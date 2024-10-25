@@ -10,6 +10,7 @@
 #include <string.h>
 #include <../sync/sync.h>
 #include <riscv.h>
+#include <buddy_pmm.h>
 
 // virtual address of physical page array
 struct Page *pages;
@@ -143,15 +144,5 @@ static void check_alloc_page(void) {
     pmm_manager->check();
     cprintf("check_alloc_page() succeeded!\n");
 }
-//slub
-/*
-static inline void *
-page2kva(struct Page *page){
-    return KADDR(page2pa(page));
-}
 
-static inline struct Page *
-kva2page(void *kva){
-    return pa2page(PADDR(kva));
-}
-*/
+

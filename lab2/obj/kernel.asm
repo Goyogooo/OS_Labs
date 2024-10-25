@@ -90,6 +90,7 @@ ffffffffc0200062:	3fe000ef          	jal	ffffffffc0200460 <idt_init>
 
     pmm_init();  // init physical memory management
 ffffffffc0200066:	316010ef          	jal	ffffffffc020137c <pmm_init>
+    //test_slub_allocator();
 
     idt_init();  // init interrupt descriptor table
 ffffffffc020006a:	3f6000ef          	jal	ffffffffc0200460 <idt_init>
@@ -2768,7 +2769,7 @@ ffffffffc02014ea:	ebdfe0ef          	jal	ffffffffc02003a6 <__panic>
     uintptr_t freemem = PADDR((uintptr_t)pages + sizeof(struct Page) * (npage - nbase));
 ffffffffc02014ee:	00001617          	auipc	a2,0x1
 ffffffffc02014f2:	0d260613          	addi	a2,a2,210 # ffffffffc02025c0 <etext+0xb1e>
-ffffffffc02014f6:	06e00593          	li	a1,110
+ffffffffc02014f6:	07000593          	li	a1,112
 ffffffffc02014fa:	00001517          	auipc	a0,0x1
 ffffffffc02014fe:	0ee50513          	addi	a0,a0,238 # ffffffffc02025e8 <etext+0xb46>
 ffffffffc0201502:	ea5fe0ef          	jal	ffffffffc02003a6 <__panic>
@@ -2776,7 +2777,7 @@ ffffffffc0201502:	ea5fe0ef          	jal	ffffffffc02003a6 <__panic>
 ffffffffc0201506:	86ae                	mv	a3,a1
 ffffffffc0201508:	00001617          	auipc	a2,0x1
 ffffffffc020150c:	0b860613          	addi	a2,a2,184 # ffffffffc02025c0 <etext+0xb1e>
-ffffffffc0201510:	08900593          	li	a1,137
+ffffffffc0201510:	08b00593          	li	a1,139
 ffffffffc0201514:	00001517          	auipc	a0,0x1
 ffffffffc0201518:	0d450513          	addi	a0,a0,212 # ffffffffc02025e8 <etext+0xb46>
 ffffffffc020151c:	e8bfe0ef          	jal	ffffffffc02003a6 <__panic>

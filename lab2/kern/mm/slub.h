@@ -3,7 +3,6 @@
 
 #include <list.h>
 #include <pmm.h>
-#include "buddy.h"
 
 typedef struct slub_cache {
     size_t obj_size;               // 单个对象的大小

@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <trap.h>
+#include <slub.h> 
 
 int kern_init(void) __attribute__((noreturn));
 void grade_backtrace(void);
