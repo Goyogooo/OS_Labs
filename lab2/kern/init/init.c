@@ -27,6 +27,7 @@ int kern_init(void) {
     idt_init();  // init interrupt descriptor table
 
     pmm_init();  // init physical memory management
+    //test_slub_allocator();
 
     idt_init();  // init interrupt descriptor table
 
