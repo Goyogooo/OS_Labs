@@ -26,11 +26,218 @@ get_pte()函数（位于`kern/mm/pmm.c`）用于在页表中查找或创建页�
  - 如果ucore的缺页服务例程在执行过程中访问内存，出现了页访问异常，请问硬件要做哪些事情？
 - 数据结构Page的全局变量（其实是一个数组）的每一项与页表中的页目录项和页表项有无对应关系？如果有，其对应关系是啥？
 
+**1. codes**
+
+```c
+//kern/mm/vmm.c
+//...
+int
+do_pgfault(struct mm_struct *mm, uint_t error_code, uintptr_t addr) {
+    int ret = -E_INVAL;
+    //try to find a vma which include addr
+    struct vma_struct *vma = find_vma(mm, addr);
+
+    pgfault_num++;
+    //If the addr is in the range of a mm's vma?
+    if (vma == NULL || vma->vm_start > addr) {
+        cprintf("not valid addr %x, and  can not find it in vma\n", addr);
+        goto failed;
+    }
+
+    /* IF (write an existed addr ) OR
+     *    (write an non_existed addr && addr is writable) OR
+     *    (read  an non_existed addr && addr is readable)
+     * THEN
+     *    continue process
+     */
+    uint32_t perm = PTE_U;
+    if (vma->vm_flags & VM_WRITE) {
+        perm |= (PTE_R | PTE_W);
+    }
+    addr = ROUNDDOWN(addr, PGSIZE);
+
+    ret = -E_NO_MEM;
+
+    pte_t *ptep=NULL;
+    /*
+    * Maybe you want help comment, BELOW comments can help you finish the code
+    *
+    * Some Useful MACROs and DEFINEs, you can use them in below implementation.
+    * MACROs or Functions:
+    *   get_pte : get an pte and return the kernel virtual address of this pte for la
+    *             if the PT contians this pte didn't exist, alloc a page for PT (notice the 3th parameter '1')
+    *   pgdir_alloc_page : call alloc_page & page_insert functions to allocate a page size memory & setup
+    *             an addr map pa<--->la with linear address la and the PDT pgdir
+    * DEFINES:
+    *   VM_WRITE  : If vma->vm_flags & VM_WRITE == 1/0, then the vma is writable/non writable
+    *   PTE_W           0x002                   // page table/directory entry flags bit : Writeable
+    *   PTE_U           0x004                   // page table/directory entry flags bit : User can access
+    * VARIABLES:
+    *   mm->pgdir : the PDT of these vma
+    *
+    */
+
+
+    ptep = get_pte(mm->pgdir, addr, 1);  //(1) try to find a pte, if pte's
+                                         //PT(Page Table) isn't existed, then
+                                         //create a PT.
+    if (*ptep == 0) {
+        if (pgdir_alloc_page(mm->pgdir, addr, perm) == NULL) {
+            cprintf("pgdir_alloc_page in do_pgfault failed\n");
+            goto failed;
+        }
+    } else {
+        /*LAB3 EXERCISE 3: YOUR CODE
+        * 请你根据以下信息提示，补充函数
+        * 现在我们认为pte是一个交换条目，那我们应该从磁盘加载数据并放到带有phy addr的页面，
+        * 并将phy addr与逻辑addr映射，触发交换管理器记录该页面的访问情况
+        *
+        *  一些有用的宏和定义，可能会对你接下来代码的编写产生帮助(显然是有帮助的)
+        *  宏或函数:
+        *    swap_in(mm, addr, &page) : 分配一个内存页，然后根据
+        *    PTE中的swap条目的addr，找到磁盘页的地址，将磁盘页的内容读入这个内存页
+        *    page_insert ： 建立一个Page的phy addr与线性addr la的映射
+        *    swap_map_swappable ： 设置页面可交换
+        */
+        if (swap_init_ok) {
+            struct Page *page = NULL;
+            // 你要编写的内容在这里，请基于上文说明以及下文的英文注释完成代码编写
+            //(1）According to the mm AND addr, try
+            //to load the content of right disk page
+            //into the memory which page managed.
+            //(2) According to the mm,
+            //addr AND page, setup the
+            //map of phy addr <--->
+            //logical addr
+            //(3) make the page swappable.
+            //begin
+            // 从交换区加载页面
+            if (swap_in(mm, addr, &page) != 0) {
+                cprintf("swap_in() failed\n");
+                goto failed;
+            }
+
+            // 重新映射页面
+            if (page_insert(mm->pgdir, page, addr, perm) != 0) {
+                cprintf("page_insert() after swap_in() failed\n");
+                free_page(page);
+                goto failed;
+            }
+
+            // 设置页面为可交换
+            swap_map_swappable(mm, addr, page, 0);
+            //end
+            page->pra_vaddr = addr;
+        } else {
+            cprintf("no swap_init_ok but ptep is %x, failed\n", *ptep);
+            goto failed;
+        }
+   }
+
+   ret = 0;
+failed:
+    return ret;
+}
+//...
+```
 #### 练习4：补充完成Clock页替换算法（需要编程）
 通过之前的练习，相信大家对FIFO的页面替换算法有了更深入的了解，现在请在我们给出的框架上，填写代码，实现 Clock页替换算法（mm/swap_clock.c）。
 请在实验报告中简要说明你的设计实现过程。请回答如下问题：
  - 比较Clock页替换算法和FIFO算法的不同。
 
+ **1. codes**
+ ```c
+ //kern/mm/swap_clock.c
+ //...
+ extern list_entry_t pra_list_head;
+list_entry_t *curr_ptr;
+/*
+ * (2) _fifo_init_mm: init pra_list_head and let  mm->sm_priv point to the addr of pra_list_head.
+ *              Now, From the memory control struct mm_struct, we can access FIFO PRA
+ */
+static int
+_clock_init_mm(struct mm_struct *mm)
+{     
+     /*LAB3 EXERCISE 4: YOUR CODE*/ 
+     // 初始化pra_list_head为空链表
+     // 初始化当前指针curr_ptr指向pra_list_head，表示当前页面替换位置为链表头
+     // 将mm的私有成员指针指向pra_list_head，用于后续的页面替换算法操作
+     //cprintf(" mm->sm_priv %x in fifo_init_mm\n",mm->sm_priv);
+     //begin
+     list_init(&pra_list_head);
+     curr_ptr=&pra_list_head;
+     mm->sm_priv=&pra_list_head;
+     cprintf(" mm->sm_priv %x in fifo_init_mm\n",mm->sm_priv);
+     //end
+     return 0;
+}
+/*
+ * (3)_fifo_map_swappable: According FIFO PRA, we should link the most recent arrival page at the back of pra_list_head qeueue
+ */
+static int
+_clock_map_swappable(struct mm_struct *mm, uintptr_t addr, struct Page *page, int swap_in)
+{
+    list_entry_t *entry=&(page->pra_page_link);
+ 
+    assert(entry != NULL && curr_ptr != NULL);
+    //record the page access situlation
+    /*LAB3 EXERCISE 4: YOUR CODE*/ 
+    // link the most recent arrival page at the back of the pra_list_head qeueue.
+    // 将页面page插入到页面链表pra_list_head的末尾
+    // 将页面的visited标志置为1，表示该页面已被访问
+    //begin
+    list_add(&pra_list_head, entry);
+    page->visited =1;
+    //end
+    return 0;
+}
+/*
+ *  (4)_fifo_swap_out_victim: According FIFO PRA, we should unlink the  earliest arrival page in front of pra_list_head qeueue,
+ *                            then set the addr of addr of this page to ptr_page.
+ */
+static int
+_clock_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tick)
+{
+     list_entry_t *head=(list_entry_t*) mm->sm_priv;
+         assert(head != NULL);
+     assert(in_tick==0);
+     /* Select the victim */
+     //(1)  unlink the  earliest arrival page in front of pra_list_head qeueue
+     //(2)  set the addr of addr of this page to ptr_page
+    while (1) {
+        /*LAB3 EXERCISE 4: YOUR CODE*/ 
+        // 编写代码
+        // 遍历页面链表pra_list_head，查找最早未被访问的页面
+        // 获取当前页面对应的Page结构指针
+        // 如果当前页面未被访问，则将该页面从页面链表中删除，并将该页面指针赋值给ptr_page作为换出页面
+        // 如果当前页面已被访问，则将visited标志置为0，表示该页面已被重新访问
+        //begin
+        list_entry_t* current = list_prev(head);
+        struct Page *page = le2page(current, pra_page_link);
+        if (current == head) {
+            *ptr_page = NULL;
+            break;
+        }
+        if(page->visited == 0)
+        {
+            list_del(current);
+            *ptr_page = le2page(current, pra_page_link); 
+            cprintf("curr_ptr %p\n", curr_ptr);
+            break;
+              
+        }
+        if(page->visited == 1)
+        {
+            page->visited = 0;
+            curr_ptr = current;
+            current = list_prev(current);           
+        }
+        //end
+    }
+    return 0;
+}
+//...
+ ```
 #### 练习5：阅读代码和实现手册，理解页表映射方式相关知识（思考题）
 如果我们采用”一个大页“ 的页表映射方式，相比分级页表，有什么好处、优势，有什么坏处、风险？
 
