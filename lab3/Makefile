@@ -98,6 +98,23 @@ else
 $(call add_files_cc,$(call listf_cc,$(LIBDIR)),libs,)
 endif
 
+#include
+INCLUDE	+= include
+
+CFLAGS	+= $(addprefix -I,$(INCLUDE))
+LIBDIR	+= include
+CFLAGS2 := $(CFLAGS) -D ucore_test
+# for cc
+add_files_cc = $(call add_files,$(1),$(CC),$(CFLAGS) $(3),$(2),$(4))
+add_files_cc2 = $(call add_files,$(1),$(CC),$(CFLAGS2) $(3),$(2),$(4))
+create_target_cc = $(call create_target,$(1),$(2),$(3),$(CC),$(CFLAGS))
+
+ifeq ($(MAKECMDGOAL),test)
+$(call add_files_cc2,$(call listf_cc,$(LIBDIR)),include,)
+else
+$(call add_files_cc,$(call listf_cc,$(LIBDIR)),include,)
+endif
+
 # -------------------------------------------------------------------
 # kernel
 

@@ -295,7 +295,7 @@ default_check(void) {
 }
 
 const struct pmm_manager default_pmm_manager = {
-    .name = "default_pmm_manager",
+    .name = "fifo swap manager",
     .init = default_init,
     .init_memmap = default_init_memmap,
     .alloc_pages = default_alloc_pages,

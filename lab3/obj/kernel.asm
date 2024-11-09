@@ -62,46 +62,46 @@ kern_init(void) {
 ffffffffc0200032:	0000a517          	auipc	a0,0xa
 ffffffffc0200036:	00e50513          	addi	a0,a0,14 # ffffffffc020a040 <ide>
 ffffffffc020003a:	00011617          	auipc	a2,0x11
-ffffffffc020003e:	53e60613          	addi	a2,a2,1342 # ffffffffc0211578 <end>
+ffffffffc020003e:	53a60613          	addi	a2,a2,1338 # ffffffffc0211574 <end>
 kern_init(void) {
-ffffffffc0200042:	1141                	addi	sp,sp,-16 # ffffffffc0208ff0 <bootstack+0x1ff0>
+ffffffffc0200042:	1141                	addi	sp,sp,-16
     memset(edata, 0, end - edata);
 ffffffffc0200044:	8e09                	sub	a2,a2,a0
 ffffffffc0200046:	4581                	li	a1,0
 kern_init(void) {
 ffffffffc0200048:	e406                	sd	ra,8(sp)
     memset(edata, 0, end - edata);
-ffffffffc020004a:	4dc040ef          	jal	ffffffffc0204526 <memset>
+ffffffffc020004a:	3fa040ef          	jal	ra,ffffffffc0204444 <memset>
 
     const char *message = "(THU.CST) os is loading ...";
     cprintf("%s\n\n", message);
 ffffffffc020004e:	00004597          	auipc	a1,0x4
-ffffffffc0200052:	50258593          	addi	a1,a1,1282 # ffffffffc0204550 <etext>
+ffffffffc0200052:	42258593          	addi	a1,a1,1058 # ffffffffc0204470 <etext+0x2>
 ffffffffc0200056:	00004517          	auipc	a0,0x4
-ffffffffc020005a:	51a50513          	addi	a0,a0,1306 # ffffffffc0204570 <etext+0x20>
-ffffffffc020005e:	05c000ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020005a:	43a50513          	addi	a0,a0,1082 # ffffffffc0204490 <etext+0x22>
+ffffffffc020005e:	05c000ef          	jal	ra,ffffffffc02000ba <cprintf>
 
     print_kerninfo();
-ffffffffc0200062:	09e000ef          	jal	ffffffffc0200100 <print_kerninfo>
+ffffffffc0200062:	0a0000ef          	jal	ra,ffffffffc0200102 <print_kerninfo>
 
     // grade_backtrace();
 
     pmm_init();                 // init physical memory management
-ffffffffc0200066:	2db010ef          	jal	ffffffffc0201b40 <pmm_init>
+ffffffffc0200066:	291010ef          	jal	ra,ffffffffc0201af6 <pmm_init>
 
     idt_init();                 // init interrupt descriptor table
-ffffffffc020006a:	4e8000ef          	jal	ffffffffc0200552 <idt_init>
+ffffffffc020006a:	4fa000ef          	jal	ra,ffffffffc0200564 <idt_init>
 
     vmm_init();                 // init virtual memory management
-ffffffffc020006e:	716030ef          	jal	ffffffffc0203784 <vmm_init>
+ffffffffc020006e:	67a030ef          	jal	ra,ffffffffc02036e8 <vmm_init>
 
     ide_init();                 // init ide devices
-ffffffffc0200072:	40e000ef          	jal	ffffffffc0200480 <ide_init>
+ffffffffc0200072:	420000ef          	jal	ra,ffffffffc0200492 <ide_init>
     swap_init();                // init swap
-ffffffffc0200076:	167020ef          	jal	ffffffffc02029dc <swap_init>
+ffffffffc0200076:	0e5020ef          	jal	ra,ffffffffc020295a <swap_init>
 
     clock_init();               // init clock interrupt
-ffffffffc020007a:	344000ef          	jal	ffffffffc02003be <clock_init>
+ffffffffc020007a:	356000ef          	jal	ra,ffffffffc02003d0 <clock_init>
     // intr_enable();              // enable irq interrupt
 
 
@@ -122,7 +122,7 @@ ffffffffc0200082:	e022                	sd	s0,0(sp)
 ffffffffc0200084:	e406                	sd	ra,8(sp)
 ffffffffc0200086:	842e                	mv	s0,a1
     cons_putc(c);
-ffffffffc0200088:	388000ef          	jal	ffffffffc0200410 <cons_putc>
+ffffffffc0200088:	39a000ef          	jal	ra,ffffffffc0200422 <cons_putc>
     (*cnt) ++;
 ffffffffc020008c:	401c                	lw	a5,0(s0)
 }
@@ -155,7 +155,7 @@ ffffffffc02000aa:	ec06                	sd	ra,24(sp)
     int cnt = 0;
 ffffffffc02000ac:	c602                	sw	zero,12(sp)
     vprintfmt((void*)cputch, &cnt, fmt, ap);
-ffffffffc02000ae:	7b5030ef          	jal	ffffffffc0204062 <vprintfmt>
+ffffffffc02000ae:	6e5030ef          	jal	ra,ffffffffc0203f92 <vprintfmt>
     return cnt;
 }
 ffffffffc02000b2:	60e2                	ld	ra,24(sp)
@@ -174,2694 +174,2690 @@ ffffffffc02000ba:	711d                	addi	sp,sp,-96
     va_list ap;
     int cnt;
     va_start(ap, fmt);
-ffffffffc02000bc:	02810313          	addi	t1,sp,40
+ffffffffc02000bc:	02810313          	addi	t1,sp,40 # ffffffffc0209028 <boot_page_table_sv39+0x28>
 cprintf(const char *fmt, ...) {
-ffffffffc02000c0:	f42e                	sd	a1,40(sp)
-ffffffffc02000c2:	f832                	sd	a2,48(sp)
-ffffffffc02000c4:	fc36                	sd	a3,56(sp)
+ffffffffc02000c0:	8e2a                	mv	t3,a0
+ffffffffc02000c2:	f42e                	sd	a1,40(sp)
+ffffffffc02000c4:	f832                	sd	a2,48(sp)
+ffffffffc02000c6:	fc36                	sd	a3,56(sp)
     vprintfmt((void*)cputch, &cnt, fmt, ap);
-ffffffffc02000c6:	862a                	mv	a2,a0
-ffffffffc02000c8:	004c                	addi	a1,sp,4
-ffffffffc02000ca:	00000517          	auipc	a0,0x0
-ffffffffc02000ce:	fb650513          	addi	a0,a0,-74 # ffffffffc0200080 <cputch>
+ffffffffc02000c8:	00000517          	auipc	a0,0x0
+ffffffffc02000cc:	fb850513          	addi	a0,a0,-72 # ffffffffc0200080 <cputch>
+ffffffffc02000d0:	004c                	addi	a1,sp,4
 ffffffffc02000d2:	869a                	mv	a3,t1
+ffffffffc02000d4:	8672                	mv	a2,t3
 cprintf(const char *fmt, ...) {
-ffffffffc02000d4:	ec06                	sd	ra,24(sp)
-ffffffffc02000d6:	e0ba                	sd	a4,64(sp)
-ffffffffc02000d8:	e4be                	sd	a5,72(sp)
-ffffffffc02000da:	e8c2                	sd	a6,80(sp)
-ffffffffc02000dc:	ecc6                	sd	a7,88(sp)
+ffffffffc02000d6:	ec06                	sd	ra,24(sp)
+ffffffffc02000d8:	e0ba                	sd	a4,64(sp)
+ffffffffc02000da:	e4be                	sd	a5,72(sp)
+ffffffffc02000dc:	e8c2                	sd	a6,80(sp)
+ffffffffc02000de:	ecc6                	sd	a7,88(sp)
     va_start(ap, fmt);
-ffffffffc02000de:	e41a                	sd	t1,8(sp)
+ffffffffc02000e0:	e41a                	sd	t1,8(sp)
     int cnt = 0;
-ffffffffc02000e0:	c202                	sw	zero,4(sp)
+ffffffffc02000e2:	c202                	sw	zero,4(sp)
     vprintfmt((void*)cputch, &cnt, fmt, ap);
-ffffffffc02000e2:	781030ef          	jal	ffffffffc0204062 <vprintfmt>
+ffffffffc02000e4:	6af030ef          	jal	ra,ffffffffc0203f92 <vprintfmt>
     cnt = vcprintf(fmt, ap);
     va_end(ap);
     return cnt;
 }
-ffffffffc02000e6:	60e2                	ld	ra,24(sp)
-ffffffffc02000e8:	4512                	lw	a0,4(sp)
-ffffffffc02000ea:	6125                	addi	sp,sp,96
-ffffffffc02000ec:	8082                	ret
+ffffffffc02000e8:	60e2                	ld	ra,24(sp)
+ffffffffc02000ea:	4512                	lw	a0,4(sp)
+ffffffffc02000ec:	6125                	addi	sp,sp,96
+ffffffffc02000ee:	8082                	ret
 
-ffffffffc02000ee <cputchar>:
+ffffffffc02000f0 <cputchar>:
 
 /* cputchar - writes a single character to stdout */
 void
 cputchar(int c) {
     cons_putc(c);
-ffffffffc02000ee:	a60d                	j	ffffffffc0200410 <cons_putc>
+ffffffffc02000f0:	ae0d                	j	ffffffffc0200422 <cons_putc>
 
-ffffffffc02000f0 <getchar>:
+ffffffffc02000f2 <getchar>:
     return cnt;
 }
 
 /* getchar - reads a single non-zero character from stdin */
 int
 getchar(void) {
-ffffffffc02000f0:	1141                	addi	sp,sp,-16
-ffffffffc02000f2:	e406                	sd	ra,8(sp)
+ffffffffc02000f2:	1141                	addi	sp,sp,-16
+ffffffffc02000f4:	e406                	sd	ra,8(sp)
     int c;
     while ((c = cons_getc()) == 0)
-ffffffffc02000f4:	350000ef          	jal	ffffffffc0200444 <cons_getc>
-ffffffffc02000f8:	dd75                	beqz	a0,ffffffffc02000f4 <getchar+0x4>
+ffffffffc02000f6:	360000ef          	jal	ra,ffffffffc0200456 <cons_getc>
+ffffffffc02000fa:	dd75                	beqz	a0,ffffffffc02000f6 <getchar+0x4>
         /* do nothing */;
     return c;
 }
-ffffffffc02000fa:	60a2                	ld	ra,8(sp)
-ffffffffc02000fc:	0141                	addi	sp,sp,16
-ffffffffc02000fe:	8082                	ret
+ffffffffc02000fc:	60a2                	ld	ra,8(sp)
+ffffffffc02000fe:	0141                	addi	sp,sp,16
+ffffffffc0200100:	8082                	ret
 
-ffffffffc0200100 <print_kerninfo>:
+ffffffffc0200102 <print_kerninfo>:
 /* *
  * print_kerninfo - print the information about kernel, including the location
  * of kernel entry, the start addresses of data and text segements, the start
  * address of free memory and how many memory that kernel has used.
  * */
 void print_kerninfo(void) {
-ffffffffc0200100:	1141                	addi	sp,sp,-16
+ffffffffc0200102:	1141                	addi	sp,sp,-16
     extern char etext[], edata[], end[], kern_init[];
     cprintf("Special kernel symbols:\n");
-ffffffffc0200102:	00004517          	auipc	a0,0x4
-ffffffffc0200106:	47650513          	addi	a0,a0,1142 # ffffffffc0204578 <etext+0x28>
+ffffffffc0200104:	00004517          	auipc	a0,0x4
+ffffffffc0200108:	39450513          	addi	a0,a0,916 # ffffffffc0204498 <etext+0x2a>
 void print_kerninfo(void) {
-ffffffffc020010a:	e406                	sd	ra,8(sp)
+ffffffffc020010c:	e406                	sd	ra,8(sp)
     cprintf("Special kernel symbols:\n");
-ffffffffc020010c:	fafff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020010e:	fadff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  entry  0x%08x (virtual)\n", kern_init);
-ffffffffc0200110:	00000597          	auipc	a1,0x0
-ffffffffc0200114:	f2258593          	addi	a1,a1,-222 # ffffffffc0200032 <kern_init>
-ffffffffc0200118:	00004517          	auipc	a0,0x4
-ffffffffc020011c:	48050513          	addi	a0,a0,1152 # ffffffffc0204598 <etext+0x48>
-ffffffffc0200120:	f9bff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200112:	00000597          	auipc	a1,0x0
+ffffffffc0200116:	f2058593          	addi	a1,a1,-224 # ffffffffc0200032 <kern_init>
+ffffffffc020011a:	00004517          	auipc	a0,0x4
+ffffffffc020011e:	39e50513          	addi	a0,a0,926 # ffffffffc02044b8 <etext+0x4a>
+ffffffffc0200122:	f99ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  etext  0x%08x (virtual)\n", etext);
-ffffffffc0200124:	00004597          	auipc	a1,0x4
-ffffffffc0200128:	42c58593          	addi	a1,a1,1068 # ffffffffc0204550 <etext>
-ffffffffc020012c:	00004517          	auipc	a0,0x4
-ffffffffc0200130:	48c50513          	addi	a0,a0,1164 # ffffffffc02045b8 <etext+0x68>
-ffffffffc0200134:	f87ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200126:	00004597          	auipc	a1,0x4
+ffffffffc020012a:	34858593          	addi	a1,a1,840 # ffffffffc020446e <etext>
+ffffffffc020012e:	00004517          	auipc	a0,0x4
+ffffffffc0200132:	3aa50513          	addi	a0,a0,938 # ffffffffc02044d8 <etext+0x6a>
+ffffffffc0200136:	f85ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  edata  0x%08x (virtual)\n", edata);
-ffffffffc0200138:	0000a597          	auipc	a1,0xa
-ffffffffc020013c:	f0858593          	addi	a1,a1,-248 # ffffffffc020a040 <ide>
-ffffffffc0200140:	00004517          	auipc	a0,0x4
-ffffffffc0200144:	49850513          	addi	a0,a0,1176 # ffffffffc02045d8 <etext+0x88>
-ffffffffc0200148:	f73ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020013a:	0000a597          	auipc	a1,0xa
+ffffffffc020013e:	f0658593          	addi	a1,a1,-250 # ffffffffc020a040 <ide>
+ffffffffc0200142:	00004517          	auipc	a0,0x4
+ffffffffc0200146:	3b650513          	addi	a0,a0,950 # ffffffffc02044f8 <etext+0x8a>
+ffffffffc020014a:	f71ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  end    0x%08x (virtual)\n", end);
-ffffffffc020014c:	00011597          	auipc	a1,0x11
-ffffffffc0200150:	42c58593          	addi	a1,a1,1068 # ffffffffc0211578 <end>
-ffffffffc0200154:	00004517          	auipc	a0,0x4
-ffffffffc0200158:	4a450513          	addi	a0,a0,1188 # ffffffffc02045f8 <etext+0xa8>
-ffffffffc020015c:	f5fff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020014e:	00011597          	auipc	a1,0x11
+ffffffffc0200152:	42658593          	addi	a1,a1,1062 # ffffffffc0211574 <end>
+ffffffffc0200156:	00004517          	auipc	a0,0x4
+ffffffffc020015a:	3c250513          	addi	a0,a0,962 # ffffffffc0204518 <etext+0xaa>
+ffffffffc020015e:	f5dff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("Kernel executable memory footprint: %dKB\n",
             (end - kern_init + 1023) / 1024);
-ffffffffc0200160:	00012797          	auipc	a5,0x12
-ffffffffc0200164:	81778793          	addi	a5,a5,-2025 # ffffffffc0211977 <end+0x3ff>
-ffffffffc0200168:	00000717          	auipc	a4,0x0
-ffffffffc020016c:	eca70713          	addi	a4,a4,-310 # ffffffffc0200032 <kern_init>
-ffffffffc0200170:	8f99                	sub	a5,a5,a4
+ffffffffc0200162:	00012597          	auipc	a1,0x12
+ffffffffc0200166:	81158593          	addi	a1,a1,-2031 # ffffffffc0211973 <end+0x3ff>
+ffffffffc020016a:	00000797          	auipc	a5,0x0
+ffffffffc020016e:	ec878793          	addi	a5,a5,-312 # ffffffffc0200032 <kern_init>
+ffffffffc0200172:	40f587b3          	sub	a5,a1,a5
     cprintf("Kernel executable memory footprint: %dKB\n",
-ffffffffc0200172:	43f7d593          	srai	a1,a5,0x3f
+ffffffffc0200176:	43f7d593          	srai	a1,a5,0x3f
 }
-ffffffffc0200176:	60a2                	ld	ra,8(sp)
+ffffffffc020017a:	60a2                	ld	ra,8(sp)
     cprintf("Kernel executable memory footprint: %dKB\n",
-ffffffffc0200178:	3ff5f593          	andi	a1,a1,1023
-ffffffffc020017c:	95be                	add	a1,a1,a5
-ffffffffc020017e:	85a9                	srai	a1,a1,0xa
-ffffffffc0200180:	00004517          	auipc	a0,0x4
-ffffffffc0200184:	49850513          	addi	a0,a0,1176 # ffffffffc0204618 <etext+0xc8>
+ffffffffc020017c:	3ff5f593          	andi	a1,a1,1023
+ffffffffc0200180:	95be                	add	a1,a1,a5
+ffffffffc0200182:	85a9                	srai	a1,a1,0xa
+ffffffffc0200184:	00004517          	auipc	a0,0x4
+ffffffffc0200188:	3b450513          	addi	a0,a0,948 # ffffffffc0204538 <etext+0xca>
 }
-ffffffffc0200188:	0141                	addi	sp,sp,16
+ffffffffc020018c:	0141                	addi	sp,sp,16
     cprintf("Kernel executable memory footprint: %dKB\n",
-ffffffffc020018a:	bf05                	j	ffffffffc02000ba <cprintf>
+ffffffffc020018e:	b735                	j	ffffffffc02000ba <cprintf>
 
-ffffffffc020018c <print_stackframe>:
+ffffffffc0200190 <print_stackframe>:
  * Note that, the length of ebp-chain is limited. In boot/bootasm.S, before
  * jumping
  * to the kernel entry, the value of ebp has been set to zero, that's the
  * boundary.
  * */
 void print_stackframe(void) {
-ffffffffc020018c:	1141                	addi	sp,sp,-16
+ffffffffc0200190:	1141                	addi	sp,sp,-16
 
     panic("Not Implemented!");
-ffffffffc020018e:	00004617          	auipc	a2,0x4
-ffffffffc0200192:	4ba60613          	addi	a2,a2,1210 # ffffffffc0204648 <etext+0xf8>
-ffffffffc0200196:	04e00593          	li	a1,78
-ffffffffc020019a:	00004517          	auipc	a0,0x4
-ffffffffc020019e:	4c650513          	addi	a0,a0,1222 # ffffffffc0204660 <etext+0x110>
+ffffffffc0200192:	00004617          	auipc	a2,0x4
+ffffffffc0200196:	3d660613          	addi	a2,a2,982 # ffffffffc0204568 <etext+0xfa>
+ffffffffc020019a:	04e00593          	li	a1,78
+ffffffffc020019e:	00004517          	auipc	a0,0x4
+ffffffffc02001a2:	3e250513          	addi	a0,a0,994 # ffffffffc0204580 <etext+0x112>
 void print_stackframe(void) {
-ffffffffc02001a2:	e406                	sd	ra,8(sp)
+ffffffffc02001a6:	e406                	sd	ra,8(sp)
     panic("Not Implemented!");
-ffffffffc02001a4:	1bc000ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02001a8:	1cc000ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc02001a8 <mon_help>:
+ffffffffc02001ac <mon_help>:
     }
 }
 
 /* mon_help - print the information about mon_* functions */
 int
 mon_help(int argc, char **argv, struct trapframe *tf) {
-ffffffffc02001a8:	1141                	addi	sp,sp,-16
+ffffffffc02001ac:	1141                	addi	sp,sp,-16
     int i;
     for (i = 0; i < NCOMMANDS; i ++) {
         cprintf("%s - %s\n", commands[i].name, commands[i].desc);
-ffffffffc02001aa:	00004617          	auipc	a2,0x4
-ffffffffc02001ae:	4ce60613          	addi	a2,a2,1230 # ffffffffc0204678 <etext+0x128>
-ffffffffc02001b2:	00004597          	auipc	a1,0x4
-ffffffffc02001b6:	4e658593          	addi	a1,a1,1254 # ffffffffc0204698 <etext+0x148>
-ffffffffc02001ba:	00004517          	auipc	a0,0x4
-ffffffffc02001be:	4e650513          	addi	a0,a0,1254 # ffffffffc02046a0 <etext+0x150>
+ffffffffc02001ae:	00004617          	auipc	a2,0x4
+ffffffffc02001b2:	3ea60613          	addi	a2,a2,1002 # ffffffffc0204598 <etext+0x12a>
+ffffffffc02001b6:	00004597          	auipc	a1,0x4
+ffffffffc02001ba:	40258593          	addi	a1,a1,1026 # ffffffffc02045b8 <etext+0x14a>
+ffffffffc02001be:	00004517          	auipc	a0,0x4
+ffffffffc02001c2:	40250513          	addi	a0,a0,1026 # ffffffffc02045c0 <etext+0x152>
 mon_help(int argc, char **argv, struct trapframe *tf) {
-ffffffffc02001c2:	e406                	sd	ra,8(sp)
+ffffffffc02001c6:	e406                	sd	ra,8(sp)
         cprintf("%s - %s\n", commands[i].name, commands[i].desc);
-ffffffffc02001c4:	ef7ff0ef          	jal	ffffffffc02000ba <cprintf>
-ffffffffc02001c8:	00004617          	auipc	a2,0x4
-ffffffffc02001cc:	4e860613          	addi	a2,a2,1256 # ffffffffc02046b0 <etext+0x160>
-ffffffffc02001d0:	00004597          	auipc	a1,0x4
-ffffffffc02001d4:	50858593          	addi	a1,a1,1288 # ffffffffc02046d8 <etext+0x188>
-ffffffffc02001d8:	00004517          	auipc	a0,0x4
-ffffffffc02001dc:	4c850513          	addi	a0,a0,1224 # ffffffffc02046a0 <etext+0x150>
-ffffffffc02001e0:	edbff0ef          	jal	ffffffffc02000ba <cprintf>
-ffffffffc02001e4:	00004617          	auipc	a2,0x4
-ffffffffc02001e8:	50460613          	addi	a2,a2,1284 # ffffffffc02046e8 <etext+0x198>
-ffffffffc02001ec:	00004597          	auipc	a1,0x4
-ffffffffc02001f0:	51c58593          	addi	a1,a1,1308 # ffffffffc0204708 <etext+0x1b8>
-ffffffffc02001f4:	00004517          	auipc	a0,0x4
-ffffffffc02001f8:	4ac50513          	addi	a0,a0,1196 # ffffffffc02046a0 <etext+0x150>
-ffffffffc02001fc:	ebfff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02001c8:	ef3ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
+ffffffffc02001cc:	00004617          	auipc	a2,0x4
+ffffffffc02001d0:	40460613          	addi	a2,a2,1028 # ffffffffc02045d0 <etext+0x162>
+ffffffffc02001d4:	00004597          	auipc	a1,0x4
+ffffffffc02001d8:	42458593          	addi	a1,a1,1060 # ffffffffc02045f8 <etext+0x18a>
+ffffffffc02001dc:	00004517          	auipc	a0,0x4
+ffffffffc02001e0:	3e450513          	addi	a0,a0,996 # ffffffffc02045c0 <etext+0x152>
+ffffffffc02001e4:	ed7ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
+ffffffffc02001e8:	00004617          	auipc	a2,0x4
+ffffffffc02001ec:	42060613          	addi	a2,a2,1056 # ffffffffc0204608 <etext+0x19a>
+ffffffffc02001f0:	00004597          	auipc	a1,0x4
+ffffffffc02001f4:	43858593          	addi	a1,a1,1080 # ffffffffc0204628 <etext+0x1ba>
+ffffffffc02001f8:	00004517          	auipc	a0,0x4
+ffffffffc02001fc:	3c850513          	addi	a0,a0,968 # ffffffffc02045c0 <etext+0x152>
+ffffffffc0200200:	ebbff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     }
     return 0;
 }
-ffffffffc0200200:	60a2                	ld	ra,8(sp)
-ffffffffc0200202:	4501                	li	a0,0
-ffffffffc0200204:	0141                	addi	sp,sp,16
-ffffffffc0200206:	8082                	ret
+ffffffffc0200204:	60a2                	ld	ra,8(sp)
+ffffffffc0200206:	4501                	li	a0,0
+ffffffffc0200208:	0141                	addi	sp,sp,16
+ffffffffc020020a:	8082                	ret
 
-ffffffffc0200208 <mon_kerninfo>:
+ffffffffc020020c <mon_kerninfo>:
 /* *
  * mon_kerninfo - call print_kerninfo in kern/debug/kdebug.c to
  * print the memory occupancy in kernel.
  * */
 int
 mon_kerninfo(int argc, char **argv, struct trapframe *tf) {
-ffffffffc0200208:	1141                	addi	sp,sp,-16
-ffffffffc020020a:	e406                	sd	ra,8(sp)
+ffffffffc020020c:	1141                	addi	sp,sp,-16
+ffffffffc020020e:	e406                	sd	ra,8(sp)
     print_kerninfo();
-ffffffffc020020c:	ef5ff0ef          	jal	ffffffffc0200100 <print_kerninfo>
+ffffffffc0200210:	ef3ff0ef          	jal	ra,ffffffffc0200102 <print_kerninfo>
     return 0;
 }
-ffffffffc0200210:	60a2                	ld	ra,8(sp)
-ffffffffc0200212:	4501                	li	a0,0
-ffffffffc0200214:	0141                	addi	sp,sp,16
-ffffffffc0200216:	8082                	ret
+ffffffffc0200214:	60a2                	ld	ra,8(sp)
+ffffffffc0200216:	4501                	li	a0,0
+ffffffffc0200218:	0141                	addi	sp,sp,16
+ffffffffc020021a:	8082                	ret
 
-ffffffffc0200218 <mon_backtrace>:
+ffffffffc020021c <mon_backtrace>:
 /* *
  * mon_backtrace - call print_stackframe in kern/debug/kdebug.c to
  * print a backtrace of the stack.
  * */
 int
 mon_backtrace(int argc, char **argv, struct trapframe *tf) {
-ffffffffc0200218:	1141                	addi	sp,sp,-16
-ffffffffc020021a:	e406                	sd	ra,8(sp)
+ffffffffc020021c:	1141                	addi	sp,sp,-16
+ffffffffc020021e:	e406                	sd	ra,8(sp)
     print_stackframe();
-ffffffffc020021c:	f71ff0ef          	jal	ffffffffc020018c <print_stackframe>
+ffffffffc0200220:	f71ff0ef          	jal	ra,ffffffffc0200190 <print_stackframe>
     return 0;
 }
-ffffffffc0200220:	60a2                	ld	ra,8(sp)
-ffffffffc0200222:	4501                	li	a0,0
-ffffffffc0200224:	0141                	addi	sp,sp,16
-ffffffffc0200226:	8082                	ret
+ffffffffc0200224:	60a2                	ld	ra,8(sp)
+ffffffffc0200226:	4501                	li	a0,0
+ffffffffc0200228:	0141                	addi	sp,sp,16
+ffffffffc020022a:	8082                	ret
 
-ffffffffc0200228 <kmonitor>:
+ffffffffc020022c <kmonitor>:
 kmonitor(struct trapframe *tf) {
-ffffffffc0200228:	7115                	addi	sp,sp,-224
-ffffffffc020022a:	f15a                	sd	s6,160(sp)
-ffffffffc020022c:	8b2a                	mv	s6,a0
+ffffffffc020022c:	7115                	addi	sp,sp,-224
+ffffffffc020022e:	ed5e                	sd	s7,152(sp)
+ffffffffc0200230:	8baa                	mv	s7,a0
     cprintf("Welcome to the kernel debug monitor!!\n");
-ffffffffc020022e:	00004517          	auipc	a0,0x4
-ffffffffc0200232:	4ea50513          	addi	a0,a0,1258 # ffffffffc0204718 <etext+0x1c8>
+ffffffffc0200232:	00004517          	auipc	a0,0x4
+ffffffffc0200236:	40650513          	addi	a0,a0,1030 # ffffffffc0204638 <etext+0x1ca>
 kmonitor(struct trapframe *tf) {
-ffffffffc0200236:	ed86                	sd	ra,216(sp)
-ffffffffc0200238:	e9a2                	sd	s0,208(sp)
-ffffffffc020023a:	e5a6                	sd	s1,200(sp)
-ffffffffc020023c:	e1ca                	sd	s2,192(sp)
-ffffffffc020023e:	fd4e                	sd	s3,184(sp)
-ffffffffc0200240:	f952                	sd	s4,176(sp)
-ffffffffc0200242:	f556                	sd	s5,168(sp)
-ffffffffc0200244:	ed5e                	sd	s7,152(sp)
-ffffffffc0200246:	e962                	sd	s8,144(sp)
-ffffffffc0200248:	e566                	sd	s9,136(sp)
-ffffffffc020024a:	e16a                	sd	s10,128(sp)
+ffffffffc020023a:	ed86                	sd	ra,216(sp)
+ffffffffc020023c:	e9a2                	sd	s0,208(sp)
+ffffffffc020023e:	e5a6                	sd	s1,200(sp)
+ffffffffc0200240:	e1ca                	sd	s2,192(sp)
+ffffffffc0200242:	fd4e                	sd	s3,184(sp)
+ffffffffc0200244:	f952                	sd	s4,176(sp)
+ffffffffc0200246:	f556                	sd	s5,168(sp)
+ffffffffc0200248:	f15a                	sd	s6,160(sp)
+ffffffffc020024a:	e962                	sd	s8,144(sp)
+ffffffffc020024c:	e566                	sd	s9,136(sp)
+ffffffffc020024e:	e16a                	sd	s10,128(sp)
     cprintf("Welcome to the kernel debug monitor!!\n");
-ffffffffc020024c:	e6fff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200250:	e6bff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("Type 'help' for a list of commands.\n");
-ffffffffc0200250:	00004517          	auipc	a0,0x4
-ffffffffc0200254:	4f050513          	addi	a0,a0,1264 # ffffffffc0204740 <etext+0x1f0>
-ffffffffc0200258:	e63ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200254:	00004517          	auipc	a0,0x4
+ffffffffc0200258:	40c50513          	addi	a0,a0,1036 # ffffffffc0204660 <etext+0x1f2>
+ffffffffc020025c:	e5fff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     if (tf != NULL) {
-ffffffffc020025c:	000b0563          	beqz	s6,ffffffffc0200266 <kmonitor+0x3e>
+ffffffffc0200260:	000b8563          	beqz	s7,ffffffffc020026a <kmonitor+0x3e>
         print_trapframe(tf);
-ffffffffc0200260:	855a                	mv	a0,s6
-ffffffffc0200262:	4da000ef          	jal	ffffffffc020073c <print_trapframe>
-ffffffffc0200266:	00006c17          	auipc	s8,0x6
-ffffffffc020026a:	ebac0c13          	addi	s8,s8,-326 # ffffffffc0206120 <commands>
+ffffffffc0200264:	855e                	mv	a0,s7
+ffffffffc0200266:	4e8000ef          	jal	ra,ffffffffc020074e <print_trapframe>
+ffffffffc020026a:	00004c17          	auipc	s8,0x4
+ffffffffc020026e:	45ec0c13          	addi	s8,s8,1118 # ffffffffc02046c8 <commands>
         if ((buf = readline("")) != NULL) {
-ffffffffc020026e:	00006917          	auipc	s2,0x6
-ffffffffc0200272:	85a90913          	addi	s2,s2,-1958 # ffffffffc0205ac8 <etext+0x1578>
+ffffffffc0200272:	00006917          	auipc	s2,0x6
+ffffffffc0200276:	86690913          	addi	s2,s2,-1946 # ffffffffc0205ad8 <default_pmm_manager+0x928>
         while (*buf != '\0' && strchr(WHITESPACE, *buf) != NULL) {
-ffffffffc0200276:	00004497          	auipc	s1,0x4
-ffffffffc020027a:	4f248493          	addi	s1,s1,1266 # ffffffffc0204768 <etext+0x218>
+ffffffffc020027a:	00004497          	auipc	s1,0x4
+ffffffffc020027e:	40e48493          	addi	s1,s1,1038 # ffffffffc0204688 <etext+0x21a>
         if (argc == MAXARGS - 1) {
-ffffffffc020027e:	49bd                	li	s3,15
+ffffffffc0200282:	49bd                	li	s3,15
             cprintf("Too many arguments (max %d).\n", MAXARGS);
-ffffffffc0200280:	00004a97          	auipc	s5,0x4
-ffffffffc0200284:	4f0a8a93          	addi	s5,s5,1264 # ffffffffc0204770 <etext+0x220>
+ffffffffc0200284:	00004b17          	auipc	s6,0x4
+ffffffffc0200288:	40cb0b13          	addi	s6,s6,1036 # ffffffffc0204690 <etext+0x222>
+        argv[argc ++] = buf;
+ffffffffc020028c:	00004a17          	auipc	s4,0x4
+ffffffffc0200290:	32ca0a13          	addi	s4,s4,812 # ffffffffc02045b8 <etext+0x14a>
     for (i = 0; i < NCOMMANDS; i ++) {
-ffffffffc0200288:	4a0d                	li	s4,3
-    cprintf("Unknown command '%s'\n", argv[0]);
-ffffffffc020028a:	00004b97          	auipc	s7,0x4
-ffffffffc020028e:	506b8b93          	addi	s7,s7,1286 # ffffffffc0204790 <etext+0x240>
+ffffffffc0200294:	4a8d                	li	s5,3
         if ((buf = readline("")) != NULL) {
-ffffffffc0200292:	854a                	mv	a0,s2
-ffffffffc0200294:	148040ef          	jal	ffffffffc02043dc <readline>
-ffffffffc0200298:	842a                	mv	s0,a0
-ffffffffc020029a:	dd65                	beqz	a0,ffffffffc0200292 <kmonitor+0x6a>
+ffffffffc0200296:	854a                	mv	a0,s2
+ffffffffc0200298:	07c040ef          	jal	ra,ffffffffc0204314 <readline>
+ffffffffc020029c:	842a                	mv	s0,a0
+ffffffffc020029e:	dd65                	beqz	a0,ffffffffc0200296 <kmonitor+0x6a>
         while (*buf != '\0' && strchr(WHITESPACE, *buf) != NULL) {
-ffffffffc020029c:	00054583          	lbu	a1,0(a0)
+ffffffffc02002a0:	00054583          	lbu	a1,0(a0)
     int argc = 0;
-ffffffffc02002a0:	4c81                	li	s9,0
+ffffffffc02002a4:	4c81                	li	s9,0
         while (*buf != '\0' && strchr(WHITESPACE, *buf) != NULL) {
-ffffffffc02002a2:	e59d                	bnez	a1,ffffffffc02002d0 <kmonitor+0xa8>
+ffffffffc02002a6:	e1bd                	bnez	a1,ffffffffc020030c <kmonitor+0xe0>
     if (argc == 0) {
-ffffffffc02002a4:	fe0c87e3          	beqz	s9,ffffffffc0200292 <kmonitor+0x6a>
-ffffffffc02002a8:	00006d17          	auipc	s10,0x6
-ffffffffc02002ac:	e78d0d13          	addi	s10,s10,-392 # ffffffffc0206120 <commands>
-    for (i = 0; i < NCOMMANDS; i ++) {
-ffffffffc02002b0:	4401                	li	s0,0
+ffffffffc02002a8:	fe0c87e3          	beqz	s9,ffffffffc0200296 <kmonitor+0x6a>
         if (strcmp(commands[i].name, argv[0]) == 0) {
-ffffffffc02002b2:	6582                	ld	a1,0(sp)
-ffffffffc02002b4:	000d3503          	ld	a0,0(s10)
-ffffffffc02002b8:	220040ef          	jal	ffffffffc02044d8 <strcmp>
-ffffffffc02002bc:	c53d                	beqz	a0,ffffffffc020032a <kmonitor+0x102>
+ffffffffc02002ac:	6582                	ld	a1,0(sp)
+ffffffffc02002ae:	00004d17          	auipc	s10,0x4
+ffffffffc02002b2:	41ad0d13          	addi	s10,s10,1050 # ffffffffc02046c8 <commands>
+        argv[argc ++] = buf;
+ffffffffc02002b6:	8552                	mv	a0,s4
     for (i = 0; i < NCOMMANDS; i ++) {
-ffffffffc02002be:	2405                	addiw	s0,s0,1
-ffffffffc02002c0:	0d61                	addi	s10,s10,24
-ffffffffc02002c2:	ff4418e3          	bne	s0,s4,ffffffffc02002b2 <kmonitor+0x8a>
-    cprintf("Unknown command '%s'\n", argv[0]);
-ffffffffc02002c6:	6582                	ld	a1,0(sp)
-ffffffffc02002c8:	855e                	mv	a0,s7
-ffffffffc02002ca:	df1ff0ef          	jal	ffffffffc02000ba <cprintf>
-    return 0;
-ffffffffc02002ce:	b7d1                	j	ffffffffc0200292 <kmonitor+0x6a>
-        while (*buf != '\0' && strchr(WHITESPACE, *buf) != NULL) {
-ffffffffc02002d0:	8526                	mv	a0,s1
-ffffffffc02002d2:	23e040ef          	jal	ffffffffc0204510 <strchr>
-ffffffffc02002d6:	c901                	beqz	a0,ffffffffc02002e6 <kmonitor+0xbe>
-ffffffffc02002d8:	00144583          	lbu	a1,1(s0)
-            *buf ++ = '\0';
-ffffffffc02002dc:	00040023          	sb	zero,0(s0)
-ffffffffc02002e0:	0405                	addi	s0,s0,1
-        while (*buf != '\0' && strchr(WHITESPACE, *buf) != NULL) {
-ffffffffc02002e2:	d1e9                	beqz	a1,ffffffffc02002a4 <kmonitor+0x7c>
-ffffffffc02002e4:	b7f5                	j	ffffffffc02002d0 <kmonitor+0xa8>
-        if (*buf == '\0') {
-ffffffffc02002e6:	00044783          	lbu	a5,0(s0)
-ffffffffc02002ea:	dfcd                	beqz	a5,ffffffffc02002a4 <kmonitor+0x7c>
-        if (argc == MAXARGS - 1) {
-ffffffffc02002ec:	033c8a63          	beq	s9,s3,ffffffffc0200320 <kmonitor+0xf8>
-        argv[argc ++] = buf;
-ffffffffc02002f0:	003c9793          	slli	a5,s9,0x3
-ffffffffc02002f4:	08078793          	addi	a5,a5,128
-ffffffffc02002f8:	978a                	add	a5,a5,sp
-ffffffffc02002fa:	f887b023          	sd	s0,-128(a5)
-        while (*buf != '\0' && strchr(WHITESPACE, *buf) == NULL) {
-ffffffffc02002fe:	00044583          	lbu	a1,0(s0)
-        argv[argc ++] = buf;
-ffffffffc0200302:	2c85                	addiw	s9,s9,1
-        while (*buf != '\0' && strchr(WHITESPACE, *buf) == NULL) {
-ffffffffc0200304:	e591                	bnez	a1,ffffffffc0200310 <kmonitor+0xe8>
-ffffffffc0200306:	bf79                	j	ffffffffc02002a4 <kmonitor+0x7c>
-ffffffffc0200308:	00144583          	lbu	a1,1(s0)
-            buf ++;
-ffffffffc020030c:	0405                	addi	s0,s0,1
-        while (*buf != '\0' && strchr(WHITESPACE, *buf) == NULL) {
-ffffffffc020030e:	d9d9                	beqz	a1,ffffffffc02002a4 <kmonitor+0x7c>
-ffffffffc0200310:	8526                	mv	a0,s1
-ffffffffc0200312:	1fe040ef          	jal	ffffffffc0204510 <strchr>
-ffffffffc0200316:	d96d                	beqz	a0,ffffffffc0200308 <kmonitor+0xe0>
-        while (*buf != '\0' && strchr(WHITESPACE, *buf) != NULL) {
-ffffffffc0200318:	00044583          	lbu	a1,0(s0)
-ffffffffc020031c:	d5c1                	beqz	a1,ffffffffc02002a4 <kmonitor+0x7c>
-ffffffffc020031e:	bf4d                	j	ffffffffc02002d0 <kmonitor+0xa8>
-            cprintf("Too many arguments (max %d).\n", MAXARGS);
-ffffffffc0200320:	45c1                	li	a1,16
-ffffffffc0200322:	8556                	mv	a0,s5
-ffffffffc0200324:	d97ff0ef          	jal	ffffffffc02000ba <cprintf>
-ffffffffc0200328:	b7e1                	j	ffffffffc02002f0 <kmonitor+0xc8>
+ffffffffc02002b8:	4401                	li	s0,0
+ffffffffc02002ba:	0d61                	addi	s10,s10,24
+        if (strcmp(commands[i].name, argv[0]) == 0) {
+ffffffffc02002bc:	154040ef          	jal	ra,ffffffffc0204410 <strcmp>
+ffffffffc02002c0:	c919                	beqz	a0,ffffffffc02002d6 <kmonitor+0xaa>
+    for (i = 0; i < NCOMMANDS; i ++) {
+ffffffffc02002c2:	2405                	addiw	s0,s0,1
+ffffffffc02002c4:	0b540063          	beq	s0,s5,ffffffffc0200364 <kmonitor+0x138>
+        if (strcmp(commands[i].name, argv[0]) == 0) {
+ffffffffc02002c8:	000d3503          	ld	a0,0(s10)
+ffffffffc02002cc:	6582                	ld	a1,0(sp)
+    for (i = 0; i < NCOMMANDS; i ++) {
+ffffffffc02002ce:	0d61                	addi	s10,s10,24
+        if (strcmp(commands[i].name, argv[0]) == 0) {
+ffffffffc02002d0:	140040ef          	jal	ra,ffffffffc0204410 <strcmp>
+ffffffffc02002d4:	f57d                	bnez	a0,ffffffffc02002c2 <kmonitor+0x96>
             return commands[i].func(argc - 1, argv + 1, tf);
-ffffffffc020032a:	00141793          	slli	a5,s0,0x1
-ffffffffc020032e:	97a2                	add	a5,a5,s0
-ffffffffc0200330:	078e                	slli	a5,a5,0x3
-ffffffffc0200332:	97e2                	add	a5,a5,s8
-ffffffffc0200334:	6b9c                	ld	a5,16(a5)
-ffffffffc0200336:	865a                	mv	a2,s6
-ffffffffc0200338:	002c                	addi	a1,sp,8
-ffffffffc020033a:	fffc851b          	addiw	a0,s9,-1
-ffffffffc020033e:	9782                	jalr	a5
+ffffffffc02002d6:	00141793          	slli	a5,s0,0x1
+ffffffffc02002da:	97a2                	add	a5,a5,s0
+ffffffffc02002dc:	078e                	slli	a5,a5,0x3
+ffffffffc02002de:	97e2                	add	a5,a5,s8
+ffffffffc02002e0:	6b9c                	ld	a5,16(a5)
+ffffffffc02002e2:	865e                	mv	a2,s7
+ffffffffc02002e4:	002c                	addi	a1,sp,8
+ffffffffc02002e6:	fffc851b          	addiw	a0,s9,-1
+ffffffffc02002ea:	9782                	jalr	a5
             if (runcmd(buf, tf) < 0) {
-ffffffffc0200340:	f40559e3          	bgez	a0,ffffffffc0200292 <kmonitor+0x6a>
+ffffffffc02002ec:	fa0555e3          	bgez	a0,ffffffffc0200296 <kmonitor+0x6a>
 }
-ffffffffc0200344:	60ee                	ld	ra,216(sp)
-ffffffffc0200346:	644e                	ld	s0,208(sp)
-ffffffffc0200348:	64ae                	ld	s1,200(sp)
-ffffffffc020034a:	690e                	ld	s2,192(sp)
-ffffffffc020034c:	79ea                	ld	s3,184(sp)
-ffffffffc020034e:	7a4a                	ld	s4,176(sp)
-ffffffffc0200350:	7aaa                	ld	s5,168(sp)
-ffffffffc0200352:	7b0a                	ld	s6,160(sp)
-ffffffffc0200354:	6bea                	ld	s7,152(sp)
-ffffffffc0200356:	6c4a                	ld	s8,144(sp)
-ffffffffc0200358:	6caa                	ld	s9,136(sp)
-ffffffffc020035a:	6d0a                	ld	s10,128(sp)
-ffffffffc020035c:	612d                	addi	sp,sp,224
-ffffffffc020035e:	8082                	ret
+ffffffffc02002f0:	60ee                	ld	ra,216(sp)
+ffffffffc02002f2:	644e                	ld	s0,208(sp)
+ffffffffc02002f4:	64ae                	ld	s1,200(sp)
+ffffffffc02002f6:	690e                	ld	s2,192(sp)
+ffffffffc02002f8:	79ea                	ld	s3,184(sp)
+ffffffffc02002fa:	7a4a                	ld	s4,176(sp)
+ffffffffc02002fc:	7aaa                	ld	s5,168(sp)
+ffffffffc02002fe:	7b0a                	ld	s6,160(sp)
+ffffffffc0200300:	6bea                	ld	s7,152(sp)
+ffffffffc0200302:	6c4a                	ld	s8,144(sp)
+ffffffffc0200304:	6caa                	ld	s9,136(sp)
+ffffffffc0200306:	6d0a                	ld	s10,128(sp)
+ffffffffc0200308:	612d                	addi	sp,sp,224
+ffffffffc020030a:	8082                	ret
+        while (*buf != '\0' && strchr(WHITESPACE, *buf) != NULL) {
+ffffffffc020030c:	8526                	mv	a0,s1
+ffffffffc020030e:	120040ef          	jal	ra,ffffffffc020442e <strchr>
+ffffffffc0200312:	c901                	beqz	a0,ffffffffc0200322 <kmonitor+0xf6>
+ffffffffc0200314:	00144583          	lbu	a1,1(s0)
+            *buf ++ = '\0';
+ffffffffc0200318:	00040023          	sb	zero,0(s0)
+ffffffffc020031c:	0405                	addi	s0,s0,1
+        while (*buf != '\0' && strchr(WHITESPACE, *buf) != NULL) {
+ffffffffc020031e:	d5c9                	beqz	a1,ffffffffc02002a8 <kmonitor+0x7c>
+ffffffffc0200320:	b7f5                	j	ffffffffc020030c <kmonitor+0xe0>
+        if (*buf == '\0') {
+ffffffffc0200322:	00044783          	lbu	a5,0(s0)
+ffffffffc0200326:	d3c9                	beqz	a5,ffffffffc02002a8 <kmonitor+0x7c>
+        if (argc == MAXARGS - 1) {
+ffffffffc0200328:	033c8963          	beq	s9,s3,ffffffffc020035a <kmonitor+0x12e>
+        argv[argc ++] = buf;
+ffffffffc020032c:	003c9793          	slli	a5,s9,0x3
+ffffffffc0200330:	0118                	addi	a4,sp,128
+ffffffffc0200332:	97ba                	add	a5,a5,a4
+ffffffffc0200334:	f887b023          	sd	s0,-128(a5)
+        while (*buf != '\0' && strchr(WHITESPACE, *buf) == NULL) {
+ffffffffc0200338:	00044583          	lbu	a1,0(s0)
+        argv[argc ++] = buf;
+ffffffffc020033c:	2c85                	addiw	s9,s9,1
+        while (*buf != '\0' && strchr(WHITESPACE, *buf) == NULL) {
+ffffffffc020033e:	e591                	bnez	a1,ffffffffc020034a <kmonitor+0x11e>
+ffffffffc0200340:	b7b5                	j	ffffffffc02002ac <kmonitor+0x80>
+ffffffffc0200342:	00144583          	lbu	a1,1(s0)
+            buf ++;
+ffffffffc0200346:	0405                	addi	s0,s0,1
+        while (*buf != '\0' && strchr(WHITESPACE, *buf) == NULL) {
+ffffffffc0200348:	d1a5                	beqz	a1,ffffffffc02002a8 <kmonitor+0x7c>
+ffffffffc020034a:	8526                	mv	a0,s1
+ffffffffc020034c:	0e2040ef          	jal	ra,ffffffffc020442e <strchr>
+ffffffffc0200350:	d96d                	beqz	a0,ffffffffc0200342 <kmonitor+0x116>
+        while (*buf != '\0' && strchr(WHITESPACE, *buf) != NULL) {
+ffffffffc0200352:	00044583          	lbu	a1,0(s0)
+ffffffffc0200356:	d9a9                	beqz	a1,ffffffffc02002a8 <kmonitor+0x7c>
+ffffffffc0200358:	bf55                	j	ffffffffc020030c <kmonitor+0xe0>
+            cprintf("Too many arguments (max %d).\n", MAXARGS);
+ffffffffc020035a:	45c1                	li	a1,16
+ffffffffc020035c:	855a                	mv	a0,s6
+ffffffffc020035e:	d5dff0ef          	jal	ra,ffffffffc02000ba <cprintf>
+ffffffffc0200362:	b7e9                	j	ffffffffc020032c <kmonitor+0x100>
+    cprintf("Unknown command '%s'\n", argv[0]);
+ffffffffc0200364:	6582                	ld	a1,0(sp)
+ffffffffc0200366:	00004517          	auipc	a0,0x4
+ffffffffc020036a:	34a50513          	addi	a0,a0,842 # ffffffffc02046b0 <etext+0x242>
+ffffffffc020036e:	d4dff0ef          	jal	ra,ffffffffc02000ba <cprintf>
+    return 0;
+ffffffffc0200372:	b715                	j	ffffffffc0200296 <kmonitor+0x6a>
 
-ffffffffc0200360 <__panic>:
+ffffffffc0200374 <__panic>:
  * __panic - __panic is called on unresolvable fatal errors. it prints
  * "panic: 'message'", and then enters the kernel monitor.
  * */
 void
 __panic(const char *file, int line, const char *fmt, ...) {
     if (is_panic) {
-ffffffffc0200360:	00011317          	auipc	t1,0x11
-ffffffffc0200364:	19830313          	addi	t1,t1,408 # ffffffffc02114f8 <is_panic>
-ffffffffc0200368:	00032e03          	lw	t3,0(t1)
+ffffffffc0200374:	00011317          	auipc	t1,0x11
+ffffffffc0200378:	18430313          	addi	t1,t1,388 # ffffffffc02114f8 <is_panic>
+ffffffffc020037c:	00032e03          	lw	t3,0(t1)
 __panic(const char *file, int line, const char *fmt, ...) {
-ffffffffc020036c:	715d                	addi	sp,sp,-80
-ffffffffc020036e:	ec06                	sd	ra,24(sp)
-ffffffffc0200370:	f436                	sd	a3,40(sp)
-ffffffffc0200372:	f83a                	sd	a4,48(sp)
-ffffffffc0200374:	fc3e                	sd	a5,56(sp)
-ffffffffc0200376:	e0c2                	sd	a6,64(sp)
-ffffffffc0200378:	e4c6                	sd	a7,72(sp)
+ffffffffc0200380:	715d                	addi	sp,sp,-80
+ffffffffc0200382:	ec06                	sd	ra,24(sp)
+ffffffffc0200384:	e822                	sd	s0,16(sp)
+ffffffffc0200386:	f436                	sd	a3,40(sp)
+ffffffffc0200388:	f83a                	sd	a4,48(sp)
+ffffffffc020038a:	fc3e                	sd	a5,56(sp)
+ffffffffc020038c:	e0c2                	sd	a6,64(sp)
+ffffffffc020038e:	e4c6                	sd	a7,72(sp)
     if (is_panic) {
-ffffffffc020037a:	020e1c63          	bnez	t3,ffffffffc02003b2 <__panic+0x52>
+ffffffffc0200390:	020e1a63          	bnez	t3,ffffffffc02003c4 <__panic+0x50>
         goto panic_dead;
     }
     is_panic = 1;
-ffffffffc020037e:	4785                	li	a5,1
-ffffffffc0200380:	00f32023          	sw	a5,0(t1)
+ffffffffc0200394:	4785                	li	a5,1
+ffffffffc0200396:	00f32023          	sw	a5,0(t1)
 
     // print the 'message'
     va_list ap;
     va_start(ap, fmt);
-ffffffffc0200384:	e822                	sd	s0,16(sp)
-ffffffffc0200386:	103c                	addi	a5,sp,40
-ffffffffc0200388:	8432                	mv	s0,a2
+ffffffffc020039a:	8432                	mv	s0,a2
+ffffffffc020039c:	103c                	addi	a5,sp,40
     cprintf("kernel panic at %s:%d:\n    ", file, line);
-ffffffffc020038a:	862e                	mv	a2,a1
-ffffffffc020038c:	85aa                	mv	a1,a0
-ffffffffc020038e:	00004517          	auipc	a0,0x4
-ffffffffc0200392:	41a50513          	addi	a0,a0,1050 # ffffffffc02047a8 <etext+0x258>
+ffffffffc020039e:	862e                	mv	a2,a1
+ffffffffc02003a0:	85aa                	mv	a1,a0
+ffffffffc02003a2:	00004517          	auipc	a0,0x4
+ffffffffc02003a6:	36e50513          	addi	a0,a0,878 # ffffffffc0204710 <commands+0x48>
     va_start(ap, fmt);
-ffffffffc0200396:	e43e                	sd	a5,8(sp)
+ffffffffc02003aa:	e43e                	sd	a5,8(sp)
     cprintf("kernel panic at %s:%d:\n    ", file, line);
-ffffffffc0200398:	d23ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02003ac:	d0fff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     vcprintf(fmt, ap);
-ffffffffc020039c:	65a2                	ld	a1,8(sp)
-ffffffffc020039e:	8522                	mv	a0,s0
-ffffffffc02003a0:	cfbff0ef          	jal	ffffffffc020009a <vcprintf>
+ffffffffc02003b0:	65a2                	ld	a1,8(sp)
+ffffffffc02003b2:	8522                	mv	a0,s0
+ffffffffc02003b4:	ce7ff0ef          	jal	ra,ffffffffc020009a <vcprintf>
     cprintf("\n");
-ffffffffc02003a4:	00005517          	auipc	a0,0x5
-ffffffffc02003a8:	27450513          	addi	a0,a0,628 # ffffffffc0205618 <etext+0x10c8>
-ffffffffc02003ac:	d0fff0ef          	jal	ffffffffc02000ba <cprintf>
-ffffffffc02003b0:	6442                	ld	s0,16(sp)
+ffffffffc02003b8:	00005517          	auipc	a0,0x5
+ffffffffc02003bc:	27050513          	addi	a0,a0,624 # ffffffffc0205628 <default_pmm_manager+0x478>
+ffffffffc02003c0:	cfbff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     va_end(ap);
 
 panic_dead:
     intr_disable();
-ffffffffc02003b2:	12a000ef          	jal	ffffffffc02004dc <intr_disable>
+ffffffffc02003c4:	12a000ef          	jal	ra,ffffffffc02004ee <intr_disable>
     while (1) {
         kmonitor(NULL);
-ffffffffc02003b6:	4501                	li	a0,0
-ffffffffc02003b8:	e71ff0ef          	jal	ffffffffc0200228 <kmonitor>
+ffffffffc02003c8:	4501                	li	a0,0
+ffffffffc02003ca:	e63ff0ef          	jal	ra,ffffffffc020022c <kmonitor>
     while (1) {
-ffffffffc02003bc:	bfed                	j	ffffffffc02003b6 <__panic+0x56>
+ffffffffc02003ce:	bfed                	j	ffffffffc02003c8 <__panic+0x54>
 
-ffffffffc02003be <clock_init>:
+ffffffffc02003d0 <clock_init>:
  * and then enable IRQ_TIMER.
  * */
 void clock_init(void) {
     // divided by 500 when using Spike(2MHz)
     // divided by 100 when using QEMU(10MHz)
     timebase = 1e7 / 100;
-ffffffffc02003be:	67e1                	lui	a5,0x18
-ffffffffc02003c0:	6a078793          	addi	a5,a5,1696 # 186a0 <kern_entry-0xffffffffc01e7960>
-ffffffffc02003c4:	00011717          	auipc	a4,0x11
-ffffffffc02003c8:	12f73e23          	sd	a5,316(a4) # ffffffffc0211500 <timebase>
+ffffffffc02003d0:	67e1                	lui	a5,0x18
+ffffffffc02003d2:	6a078793          	addi	a5,a5,1696 # 186a0 <kern_entry-0xffffffffc01e7960>
+ffffffffc02003d6:	00011717          	auipc	a4,0x11
+ffffffffc02003da:	12f73923          	sd	a5,306(a4) # ffffffffc0211508 <timebase>
     __asm__ __volatile__("rdtime %0" : "=r"(n));
-ffffffffc02003cc:	c0102573          	rdtime	a0
+ffffffffc02003de:	c0102573          	rdtime	a0
 static inline void sbi_set_timer(uint64_t stime_value)
 {
 #if __riscv_xlen == 32
 	SBI_CALL_2(SBI_SET_TIMER, stime_value, stime_value >> 32);
 #else
 	SBI_CALL_1(SBI_SET_TIMER, stime_value);
-ffffffffc02003d0:	4581                	li	a1,0
+ffffffffc02003e2:	4581                	li	a1,0
     ticks = 0;
 
     cprintf("++ setup timer interrupts\n");
 }
 
 void clock_set_next_event(void) { sbi_set_timer(get_cycles() + timebase); }
-ffffffffc02003d2:	953e                	add	a0,a0,a5
-ffffffffc02003d4:	4601                	li	a2,0
-ffffffffc02003d6:	4881                	li	a7,0
-ffffffffc02003d8:	00000073          	ecall
+ffffffffc02003e4:	953e                	add	a0,a0,a5
+ffffffffc02003e6:	4601                	li	a2,0
+ffffffffc02003e8:	4881                	li	a7,0
+ffffffffc02003ea:	00000073          	ecall
     set_csr(sie, MIP_STIP);
-ffffffffc02003dc:	02000793          	li	a5,32
-ffffffffc02003e0:	1047a7f3          	csrrs	a5,sie,a5
+ffffffffc02003ee:	02000793          	li	a5,32
+ffffffffc02003f2:	1047a7f3          	csrrs	a5,sie,a5
     cprintf("++ setup timer interrupts\n");
-ffffffffc02003e4:	00004517          	auipc	a0,0x4
-ffffffffc02003e8:	3e450513          	addi	a0,a0,996 # ffffffffc02047c8 <etext+0x278>
+ffffffffc02003f6:	00004517          	auipc	a0,0x4
+ffffffffc02003fa:	33a50513          	addi	a0,a0,826 # ffffffffc0204730 <commands+0x68>
     ticks = 0;
-ffffffffc02003ec:	00011797          	auipc	a5,0x11
-ffffffffc02003f0:	1007be23          	sd	zero,284(a5) # ffffffffc0211508 <ticks>
+ffffffffc02003fe:	00011797          	auipc	a5,0x11
+ffffffffc0200402:	1007b123          	sd	zero,258(a5) # ffffffffc0211500 <ticks>
     cprintf("++ setup timer interrupts\n");
-ffffffffc02003f4:	b1d9                	j	ffffffffc02000ba <cprintf>
+ffffffffc0200406:	b955                	j	ffffffffc02000ba <cprintf>
 
-ffffffffc02003f6 <clock_set_next_event>:
+ffffffffc0200408 <clock_set_next_event>:
     __asm__ __volatile__("rdtime %0" : "=r"(n));
-ffffffffc02003f6:	c0102573          	rdtime	a0
+ffffffffc0200408:	c0102573          	rdtime	a0
 void clock_set_next_event(void) { sbi_set_timer(get_cycles() + timebase); }
-ffffffffc02003fa:	00011797          	auipc	a5,0x11
-ffffffffc02003fe:	1067b783          	ld	a5,262(a5) # ffffffffc0211500 <timebase>
-ffffffffc0200402:	953e                	add	a0,a0,a5
-ffffffffc0200404:	4581                	li	a1,0
-ffffffffc0200406:	4601                	li	a2,0
-ffffffffc0200408:	4881                	li	a7,0
-ffffffffc020040a:	00000073          	ecall
-ffffffffc020040e:	8082                	ret
+ffffffffc020040c:	00011797          	auipc	a5,0x11
+ffffffffc0200410:	0fc7b783          	ld	a5,252(a5) # ffffffffc0211508 <timebase>
+ffffffffc0200414:	953e                	add	a0,a0,a5
+ffffffffc0200416:	4581                	li	a1,0
+ffffffffc0200418:	4601                	li	a2,0
+ffffffffc020041a:	4881                	li	a7,0
+ffffffffc020041c:	00000073          	ecall
+ffffffffc0200420:	8082                	ret
 
-ffffffffc0200410 <cons_putc>:
+ffffffffc0200422 <cons_putc>:
 #include <intr.h>
 #include <mmu.h>
 #include <riscv.h>
 
 static inline bool __intr_save(void) {
     if (read_csr(sstatus) & SSTATUS_SIE) {
-ffffffffc0200410:	100027f3          	csrr	a5,sstatus
-ffffffffc0200414:	8b89                	andi	a5,a5,2
+ffffffffc0200422:	100027f3          	csrr	a5,sstatus
+ffffffffc0200426:	8b89                	andi	a5,a5,2
 	SBI_CALL_1(SBI_CONSOLE_PUTCHAR, ch);
-ffffffffc0200416:	0ff57513          	zext.b	a0,a0
-ffffffffc020041a:	e799                	bnez	a5,ffffffffc0200428 <cons_putc+0x18>
-ffffffffc020041c:	4581                	li	a1,0
-ffffffffc020041e:	4601                	li	a2,0
-ffffffffc0200420:	4885                	li	a7,1
-ffffffffc0200422:	00000073          	ecall
+ffffffffc0200428:	0ff57513          	zext.b	a0,a0
+ffffffffc020042c:	e799                	bnez	a5,ffffffffc020043a <cons_putc+0x18>
+ffffffffc020042e:	4581                	li	a1,0
+ffffffffc0200430:	4601                	li	a2,0
+ffffffffc0200432:	4885                	li	a7,1
+ffffffffc0200434:	00000073          	ecall
     }
     return 0;
 }
 
 static inline void __intr_restore(bool flag) {
     if (flag) {
-ffffffffc0200426:	8082                	ret
+ffffffffc0200438:	8082                	ret
 
 /* cons_init - initializes the console devices */
 void cons_init(void) {}
 
 /* cons_putc - print a single character @c to console devices */
 void cons_putc(int c) {
-ffffffffc0200428:	1101                	addi	sp,sp,-32
-ffffffffc020042a:	ec06                	sd	ra,24(sp)
-ffffffffc020042c:	e42a                	sd	a0,8(sp)
+ffffffffc020043a:	1101                	addi	sp,sp,-32
+ffffffffc020043c:	ec06                	sd	ra,24(sp)
+ffffffffc020043e:	e42a                	sd	a0,8(sp)
         intr_disable();
-ffffffffc020042e:	0ae000ef          	jal	ffffffffc02004dc <intr_disable>
-ffffffffc0200432:	6522                	ld	a0,8(sp)
-ffffffffc0200434:	4581                	li	a1,0
-ffffffffc0200436:	4601                	li	a2,0
-ffffffffc0200438:	4885                	li	a7,1
-ffffffffc020043a:	00000073          	ecall
+ffffffffc0200440:	0ae000ef          	jal	ra,ffffffffc02004ee <intr_disable>
+ffffffffc0200444:	6522                	ld	a0,8(sp)
+ffffffffc0200446:	4581                	li	a1,0
+ffffffffc0200448:	4601                	li	a2,0
+ffffffffc020044a:	4885                	li	a7,1
+ffffffffc020044c:	00000073          	ecall
     local_intr_save(intr_flag);
     {
         sbi_console_putchar((unsigned char)c);
     }
     local_intr_restore(intr_flag);
 }
-ffffffffc020043e:	60e2                	ld	ra,24(sp)
-ffffffffc0200440:	6105                	addi	sp,sp,32
+ffffffffc0200450:	60e2                	ld	ra,24(sp)
+ffffffffc0200452:	6105                	addi	sp,sp,32
         intr_enable();
-ffffffffc0200442:	a851                	j	ffffffffc02004d6 <intr_enable>
+ffffffffc0200454:	a851                	j	ffffffffc02004e8 <intr_enable>
 
-ffffffffc0200444 <cons_getc>:
+ffffffffc0200456 <cons_getc>:
     if (read_csr(sstatus) & SSTATUS_SIE) {
-ffffffffc0200444:	100027f3          	csrr	a5,sstatus
-ffffffffc0200448:	8b89                	andi	a5,a5,2
-ffffffffc020044a:	eb89                	bnez	a5,ffffffffc020045c <cons_getc+0x18>
+ffffffffc0200456:	100027f3          	csrr	a5,sstatus
+ffffffffc020045a:	8b89                	andi	a5,a5,2
+ffffffffc020045c:	eb89                	bnez	a5,ffffffffc020046e <cons_getc+0x18>
 	return SBI_CALL_0(SBI_CONSOLE_GETCHAR);
-ffffffffc020044c:	4501                	li	a0,0
-ffffffffc020044e:	4581                	li	a1,0
-ffffffffc0200450:	4601                	li	a2,0
-ffffffffc0200452:	4889                	li	a7,2
-ffffffffc0200454:	00000073          	ecall
-ffffffffc0200458:	2501                	sext.w	a0,a0
+ffffffffc020045e:	4501                	li	a0,0
+ffffffffc0200460:	4581                	li	a1,0
+ffffffffc0200462:	4601                	li	a2,0
+ffffffffc0200464:	4889                	li	a7,2
+ffffffffc0200466:	00000073          	ecall
+ffffffffc020046a:	2501                	sext.w	a0,a0
     {
         c = sbi_console_getchar();
     }
     local_intr_restore(intr_flag);
     return c;
 }
-ffffffffc020045a:	8082                	ret
+ffffffffc020046c:	8082                	ret
 int cons_getc(void) {
-ffffffffc020045c:	1101                	addi	sp,sp,-32
-ffffffffc020045e:	ec06                	sd	ra,24(sp)
+ffffffffc020046e:	1101                	addi	sp,sp,-32
+ffffffffc0200470:	ec06                	sd	ra,24(sp)
         intr_disable();
-ffffffffc0200460:	07c000ef          	jal	ffffffffc02004dc <intr_disable>
-ffffffffc0200464:	4501                	li	a0,0
-ffffffffc0200466:	4581                	li	a1,0
-ffffffffc0200468:	4601                	li	a2,0
-ffffffffc020046a:	4889                	li	a7,2
-ffffffffc020046c:	00000073          	ecall
-ffffffffc0200470:	2501                	sext.w	a0,a0
-ffffffffc0200472:	e42a                	sd	a0,8(sp)
+ffffffffc0200472:	07c000ef          	jal	ra,ffffffffc02004ee <intr_disable>
+ffffffffc0200476:	4501                	li	a0,0
+ffffffffc0200478:	4581                	li	a1,0
+ffffffffc020047a:	4601                	li	a2,0
+ffffffffc020047c:	4889                	li	a7,2
+ffffffffc020047e:	00000073          	ecall
+ffffffffc0200482:	2501                	sext.w	a0,a0
+ffffffffc0200484:	e42a                	sd	a0,8(sp)
         intr_enable();
-ffffffffc0200474:	062000ef          	jal	ffffffffc02004d6 <intr_enable>
+ffffffffc0200486:	062000ef          	jal	ra,ffffffffc02004e8 <intr_enable>
 }
-ffffffffc0200478:	60e2                	ld	ra,24(sp)
-ffffffffc020047a:	6522                	ld	a0,8(sp)
-ffffffffc020047c:	6105                	addi	sp,sp,32
-ffffffffc020047e:	8082                	ret
+ffffffffc020048a:	60e2                	ld	ra,24(sp)
+ffffffffc020048c:	6522                	ld	a0,8(sp)
+ffffffffc020048e:	6105                	addi	sp,sp,32
+ffffffffc0200490:	8082                	ret
 
-ffffffffc0200480 <ide_init>:
+ffffffffc0200492 <ide_init>:
 #include <stdio.h>
 #include <string.h>
 #include <trap.h>
 #include <riscv.h>
 
 void ide_init(void) {}
-ffffffffc0200480:	8082                	ret
+ffffffffc0200492:	8082                	ret
 
-ffffffffc0200482 <ide_device_valid>:
+ffffffffc0200494 <ide_device_valid>:
 
 #define MAX_IDE 2
 #define MAX_DISK_NSECS 56
 static char ide[MAX_DISK_NSECS * SECTSIZE];
 
 bool ide_device_valid(unsigned short ideno) { return ideno < MAX_IDE; }
-ffffffffc0200482:	00253513          	sltiu	a0,a0,2
-ffffffffc0200486:	8082                	ret
+ffffffffc0200494:	00253513          	sltiu	a0,a0,2
+ffffffffc0200498:	8082                	ret
 
-ffffffffc0200488 <ide_device_size>:
+ffffffffc020049a <ide_device_size>:
 
 size_t ide_device_size(unsigned short ideno) { return MAX_DISK_NSECS; }
-ffffffffc0200488:	03800513          	li	a0,56
-ffffffffc020048c:	8082                	ret
+ffffffffc020049a:	03800513          	li	a0,56
+ffffffffc020049e:	8082                	ret
 
-ffffffffc020048e <ide_read_secs>:
+ffffffffc02004a0 <ide_read_secs>:
 
 int ide_read_secs(unsigned short ideno, uint32_t secno, void *dst,
                   size_t nsecs) {
     int iobase = secno * SECTSIZE;
     memcpy(dst, &ide[iobase], nsecs * SECTSIZE);
-ffffffffc020048e:	0000a797          	auipc	a5,0xa
-ffffffffc0200492:	bb278793          	addi	a5,a5,-1102 # ffffffffc020a040 <ide>
+ffffffffc02004a0:	0000a797          	auipc	a5,0xa
+ffffffffc02004a4:	ba078793          	addi	a5,a5,-1120 # ffffffffc020a040 <ide>
     int iobase = secno * SECTSIZE;
-ffffffffc0200496:	0095959b          	slliw	a1,a1,0x9
+ffffffffc02004a8:	0095959b          	slliw	a1,a1,0x9
                   size_t nsecs) {
-ffffffffc020049a:	1141                	addi	sp,sp,-16
-ffffffffc020049c:	8532                	mv	a0,a2
+ffffffffc02004ac:	1141                	addi	sp,sp,-16
+ffffffffc02004ae:	8532                	mv	a0,a2
     memcpy(dst, &ide[iobase], nsecs * SECTSIZE);
-ffffffffc020049e:	95be                	add	a1,a1,a5
-ffffffffc02004a0:	00969613          	slli	a2,a3,0x9
+ffffffffc02004b0:	95be                	add	a1,a1,a5
+ffffffffc02004b2:	00969613          	slli	a2,a3,0x9
                   size_t nsecs) {
-ffffffffc02004a4:	e406                	sd	ra,8(sp)
+ffffffffc02004b6:	e406                	sd	ra,8(sp)
     memcpy(dst, &ide[iobase], nsecs * SECTSIZE);
-ffffffffc02004a6:	092040ef          	jal	ffffffffc0204538 <memcpy>
+ffffffffc02004b8:	79f030ef          	jal	ra,ffffffffc0204456 <memcpy>
     return 0;
 }
-ffffffffc02004aa:	60a2                	ld	ra,8(sp)
-ffffffffc02004ac:	4501                	li	a0,0
-ffffffffc02004ae:	0141                	addi	sp,sp,16
-ffffffffc02004b0:	8082                	ret
+ffffffffc02004bc:	60a2                	ld	ra,8(sp)
+ffffffffc02004be:	4501                	li	a0,0
+ffffffffc02004c0:	0141                	addi	sp,sp,16
+ffffffffc02004c2:	8082                	ret
 
-ffffffffc02004b2 <ide_write_secs>:
+ffffffffc02004c4 <ide_write_secs>:
 
 int ide_write_secs(unsigned short ideno, uint32_t secno, const void *src,
                    size_t nsecs) {
     int iobase = secno * SECTSIZE;
-ffffffffc02004b2:	0095979b          	slliw	a5,a1,0x9
+ffffffffc02004c4:	0095979b          	slliw	a5,a1,0x9
     memcpy(&ide[iobase], src, nsecs * SECTSIZE);
-ffffffffc02004b6:	0000a517          	auipc	a0,0xa
-ffffffffc02004ba:	b8a50513          	addi	a0,a0,-1142 # ffffffffc020a040 <ide>
+ffffffffc02004c8:	0000a517          	auipc	a0,0xa
+ffffffffc02004cc:	b7850513          	addi	a0,a0,-1160 # ffffffffc020a040 <ide>
                    size_t nsecs) {
-ffffffffc02004be:	1141                	addi	sp,sp,-16
-ffffffffc02004c0:	85b2                	mv	a1,a2
+ffffffffc02004d0:	1141                	addi	sp,sp,-16
+ffffffffc02004d2:	85b2                	mv	a1,a2
     memcpy(&ide[iobase], src, nsecs * SECTSIZE);
-ffffffffc02004c2:	953e                	add	a0,a0,a5
-ffffffffc02004c4:	00969613          	slli	a2,a3,0x9
+ffffffffc02004d4:	953e                	add	a0,a0,a5
+ffffffffc02004d6:	00969613          	slli	a2,a3,0x9
                    size_t nsecs) {
-ffffffffc02004c8:	e406                	sd	ra,8(sp)
+ffffffffc02004da:	e406                	sd	ra,8(sp)
     memcpy(&ide[iobase], src, nsecs * SECTSIZE);
-ffffffffc02004ca:	06e040ef          	jal	ffffffffc0204538 <memcpy>
+ffffffffc02004dc:	77b030ef          	jal	ra,ffffffffc0204456 <memcpy>
     return 0;
 }
-ffffffffc02004ce:	60a2                	ld	ra,8(sp)
-ffffffffc02004d0:	4501                	li	a0,0
-ffffffffc02004d2:	0141                	addi	sp,sp,16
-ffffffffc02004d4:	8082                	ret
+ffffffffc02004e0:	60a2                	ld	ra,8(sp)
+ffffffffc02004e2:	4501                	li	a0,0
+ffffffffc02004e4:	0141                	addi	sp,sp,16
+ffffffffc02004e6:	8082                	ret
 
-ffffffffc02004d6 <intr_enable>:
+ffffffffc02004e8 <intr_enable>:
 #include <intr.h>
 #include <riscv.h>
 
 /* intr_enable - enable irq interrupt */
 void intr_enable(void) { set_csr(sstatus, SSTATUS_SIE); }
-ffffffffc02004d6:	100167f3          	csrrsi	a5,sstatus,2
-ffffffffc02004da:	8082                	ret
+ffffffffc02004e8:	100167f3          	csrrsi	a5,sstatus,2
+ffffffffc02004ec:	8082                	ret
 
-ffffffffc02004dc <intr_disable>:
+ffffffffc02004ee <intr_disable>:
 
 /* intr_disable - disable irq interrupt */
 void intr_disable(void) { clear_csr(sstatus, SSTATUS_SIE); }
-ffffffffc02004dc:	100177f3          	csrrci	a5,sstatus,2
-ffffffffc02004e0:	8082                	ret
+ffffffffc02004ee:	100177f3          	csrrci	a5,sstatus,2
+ffffffffc02004f2:	8082                	ret
 
-ffffffffc02004e2 <pgfault_handler>:
+ffffffffc02004f4 <pgfault_handler>:
     set_csr(sstatus, SSTATUS_SUM);
 }
 
 /* trap_in_kernel - test if trap happened in kernel */
 bool trap_in_kernel(struct trapframe *tf) {
     return (tf->status & SSTATUS_SPP) != 0;
-ffffffffc02004e2:	10053783          	ld	a5,256(a0)
+ffffffffc02004f4:	10053783          	ld	a5,256(a0)
     cprintf("page fault at 0x%08x: %c/%c\n", tf->badvaddr,
             trap_in_kernel(tf) ? 'K' : 'U',
             tf->cause == CAUSE_STORE_PAGE_FAULT ? 'W' : 'R');
 }
 
 static int pgfault_handler(struct trapframe *tf) {
-ffffffffc02004e6:	1141                	addi	sp,sp,-16
-ffffffffc02004e8:	e022                	sd	s0,0(sp)
-ffffffffc02004ea:	e406                	sd	ra,8(sp)
+ffffffffc02004f8:	1141                	addi	sp,sp,-16
+ffffffffc02004fa:	e022                	sd	s0,0(sp)
+ffffffffc02004fc:	e406                	sd	ra,8(sp)
     return (tf->status & SSTATUS_SPP) != 0;
-ffffffffc02004ec:	1007f793          	andi	a5,a5,256
+ffffffffc02004fe:	1007f793          	andi	a5,a5,256
     cprintf("page fault at 0x%08x: %c/%c\n", tf->badvaddr,
-ffffffffc02004f0:	11053583          	ld	a1,272(a0)
+ffffffffc0200502:	11053583          	ld	a1,272(a0)
 static int pgfault_handler(struct trapframe *tf) {
-ffffffffc02004f4:	842a                	mv	s0,a0
+ffffffffc0200506:	842a                	mv	s0,a0
     cprintf("page fault at 0x%08x: %c/%c\n", tf->badvaddr,
-ffffffffc02004f6:	04b00613          	li	a2,75
-ffffffffc02004fa:	e399                	bnez	a5,ffffffffc0200500 <pgfault_handler+0x1e>
-ffffffffc02004fc:	05500613          	li	a2,85
-ffffffffc0200500:	11843703          	ld	a4,280(s0)
-ffffffffc0200504:	47bd                	li	a5,15
-ffffffffc0200506:	05200693          	li	a3,82
-ffffffffc020050a:	00f71463          	bne	a4,a5,ffffffffc0200512 <pgfault_handler+0x30>
-ffffffffc020050e:	05700693          	li	a3,87
-ffffffffc0200512:	00004517          	auipc	a0,0x4
-ffffffffc0200516:	2d650513          	addi	a0,a0,726 # ffffffffc02047e8 <etext+0x298>
-ffffffffc020051a:	ba1ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200508:	05500613          	li	a2,85
+ffffffffc020050c:	c399                	beqz	a5,ffffffffc0200512 <pgfault_handler+0x1e>
+ffffffffc020050e:	04b00613          	li	a2,75
+ffffffffc0200512:	11843703          	ld	a4,280(s0)
+ffffffffc0200516:	47bd                	li	a5,15
+ffffffffc0200518:	05700693          	li	a3,87
+ffffffffc020051c:	00f70463          	beq	a4,a5,ffffffffc0200524 <pgfault_handler+0x30>
+ffffffffc0200520:	05200693          	li	a3,82
+ffffffffc0200524:	00004517          	auipc	a0,0x4
+ffffffffc0200528:	22c50513          	addi	a0,a0,556 # ffffffffc0204750 <commands+0x88>
+ffffffffc020052c:	b8fff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     extern struct mm_struct *check_mm_struct;
     print_pgfault(tf);
     if (check_mm_struct != NULL) {
-ffffffffc020051e:	00011517          	auipc	a0,0x11
-ffffffffc0200522:	05253503          	ld	a0,82(a0) # ffffffffc0211570 <check_mm_struct>
-ffffffffc0200526:	c911                	beqz	a0,ffffffffc020053a <pgfault_handler+0x58>
+ffffffffc0200530:	00011517          	auipc	a0,0x11
+ffffffffc0200534:	03853503          	ld	a0,56(a0) # ffffffffc0211568 <check_mm_struct>
+ffffffffc0200538:	c911                	beqz	a0,ffffffffc020054c <pgfault_handler+0x58>
         return do_pgfault(check_mm_struct, tf->cause, tf->badvaddr);
-ffffffffc0200528:	11043603          	ld	a2,272(s0)
-ffffffffc020052c:	11843583          	ld	a1,280(s0)
+ffffffffc020053a:	11043603          	ld	a2,272(s0)
+ffffffffc020053e:	11843583          	ld	a1,280(s0)
     }
     panic("unhandled page fault.\n");
 }
-ffffffffc0200530:	6402                	ld	s0,0(sp)
-ffffffffc0200532:	60a2                	ld	ra,8(sp)
-ffffffffc0200534:	0141                	addi	sp,sp,16
+ffffffffc0200542:	6402                	ld	s0,0(sp)
+ffffffffc0200544:	60a2                	ld	ra,8(sp)
+ffffffffc0200546:	0141                	addi	sp,sp,16
         return do_pgfault(check_mm_struct, tf->cause, tf->badvaddr);
-ffffffffc0200536:	03d0306f          	j	ffffffffc0203d72 <do_pgfault>
+ffffffffc0200548:	7780306f          	j	ffffffffc0203cc0 <do_pgfault>
     panic("unhandled page fault.\n");
-ffffffffc020053a:	00004617          	auipc	a2,0x4
-ffffffffc020053e:	2ce60613          	addi	a2,a2,718 # ffffffffc0204808 <etext+0x2b8>
-ffffffffc0200542:	07800593          	li	a1,120
-ffffffffc0200546:	00004517          	auipc	a0,0x4
-ffffffffc020054a:	2da50513          	addi	a0,a0,730 # ffffffffc0204820 <etext+0x2d0>
-ffffffffc020054e:	e13ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc020054c:	00004617          	auipc	a2,0x4
+ffffffffc0200550:	22460613          	addi	a2,a2,548 # ffffffffc0204770 <commands+0xa8>
+ffffffffc0200554:	07800593          	li	a1,120
+ffffffffc0200558:	00004517          	auipc	a0,0x4
+ffffffffc020055c:	23050513          	addi	a0,a0,560 # ffffffffc0204788 <commands+0xc0>
+ffffffffc0200560:	e15ff0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc0200552 <idt_init>:
+ffffffffc0200564 <idt_init>:
     write_csr(sscratch, 0);
-ffffffffc0200552:	14005073          	csrwi	sscratch,0
+ffffffffc0200564:	14005073          	csrwi	sscratch,0
     write_csr(stvec, &__alltraps);
-ffffffffc0200556:	00000797          	auipc	a5,0x0
-ffffffffc020055a:	4ca78793          	addi	a5,a5,1226 # ffffffffc0200a20 <__alltraps>
-ffffffffc020055e:	10579073          	csrw	stvec,a5
+ffffffffc0200568:	00000797          	auipc	a5,0x0
+ffffffffc020056c:	4c878793          	addi	a5,a5,1224 # ffffffffc0200a30 <__alltraps>
+ffffffffc0200570:	10579073          	csrw	stvec,a5
     set_csr(sstatus, SSTATUS_SIE);
-ffffffffc0200562:	100167f3          	csrrsi	a5,sstatus,2
+ffffffffc0200574:	100167f3          	csrrsi	a5,sstatus,2
     set_csr(sstatus, SSTATUS_SUM);
-ffffffffc0200566:	000407b7          	lui	a5,0x40
-ffffffffc020056a:	1007a7f3          	csrrs	a5,sstatus,a5
+ffffffffc0200578:	000407b7          	lui	a5,0x40
+ffffffffc020057c:	1007a7f3          	csrrs	a5,sstatus,a5
 }
-ffffffffc020056e:	8082                	ret
+ffffffffc0200580:	8082                	ret
 
-ffffffffc0200570 <print_regs>:
+ffffffffc0200582 <print_regs>:
     cprintf("  zero     0x%08x\n", gpr->zero);
-ffffffffc0200570:	610c                	ld	a1,0(a0)
+ffffffffc0200582:	610c                	ld	a1,0(a0)
 void print_regs(struct pushregs *gpr) {
-ffffffffc0200572:	1141                	addi	sp,sp,-16
-ffffffffc0200574:	e022                	sd	s0,0(sp)
-ffffffffc0200576:	842a                	mv	s0,a0
+ffffffffc0200584:	1141                	addi	sp,sp,-16
+ffffffffc0200586:	e022                	sd	s0,0(sp)
+ffffffffc0200588:	842a                	mv	s0,a0
     cprintf("  zero     0x%08x\n", gpr->zero);
-ffffffffc0200578:	00004517          	auipc	a0,0x4
-ffffffffc020057c:	2c050513          	addi	a0,a0,704 # ffffffffc0204838 <etext+0x2e8>
+ffffffffc020058a:	00004517          	auipc	a0,0x4
+ffffffffc020058e:	21650513          	addi	a0,a0,534 # ffffffffc02047a0 <commands+0xd8>
 void print_regs(struct pushregs *gpr) {
-ffffffffc0200580:	e406                	sd	ra,8(sp)
+ffffffffc0200592:	e406                	sd	ra,8(sp)
     cprintf("  zero     0x%08x\n", gpr->zero);
-ffffffffc0200582:	b39ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200594:	b27ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  ra       0x%08x\n", gpr->ra);
-ffffffffc0200586:	640c                	ld	a1,8(s0)
-ffffffffc0200588:	00004517          	auipc	a0,0x4
-ffffffffc020058c:	2c850513          	addi	a0,a0,712 # ffffffffc0204850 <etext+0x300>
-ffffffffc0200590:	b2bff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200598:	640c                	ld	a1,8(s0)
+ffffffffc020059a:	00004517          	auipc	a0,0x4
+ffffffffc020059e:	21e50513          	addi	a0,a0,542 # ffffffffc02047b8 <commands+0xf0>
+ffffffffc02005a2:	b19ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  sp       0x%08x\n", gpr->sp);
-ffffffffc0200594:	680c                	ld	a1,16(s0)
-ffffffffc0200596:	00004517          	auipc	a0,0x4
-ffffffffc020059a:	2d250513          	addi	a0,a0,722 # ffffffffc0204868 <etext+0x318>
-ffffffffc020059e:	b1dff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02005a6:	680c                	ld	a1,16(s0)
+ffffffffc02005a8:	00004517          	auipc	a0,0x4
+ffffffffc02005ac:	22850513          	addi	a0,a0,552 # ffffffffc02047d0 <commands+0x108>
+ffffffffc02005b0:	b0bff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  gp       0x%08x\n", gpr->gp);
-ffffffffc02005a2:	6c0c                	ld	a1,24(s0)
-ffffffffc02005a4:	00004517          	auipc	a0,0x4
-ffffffffc02005a8:	2dc50513          	addi	a0,a0,732 # ffffffffc0204880 <etext+0x330>
-ffffffffc02005ac:	b0fff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02005b4:	6c0c                	ld	a1,24(s0)
+ffffffffc02005b6:	00004517          	auipc	a0,0x4
+ffffffffc02005ba:	23250513          	addi	a0,a0,562 # ffffffffc02047e8 <commands+0x120>
+ffffffffc02005be:	afdff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  tp       0x%08x\n", gpr->tp);
-ffffffffc02005b0:	700c                	ld	a1,32(s0)
-ffffffffc02005b2:	00004517          	auipc	a0,0x4
-ffffffffc02005b6:	2e650513          	addi	a0,a0,742 # ffffffffc0204898 <etext+0x348>
-ffffffffc02005ba:	b01ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02005c2:	700c                	ld	a1,32(s0)
+ffffffffc02005c4:	00004517          	auipc	a0,0x4
+ffffffffc02005c8:	23c50513          	addi	a0,a0,572 # ffffffffc0204800 <commands+0x138>
+ffffffffc02005cc:	aefff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  t0       0x%08x\n", gpr->t0);
-ffffffffc02005be:	740c                	ld	a1,40(s0)
-ffffffffc02005c0:	00004517          	auipc	a0,0x4
-ffffffffc02005c4:	2f050513          	addi	a0,a0,752 # ffffffffc02048b0 <etext+0x360>
-ffffffffc02005c8:	af3ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02005d0:	740c                	ld	a1,40(s0)
+ffffffffc02005d2:	00004517          	auipc	a0,0x4
+ffffffffc02005d6:	24650513          	addi	a0,a0,582 # ffffffffc0204818 <commands+0x150>
+ffffffffc02005da:	ae1ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  t1       0x%08x\n", gpr->t1);
-ffffffffc02005cc:	780c                	ld	a1,48(s0)
-ffffffffc02005ce:	00004517          	auipc	a0,0x4
-ffffffffc02005d2:	2fa50513          	addi	a0,a0,762 # ffffffffc02048c8 <etext+0x378>
-ffffffffc02005d6:	ae5ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02005de:	780c                	ld	a1,48(s0)
+ffffffffc02005e0:	00004517          	auipc	a0,0x4
+ffffffffc02005e4:	25050513          	addi	a0,a0,592 # ffffffffc0204830 <commands+0x168>
+ffffffffc02005e8:	ad3ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  t2       0x%08x\n", gpr->t2);
-ffffffffc02005da:	7c0c                	ld	a1,56(s0)
-ffffffffc02005dc:	00004517          	auipc	a0,0x4
-ffffffffc02005e0:	30450513          	addi	a0,a0,772 # ffffffffc02048e0 <etext+0x390>
-ffffffffc02005e4:	ad7ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02005ec:	7c0c                	ld	a1,56(s0)
+ffffffffc02005ee:	00004517          	auipc	a0,0x4
+ffffffffc02005f2:	25a50513          	addi	a0,a0,602 # ffffffffc0204848 <commands+0x180>
+ffffffffc02005f6:	ac5ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s0       0x%08x\n", gpr->s0);
-ffffffffc02005e8:	602c                	ld	a1,64(s0)
-ffffffffc02005ea:	00004517          	auipc	a0,0x4
-ffffffffc02005ee:	30e50513          	addi	a0,a0,782 # ffffffffc02048f8 <etext+0x3a8>
-ffffffffc02005f2:	ac9ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02005fa:	602c                	ld	a1,64(s0)
+ffffffffc02005fc:	00004517          	auipc	a0,0x4
+ffffffffc0200600:	26450513          	addi	a0,a0,612 # ffffffffc0204860 <commands+0x198>
+ffffffffc0200604:	ab7ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s1       0x%08x\n", gpr->s1);
-ffffffffc02005f6:	642c                	ld	a1,72(s0)
-ffffffffc02005f8:	00004517          	auipc	a0,0x4
-ffffffffc02005fc:	31850513          	addi	a0,a0,792 # ffffffffc0204910 <etext+0x3c0>
-ffffffffc0200600:	abbff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200608:	642c                	ld	a1,72(s0)
+ffffffffc020060a:	00004517          	auipc	a0,0x4
+ffffffffc020060e:	26e50513          	addi	a0,a0,622 # ffffffffc0204878 <commands+0x1b0>
+ffffffffc0200612:	aa9ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  a0       0x%08x\n", gpr->a0);
-ffffffffc0200604:	682c                	ld	a1,80(s0)
-ffffffffc0200606:	00004517          	auipc	a0,0x4
-ffffffffc020060a:	32250513          	addi	a0,a0,802 # ffffffffc0204928 <etext+0x3d8>
-ffffffffc020060e:	aadff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200616:	682c                	ld	a1,80(s0)
+ffffffffc0200618:	00004517          	auipc	a0,0x4
+ffffffffc020061c:	27850513          	addi	a0,a0,632 # ffffffffc0204890 <commands+0x1c8>
+ffffffffc0200620:	a9bff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  a1       0x%08x\n", gpr->a1);
-ffffffffc0200612:	6c2c                	ld	a1,88(s0)
-ffffffffc0200614:	00004517          	auipc	a0,0x4
-ffffffffc0200618:	32c50513          	addi	a0,a0,812 # ffffffffc0204940 <etext+0x3f0>
-ffffffffc020061c:	a9fff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200624:	6c2c                	ld	a1,88(s0)
+ffffffffc0200626:	00004517          	auipc	a0,0x4
+ffffffffc020062a:	28250513          	addi	a0,a0,642 # ffffffffc02048a8 <commands+0x1e0>
+ffffffffc020062e:	a8dff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  a2       0x%08x\n", gpr->a2);
-ffffffffc0200620:	702c                	ld	a1,96(s0)
-ffffffffc0200622:	00004517          	auipc	a0,0x4
-ffffffffc0200626:	33650513          	addi	a0,a0,822 # ffffffffc0204958 <etext+0x408>
-ffffffffc020062a:	a91ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200632:	702c                	ld	a1,96(s0)
+ffffffffc0200634:	00004517          	auipc	a0,0x4
+ffffffffc0200638:	28c50513          	addi	a0,a0,652 # ffffffffc02048c0 <commands+0x1f8>
+ffffffffc020063c:	a7fff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  a3       0x%08x\n", gpr->a3);
-ffffffffc020062e:	742c                	ld	a1,104(s0)
-ffffffffc0200630:	00004517          	auipc	a0,0x4
-ffffffffc0200634:	34050513          	addi	a0,a0,832 # ffffffffc0204970 <etext+0x420>
-ffffffffc0200638:	a83ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200640:	742c                	ld	a1,104(s0)
+ffffffffc0200642:	00004517          	auipc	a0,0x4
+ffffffffc0200646:	29650513          	addi	a0,a0,662 # ffffffffc02048d8 <commands+0x210>
+ffffffffc020064a:	a71ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  a4       0x%08x\n", gpr->a4);
-ffffffffc020063c:	782c                	ld	a1,112(s0)
-ffffffffc020063e:	00004517          	auipc	a0,0x4
-ffffffffc0200642:	34a50513          	addi	a0,a0,842 # ffffffffc0204988 <etext+0x438>
-ffffffffc0200646:	a75ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020064e:	782c                	ld	a1,112(s0)
+ffffffffc0200650:	00004517          	auipc	a0,0x4
+ffffffffc0200654:	2a050513          	addi	a0,a0,672 # ffffffffc02048f0 <commands+0x228>
+ffffffffc0200658:	a63ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  a5       0x%08x\n", gpr->a5);
-ffffffffc020064a:	7c2c                	ld	a1,120(s0)
-ffffffffc020064c:	00004517          	auipc	a0,0x4
-ffffffffc0200650:	35450513          	addi	a0,a0,852 # ffffffffc02049a0 <etext+0x450>
-ffffffffc0200654:	a67ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020065c:	7c2c                	ld	a1,120(s0)
+ffffffffc020065e:	00004517          	auipc	a0,0x4
+ffffffffc0200662:	2aa50513          	addi	a0,a0,682 # ffffffffc0204908 <commands+0x240>
+ffffffffc0200666:	a55ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  a6       0x%08x\n", gpr->a6);
-ffffffffc0200658:	604c                	ld	a1,128(s0)
-ffffffffc020065a:	00004517          	auipc	a0,0x4
-ffffffffc020065e:	35e50513          	addi	a0,a0,862 # ffffffffc02049b8 <etext+0x468>
-ffffffffc0200662:	a59ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020066a:	604c                	ld	a1,128(s0)
+ffffffffc020066c:	00004517          	auipc	a0,0x4
+ffffffffc0200670:	2b450513          	addi	a0,a0,692 # ffffffffc0204920 <commands+0x258>
+ffffffffc0200674:	a47ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  a7       0x%08x\n", gpr->a7);
-ffffffffc0200666:	644c                	ld	a1,136(s0)
-ffffffffc0200668:	00004517          	auipc	a0,0x4
-ffffffffc020066c:	36850513          	addi	a0,a0,872 # ffffffffc02049d0 <etext+0x480>
-ffffffffc0200670:	a4bff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200678:	644c                	ld	a1,136(s0)
+ffffffffc020067a:	00004517          	auipc	a0,0x4
+ffffffffc020067e:	2be50513          	addi	a0,a0,702 # ffffffffc0204938 <commands+0x270>
+ffffffffc0200682:	a39ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s2       0x%08x\n", gpr->s2);
-ffffffffc0200674:	684c                	ld	a1,144(s0)
-ffffffffc0200676:	00004517          	auipc	a0,0x4
-ffffffffc020067a:	37250513          	addi	a0,a0,882 # ffffffffc02049e8 <etext+0x498>
-ffffffffc020067e:	a3dff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200686:	684c                	ld	a1,144(s0)
+ffffffffc0200688:	00004517          	auipc	a0,0x4
+ffffffffc020068c:	2c850513          	addi	a0,a0,712 # ffffffffc0204950 <commands+0x288>
+ffffffffc0200690:	a2bff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s3       0x%08x\n", gpr->s3);
-ffffffffc0200682:	6c4c                	ld	a1,152(s0)
-ffffffffc0200684:	00004517          	auipc	a0,0x4
-ffffffffc0200688:	37c50513          	addi	a0,a0,892 # ffffffffc0204a00 <etext+0x4b0>
-ffffffffc020068c:	a2fff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200694:	6c4c                	ld	a1,152(s0)
+ffffffffc0200696:	00004517          	auipc	a0,0x4
+ffffffffc020069a:	2d250513          	addi	a0,a0,722 # ffffffffc0204968 <commands+0x2a0>
+ffffffffc020069e:	a1dff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s4       0x%08x\n", gpr->s4);
-ffffffffc0200690:	704c                	ld	a1,160(s0)
-ffffffffc0200692:	00004517          	auipc	a0,0x4
-ffffffffc0200696:	38650513          	addi	a0,a0,902 # ffffffffc0204a18 <etext+0x4c8>
-ffffffffc020069a:	a21ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02006a2:	704c                	ld	a1,160(s0)
+ffffffffc02006a4:	00004517          	auipc	a0,0x4
+ffffffffc02006a8:	2dc50513          	addi	a0,a0,732 # ffffffffc0204980 <commands+0x2b8>
+ffffffffc02006ac:	a0fff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s5       0x%08x\n", gpr->s5);
-ffffffffc020069e:	744c                	ld	a1,168(s0)
-ffffffffc02006a0:	00004517          	auipc	a0,0x4
-ffffffffc02006a4:	39050513          	addi	a0,a0,912 # ffffffffc0204a30 <etext+0x4e0>
-ffffffffc02006a8:	a13ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02006b0:	744c                	ld	a1,168(s0)
+ffffffffc02006b2:	00004517          	auipc	a0,0x4
+ffffffffc02006b6:	2e650513          	addi	a0,a0,742 # ffffffffc0204998 <commands+0x2d0>
+ffffffffc02006ba:	a01ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s6       0x%08x\n", gpr->s6);
-ffffffffc02006ac:	784c                	ld	a1,176(s0)
-ffffffffc02006ae:	00004517          	auipc	a0,0x4
-ffffffffc02006b2:	39a50513          	addi	a0,a0,922 # ffffffffc0204a48 <etext+0x4f8>
-ffffffffc02006b6:	a05ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02006be:	784c                	ld	a1,176(s0)
+ffffffffc02006c0:	00004517          	auipc	a0,0x4
+ffffffffc02006c4:	2f050513          	addi	a0,a0,752 # ffffffffc02049b0 <commands+0x2e8>
+ffffffffc02006c8:	9f3ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s7       0x%08x\n", gpr->s7);
-ffffffffc02006ba:	7c4c                	ld	a1,184(s0)
-ffffffffc02006bc:	00004517          	auipc	a0,0x4
-ffffffffc02006c0:	3a450513          	addi	a0,a0,932 # ffffffffc0204a60 <etext+0x510>
-ffffffffc02006c4:	9f7ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02006cc:	7c4c                	ld	a1,184(s0)
+ffffffffc02006ce:	00004517          	auipc	a0,0x4
+ffffffffc02006d2:	2fa50513          	addi	a0,a0,762 # ffffffffc02049c8 <commands+0x300>
+ffffffffc02006d6:	9e5ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s8       0x%08x\n", gpr->s8);
-ffffffffc02006c8:	606c                	ld	a1,192(s0)
-ffffffffc02006ca:	00004517          	auipc	a0,0x4
-ffffffffc02006ce:	3ae50513          	addi	a0,a0,942 # ffffffffc0204a78 <etext+0x528>
-ffffffffc02006d2:	9e9ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02006da:	606c                	ld	a1,192(s0)
+ffffffffc02006dc:	00004517          	auipc	a0,0x4
+ffffffffc02006e0:	30450513          	addi	a0,a0,772 # ffffffffc02049e0 <commands+0x318>
+ffffffffc02006e4:	9d7ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s9       0x%08x\n", gpr->s9);
-ffffffffc02006d6:	646c                	ld	a1,200(s0)
-ffffffffc02006d8:	00004517          	auipc	a0,0x4
-ffffffffc02006dc:	3b850513          	addi	a0,a0,952 # ffffffffc0204a90 <etext+0x540>
-ffffffffc02006e0:	9dbff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02006e8:	646c                	ld	a1,200(s0)
+ffffffffc02006ea:	00004517          	auipc	a0,0x4
+ffffffffc02006ee:	30e50513          	addi	a0,a0,782 # ffffffffc02049f8 <commands+0x330>
+ffffffffc02006f2:	9c9ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s10      0x%08x\n", gpr->s10);
-ffffffffc02006e4:	686c                	ld	a1,208(s0)
-ffffffffc02006e6:	00004517          	auipc	a0,0x4
-ffffffffc02006ea:	3c250513          	addi	a0,a0,962 # ffffffffc0204aa8 <etext+0x558>
-ffffffffc02006ee:	9cdff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02006f6:	686c                	ld	a1,208(s0)
+ffffffffc02006f8:	00004517          	auipc	a0,0x4
+ffffffffc02006fc:	31850513          	addi	a0,a0,792 # ffffffffc0204a10 <commands+0x348>
+ffffffffc0200700:	9bbff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  s11      0x%08x\n", gpr->s11);
-ffffffffc02006f2:	6c6c                	ld	a1,216(s0)
-ffffffffc02006f4:	00004517          	auipc	a0,0x4
-ffffffffc02006f8:	3cc50513          	addi	a0,a0,972 # ffffffffc0204ac0 <etext+0x570>
-ffffffffc02006fc:	9bfff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200704:	6c6c                	ld	a1,216(s0)
+ffffffffc0200706:	00004517          	auipc	a0,0x4
+ffffffffc020070a:	32250513          	addi	a0,a0,802 # ffffffffc0204a28 <commands+0x360>
+ffffffffc020070e:	9adff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  t3       0x%08x\n", gpr->t3);
-ffffffffc0200700:	706c                	ld	a1,224(s0)
-ffffffffc0200702:	00004517          	auipc	a0,0x4
-ffffffffc0200706:	3d650513          	addi	a0,a0,982 # ffffffffc0204ad8 <etext+0x588>
-ffffffffc020070a:	9b1ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200712:	706c                	ld	a1,224(s0)
+ffffffffc0200714:	00004517          	auipc	a0,0x4
+ffffffffc0200718:	32c50513          	addi	a0,a0,812 # ffffffffc0204a40 <commands+0x378>
+ffffffffc020071c:	99fff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  t4       0x%08x\n", gpr->t4);
-ffffffffc020070e:	746c                	ld	a1,232(s0)
-ffffffffc0200710:	00004517          	auipc	a0,0x4
-ffffffffc0200714:	3e050513          	addi	a0,a0,992 # ffffffffc0204af0 <etext+0x5a0>
-ffffffffc0200718:	9a3ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200720:	746c                	ld	a1,232(s0)
+ffffffffc0200722:	00004517          	auipc	a0,0x4
+ffffffffc0200726:	33650513          	addi	a0,a0,822 # ffffffffc0204a58 <commands+0x390>
+ffffffffc020072a:	991ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  t5       0x%08x\n", gpr->t5);
-ffffffffc020071c:	786c                	ld	a1,240(s0)
-ffffffffc020071e:	00004517          	auipc	a0,0x4
-ffffffffc0200722:	3ea50513          	addi	a0,a0,1002 # ffffffffc0204b08 <etext+0x5b8>
-ffffffffc0200726:	995ff0ef          	jal	ffffffffc02000ba <cprintf>
-    cprintf("  t6       0x%08x\n", gpr->t6);
-ffffffffc020072a:	7c6c                	ld	a1,248(s0)
-}
-ffffffffc020072c:	6402                	ld	s0,0(sp)
-ffffffffc020072e:	60a2                	ld	ra,8(sp)
-    cprintf("  t6       0x%08x\n", gpr->t6);
+ffffffffc020072e:	786c                	ld	a1,240(s0)
 ffffffffc0200730:	00004517          	auipc	a0,0x4
-ffffffffc0200734:	3f050513          	addi	a0,a0,1008 # ffffffffc0204b20 <etext+0x5d0>
-}
-ffffffffc0200738:	0141                	addi	sp,sp,16
+ffffffffc0200734:	34050513          	addi	a0,a0,832 # ffffffffc0204a70 <commands+0x3a8>
+ffffffffc0200738:	983ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  t6       0x%08x\n", gpr->t6);
-ffffffffc020073a:	b241                	j	ffffffffc02000ba <cprintf>
+ffffffffc020073c:	7c6c                	ld	a1,248(s0)
+}
+ffffffffc020073e:	6402                	ld	s0,0(sp)
+ffffffffc0200740:	60a2                	ld	ra,8(sp)
+    cprintf("  t6       0x%08x\n", gpr->t6);
+ffffffffc0200742:	00004517          	auipc	a0,0x4
+ffffffffc0200746:	34650513          	addi	a0,a0,838 # ffffffffc0204a88 <commands+0x3c0>
+}
+ffffffffc020074a:	0141                	addi	sp,sp,16
+    cprintf("  t6       0x%08x\n", gpr->t6);
+ffffffffc020074c:	b2bd                	j	ffffffffc02000ba <cprintf>
 
-ffffffffc020073c <print_trapframe>:
+ffffffffc020074e <print_trapframe>:
 void print_trapframe(struct trapframe *tf) {
-ffffffffc020073c:	1141                	addi	sp,sp,-16
-ffffffffc020073e:	e022                	sd	s0,0(sp)
+ffffffffc020074e:	1141                	addi	sp,sp,-16
+ffffffffc0200750:	e022                	sd	s0,0(sp)
     cprintf("trapframe at %p\n", tf);
-ffffffffc0200740:	85aa                	mv	a1,a0
+ffffffffc0200752:	85aa                	mv	a1,a0
 void print_trapframe(struct trapframe *tf) {
-ffffffffc0200742:	842a                	mv	s0,a0
+ffffffffc0200754:	842a                	mv	s0,a0
     cprintf("trapframe at %p\n", tf);
-ffffffffc0200744:	00004517          	auipc	a0,0x4
-ffffffffc0200748:	3f450513          	addi	a0,a0,1012 # ffffffffc0204b38 <etext+0x5e8>
+ffffffffc0200756:	00004517          	auipc	a0,0x4
+ffffffffc020075a:	34a50513          	addi	a0,a0,842 # ffffffffc0204aa0 <commands+0x3d8>
 void print_trapframe(struct trapframe *tf) {
-ffffffffc020074c:	e406                	sd	ra,8(sp)
+ffffffffc020075e:	e406                	sd	ra,8(sp)
     cprintf("trapframe at %p\n", tf);
-ffffffffc020074e:	96dff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200760:	95bff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     print_regs(&tf->gpr);
-ffffffffc0200752:	8522                	mv	a0,s0
-ffffffffc0200754:	e1dff0ef          	jal	ffffffffc0200570 <print_regs>
+ffffffffc0200764:	8522                	mv	a0,s0
+ffffffffc0200766:	e1dff0ef          	jal	ra,ffffffffc0200582 <print_regs>
     cprintf("  status   0x%08x\n", tf->status);
-ffffffffc0200758:	10043583          	ld	a1,256(s0)
-ffffffffc020075c:	00004517          	auipc	a0,0x4
-ffffffffc0200760:	3f450513          	addi	a0,a0,1012 # ffffffffc0204b50 <etext+0x600>
-ffffffffc0200764:	957ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020076a:	10043583          	ld	a1,256(s0)
+ffffffffc020076e:	00004517          	auipc	a0,0x4
+ffffffffc0200772:	34a50513          	addi	a0,a0,842 # ffffffffc0204ab8 <commands+0x3f0>
+ffffffffc0200776:	945ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  epc      0x%08x\n", tf->epc);
-ffffffffc0200768:	10843583          	ld	a1,264(s0)
-ffffffffc020076c:	00004517          	auipc	a0,0x4
-ffffffffc0200770:	3fc50513          	addi	a0,a0,1020 # ffffffffc0204b68 <etext+0x618>
-ffffffffc0200774:	947ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020077a:	10843583          	ld	a1,264(s0)
+ffffffffc020077e:	00004517          	auipc	a0,0x4
+ffffffffc0200782:	35250513          	addi	a0,a0,850 # ffffffffc0204ad0 <commands+0x408>
+ffffffffc0200786:	935ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  badvaddr 0x%08x\n", tf->badvaddr);
-ffffffffc0200778:	11043583          	ld	a1,272(s0)
-ffffffffc020077c:	00004517          	auipc	a0,0x4
-ffffffffc0200780:	40450513          	addi	a0,a0,1028 # ffffffffc0204b80 <etext+0x630>
-ffffffffc0200784:	937ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020078a:	11043583          	ld	a1,272(s0)
+ffffffffc020078e:	00004517          	auipc	a0,0x4
+ffffffffc0200792:	35a50513          	addi	a0,a0,858 # ffffffffc0204ae8 <commands+0x420>
+ffffffffc0200796:	925ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  cause    0x%08x\n", tf->cause);
-ffffffffc0200788:	11843583          	ld	a1,280(s0)
+ffffffffc020079a:	11843583          	ld	a1,280(s0)
 }
-ffffffffc020078c:	6402                	ld	s0,0(sp)
-ffffffffc020078e:	60a2                	ld	ra,8(sp)
+ffffffffc020079e:	6402                	ld	s0,0(sp)
+ffffffffc02007a0:	60a2                	ld	ra,8(sp)
     cprintf("  cause    0x%08x\n", tf->cause);
-ffffffffc0200790:	00004517          	auipc	a0,0x4
-ffffffffc0200794:	40850513          	addi	a0,a0,1032 # ffffffffc0204b98 <etext+0x648>
+ffffffffc02007a2:	00004517          	auipc	a0,0x4
+ffffffffc02007a6:	35e50513          	addi	a0,a0,862 # ffffffffc0204b00 <commands+0x438>
 }
-ffffffffc0200798:	0141                	addi	sp,sp,16
+ffffffffc02007aa:	0141                	addi	sp,sp,16
     cprintf("  cause    0x%08x\n", tf->cause);
-ffffffffc020079a:	921ff06f          	j	ffffffffc02000ba <cprintf>
+ffffffffc02007ac:	90fff06f          	j	ffffffffc02000ba <cprintf>
 
-ffffffffc020079e <interrupt_handler>:
+ffffffffc02007b0 <interrupt_handler>:
+
 static volatile int in_swap_tick_event = 0;
 extern struct mm_struct *check_mm_struct;
 
 void interrupt_handler(struct trapframe *tf) {
     intptr_t cause = (tf->cause << 1) >> 1;
-    switch (cause) {
-ffffffffc020079e:	11853783          	ld	a5,280(a0)
-ffffffffc02007a2:	472d                	li	a4,11
-ffffffffc02007a4:	0786                	slli	a5,a5,0x1
-ffffffffc02007a6:	8385                	srli	a5,a5,0x1
-ffffffffc02007a8:	08f76963          	bltu	a4,a5,ffffffffc020083a <interrupt_handler+0x9c>
-ffffffffc02007ac:	00006717          	auipc	a4,0x6
-ffffffffc02007b0:	9bc70713          	addi	a4,a4,-1604 # ffffffffc0206168 <commands+0x48>
-ffffffffc02007b4:	078a                	slli	a5,a5,0x2
-ffffffffc02007b6:	97ba                	add	a5,a5,a4
-ffffffffc02007b8:	439c                	lw	a5,0(a5)
-ffffffffc02007ba:	97ba                	add	a5,a5,a4
-ffffffffc02007bc:	8782                	jr	a5
+ffffffffc02007b0:	11853783          	ld	a5,280(a0)
+ffffffffc02007b4:	472d                	li	a4,11
+ffffffffc02007b6:	0786                	slli	a5,a5,0x1
+ffffffffc02007b8:	8385                	srli	a5,a5,0x1
+ffffffffc02007ba:	08f76963          	bltu	a4,a5,ffffffffc020084c <interrupt_handler+0x9c>
+ffffffffc02007be:	00004717          	auipc	a4,0x4
+ffffffffc02007c2:	40a70713          	addi	a4,a4,1034 # ffffffffc0204bc8 <commands+0x500>
+ffffffffc02007c6:	078a                	slli	a5,a5,0x2
+ffffffffc02007c8:	97ba                	add	a5,a5,a4
+ffffffffc02007ca:	439c                	lw	a5,0(a5)
+ffffffffc02007cc:	97ba                	add	a5,a5,a4
+ffffffffc02007ce:	8782                	jr	a5
             break;
         case IRQ_H_SOFT:
             cprintf("Hypervisor software interrupt\n");
             break;
         case IRQ_M_SOFT:
             cprintf("Machine software interrupt\n");
-ffffffffc02007be:	00004517          	auipc	a0,0x4
-ffffffffc02007c2:	45250513          	addi	a0,a0,1106 # ffffffffc0204c10 <etext+0x6c0>
-ffffffffc02007c6:	8f5ff06f          	j	ffffffffc02000ba <cprintf>
+ffffffffc02007d0:	00004517          	auipc	a0,0x4
+ffffffffc02007d4:	3a850513          	addi	a0,a0,936 # ffffffffc0204b78 <commands+0x4b0>
+ffffffffc02007d8:	8e3ff06f          	j	ffffffffc02000ba <cprintf>
             cprintf("Hypervisor software interrupt\n");
-ffffffffc02007ca:	00004517          	auipc	a0,0x4
-ffffffffc02007ce:	42650513          	addi	a0,a0,1062 # ffffffffc0204bf0 <etext+0x6a0>
-ffffffffc02007d2:	8e9ff06f          	j	ffffffffc02000ba <cprintf>
+ffffffffc02007dc:	00004517          	auipc	a0,0x4
+ffffffffc02007e0:	37c50513          	addi	a0,a0,892 # ffffffffc0204b58 <commands+0x490>
+ffffffffc02007e4:	8d7ff06f          	j	ffffffffc02000ba <cprintf>
             cprintf("User software interrupt\n");
-ffffffffc02007d6:	00004517          	auipc	a0,0x4
-ffffffffc02007da:	3da50513          	addi	a0,a0,986 # ffffffffc0204bb0 <etext+0x660>
-ffffffffc02007de:	8ddff06f          	j	ffffffffc02000ba <cprintf>
+ffffffffc02007e8:	00004517          	auipc	a0,0x4
+ffffffffc02007ec:	33050513          	addi	a0,a0,816 # ffffffffc0204b18 <commands+0x450>
+ffffffffc02007f0:	8cbff06f          	j	ffffffffc02000ba <cprintf>
             cprintf("Supervisor software interrupt\n");
-ffffffffc02007e2:	00004517          	auipc	a0,0x4
-ffffffffc02007e6:	3ee50513          	addi	a0,a0,1006 # ffffffffc0204bd0 <etext+0x680>
-ffffffffc02007ea:	8d1ff06f          	j	ffffffffc02000ba <cprintf>
+ffffffffc02007f4:	00004517          	auipc	a0,0x4
+ffffffffc02007f8:	34450513          	addi	a0,a0,836 # ffffffffc0204b38 <commands+0x470>
+ffffffffc02007fc:	8bfff06f          	j	ffffffffc02000ba <cprintf>
 void interrupt_handler(struct trapframe *tf) {
-ffffffffc02007ee:	1141                	addi	sp,sp,-16
-ffffffffc02007f0:	e406                	sd	ra,8(sp)
+ffffffffc0200800:	1141                	addi	sp,sp,-16
+ffffffffc0200802:	e406                	sd	ra,8(sp)
             // "All bits besides SSIP and USIP in the sip register are
             // read-only." -- privileged spec1.9.1, 4.1.4, p59
             // In fact, Call sbi_set_timer will clear STIP, or you can clear it
             // directly.
             // clear_csr(sip, SIP_STIP);
             clock_set_next_event();
-ffffffffc02007f2:	c05ff0ef          	jal	ffffffffc02003f6 <clock_set_next_event>
+ffffffffc0200804:	c05ff0ef          	jal	ra,ffffffffc0200408 <clock_set_next_event>
             if (++ticks % TICK_NUM == 0) {
-ffffffffc02007f6:	00011697          	auipc	a3,0x11
-ffffffffc02007fa:	d1268693          	addi	a3,a3,-750 # ffffffffc0211508 <ticks>
-ffffffffc02007fe:	629c                	ld	a5,0(a3)
-ffffffffc0200800:	06400713          	li	a4,100
-ffffffffc0200804:	0785                	addi	a5,a5,1 # 40001 <kern_entry-0xffffffffc01bffff>
-ffffffffc0200806:	02e7f733          	remu	a4,a5,a4
-ffffffffc020080a:	e29c                	sd	a5,0(a3)
-ffffffffc020080c:	cb05                	beqz	a4,ffffffffc020083c <interrupt_handler+0x9e>
+ffffffffc0200808:	00011697          	auipc	a3,0x11
+ffffffffc020080c:	cf868693          	addi	a3,a3,-776 # ffffffffc0211500 <ticks>
+ffffffffc0200810:	629c                	ld	a5,0(a3)
+ffffffffc0200812:	06400713          	li	a4,100
+ffffffffc0200816:	0785                	addi	a5,a5,1
+ffffffffc0200818:	02e7f733          	remu	a4,a5,a4
+ffffffffc020081c:	e29c                	sd	a5,0(a3)
+ffffffffc020081e:	cb05                	beqz	a4,ffffffffc020084e <interrupt_handler+0x9e>
                 print_ticks();
                 num++;          //new
             }
             if(num == 10){      //new
-ffffffffc020080e:	00011717          	auipc	a4,0x11
-ffffffffc0200812:	d0272703          	lw	a4,-766(a4) # ffffffffc0211510 <num>
-ffffffffc0200816:	47a9                	li	a5,10
-ffffffffc0200818:	00f71863          	bne	a4,a5,ffffffffc0200828 <interrupt_handler+0x8a>
+ffffffffc0200820:	00011717          	auipc	a4,0x11
+ffffffffc0200824:	cf072703          	lw	a4,-784(a4) # ffffffffc0211510 <num>
+ffffffffc0200828:	47a9                	li	a5,10
+ffffffffc020082a:	00f71863          	bne	a4,a5,ffffffffc020083a <interrupt_handler+0x8a>
 #endif
 }
 
 static inline void sbi_shutdown(void)
 {
 	SBI_CALL_0(SBI_SHUTDOWN);
-ffffffffc020081c:	4501                	li	a0,0
-ffffffffc020081e:	4581                	li	a1,0
-ffffffffc0200820:	4601                	li	a2,0
-ffffffffc0200822:	48a1                	li	a7,8
-ffffffffc0200824:	00000073          	ecall
+ffffffffc020082e:	4501                	li	a0,0
+ffffffffc0200830:	4581                	li	a1,0
+ffffffffc0200832:	4601                	li	a2,0
+ffffffffc0200834:	48a1                	li	a7,8
+ffffffffc0200836:	00000073          	ecall
             break;
         default:
             print_trapframe(tf);
             break;
     }
 }
-ffffffffc0200828:	60a2                	ld	ra,8(sp)
-ffffffffc020082a:	0141                	addi	sp,sp,16
-ffffffffc020082c:	8082                	ret
+ffffffffc020083a:	60a2                	ld	ra,8(sp)
+ffffffffc020083c:	0141                	addi	sp,sp,16
+ffffffffc020083e:	8082                	ret
             cprintf("Supervisor external interrupt\n");
-ffffffffc020082e:	00004517          	auipc	a0,0x4
-ffffffffc0200832:	41250513          	addi	a0,a0,1042 # ffffffffc0204c40 <etext+0x6f0>
-ffffffffc0200836:	885ff06f          	j	ffffffffc02000ba <cprintf>
-            print_trapframe(tf);
-ffffffffc020083a:	b709                	j	ffffffffc020073c <print_trapframe>
-    cprintf("%d ticks\n", TICK_NUM);
-ffffffffc020083c:	06400593          	li	a1,100
 ffffffffc0200840:	00004517          	auipc	a0,0x4
-ffffffffc0200844:	3f050513          	addi	a0,a0,1008 # ffffffffc0204c30 <etext+0x6e0>
-ffffffffc0200848:	873ff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200844:	36850513          	addi	a0,a0,872 # ffffffffc0204ba8 <commands+0x4e0>
+ffffffffc0200848:	873ff06f          	j	ffffffffc02000ba <cprintf>
+            print_trapframe(tf);
+ffffffffc020084c:	b709                	j	ffffffffc020074e <print_trapframe>
+    cprintf("%d ticks\n", TICK_NUM);
+ffffffffc020084e:	06400593          	li	a1,100
+ffffffffc0200852:	00004517          	auipc	a0,0x4
+ffffffffc0200856:	34650513          	addi	a0,a0,838 # ffffffffc0204b98 <commands+0x4d0>
+ffffffffc020085a:	861ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
                 num++;          //new
-ffffffffc020084c:	00011697          	auipc	a3,0x11
-ffffffffc0200850:	cc468693          	addi	a3,a3,-828 # ffffffffc0211510 <num>
-ffffffffc0200854:	429c                	lw	a5,0(a3)
-ffffffffc0200856:	0017871b          	addiw	a4,a5,1
-ffffffffc020085a:	c298                	sw	a4,0(a3)
-ffffffffc020085c:	bf6d                	j	ffffffffc0200816 <interrupt_handler+0x78>
+ffffffffc020085e:	00011697          	auipc	a3,0x11
+ffffffffc0200862:	cb268693          	addi	a3,a3,-846 # ffffffffc0211510 <num>
+ffffffffc0200866:	429c                	lw	a5,0(a3)
+ffffffffc0200868:	0017871b          	addiw	a4,a5,1
+ffffffffc020086c:	c298                	sw	a4,0(a3)
+ffffffffc020086e:	bf6d                	j	ffffffffc0200828 <interrupt_handler+0x78>
 
-ffffffffc020085e <exception_handler>:
+ffffffffc0200870 <exception_handler>:
 
 
 void exception_handler(struct trapframe *tf) {
     int ret;
     switch (tf->cause) {
-ffffffffc020085e:	11853783          	ld	a5,280(a0)
+ffffffffc0200870:	11853783          	ld	a5,280(a0)
 void exception_handler(struct trapframe *tf) {
-ffffffffc0200862:	1101                	addi	sp,sp,-32
-ffffffffc0200864:	e822                	sd	s0,16(sp)
-ffffffffc0200866:	ec06                	sd	ra,24(sp)
-    switch (tf->cause) {
-ffffffffc0200868:	473d                	li	a4,15
-void exception_handler(struct trapframe *tf) {
-ffffffffc020086a:	842a                	mv	s0,a0
-    switch (tf->cause) {
-ffffffffc020086c:	16f76b63          	bltu	a4,a5,ffffffffc02009e2 <exception_handler+0x184>
-ffffffffc0200870:	00006717          	auipc	a4,0x6
-ffffffffc0200874:	92870713          	addi	a4,a4,-1752 # ffffffffc0206198 <commands+0x78>
-ffffffffc0200878:	078a                	slli	a5,a5,0x2
-ffffffffc020087a:	97ba                	add	a5,a5,a4
-ffffffffc020087c:	439c                	lw	a5,0(a5)
-ffffffffc020087e:	97ba                	add	a5,a5,a4
-ffffffffc0200880:	8782                	jr	a5
+ffffffffc0200874:	1101                	addi	sp,sp,-32
+ffffffffc0200876:	e822                	sd	s0,16(sp)
+ffffffffc0200878:	ec06                	sd	ra,24(sp)
+ffffffffc020087a:	e426                	sd	s1,8(sp)
+ffffffffc020087c:	473d                	li	a4,15
+ffffffffc020087e:	842a                	mv	s0,a0
+ffffffffc0200880:	16f76863          	bltu	a4,a5,ffffffffc02009f0 <exception_handler+0x180>
+ffffffffc0200884:	00004717          	auipc	a4,0x4
+ffffffffc0200888:	52c70713          	addi	a4,a4,1324 # ffffffffc0204db0 <commands+0x6e8>
+ffffffffc020088c:	078a                	slli	a5,a5,0x2
+ffffffffc020088e:	97ba                	add	a5,a5,a4
+ffffffffc0200890:	439c                	lw	a5,0(a5)
+ffffffffc0200892:	97ba                	add	a5,a5,a4
+ffffffffc0200894:	8782                	jr	a5
                 print_trapframe(tf);
                 panic("handle pgfault failed. %e\n", ret);
             }
             break;
         case CAUSE_STORE_PAGE_FAULT:
             cprintf("Store/AMO page fault\n");
-ffffffffc0200882:	00004517          	auipc	a0,0x4
-ffffffffc0200886:	57e50513          	addi	a0,a0,1406 # ffffffffc0204e00 <etext+0x8b0>
-ffffffffc020088a:	e426                	sd	s1,8(sp)
-ffffffffc020088c:	82fff0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0200896:	00004517          	auipc	a0,0x4
+ffffffffc020089a:	50250513          	addi	a0,a0,1282 # ffffffffc0204d98 <commands+0x6d0>
+ffffffffc020089e:	81dff0ef          	jal	ra,ffffffffc02000ba <cprintf>
             if ((ret = pgfault_handler(tf)) != 0) {
-ffffffffc0200890:	8522                	mv	a0,s0
-ffffffffc0200892:	c51ff0ef          	jal	ffffffffc02004e2 <pgfault_handler>
-ffffffffc0200896:	84aa                	mv	s1,a0
-ffffffffc0200898:	14051a63          	bnez	a0,ffffffffc02009ec <exception_handler+0x18e>
-ffffffffc020089c:	64a2                	ld	s1,8(sp)
+ffffffffc02008a2:	8522                	mv	a0,s0
+ffffffffc02008a4:	c51ff0ef          	jal	ra,ffffffffc02004f4 <pgfault_handler>
+ffffffffc02008a8:	84aa                	mv	s1,a0
+ffffffffc02008aa:	14051963          	bnez	a0,ffffffffc02009fc <exception_handler+0x18c>
             break;
         default:
             print_trapframe(tf);
             break;
     }
 }
-ffffffffc020089e:	60e2                	ld	ra,24(sp)
-ffffffffc02008a0:	6442                	ld	s0,16(sp)
-ffffffffc02008a2:	6105                	addi	sp,sp,32
-ffffffffc02008a4:	8082                	ret
+ffffffffc02008ae:	60e2                	ld	ra,24(sp)
+ffffffffc02008b0:	6442                	ld	s0,16(sp)
+ffffffffc02008b2:	64a2                	ld	s1,8(sp)
+ffffffffc02008b4:	6105                	addi	sp,sp,32
+ffffffffc02008b6:	8082                	ret
             cprintf("Instruction address misaligned\n");
-ffffffffc02008a6:	00004517          	auipc	a0,0x4
-ffffffffc02008aa:	3ba50513          	addi	a0,a0,954 # ffffffffc0204c60 <etext+0x710>
-}
-ffffffffc02008ae:	6442                	ld	s0,16(sp)
-ffffffffc02008b0:	60e2                	ld	ra,24(sp)
-ffffffffc02008b2:	6105                	addi	sp,sp,32
-            cprintf("Instruction access fault\n");
-ffffffffc02008b4:	807ff06f          	j	ffffffffc02000ba <cprintf>
 ffffffffc02008b8:	00004517          	auipc	a0,0x4
-ffffffffc02008bc:	3c850513          	addi	a0,a0,968 # ffffffffc0204c80 <etext+0x730>
-ffffffffc02008c0:	b7fd                	j	ffffffffc02008ae <exception_handler+0x50>
-            cprintf("Illegal instruction\n");
-ffffffffc02008c2:	00004517          	auipc	a0,0x4
-ffffffffc02008c6:	3de50513          	addi	a0,a0,990 # ffffffffc0204ca0 <etext+0x750>
-ffffffffc02008ca:	ff0ff0ef          	jal	ffffffffc02000ba <cprintf>
-            tf->epc += 4;//new
-ffffffffc02008ce:	10843783          	ld	a5,264(s0)
-ffffffffc02008d2:	0791                	addi	a5,a5,4
-ffffffffc02008d4:	10f43423          	sd	a5,264(s0)
-            break;
-ffffffffc02008d8:	b7d9                	j	ffffffffc020089e <exception_handler+0x40>
-            cprintf("Breakpoint\n");
-ffffffffc02008da:	00004517          	auipc	a0,0x4
-ffffffffc02008de:	3de50513          	addi	a0,a0,990 # ffffffffc0204cb8 <etext+0x768>
-ffffffffc02008e2:	fd8ff0ef          	jal	ffffffffc02000ba <cprintf>
-            tf->epc += 4;//new
-ffffffffc02008e6:	10843783          	ld	a5,264(s0)
-ffffffffc02008ea:	0791                	addi	a5,a5,4
-ffffffffc02008ec:	10f43423          	sd	a5,264(s0)
-            break;
-ffffffffc02008f0:	b77d                	j	ffffffffc020089e <exception_handler+0x40>
-            cprintf("Load address misaligned\n");
-ffffffffc02008f2:	00004517          	auipc	a0,0x4
-ffffffffc02008f6:	3d650513          	addi	a0,a0,982 # ffffffffc0204cc8 <etext+0x778>
-ffffffffc02008fa:	bf55                	j	ffffffffc02008ae <exception_handler+0x50>
-            cprintf("Load access fault\n");
-ffffffffc02008fc:	00004517          	auipc	a0,0x4
-ffffffffc0200900:	3ec50513          	addi	a0,a0,1004 # ffffffffc0204ce8 <etext+0x798>
-ffffffffc0200904:	e426                	sd	s1,8(sp)
-ffffffffc0200906:	fb4ff0ef          	jal	ffffffffc02000ba <cprintf>
-            if ((ret = pgfault_handler(tf)) != 0) {
-ffffffffc020090a:	8522                	mv	a0,s0
-ffffffffc020090c:	bd7ff0ef          	jal	ffffffffc02004e2 <pgfault_handler>
-ffffffffc0200910:	84aa                	mv	s1,a0
-ffffffffc0200912:	d549                	beqz	a0,ffffffffc020089c <exception_handler+0x3e>
-                print_trapframe(tf);
-ffffffffc0200914:	8522                	mv	a0,s0
-ffffffffc0200916:	e27ff0ef          	jal	ffffffffc020073c <print_trapframe>
-                panic("handle pgfault failed. %e\n", ret);
-ffffffffc020091a:	86a6                	mv	a3,s1
-ffffffffc020091c:	00004617          	auipc	a2,0x4
-ffffffffc0200920:	3e460613          	addi	a2,a2,996 # ffffffffc0204d00 <etext+0x7b0>
-ffffffffc0200924:	0d000593          	li	a1,208
-ffffffffc0200928:	00004517          	auipc	a0,0x4
-ffffffffc020092c:	ef850513          	addi	a0,a0,-264 # ffffffffc0204820 <etext+0x2d0>
-ffffffffc0200930:	a31ff0ef          	jal	ffffffffc0200360 <__panic>
-            cprintf("AMO address misaligned\n");
-ffffffffc0200934:	00004517          	auipc	a0,0x4
-ffffffffc0200938:	3ec50513          	addi	a0,a0,1004 # ffffffffc0204d20 <etext+0x7d0>
-ffffffffc020093c:	bf8d                	j	ffffffffc02008ae <exception_handler+0x50>
-            cprintf("Store/AMO access fault\n");
-ffffffffc020093e:	00004517          	auipc	a0,0x4
-ffffffffc0200942:	3fa50513          	addi	a0,a0,1018 # ffffffffc0204d38 <etext+0x7e8>
-ffffffffc0200946:	e426                	sd	s1,8(sp)
-ffffffffc0200948:	f72ff0ef          	jal	ffffffffc02000ba <cprintf>
-            if ((ret = pgfault_handler(tf)) != 0) {
-ffffffffc020094c:	8522                	mv	a0,s0
-ffffffffc020094e:	b95ff0ef          	jal	ffffffffc02004e2 <pgfault_handler>
-ffffffffc0200952:	84aa                	mv	s1,a0
-ffffffffc0200954:	d521                	beqz	a0,ffffffffc020089c <exception_handler+0x3e>
-                print_trapframe(tf);
-ffffffffc0200956:	8522                	mv	a0,s0
-ffffffffc0200958:	de5ff0ef          	jal	ffffffffc020073c <print_trapframe>
-                panic("handle pgfault failed. %e\n", ret);
-ffffffffc020095c:	86a6                	mv	a3,s1
-ffffffffc020095e:	00004617          	auipc	a2,0x4
-ffffffffc0200962:	3a260613          	addi	a2,a2,930 # ffffffffc0204d00 <etext+0x7b0>
-ffffffffc0200966:	0da00593          	li	a1,218
-ffffffffc020096a:	00004517          	auipc	a0,0x4
-ffffffffc020096e:	eb650513          	addi	a0,a0,-330 # ffffffffc0204820 <etext+0x2d0>
-ffffffffc0200972:	9efff0ef          	jal	ffffffffc0200360 <__panic>
-            cprintf("Environment call from U-mode\n");
-ffffffffc0200976:	00004517          	auipc	a0,0x4
-ffffffffc020097a:	3da50513          	addi	a0,a0,986 # ffffffffc0204d50 <etext+0x800>
-ffffffffc020097e:	bf05                	j	ffffffffc02008ae <exception_handler+0x50>
-            cprintf("Environment call from S-mode\n");
-ffffffffc0200980:	00004517          	auipc	a0,0x4
-ffffffffc0200984:	3f050513          	addi	a0,a0,1008 # ffffffffc0204d70 <etext+0x820>
-ffffffffc0200988:	b71d                	j	ffffffffc02008ae <exception_handler+0x50>
-            cprintf("Environment call from H-mode\n");
-ffffffffc020098a:	00004517          	auipc	a0,0x4
-ffffffffc020098e:	40650513          	addi	a0,a0,1030 # ffffffffc0204d90 <etext+0x840>
-ffffffffc0200992:	bf31                	j	ffffffffc02008ae <exception_handler+0x50>
-            cprintf("Environment call from M-mode\n");
-ffffffffc0200994:	00004517          	auipc	a0,0x4
-ffffffffc0200998:	41c50513          	addi	a0,a0,1052 # ffffffffc0204db0 <etext+0x860>
-ffffffffc020099c:	bf09                	j	ffffffffc02008ae <exception_handler+0x50>
-            cprintf("Instruction page fault\n");
-ffffffffc020099e:	00004517          	auipc	a0,0x4
-ffffffffc02009a2:	43250513          	addi	a0,a0,1074 # ffffffffc0204dd0 <etext+0x880>
-ffffffffc02009a6:	b721                	j	ffffffffc02008ae <exception_handler+0x50>
-            cprintf("Load page fault\n");
-ffffffffc02009a8:	00004517          	auipc	a0,0x4
-ffffffffc02009ac:	44050513          	addi	a0,a0,1088 # ffffffffc0204de8 <etext+0x898>
-ffffffffc02009b0:	e426                	sd	s1,8(sp)
-ffffffffc02009b2:	f08ff0ef          	jal	ffffffffc02000ba <cprintf>
-            if ((ret = pgfault_handler(tf)) != 0) {
-ffffffffc02009b6:	8522                	mv	a0,s0
-ffffffffc02009b8:	b2bff0ef          	jal	ffffffffc02004e2 <pgfault_handler>
-ffffffffc02009bc:	84aa                	mv	s1,a0
-ffffffffc02009be:	ec050fe3          	beqz	a0,ffffffffc020089c <exception_handler+0x3e>
-                print_trapframe(tf);
-ffffffffc02009c2:	8522                	mv	a0,s0
-ffffffffc02009c4:	d79ff0ef          	jal	ffffffffc020073c <print_trapframe>
-                panic("handle pgfault failed. %e\n", ret);
-ffffffffc02009c8:	86a6                	mv	a3,s1
-ffffffffc02009ca:	00004617          	auipc	a2,0x4
-ffffffffc02009ce:	33660613          	addi	a2,a2,822 # ffffffffc0204d00 <etext+0x7b0>
-ffffffffc02009d2:	0f000593          	li	a1,240
-ffffffffc02009d6:	00004517          	auipc	a0,0x4
-ffffffffc02009da:	e4a50513          	addi	a0,a0,-438 # ffffffffc0204820 <etext+0x2d0>
-ffffffffc02009de:	983ff0ef          	jal	ffffffffc0200360 <__panic>
-            print_trapframe(tf);
-ffffffffc02009e2:	8522                	mv	a0,s0
+ffffffffc02008bc:	34050513          	addi	a0,a0,832 # ffffffffc0204bf8 <commands+0x530>
 }
-ffffffffc02009e4:	6442                	ld	s0,16(sp)
-ffffffffc02009e6:	60e2                	ld	ra,24(sp)
-ffffffffc02009e8:	6105                	addi	sp,sp,32
-            print_trapframe(tf);
-ffffffffc02009ea:	bb89                	j	ffffffffc020073c <print_trapframe>
+ffffffffc02008c0:	6442                	ld	s0,16(sp)
+ffffffffc02008c2:	60e2                	ld	ra,24(sp)
+ffffffffc02008c4:	64a2                	ld	s1,8(sp)
+ffffffffc02008c6:	6105                	addi	sp,sp,32
+            cprintf("Instruction access fault\n");
+ffffffffc02008c8:	ff2ff06f          	j	ffffffffc02000ba <cprintf>
+ffffffffc02008cc:	00004517          	auipc	a0,0x4
+ffffffffc02008d0:	34c50513          	addi	a0,a0,844 # ffffffffc0204c18 <commands+0x550>
+ffffffffc02008d4:	b7f5                	j	ffffffffc02008c0 <exception_handler+0x50>
+            cprintf("Illegal instruction\n");
+ffffffffc02008d6:	00004517          	auipc	a0,0x4
+ffffffffc02008da:	36250513          	addi	a0,a0,866 # ffffffffc0204c38 <commands+0x570>
+ffffffffc02008de:	fdcff0ef          	jal	ra,ffffffffc02000ba <cprintf>
+            tf->epc += 4;//new
+ffffffffc02008e2:	10843783          	ld	a5,264(s0)
+ffffffffc02008e6:	0791                	addi	a5,a5,4
+ffffffffc02008e8:	10f43423          	sd	a5,264(s0)
+            break;
+ffffffffc02008ec:	b7c9                	j	ffffffffc02008ae <exception_handler+0x3e>
+            cprintf("Breakpoint\n");
+ffffffffc02008ee:	00004517          	auipc	a0,0x4
+ffffffffc02008f2:	36250513          	addi	a0,a0,866 # ffffffffc0204c50 <commands+0x588>
+ffffffffc02008f6:	fc4ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
+            tf->epc += 4;//new
+ffffffffc02008fa:	10843783          	ld	a5,264(s0)
+ffffffffc02008fe:	0791                	addi	a5,a5,4
+ffffffffc0200900:	10f43423          	sd	a5,264(s0)
+            break;
+ffffffffc0200904:	b76d                	j	ffffffffc02008ae <exception_handler+0x3e>
+            cprintf("Load address misaligned\n");
+ffffffffc0200906:	00004517          	auipc	a0,0x4
+ffffffffc020090a:	35a50513          	addi	a0,a0,858 # ffffffffc0204c60 <commands+0x598>
+ffffffffc020090e:	bf4d                	j	ffffffffc02008c0 <exception_handler+0x50>
+            cprintf("Load access fault\n");
+ffffffffc0200910:	00004517          	auipc	a0,0x4
+ffffffffc0200914:	37050513          	addi	a0,a0,880 # ffffffffc0204c80 <commands+0x5b8>
+ffffffffc0200918:	fa2ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
+            if ((ret = pgfault_handler(tf)) != 0) {
+ffffffffc020091c:	8522                	mv	a0,s0
+ffffffffc020091e:	bd7ff0ef          	jal	ra,ffffffffc02004f4 <pgfault_handler>
+ffffffffc0200922:	84aa                	mv	s1,a0
+ffffffffc0200924:	d549                	beqz	a0,ffffffffc02008ae <exception_handler+0x3e>
                 print_trapframe(tf);
-ffffffffc02009ec:	8522                	mv	a0,s0
-ffffffffc02009ee:	d4fff0ef          	jal	ffffffffc020073c <print_trapframe>
+ffffffffc0200926:	8522                	mv	a0,s0
+ffffffffc0200928:	e27ff0ef          	jal	ra,ffffffffc020074e <print_trapframe>
                 panic("handle pgfault failed. %e\n", ret);
-ffffffffc02009f2:	86a6                	mv	a3,s1
-ffffffffc02009f4:	00004617          	auipc	a2,0x4
-ffffffffc02009f8:	30c60613          	addi	a2,a2,780 # ffffffffc0204d00 <etext+0x7b0>
-ffffffffc02009fc:	0f700593          	li	a1,247
-ffffffffc0200a00:	00004517          	auipc	a0,0x4
-ffffffffc0200a04:	e2050513          	addi	a0,a0,-480 # ffffffffc0204820 <etext+0x2d0>
-ffffffffc0200a08:	959ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc020092c:	86a6                	mv	a3,s1
+ffffffffc020092e:	00004617          	auipc	a2,0x4
+ffffffffc0200932:	36a60613          	addi	a2,a2,874 # ffffffffc0204c98 <commands+0x5d0>
+ffffffffc0200936:	0d000593          	li	a1,208
+ffffffffc020093a:	00004517          	auipc	a0,0x4
+ffffffffc020093e:	e4e50513          	addi	a0,a0,-434 # ffffffffc0204788 <commands+0xc0>
+ffffffffc0200942:	a33ff0ef          	jal	ra,ffffffffc0200374 <__panic>
+            cprintf("AMO address misaligned\n");
+ffffffffc0200946:	00004517          	auipc	a0,0x4
+ffffffffc020094a:	37250513          	addi	a0,a0,882 # ffffffffc0204cb8 <commands+0x5f0>
+ffffffffc020094e:	bf8d                	j	ffffffffc02008c0 <exception_handler+0x50>
+            cprintf("Store/AMO access fault\n");
+ffffffffc0200950:	00004517          	auipc	a0,0x4
+ffffffffc0200954:	38050513          	addi	a0,a0,896 # ffffffffc0204cd0 <commands+0x608>
+ffffffffc0200958:	f62ff0ef          	jal	ra,ffffffffc02000ba <cprintf>
+            if ((ret = pgfault_handler(tf)) != 0) {
+ffffffffc020095c:	8522                	mv	a0,s0
+ffffffffc020095e:	b97ff0ef          	jal	ra,ffffffffc02004f4 <pgfault_handler>
+ffffffffc0200962:	84aa                	mv	s1,a0
+ffffffffc0200964:	d529                	beqz	a0,ffffffffc02008ae <exception_handler+0x3e>
+                print_trapframe(tf);
+ffffffffc0200966:	8522                	mv	a0,s0
+ffffffffc0200968:	de7ff0ef          	jal	ra,ffffffffc020074e <print_trapframe>
+                panic("handle pgfault failed. %e\n", ret);
+ffffffffc020096c:	86a6                	mv	a3,s1
+ffffffffc020096e:	00004617          	auipc	a2,0x4
+ffffffffc0200972:	32a60613          	addi	a2,a2,810 # ffffffffc0204c98 <commands+0x5d0>
+ffffffffc0200976:	0da00593          	li	a1,218
+ffffffffc020097a:	00004517          	auipc	a0,0x4
+ffffffffc020097e:	e0e50513          	addi	a0,a0,-498 # ffffffffc0204788 <commands+0xc0>
+ffffffffc0200982:	9f3ff0ef          	jal	ra,ffffffffc0200374 <__panic>
+            cprintf("Environment call from U-mode\n");
+ffffffffc0200986:	00004517          	auipc	a0,0x4
+ffffffffc020098a:	36250513          	addi	a0,a0,866 # ffffffffc0204ce8 <commands+0x620>
+ffffffffc020098e:	bf0d                	j	ffffffffc02008c0 <exception_handler+0x50>
+            cprintf("Environment call from S-mode\n");
+ffffffffc0200990:	00004517          	auipc	a0,0x4
+ffffffffc0200994:	37850513          	addi	a0,a0,888 # ffffffffc0204d08 <commands+0x640>
+ffffffffc0200998:	b725                	j	ffffffffc02008c0 <exception_handler+0x50>
+            cprintf("Environment call from H-mode\n");
+ffffffffc020099a:	00004517          	auipc	a0,0x4
+ffffffffc020099e:	38e50513          	addi	a0,a0,910 # ffffffffc0204d28 <commands+0x660>
+ffffffffc02009a2:	bf39                	j	ffffffffc02008c0 <exception_handler+0x50>
+            cprintf("Environment call from M-mode\n");
+ffffffffc02009a4:	00004517          	auipc	a0,0x4
+ffffffffc02009a8:	3a450513          	addi	a0,a0,932 # ffffffffc0204d48 <commands+0x680>
+ffffffffc02009ac:	bf11                	j	ffffffffc02008c0 <exception_handler+0x50>
+            cprintf("Instruction page fault\n");
+ffffffffc02009ae:	00004517          	auipc	a0,0x4
+ffffffffc02009b2:	3ba50513          	addi	a0,a0,954 # ffffffffc0204d68 <commands+0x6a0>
+ffffffffc02009b6:	b729                	j	ffffffffc02008c0 <exception_handler+0x50>
+            cprintf("Load page fault\n");
+ffffffffc02009b8:	00004517          	auipc	a0,0x4
+ffffffffc02009bc:	3c850513          	addi	a0,a0,968 # ffffffffc0204d80 <commands+0x6b8>
+ffffffffc02009c0:	efaff0ef          	jal	ra,ffffffffc02000ba <cprintf>
+            if ((ret = pgfault_handler(tf)) != 0) {
+ffffffffc02009c4:	8522                	mv	a0,s0
+ffffffffc02009c6:	b2fff0ef          	jal	ra,ffffffffc02004f4 <pgfault_handler>
+ffffffffc02009ca:	84aa                	mv	s1,a0
+ffffffffc02009cc:	ee0501e3          	beqz	a0,ffffffffc02008ae <exception_handler+0x3e>
+                print_trapframe(tf);
+ffffffffc02009d0:	8522                	mv	a0,s0
+ffffffffc02009d2:	d7dff0ef          	jal	ra,ffffffffc020074e <print_trapframe>
+                panic("handle pgfault failed. %e\n", ret);
+ffffffffc02009d6:	86a6                	mv	a3,s1
+ffffffffc02009d8:	00004617          	auipc	a2,0x4
+ffffffffc02009dc:	2c060613          	addi	a2,a2,704 # ffffffffc0204c98 <commands+0x5d0>
+ffffffffc02009e0:	0f000593          	li	a1,240
+ffffffffc02009e4:	00004517          	auipc	a0,0x4
+ffffffffc02009e8:	da450513          	addi	a0,a0,-604 # ffffffffc0204788 <commands+0xc0>
+ffffffffc02009ec:	989ff0ef          	jal	ra,ffffffffc0200374 <__panic>
+            print_trapframe(tf);
+ffffffffc02009f0:	8522                	mv	a0,s0
+}
+ffffffffc02009f2:	6442                	ld	s0,16(sp)
+ffffffffc02009f4:	60e2                	ld	ra,24(sp)
+ffffffffc02009f6:	64a2                	ld	s1,8(sp)
+ffffffffc02009f8:	6105                	addi	sp,sp,32
+            print_trapframe(tf);
+ffffffffc02009fa:	bb91                	j	ffffffffc020074e <print_trapframe>
+                print_trapframe(tf);
+ffffffffc02009fc:	8522                	mv	a0,s0
+ffffffffc02009fe:	d51ff0ef          	jal	ra,ffffffffc020074e <print_trapframe>
+                panic("handle pgfault failed. %e\n", ret);
+ffffffffc0200a02:	86a6                	mv	a3,s1
+ffffffffc0200a04:	00004617          	auipc	a2,0x4
+ffffffffc0200a08:	29460613          	addi	a2,a2,660 # ffffffffc0204c98 <commands+0x5d0>
+ffffffffc0200a0c:	0f700593          	li	a1,247
+ffffffffc0200a10:	00004517          	auipc	a0,0x4
+ffffffffc0200a14:	d7850513          	addi	a0,a0,-648 # ffffffffc0204788 <commands+0xc0>
+ffffffffc0200a18:	95dff0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc0200a0c <trap>:
+ffffffffc0200a1c <trap>:
  * the code in kern/trap/trapentry.S restores the old CPU state saved in the
  * trapframe and then uses the iret instruction to return from the exception.
  * */
 void trap(struct trapframe *tf) {
     // dispatch based on what type of trap occurred
     if ((intptr_t)tf->cause < 0) {
-ffffffffc0200a0c:	11853783          	ld	a5,280(a0)
-ffffffffc0200a10:	0007c363          	bltz	a5,ffffffffc0200a16 <trap+0xa>
+ffffffffc0200a1c:	11853783          	ld	a5,280(a0)
+ffffffffc0200a20:	0007c363          	bltz	a5,ffffffffc0200a26 <trap+0xa>
         // interrupts
         interrupt_handler(tf);
     } else {
         // exceptions
         exception_handler(tf);
-ffffffffc0200a14:	b5a9                	j	ffffffffc020085e <exception_handler>
+ffffffffc0200a24:	b5b1                	j	ffffffffc0200870 <exception_handler>
         interrupt_handler(tf);
-ffffffffc0200a16:	b361                	j	ffffffffc020079e <interrupt_handler>
+ffffffffc0200a26:	b369                	j	ffffffffc02007b0 <interrupt_handler>
 	...
 
-ffffffffc0200a20 <__alltraps>:
+ffffffffc0200a30 <__alltraps>:
     .endm
 
     .align 4
     .globl __alltraps
 __alltraps:
     SAVE_ALL
-ffffffffc0200a20:	14011073          	csrw	sscratch,sp
-ffffffffc0200a24:	712d                	addi	sp,sp,-288
-ffffffffc0200a26:	e406                	sd	ra,8(sp)
-ffffffffc0200a28:	ec0e                	sd	gp,24(sp)
-ffffffffc0200a2a:	f012                	sd	tp,32(sp)
-ffffffffc0200a2c:	f416                	sd	t0,40(sp)
-ffffffffc0200a2e:	f81a                	sd	t1,48(sp)
-ffffffffc0200a30:	fc1e                	sd	t2,56(sp)
-ffffffffc0200a32:	e0a2                	sd	s0,64(sp)
-ffffffffc0200a34:	e4a6                	sd	s1,72(sp)
-ffffffffc0200a36:	e8aa                	sd	a0,80(sp)
-ffffffffc0200a38:	ecae                	sd	a1,88(sp)
-ffffffffc0200a3a:	f0b2                	sd	a2,96(sp)
-ffffffffc0200a3c:	f4b6                	sd	a3,104(sp)
-ffffffffc0200a3e:	f8ba                	sd	a4,112(sp)
-ffffffffc0200a40:	fcbe                	sd	a5,120(sp)
-ffffffffc0200a42:	e142                	sd	a6,128(sp)
-ffffffffc0200a44:	e546                	sd	a7,136(sp)
-ffffffffc0200a46:	e94a                	sd	s2,144(sp)
-ffffffffc0200a48:	ed4e                	sd	s3,152(sp)
-ffffffffc0200a4a:	f152                	sd	s4,160(sp)
-ffffffffc0200a4c:	f556                	sd	s5,168(sp)
-ffffffffc0200a4e:	f95a                	sd	s6,176(sp)
-ffffffffc0200a50:	fd5e                	sd	s7,184(sp)
-ffffffffc0200a52:	e1e2                	sd	s8,192(sp)
-ffffffffc0200a54:	e5e6                	sd	s9,200(sp)
-ffffffffc0200a56:	e9ea                	sd	s10,208(sp)
-ffffffffc0200a58:	edee                	sd	s11,216(sp)
-ffffffffc0200a5a:	f1f2                	sd	t3,224(sp)
-ffffffffc0200a5c:	f5f6                	sd	t4,232(sp)
-ffffffffc0200a5e:	f9fa                	sd	t5,240(sp)
-ffffffffc0200a60:	fdfe                	sd	t6,248(sp)
-ffffffffc0200a62:	14002473          	csrr	s0,sscratch
-ffffffffc0200a66:	100024f3          	csrr	s1,sstatus
-ffffffffc0200a6a:	14102973          	csrr	s2,sepc
-ffffffffc0200a6e:	143029f3          	csrr	s3,stval
-ffffffffc0200a72:	14202a73          	csrr	s4,scause
-ffffffffc0200a76:	e822                	sd	s0,16(sp)
-ffffffffc0200a78:	e226                	sd	s1,256(sp)
-ffffffffc0200a7a:	e64a                	sd	s2,264(sp)
-ffffffffc0200a7c:	ea4e                	sd	s3,272(sp)
-ffffffffc0200a7e:	ee52                	sd	s4,280(sp)
+ffffffffc0200a30:	14011073          	csrw	sscratch,sp
+ffffffffc0200a34:	712d                	addi	sp,sp,-288
+ffffffffc0200a36:	e406                	sd	ra,8(sp)
+ffffffffc0200a38:	ec0e                	sd	gp,24(sp)
+ffffffffc0200a3a:	f012                	sd	tp,32(sp)
+ffffffffc0200a3c:	f416                	sd	t0,40(sp)
+ffffffffc0200a3e:	f81a                	sd	t1,48(sp)
+ffffffffc0200a40:	fc1e                	sd	t2,56(sp)
+ffffffffc0200a42:	e0a2                	sd	s0,64(sp)
+ffffffffc0200a44:	e4a6                	sd	s1,72(sp)
+ffffffffc0200a46:	e8aa                	sd	a0,80(sp)
+ffffffffc0200a48:	ecae                	sd	a1,88(sp)
+ffffffffc0200a4a:	f0b2                	sd	a2,96(sp)
+ffffffffc0200a4c:	f4b6                	sd	a3,104(sp)
+ffffffffc0200a4e:	f8ba                	sd	a4,112(sp)
+ffffffffc0200a50:	fcbe                	sd	a5,120(sp)
+ffffffffc0200a52:	e142                	sd	a6,128(sp)
+ffffffffc0200a54:	e546                	sd	a7,136(sp)
+ffffffffc0200a56:	e94a                	sd	s2,144(sp)
+ffffffffc0200a58:	ed4e                	sd	s3,152(sp)
+ffffffffc0200a5a:	f152                	sd	s4,160(sp)
+ffffffffc0200a5c:	f556                	sd	s5,168(sp)
+ffffffffc0200a5e:	f95a                	sd	s6,176(sp)
+ffffffffc0200a60:	fd5e                	sd	s7,184(sp)
+ffffffffc0200a62:	e1e2                	sd	s8,192(sp)
+ffffffffc0200a64:	e5e6                	sd	s9,200(sp)
+ffffffffc0200a66:	e9ea                	sd	s10,208(sp)
+ffffffffc0200a68:	edee                	sd	s11,216(sp)
+ffffffffc0200a6a:	f1f2                	sd	t3,224(sp)
+ffffffffc0200a6c:	f5f6                	sd	t4,232(sp)
+ffffffffc0200a6e:	f9fa                	sd	t5,240(sp)
+ffffffffc0200a70:	fdfe                	sd	t6,248(sp)
+ffffffffc0200a72:	14002473          	csrr	s0,sscratch
+ffffffffc0200a76:	100024f3          	csrr	s1,sstatus
+ffffffffc0200a7a:	14102973          	csrr	s2,sepc
+ffffffffc0200a7e:	143029f3          	csrr	s3,stval
+ffffffffc0200a82:	14202a73          	csrr	s4,scause
+ffffffffc0200a86:	e822                	sd	s0,16(sp)
+ffffffffc0200a88:	e226                	sd	s1,256(sp)
+ffffffffc0200a8a:	e64a                	sd	s2,264(sp)
+ffffffffc0200a8c:	ea4e                	sd	s3,272(sp)
+ffffffffc0200a8e:	ee52                	sd	s4,280(sp)
 
     move  a0, sp
-ffffffffc0200a80:	850a                	mv	a0,sp
+ffffffffc0200a90:	850a                	mv	a0,sp
     jal trap
-ffffffffc0200a82:	f8bff0ef          	jal	ffffffffc0200a0c <trap>
+ffffffffc0200a92:	f8bff0ef          	jal	ra,ffffffffc0200a1c <trap>
 
-ffffffffc0200a86 <__trapret>:
+ffffffffc0200a96 <__trapret>:
     // sp should be the same as before "jal trap"
     .globl __trapret
 __trapret:
     RESTORE_ALL
-ffffffffc0200a86:	6492                	ld	s1,256(sp)
-ffffffffc0200a88:	6932                	ld	s2,264(sp)
-ffffffffc0200a8a:	10049073          	csrw	sstatus,s1
-ffffffffc0200a8e:	14191073          	csrw	sepc,s2
-ffffffffc0200a92:	60a2                	ld	ra,8(sp)
-ffffffffc0200a94:	61e2                	ld	gp,24(sp)
-ffffffffc0200a96:	7202                	ld	tp,32(sp)
-ffffffffc0200a98:	72a2                	ld	t0,40(sp)
-ffffffffc0200a9a:	7342                	ld	t1,48(sp)
-ffffffffc0200a9c:	73e2                	ld	t2,56(sp)
-ffffffffc0200a9e:	6406                	ld	s0,64(sp)
-ffffffffc0200aa0:	64a6                	ld	s1,72(sp)
-ffffffffc0200aa2:	6546                	ld	a0,80(sp)
-ffffffffc0200aa4:	65e6                	ld	a1,88(sp)
-ffffffffc0200aa6:	7606                	ld	a2,96(sp)
-ffffffffc0200aa8:	76a6                	ld	a3,104(sp)
-ffffffffc0200aaa:	7746                	ld	a4,112(sp)
-ffffffffc0200aac:	77e6                	ld	a5,120(sp)
-ffffffffc0200aae:	680a                	ld	a6,128(sp)
-ffffffffc0200ab0:	68aa                	ld	a7,136(sp)
-ffffffffc0200ab2:	694a                	ld	s2,144(sp)
-ffffffffc0200ab4:	69ea                	ld	s3,152(sp)
-ffffffffc0200ab6:	7a0a                	ld	s4,160(sp)
-ffffffffc0200ab8:	7aaa                	ld	s5,168(sp)
-ffffffffc0200aba:	7b4a                	ld	s6,176(sp)
-ffffffffc0200abc:	7bea                	ld	s7,184(sp)
-ffffffffc0200abe:	6c0e                	ld	s8,192(sp)
-ffffffffc0200ac0:	6cae                	ld	s9,200(sp)
-ffffffffc0200ac2:	6d4e                	ld	s10,208(sp)
-ffffffffc0200ac4:	6dee                	ld	s11,216(sp)
-ffffffffc0200ac6:	7e0e                	ld	t3,224(sp)
-ffffffffc0200ac8:	7eae                	ld	t4,232(sp)
-ffffffffc0200aca:	7f4e                	ld	t5,240(sp)
-ffffffffc0200acc:	7fee                	ld	t6,248(sp)
-ffffffffc0200ace:	6142                	ld	sp,16(sp)
+ffffffffc0200a96:	6492                	ld	s1,256(sp)
+ffffffffc0200a98:	6932                	ld	s2,264(sp)
+ffffffffc0200a9a:	10049073          	csrw	sstatus,s1
+ffffffffc0200a9e:	14191073          	csrw	sepc,s2
+ffffffffc0200aa2:	60a2                	ld	ra,8(sp)
+ffffffffc0200aa4:	61e2                	ld	gp,24(sp)
+ffffffffc0200aa6:	7202                	ld	tp,32(sp)
+ffffffffc0200aa8:	72a2                	ld	t0,40(sp)
+ffffffffc0200aaa:	7342                	ld	t1,48(sp)
+ffffffffc0200aac:	73e2                	ld	t2,56(sp)
+ffffffffc0200aae:	6406                	ld	s0,64(sp)
+ffffffffc0200ab0:	64a6                	ld	s1,72(sp)
+ffffffffc0200ab2:	6546                	ld	a0,80(sp)
+ffffffffc0200ab4:	65e6                	ld	a1,88(sp)
+ffffffffc0200ab6:	7606                	ld	a2,96(sp)
+ffffffffc0200ab8:	76a6                	ld	a3,104(sp)
+ffffffffc0200aba:	7746                	ld	a4,112(sp)
+ffffffffc0200abc:	77e6                	ld	a5,120(sp)
+ffffffffc0200abe:	680a                	ld	a6,128(sp)
+ffffffffc0200ac0:	68aa                	ld	a7,136(sp)
+ffffffffc0200ac2:	694a                	ld	s2,144(sp)
+ffffffffc0200ac4:	69ea                	ld	s3,152(sp)
+ffffffffc0200ac6:	7a0a                	ld	s4,160(sp)
+ffffffffc0200ac8:	7aaa                	ld	s5,168(sp)
+ffffffffc0200aca:	7b4a                	ld	s6,176(sp)
+ffffffffc0200acc:	7bea                	ld	s7,184(sp)
+ffffffffc0200ace:	6c0e                	ld	s8,192(sp)
+ffffffffc0200ad0:	6cae                	ld	s9,200(sp)
+ffffffffc0200ad2:	6d4e                	ld	s10,208(sp)
+ffffffffc0200ad4:	6dee                	ld	s11,216(sp)
+ffffffffc0200ad6:	7e0e                	ld	t3,224(sp)
+ffffffffc0200ad8:	7eae                	ld	t4,232(sp)
+ffffffffc0200ada:	7f4e                	ld	t5,240(sp)
+ffffffffc0200adc:	7fee                	ld	t6,248(sp)
+ffffffffc0200ade:	6142                	ld	sp,16(sp)
     // go back from supervisor call
     sret
-ffffffffc0200ad0:	10200073          	sret
+ffffffffc0200ae0:	10200073          	sret
 	...
 
-ffffffffc0200ae0 <default_init>:
+ffffffffc0200af0 <default_init>:
  * list_init - initialize a new entry
  * @elm:        new entry to be initialized
  * */
 static inline void
 list_init(list_entry_t *elm) {
     elm->prev = elm->next = elm;
-ffffffffc0200ae0:	00010797          	auipc	a5,0x10
-ffffffffc0200ae4:	56078793          	addi	a5,a5,1376 # ffffffffc0211040 <free_area>
-ffffffffc0200ae8:	e79c                	sd	a5,8(a5)
-ffffffffc0200aea:	e39c                	sd	a5,0(a5)
+ffffffffc0200af0:	00010797          	auipc	a5,0x10
+ffffffffc0200af4:	55078793          	addi	a5,a5,1360 # ffffffffc0211040 <free_area>
+ffffffffc0200af8:	e79c                	sd	a5,8(a5)
+ffffffffc0200afa:	e39c                	sd	a5,0(a5)
 #define nr_free (free_area.nr_free)
 
 static void
 default_init(void) {
     list_init(&free_list);
     nr_free = 0;
-ffffffffc0200aec:	0007a823          	sw	zero,16(a5)
+ffffffffc0200afc:	0007a823          	sw	zero,16(a5)
 }
-ffffffffc0200af0:	8082                	ret
+ffffffffc0200b00:	8082                	ret
 
-ffffffffc0200af2 <default_nr_free_pages>:
+ffffffffc0200b02 <default_nr_free_pages>:
 }
 
 static size_t
 default_nr_free_pages(void) {
     return nr_free;
 }
-ffffffffc0200af2:	00010517          	auipc	a0,0x10
-ffffffffc0200af6:	55e56503          	lwu	a0,1374(a0) # ffffffffc0211050 <free_area+0x10>
-ffffffffc0200afa:	8082                	ret
+ffffffffc0200b02:	00010517          	auipc	a0,0x10
+ffffffffc0200b06:	54e56503          	lwu	a0,1358(a0) # ffffffffc0211050 <free_area+0x10>
+ffffffffc0200b0a:	8082                	ret
 
-ffffffffc0200afc <default_check>:
+ffffffffc0200b0c <default_check>:
 }
 
 // LAB2: below code is used to check the first fit allocation algorithm
 // NOTICE: You SHOULD NOT CHANGE basic_check, default_check functions!
 static void
 default_check(void) {
-ffffffffc0200afc:	715d                	addi	sp,sp,-80
-ffffffffc0200afe:	e0a2                	sd	s0,64(sp)
+ffffffffc0200b0c:	715d                	addi	sp,sp,-80
+ffffffffc0200b0e:	e0a2                	sd	s0,64(sp)
  * list_next - get the next entry
  * @listelm:    the list head
  **/
 static inline list_entry_t *
 list_next(list_entry_t *listelm) {
     return listelm->next;
-ffffffffc0200b00:	00010417          	auipc	s0,0x10
-ffffffffc0200b04:	54040413          	addi	s0,s0,1344 # ffffffffc0211040 <free_area>
-ffffffffc0200b08:	641c                	ld	a5,8(s0)
-ffffffffc0200b0a:	e486                	sd	ra,72(sp)
-ffffffffc0200b0c:	fc26                	sd	s1,56(sp)
-ffffffffc0200b0e:	f84a                	sd	s2,48(sp)
-ffffffffc0200b10:	f44e                	sd	s3,40(sp)
-ffffffffc0200b12:	f052                	sd	s4,32(sp)
-ffffffffc0200b14:	ec56                	sd	s5,24(sp)
-ffffffffc0200b16:	e85a                	sd	s6,16(sp)
-ffffffffc0200b18:	e45e                	sd	s7,8(sp)
-ffffffffc0200b1a:	e062                	sd	s8,0(sp)
+ffffffffc0200b10:	00010417          	auipc	s0,0x10
+ffffffffc0200b14:	53040413          	addi	s0,s0,1328 # ffffffffc0211040 <free_area>
+ffffffffc0200b18:	641c                	ld	a5,8(s0)
+ffffffffc0200b1a:	e486                	sd	ra,72(sp)
+ffffffffc0200b1c:	fc26                	sd	s1,56(sp)
+ffffffffc0200b1e:	f84a                	sd	s2,48(sp)
+ffffffffc0200b20:	f44e                	sd	s3,40(sp)
+ffffffffc0200b22:	f052                	sd	s4,32(sp)
+ffffffffc0200b24:	ec56                	sd	s5,24(sp)
+ffffffffc0200b26:	e85a                	sd	s6,16(sp)
+ffffffffc0200b28:	e45e                	sd	s7,8(sp)
+ffffffffc0200b2a:	e062                	sd	s8,0(sp)
     int count = 0, total = 0;
     list_entry_t *le = &free_list;
     while ((le = list_next(le)) != &free_list) {
-ffffffffc0200b1c:	2e878063          	beq	a5,s0,ffffffffc0200dfc <default_check+0x300>
+ffffffffc0200b2c:	2c878763          	beq	a5,s0,ffffffffc0200dfa <default_check+0x2ee>
     int count = 0, total = 0;
-ffffffffc0200b20:	4481                	li	s1,0
-ffffffffc0200b22:	4901                	li	s2,0
+ffffffffc0200b30:	4481                	li	s1,0
+ffffffffc0200b32:	4901                	li	s2,0
  * test_bit - Determine whether a bit is set
  * @nr:     the bit to test
  * @addr:   the address to count from
  * */
 static inline bool test_bit(int nr, volatile void *addr) {
     return (((*(volatile unsigned long *)addr) >> nr) & 1);
-ffffffffc0200b24:	fe87b703          	ld	a4,-24(a5)
+ffffffffc0200b34:	fe87b703          	ld	a4,-24(a5)
         struct Page *p = le2page(le, page_link);
         assert(PageProperty(p));
-ffffffffc0200b28:	8b09                	andi	a4,a4,2
-ffffffffc0200b2a:	2c070d63          	beqz	a4,ffffffffc0200e04 <default_check+0x308>
+ffffffffc0200b38:	8b09                	andi	a4,a4,2
+ffffffffc0200b3a:	2c070463          	beqz	a4,ffffffffc0200e02 <default_check+0x2f6>
         count ++, total += p->property;
-ffffffffc0200b2e:	ff87a703          	lw	a4,-8(a5)
-ffffffffc0200b32:	679c                	ld	a5,8(a5)
-ffffffffc0200b34:	2905                	addiw	s2,s2,1
-ffffffffc0200b36:	9cb9                	addw	s1,s1,a4
+ffffffffc0200b3e:	ff87a703          	lw	a4,-8(a5)
+ffffffffc0200b42:	679c                	ld	a5,8(a5)
+ffffffffc0200b44:	2905                	addiw	s2,s2,1
+ffffffffc0200b46:	9cb9                	addw	s1,s1,a4
     while ((le = list_next(le)) != &free_list) {
-ffffffffc0200b38:	fe8796e3          	bne	a5,s0,ffffffffc0200b24 <default_check+0x28>
+ffffffffc0200b48:	fe8796e3          	bne	a5,s0,ffffffffc0200b34 <default_check+0x28>
     }
     assert(total == nr_free_pages());
-ffffffffc0200b3c:	89a6                	mv	s3,s1
-ffffffffc0200b3e:	395000ef          	jal	ffffffffc02016d2 <nr_free_pages>
-ffffffffc0200b42:	73351163          	bne	a0,s3,ffffffffc0201264 <default_check+0x768>
+ffffffffc0200b4c:	89a6                	mv	s3,s1
+ffffffffc0200b4e:	385000ef          	jal	ra,ffffffffc02016d2 <nr_free_pages>
+ffffffffc0200b52:	71351863          	bne	a0,s3,ffffffffc0201262 <default_check+0x756>
     assert((p0 = alloc_page()) != NULL);
-ffffffffc0200b46:	4505                	li	a0,1
-ffffffffc0200b48:	2bb000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200b4c:	8a2a                	mv	s4,a0
-ffffffffc0200b4e:	44050b63          	beqz	a0,ffffffffc0200fa4 <default_check+0x4a8>
+ffffffffc0200b56:	4505                	li	a0,1
+ffffffffc0200b58:	2a9000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200b5c:	8a2a                	mv	s4,a0
+ffffffffc0200b5e:	44050263          	beqz	a0,ffffffffc0200fa2 <default_check+0x496>
     assert((p1 = alloc_page()) != NULL);
-ffffffffc0200b52:	4505                	li	a0,1
-ffffffffc0200b54:	2af000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200b58:	89aa                	mv	s3,a0
-ffffffffc0200b5a:	72050563          	beqz	a0,ffffffffc0201284 <default_check+0x788>
+ffffffffc0200b62:	4505                	li	a0,1
+ffffffffc0200b64:	29d000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200b68:	89aa                	mv	s3,a0
+ffffffffc0200b6a:	70050c63          	beqz	a0,ffffffffc0201282 <default_check+0x776>
     assert((p2 = alloc_page()) != NULL);
-ffffffffc0200b5e:	4505                	li	a0,1
-ffffffffc0200b60:	2a3000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200b64:	8aaa                	mv	s5,a0
-ffffffffc0200b66:	4a050f63          	beqz	a0,ffffffffc0201024 <default_check+0x528>
+ffffffffc0200b6e:	4505                	li	a0,1
+ffffffffc0200b70:	291000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200b74:	8aaa                	mv	s5,a0
+ffffffffc0200b76:	4a050663          	beqz	a0,ffffffffc0201022 <default_check+0x516>
     assert(p0 != p1 && p0 != p2 && p1 != p2);
-ffffffffc0200b6a:	2b3a0d63          	beq	s4,s3,ffffffffc0200e24 <default_check+0x328>
-ffffffffc0200b6e:	2aaa0b63          	beq	s4,a0,ffffffffc0200e24 <default_check+0x328>
-ffffffffc0200b72:	2aa98963          	beq	s3,a0,ffffffffc0200e24 <default_check+0x328>
+ffffffffc0200b7a:	2b3a0463          	beq	s4,s3,ffffffffc0200e22 <default_check+0x316>
+ffffffffc0200b7e:	2aaa0263          	beq	s4,a0,ffffffffc0200e22 <default_check+0x316>
+ffffffffc0200b82:	2aa98063          	beq	s3,a0,ffffffffc0200e22 <default_check+0x316>
     assert(page_ref(p0) == 0 && page_ref(p1) == 0 && page_ref(p2) == 0);
-ffffffffc0200b76:	000a2783          	lw	a5,0(s4)
-ffffffffc0200b7a:	2c079563          	bnez	a5,ffffffffc0200e44 <default_check+0x348>
-ffffffffc0200b7e:	0009a783          	lw	a5,0(s3)
-ffffffffc0200b82:	2c079163          	bnez	a5,ffffffffc0200e44 <default_check+0x348>
-ffffffffc0200b86:	411c                	lw	a5,0(a0)
-ffffffffc0200b88:	2a079e63          	bnez	a5,ffffffffc0200e44 <default_check+0x348>
+ffffffffc0200b86:	000a2783          	lw	a5,0(s4)
+ffffffffc0200b8a:	2a079c63          	bnez	a5,ffffffffc0200e42 <default_check+0x336>
+ffffffffc0200b8e:	0009a783          	lw	a5,0(s3)
+ffffffffc0200b92:	2a079863          	bnez	a5,ffffffffc0200e42 <default_check+0x336>
+ffffffffc0200b96:	411c                	lw	a5,0(a0)
+ffffffffc0200b98:	2a079563          	bnez	a5,ffffffffc0200e42 <default_check+0x336>
 extern struct Page *pages;
 extern size_t npage;
 extern const size_t nbase;
 extern uint_t va_pa_offset;
 
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0200b8c:	f8e397b7          	lui	a5,0xf8e39
-ffffffffc0200b90:	e3978793          	addi	a5,a5,-455 # fffffffff8e38e39 <end+0x38c278c1>
-ffffffffc0200b94:	07b2                	slli	a5,a5,0xc
-ffffffffc0200b96:	e3978793          	addi	a5,a5,-455
-ffffffffc0200b9a:	07b2                	slli	a5,a5,0xc
-ffffffffc0200b9c:	00011717          	auipc	a4,0x11
-ffffffffc0200ba0:	9a473703          	ld	a4,-1628(a4) # ffffffffc0211540 <pages>
-ffffffffc0200ba4:	e3978793          	addi	a5,a5,-455
-ffffffffc0200ba8:	40ea06b3          	sub	a3,s4,a4
-ffffffffc0200bac:	07b2                	slli	a5,a5,0xc
-ffffffffc0200bae:	868d                	srai	a3,a3,0x3
-ffffffffc0200bb0:	e3978793          	addi	a5,a5,-455
-ffffffffc0200bb4:	02f686b3          	mul	a3,a3,a5
-ffffffffc0200bb8:	00005597          	auipc	a1,0x5
-ffffffffc0200bbc:	7e85b583          	ld	a1,2024(a1) # ffffffffc02063a0 <nbase>
+ffffffffc0200b9c:	00011797          	auipc	a5,0x11
+ffffffffc0200ba0:	9947b783          	ld	a5,-1644(a5) # ffffffffc0211530 <pages>
+ffffffffc0200ba4:	40fa0733          	sub	a4,s4,a5
+ffffffffc0200ba8:	870d                	srai	a4,a4,0x3
+ffffffffc0200baa:	00005597          	auipc	a1,0x5
+ffffffffc0200bae:	7165b583          	ld	a1,1814(a1) # ffffffffc02062c0 <error_string+0x38>
+ffffffffc0200bb2:	02b70733          	mul	a4,a4,a1
+ffffffffc0200bb6:	00005617          	auipc	a2,0x5
+ffffffffc0200bba:	71263603          	ld	a2,1810(a2) # ffffffffc02062c8 <nbase>
     assert(page2pa(p0) < npage * PGSIZE);
-ffffffffc0200bc0:	00011617          	auipc	a2,0x11
-ffffffffc0200bc4:	97863603          	ld	a2,-1672(a2) # ffffffffc0211538 <npage>
-ffffffffc0200bc8:	0632                	slli	a2,a2,0xc
-ffffffffc0200bca:	96ae                	add	a3,a3,a1
+ffffffffc0200bbe:	00011697          	auipc	a3,0x11
+ffffffffc0200bc2:	96a6b683          	ld	a3,-1686(a3) # ffffffffc0211528 <npage>
+ffffffffc0200bc6:	06b2                	slli	a3,a3,0xc
+ffffffffc0200bc8:	9732                	add	a4,a4,a2
 
 static inline uintptr_t page2pa(struct Page *page) {
     return page2ppn(page) << PGSHIFT;
-ffffffffc0200bcc:	06b2                	slli	a3,a3,0xc
-ffffffffc0200bce:	28c6fb63          	bgeu	a3,a2,ffffffffc0200e64 <default_check+0x368>
+ffffffffc0200bca:	0732                	slli	a4,a4,0xc
+ffffffffc0200bcc:	28d77b63          	bgeu	a4,a3,ffffffffc0200e62 <default_check+0x356>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0200bd2:	40e986b3          	sub	a3,s3,a4
-ffffffffc0200bd6:	868d                	srai	a3,a3,0x3
-ffffffffc0200bd8:	02f686b3          	mul	a3,a3,a5
-ffffffffc0200bdc:	96ae                	add	a3,a3,a1
+ffffffffc0200bd0:	40f98733          	sub	a4,s3,a5
+ffffffffc0200bd4:	870d                	srai	a4,a4,0x3
+ffffffffc0200bd6:	02b70733          	mul	a4,a4,a1
+ffffffffc0200bda:	9732                	add	a4,a4,a2
     return page2ppn(page) << PGSHIFT;
-ffffffffc0200bde:	06b2                	slli	a3,a3,0xc
+ffffffffc0200bdc:	0732                	slli	a4,a4,0xc
     assert(page2pa(p1) < npage * PGSIZE);
-ffffffffc0200be0:	4cc6f263          	bgeu	a3,a2,ffffffffc02010a4 <default_check+0x5a8>
+ffffffffc0200bde:	4cd77263          	bgeu	a4,a3,ffffffffc02010a2 <default_check+0x596>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0200be4:	40e50733          	sub	a4,a0,a4
-ffffffffc0200be8:	870d                	srai	a4,a4,0x3
-ffffffffc0200bea:	02f707b3          	mul	a5,a4,a5
-ffffffffc0200bee:	97ae                	add	a5,a5,a1
+ffffffffc0200be2:	40f507b3          	sub	a5,a0,a5
+ffffffffc0200be6:	878d                	srai	a5,a5,0x3
+ffffffffc0200be8:	02b787b3          	mul	a5,a5,a1
+ffffffffc0200bec:	97b2                	add	a5,a5,a2
     return page2ppn(page) << PGSHIFT;
-ffffffffc0200bf0:	07b2                	slli	a5,a5,0xc
+ffffffffc0200bee:	07b2                	slli	a5,a5,0xc
     assert(page2pa(p2) < npage * PGSIZE);
-ffffffffc0200bf2:	30c7f963          	bgeu	a5,a2,ffffffffc0200f04 <default_check+0x408>
+ffffffffc0200bf0:	30d7f963          	bgeu	a5,a3,ffffffffc0200f02 <default_check+0x3f6>
     assert(alloc_page() == NULL);
-ffffffffc0200bf6:	4505                	li	a0,1
+ffffffffc0200bf4:	4505                	li	a0,1
     list_entry_t free_list_store = free_list;
-ffffffffc0200bf8:	00043c03          	ld	s8,0(s0)
-ffffffffc0200bfc:	00843b83          	ld	s7,8(s0)
+ffffffffc0200bf6:	00043c03          	ld	s8,0(s0)
+ffffffffc0200bfa:	00843b83          	ld	s7,8(s0)
     unsigned int nr_free_store = nr_free;
-ffffffffc0200c00:	01042b03          	lw	s6,16(s0)
+ffffffffc0200bfe:	01042b03          	lw	s6,16(s0)
     elm->prev = elm->next = elm;
-ffffffffc0200c04:	e400                	sd	s0,8(s0)
-ffffffffc0200c06:	e000                	sd	s0,0(s0)
+ffffffffc0200c02:	e400                	sd	s0,8(s0)
+ffffffffc0200c04:	e000                	sd	s0,0(s0)
     nr_free = 0;
-ffffffffc0200c08:	00010797          	auipc	a5,0x10
-ffffffffc0200c0c:	4407a423          	sw	zero,1096(a5) # ffffffffc0211050 <free_area+0x10>
+ffffffffc0200c06:	00010797          	auipc	a5,0x10
+ffffffffc0200c0a:	4407a523          	sw	zero,1098(a5) # ffffffffc0211050 <free_area+0x10>
     assert(alloc_page() == NULL);
-ffffffffc0200c10:	1f3000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200c14:	2c051863          	bnez	a0,ffffffffc0200ee4 <default_check+0x3e8>
+ffffffffc0200c0e:	1f3000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200c12:	2c051863          	bnez	a0,ffffffffc0200ee2 <default_check+0x3d6>
     free_page(p0);
-ffffffffc0200c18:	4585                	li	a1,1
-ffffffffc0200c1a:	8552                	mv	a0,s4
-ffffffffc0200c1c:	277000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200c16:	4585                	li	a1,1
+ffffffffc0200c18:	8552                	mv	a0,s4
+ffffffffc0200c1a:	279000ef          	jal	ra,ffffffffc0201692 <free_pages>
     free_page(p1);
-ffffffffc0200c20:	4585                	li	a1,1
-ffffffffc0200c22:	854e                	mv	a0,s3
-ffffffffc0200c24:	26f000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200c1e:	4585                	li	a1,1
+ffffffffc0200c20:	854e                	mv	a0,s3
+ffffffffc0200c22:	271000ef          	jal	ra,ffffffffc0201692 <free_pages>
     free_page(p2);
-ffffffffc0200c28:	4585                	li	a1,1
-ffffffffc0200c2a:	8556                	mv	a0,s5
-ffffffffc0200c2c:	267000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200c26:	4585                	li	a1,1
+ffffffffc0200c28:	8556                	mv	a0,s5
+ffffffffc0200c2a:	269000ef          	jal	ra,ffffffffc0201692 <free_pages>
     assert(nr_free == 3);
-ffffffffc0200c30:	4818                	lw	a4,16(s0)
-ffffffffc0200c32:	478d                	li	a5,3
-ffffffffc0200c34:	28f71863          	bne	a4,a5,ffffffffc0200ec4 <default_check+0x3c8>
+ffffffffc0200c2e:	4818                	lw	a4,16(s0)
+ffffffffc0200c30:	478d                	li	a5,3
+ffffffffc0200c32:	28f71863          	bne	a4,a5,ffffffffc0200ec2 <default_check+0x3b6>
     assert((p0 = alloc_page()) != NULL);
-ffffffffc0200c38:	4505                	li	a0,1
-ffffffffc0200c3a:	1c9000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200c3e:	89aa                	mv	s3,a0
-ffffffffc0200c40:	26050263          	beqz	a0,ffffffffc0200ea4 <default_check+0x3a8>
+ffffffffc0200c36:	4505                	li	a0,1
+ffffffffc0200c38:	1c9000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200c3c:	89aa                	mv	s3,a0
+ffffffffc0200c3e:	26050263          	beqz	a0,ffffffffc0200ea2 <default_check+0x396>
     assert((p1 = alloc_page()) != NULL);
-ffffffffc0200c44:	4505                	li	a0,1
-ffffffffc0200c46:	1bd000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200c4a:	8aaa                	mv	s5,a0
-ffffffffc0200c4c:	3a050c63          	beqz	a0,ffffffffc0201004 <default_check+0x508>
+ffffffffc0200c42:	4505                	li	a0,1
+ffffffffc0200c44:	1bd000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200c48:	8aaa                	mv	s5,a0
+ffffffffc0200c4a:	3a050c63          	beqz	a0,ffffffffc0201002 <default_check+0x4f6>
     assert((p2 = alloc_page()) != NULL);
-ffffffffc0200c50:	4505                	li	a0,1
-ffffffffc0200c52:	1b1000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200c56:	8a2a                	mv	s4,a0
-ffffffffc0200c58:	38050663          	beqz	a0,ffffffffc0200fe4 <default_check+0x4e8>
+ffffffffc0200c4e:	4505                	li	a0,1
+ffffffffc0200c50:	1b1000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200c54:	8a2a                	mv	s4,a0
+ffffffffc0200c56:	38050663          	beqz	a0,ffffffffc0200fe2 <default_check+0x4d6>
     assert(alloc_page() == NULL);
-ffffffffc0200c5c:	4505                	li	a0,1
-ffffffffc0200c5e:	1a5000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200c62:	36051163          	bnez	a0,ffffffffc0200fc4 <default_check+0x4c8>
+ffffffffc0200c5a:	4505                	li	a0,1
+ffffffffc0200c5c:	1a5000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200c60:	36051163          	bnez	a0,ffffffffc0200fc2 <default_check+0x4b6>
     free_page(p0);
-ffffffffc0200c66:	4585                	li	a1,1
-ffffffffc0200c68:	854e                	mv	a0,s3
-ffffffffc0200c6a:	229000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200c64:	4585                	li	a1,1
+ffffffffc0200c66:	854e                	mv	a0,s3
+ffffffffc0200c68:	22b000ef          	jal	ra,ffffffffc0201692 <free_pages>
     assert(!list_empty(&free_list));
-ffffffffc0200c6e:	641c                	ld	a5,8(s0)
-ffffffffc0200c70:	20878a63          	beq	a5,s0,ffffffffc0200e84 <default_check+0x388>
+ffffffffc0200c6c:	641c                	ld	a5,8(s0)
+ffffffffc0200c6e:	20878a63          	beq	a5,s0,ffffffffc0200e82 <default_check+0x376>
     assert((p = alloc_page()) == p0);
-ffffffffc0200c74:	4505                	li	a0,1
-ffffffffc0200c76:	18d000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200c7a:	30a99563          	bne	s3,a0,ffffffffc0200f84 <default_check+0x488>
+ffffffffc0200c72:	4505                	li	a0,1
+ffffffffc0200c74:	18d000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200c78:	30a99563          	bne	s3,a0,ffffffffc0200f82 <default_check+0x476>
     assert(alloc_page() == NULL);
-ffffffffc0200c7e:	4505                	li	a0,1
-ffffffffc0200c80:	183000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200c84:	2e051063          	bnez	a0,ffffffffc0200f64 <default_check+0x468>
+ffffffffc0200c7c:	4505                	li	a0,1
+ffffffffc0200c7e:	183000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200c82:	2e051063          	bnez	a0,ffffffffc0200f62 <default_check+0x456>
     assert(nr_free == 0);
-ffffffffc0200c88:	481c                	lw	a5,16(s0)
-ffffffffc0200c8a:	2a079d63          	bnez	a5,ffffffffc0200f44 <default_check+0x448>
+ffffffffc0200c86:	481c                	lw	a5,16(s0)
+ffffffffc0200c88:	2a079d63          	bnez	a5,ffffffffc0200f42 <default_check+0x436>
     free_page(p);
-ffffffffc0200c8e:	854e                	mv	a0,s3
-ffffffffc0200c90:	4585                	li	a1,1
+ffffffffc0200c8c:	854e                	mv	a0,s3
+ffffffffc0200c8e:	4585                	li	a1,1
     free_list = free_list_store;
-ffffffffc0200c92:	01843023          	sd	s8,0(s0)
-ffffffffc0200c96:	01743423          	sd	s7,8(s0)
+ffffffffc0200c90:	01843023          	sd	s8,0(s0)
+ffffffffc0200c94:	01743423          	sd	s7,8(s0)
     nr_free = nr_free_store;
-ffffffffc0200c9a:	01642823          	sw	s6,16(s0)
+ffffffffc0200c98:	01642823          	sw	s6,16(s0)
     free_page(p);
-ffffffffc0200c9e:	1f5000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200c9c:	1f7000ef          	jal	ra,ffffffffc0201692 <free_pages>
     free_page(p1);
-ffffffffc0200ca2:	4585                	li	a1,1
-ffffffffc0200ca4:	8556                	mv	a0,s5
-ffffffffc0200ca6:	1ed000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200ca0:	4585                	li	a1,1
+ffffffffc0200ca2:	8556                	mv	a0,s5
+ffffffffc0200ca4:	1ef000ef          	jal	ra,ffffffffc0201692 <free_pages>
     free_page(p2);
-ffffffffc0200caa:	4585                	li	a1,1
-ffffffffc0200cac:	8552                	mv	a0,s4
-ffffffffc0200cae:	1e5000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200ca8:	4585                	li	a1,1
+ffffffffc0200caa:	8552                	mv	a0,s4
+ffffffffc0200cac:	1e7000ef          	jal	ra,ffffffffc0201692 <free_pages>
 
     basic_check();
 
     struct Page *p0 = alloc_pages(5), *p1, *p2;
-ffffffffc0200cb2:	4515                	li	a0,5
-ffffffffc0200cb4:	14f000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200cb8:	89aa                	mv	s3,a0
+ffffffffc0200cb0:	4515                	li	a0,5
+ffffffffc0200cb2:	14f000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200cb6:	89aa                	mv	s3,a0
     assert(p0 != NULL);
-ffffffffc0200cba:	26050563          	beqz	a0,ffffffffc0200f24 <default_check+0x428>
-ffffffffc0200cbe:	651c                	ld	a5,8(a0)
-ffffffffc0200cc0:	8385                	srli	a5,a5,0x1
+ffffffffc0200cb8:	26050563          	beqz	a0,ffffffffc0200f22 <default_check+0x416>
+ffffffffc0200cbc:	651c                	ld	a5,8(a0)
+ffffffffc0200cbe:	8385                	srli	a5,a5,0x1
     assert(!PageProperty(p0));
-ffffffffc0200cc2:	8b85                	andi	a5,a5,1
-ffffffffc0200cc4:	54079063          	bnez	a5,ffffffffc0201204 <default_check+0x708>
+ffffffffc0200cc0:	8b85                	andi	a5,a5,1
+ffffffffc0200cc2:	54079063          	bnez	a5,ffffffffc0201202 <default_check+0x6f6>
 
     list_entry_t free_list_store = free_list;
     list_init(&free_list);
     assert(list_empty(&free_list));
     assert(alloc_page() == NULL);
-ffffffffc0200cc8:	4505                	li	a0,1
+ffffffffc0200cc6:	4505                	li	a0,1
     list_entry_t free_list_store = free_list;
-ffffffffc0200cca:	00043b03          	ld	s6,0(s0)
-ffffffffc0200cce:	00843a83          	ld	s5,8(s0)
-ffffffffc0200cd2:	e000                	sd	s0,0(s0)
-ffffffffc0200cd4:	e400                	sd	s0,8(s0)
+ffffffffc0200cc8:	00043b03          	ld	s6,0(s0)
+ffffffffc0200ccc:	00843a83          	ld	s5,8(s0)
+ffffffffc0200cd0:	e000                	sd	s0,0(s0)
+ffffffffc0200cd2:	e400                	sd	s0,8(s0)
     assert(alloc_page() == NULL);
-ffffffffc0200cd6:	12d000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200cda:	50051563          	bnez	a0,ffffffffc02011e4 <default_check+0x6e8>
+ffffffffc0200cd4:	12d000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200cd8:	50051563          	bnez	a0,ffffffffc02011e2 <default_check+0x6d6>
 
     unsigned int nr_free_store = nr_free;
     nr_free = 0;
 
     free_pages(p0 + 2, 3);
-ffffffffc0200cde:	09098a13          	addi	s4,s3,144
-ffffffffc0200ce2:	8552                	mv	a0,s4
-ffffffffc0200ce4:	458d                	li	a1,3
+ffffffffc0200cdc:	09098a13          	addi	s4,s3,144
+ffffffffc0200ce0:	8552                	mv	a0,s4
+ffffffffc0200ce2:	458d                	li	a1,3
     unsigned int nr_free_store = nr_free;
-ffffffffc0200ce6:	01042b83          	lw	s7,16(s0)
+ffffffffc0200ce4:	01042b83          	lw	s7,16(s0)
     nr_free = 0;
-ffffffffc0200cea:	00010797          	auipc	a5,0x10
-ffffffffc0200cee:	3607a323          	sw	zero,870(a5) # ffffffffc0211050 <free_area+0x10>
+ffffffffc0200ce8:	00010797          	auipc	a5,0x10
+ffffffffc0200cec:	3607a423          	sw	zero,872(a5) # ffffffffc0211050 <free_area+0x10>
     free_pages(p0 + 2, 3);
-ffffffffc0200cf2:	1a1000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200cf0:	1a3000ef          	jal	ra,ffffffffc0201692 <free_pages>
     assert(alloc_pages(4) == NULL);
-ffffffffc0200cf6:	4511                	li	a0,4
-ffffffffc0200cf8:	10b000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200cfc:	4c051463          	bnez	a0,ffffffffc02011c4 <default_check+0x6c8>
-ffffffffc0200d00:	0989b783          	ld	a5,152(s3)
-ffffffffc0200d04:	8385                	srli	a5,a5,0x1
+ffffffffc0200cf4:	4511                	li	a0,4
+ffffffffc0200cf6:	10b000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200cfa:	4c051463          	bnez	a0,ffffffffc02011c2 <default_check+0x6b6>
+ffffffffc0200cfe:	0989b783          	ld	a5,152(s3)
+ffffffffc0200d02:	8385                	srli	a5,a5,0x1
     assert(PageProperty(p0 + 2) && p0[2].property == 3);
-ffffffffc0200d06:	8b85                	andi	a5,a5,1
-ffffffffc0200d08:	48078e63          	beqz	a5,ffffffffc02011a4 <default_check+0x6a8>
-ffffffffc0200d0c:	0a89a703          	lw	a4,168(s3)
-ffffffffc0200d10:	478d                	li	a5,3
-ffffffffc0200d12:	48f71963          	bne	a4,a5,ffffffffc02011a4 <default_check+0x6a8>
+ffffffffc0200d04:	8b85                	andi	a5,a5,1
+ffffffffc0200d06:	48078e63          	beqz	a5,ffffffffc02011a2 <default_check+0x696>
+ffffffffc0200d0a:	0a89a703          	lw	a4,168(s3)
+ffffffffc0200d0e:	478d                	li	a5,3
+ffffffffc0200d10:	48f71963          	bne	a4,a5,ffffffffc02011a2 <default_check+0x696>
     assert((p1 = alloc_pages(3)) != NULL);
-ffffffffc0200d16:	450d                	li	a0,3
-ffffffffc0200d18:	0eb000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200d1c:	8c2a                	mv	s8,a0
-ffffffffc0200d1e:	46050363          	beqz	a0,ffffffffc0201184 <default_check+0x688>
+ffffffffc0200d14:	450d                	li	a0,3
+ffffffffc0200d16:	0eb000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200d1a:	8c2a                	mv	s8,a0
+ffffffffc0200d1c:	46050363          	beqz	a0,ffffffffc0201182 <default_check+0x676>
     assert(alloc_page() == NULL);
-ffffffffc0200d22:	4505                	li	a0,1
-ffffffffc0200d24:	0df000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200d28:	42051e63          	bnez	a0,ffffffffc0201164 <default_check+0x668>
+ffffffffc0200d20:	4505                	li	a0,1
+ffffffffc0200d22:	0df000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200d26:	42051e63          	bnez	a0,ffffffffc0201162 <default_check+0x656>
     assert(p0 + 2 == p1);
-ffffffffc0200d2c:	418a1c63          	bne	s4,s8,ffffffffc0201144 <default_check+0x648>
+ffffffffc0200d2a:	418a1c63          	bne	s4,s8,ffffffffc0201142 <default_check+0x636>
 
     p2 = p0 + 1;
     free_page(p0);
-ffffffffc0200d30:	4585                	li	a1,1
-ffffffffc0200d32:	854e                	mv	a0,s3
-ffffffffc0200d34:	15f000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200d2e:	4585                	li	a1,1
+ffffffffc0200d30:	854e                	mv	a0,s3
+ffffffffc0200d32:	161000ef          	jal	ra,ffffffffc0201692 <free_pages>
     free_pages(p1, 3);
-ffffffffc0200d38:	458d                	li	a1,3
-ffffffffc0200d3a:	8552                	mv	a0,s4
-ffffffffc0200d3c:	157000ef          	jal	ffffffffc0201692 <free_pages>
-ffffffffc0200d40:	0089b783          	ld	a5,8(s3)
+ffffffffc0200d36:	458d                	li	a1,3
+ffffffffc0200d38:	8552                	mv	a0,s4
+ffffffffc0200d3a:	159000ef          	jal	ra,ffffffffc0201692 <free_pages>
+ffffffffc0200d3e:	0089b783          	ld	a5,8(s3)
     p2 = p0 + 1;
-ffffffffc0200d44:	04898c13          	addi	s8,s3,72
-ffffffffc0200d48:	8385                	srli	a5,a5,0x1
+ffffffffc0200d42:	04898c13          	addi	s8,s3,72
+ffffffffc0200d46:	8385                	srli	a5,a5,0x1
     assert(PageProperty(p0) && p0->property == 1);
-ffffffffc0200d4a:	8b85                	andi	a5,a5,1
-ffffffffc0200d4c:	3c078c63          	beqz	a5,ffffffffc0201124 <default_check+0x628>
-ffffffffc0200d50:	0189a703          	lw	a4,24(s3)
-ffffffffc0200d54:	4785                	li	a5,1
-ffffffffc0200d56:	3cf71763          	bne	a4,a5,ffffffffc0201124 <default_check+0x628>
-ffffffffc0200d5a:	008a3783          	ld	a5,8(s4)
-ffffffffc0200d5e:	8385                	srli	a5,a5,0x1
+ffffffffc0200d48:	8b85                	andi	a5,a5,1
+ffffffffc0200d4a:	3c078c63          	beqz	a5,ffffffffc0201122 <default_check+0x616>
+ffffffffc0200d4e:	0189a703          	lw	a4,24(s3)
+ffffffffc0200d52:	4785                	li	a5,1
+ffffffffc0200d54:	3cf71763          	bne	a4,a5,ffffffffc0201122 <default_check+0x616>
+ffffffffc0200d58:	008a3783          	ld	a5,8(s4)
+ffffffffc0200d5c:	8385                	srli	a5,a5,0x1
     assert(PageProperty(p1) && p1->property == 3);
-ffffffffc0200d60:	8b85                	andi	a5,a5,1
-ffffffffc0200d62:	3a078163          	beqz	a5,ffffffffc0201104 <default_check+0x608>
-ffffffffc0200d66:	018a2703          	lw	a4,24(s4)
-ffffffffc0200d6a:	478d                	li	a5,3
-ffffffffc0200d6c:	38f71c63          	bne	a4,a5,ffffffffc0201104 <default_check+0x608>
+ffffffffc0200d5e:	8b85                	andi	a5,a5,1
+ffffffffc0200d60:	3a078163          	beqz	a5,ffffffffc0201102 <default_check+0x5f6>
+ffffffffc0200d64:	018a2703          	lw	a4,24(s4)
+ffffffffc0200d68:	478d                	li	a5,3
+ffffffffc0200d6a:	38f71c63          	bne	a4,a5,ffffffffc0201102 <default_check+0x5f6>
 
     assert((p0 = alloc_page()) == p2 - 1);
-ffffffffc0200d70:	4505                	li	a0,1
-ffffffffc0200d72:	091000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200d76:	36a99763          	bne	s3,a0,ffffffffc02010e4 <default_check+0x5e8>
+ffffffffc0200d6e:	4505                	li	a0,1
+ffffffffc0200d70:	091000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200d74:	36a99763          	bne	s3,a0,ffffffffc02010e2 <default_check+0x5d6>
     free_page(p0);
-ffffffffc0200d7a:	4585                	li	a1,1
-ffffffffc0200d7c:	117000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200d78:	4585                	li	a1,1
+ffffffffc0200d7a:	119000ef          	jal	ra,ffffffffc0201692 <free_pages>
     assert((p0 = alloc_pages(2)) == p2 + 1);
-ffffffffc0200d80:	4509                	li	a0,2
-ffffffffc0200d82:	081000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200d86:	32aa1f63          	bne	s4,a0,ffffffffc02010c4 <default_check+0x5c8>
+ffffffffc0200d7e:	4509                	li	a0,2
+ffffffffc0200d80:	081000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200d84:	32aa1f63          	bne	s4,a0,ffffffffc02010c2 <default_check+0x5b6>
 
     free_pages(p0, 2);
-ffffffffc0200d8a:	4589                	li	a1,2
-ffffffffc0200d8c:	107000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200d88:	4589                	li	a1,2
+ffffffffc0200d8a:	109000ef          	jal	ra,ffffffffc0201692 <free_pages>
     free_page(p2);
-ffffffffc0200d90:	4585                	li	a1,1
-ffffffffc0200d92:	8562                	mv	a0,s8
-ffffffffc0200d94:	0ff000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200d8e:	4585                	li	a1,1
+ffffffffc0200d90:	8562                	mv	a0,s8
+ffffffffc0200d92:	101000ef          	jal	ra,ffffffffc0201692 <free_pages>
 
     assert((p0 = alloc_pages(5)) != NULL);
-ffffffffc0200d98:	4515                	li	a0,5
-ffffffffc0200d9a:	069000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200d9e:	89aa                	mv	s3,a0
-ffffffffc0200da0:	48050263          	beqz	a0,ffffffffc0201224 <default_check+0x728>
+ffffffffc0200d96:	4515                	li	a0,5
+ffffffffc0200d98:	069000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200d9c:	89aa                	mv	s3,a0
+ffffffffc0200d9e:	48050263          	beqz	a0,ffffffffc0201222 <default_check+0x716>
     assert(alloc_page() == NULL);
-ffffffffc0200da4:	4505                	li	a0,1
-ffffffffc0200da6:	05d000ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0200daa:	2c051d63          	bnez	a0,ffffffffc0201084 <default_check+0x588>
+ffffffffc0200da2:	4505                	li	a0,1
+ffffffffc0200da4:	05d000ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0200da8:	2c051d63          	bnez	a0,ffffffffc0201082 <default_check+0x576>
 
     assert(nr_free == 0);
-ffffffffc0200dae:	481c                	lw	a5,16(s0)
-ffffffffc0200db0:	2a079a63          	bnez	a5,ffffffffc0201064 <default_check+0x568>
+ffffffffc0200dac:	481c                	lw	a5,16(s0)
+ffffffffc0200dae:	2a079a63          	bnez	a5,ffffffffc0201062 <default_check+0x556>
     nr_free = nr_free_store;
 
     free_list = free_list_store;
     free_pages(p0, 5);
-ffffffffc0200db4:	4595                	li	a1,5
-ffffffffc0200db6:	854e                	mv	a0,s3
+ffffffffc0200db2:	4595                	li	a1,5
+ffffffffc0200db4:	854e                	mv	a0,s3
     nr_free = nr_free_store;
-ffffffffc0200db8:	01742823          	sw	s7,16(s0)
+ffffffffc0200db6:	01742823          	sw	s7,16(s0)
     free_list = free_list_store;
-ffffffffc0200dbc:	01643023          	sd	s6,0(s0)
-ffffffffc0200dc0:	01543423          	sd	s5,8(s0)
+ffffffffc0200dba:	01643023          	sd	s6,0(s0)
+ffffffffc0200dbe:	01543423          	sd	s5,8(s0)
     free_pages(p0, 5);
-ffffffffc0200dc4:	0cf000ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0200dc2:	0d1000ef          	jal	ra,ffffffffc0201692 <free_pages>
     return listelm->next;
-ffffffffc0200dc8:	641c                	ld	a5,8(s0)
+ffffffffc0200dc6:	641c                	ld	a5,8(s0)
 
     le = &free_list;
     while ((le = list_next(le)) != &free_list) {
-ffffffffc0200dca:	00878963          	beq	a5,s0,ffffffffc0200ddc <default_check+0x2e0>
+ffffffffc0200dc8:	00878963          	beq	a5,s0,ffffffffc0200dda <default_check+0x2ce>
         struct Page *p = le2page(le, page_link);
         count --, total -= p->property;
-ffffffffc0200dce:	ff87a703          	lw	a4,-8(a5)
-ffffffffc0200dd2:	679c                	ld	a5,8(a5)
-ffffffffc0200dd4:	397d                	addiw	s2,s2,-1
-ffffffffc0200dd6:	9c99                	subw	s1,s1,a4
+ffffffffc0200dcc:	ff87a703          	lw	a4,-8(a5)
+ffffffffc0200dd0:	679c                	ld	a5,8(a5)
+ffffffffc0200dd2:	397d                	addiw	s2,s2,-1
+ffffffffc0200dd4:	9c99                	subw	s1,s1,a4
     while ((le = list_next(le)) != &free_list) {
-ffffffffc0200dd8:	fe879be3          	bne	a5,s0,ffffffffc0200dce <default_check+0x2d2>
+ffffffffc0200dd6:	fe879be3          	bne	a5,s0,ffffffffc0200dcc <default_check+0x2c0>
     }
     assert(count == 0);
-ffffffffc0200ddc:	26091463          	bnez	s2,ffffffffc0201044 <default_check+0x548>
+ffffffffc0200dda:	26091463          	bnez	s2,ffffffffc0201042 <default_check+0x536>
     assert(total == 0);
-ffffffffc0200de0:	46049263          	bnez	s1,ffffffffc0201244 <default_check+0x748>
+ffffffffc0200dde:	46049263          	bnez	s1,ffffffffc0201242 <default_check+0x736>
 }
-ffffffffc0200de4:	60a6                	ld	ra,72(sp)
-ffffffffc0200de6:	6406                	ld	s0,64(sp)
-ffffffffc0200de8:	74e2                	ld	s1,56(sp)
-ffffffffc0200dea:	7942                	ld	s2,48(sp)
-ffffffffc0200dec:	79a2                	ld	s3,40(sp)
-ffffffffc0200dee:	7a02                	ld	s4,32(sp)
-ffffffffc0200df0:	6ae2                	ld	s5,24(sp)
-ffffffffc0200df2:	6b42                	ld	s6,16(sp)
-ffffffffc0200df4:	6ba2                	ld	s7,8(sp)
-ffffffffc0200df6:	6c02                	ld	s8,0(sp)
-ffffffffc0200df8:	6161                	addi	sp,sp,80
-ffffffffc0200dfa:	8082                	ret
+ffffffffc0200de2:	60a6                	ld	ra,72(sp)
+ffffffffc0200de4:	6406                	ld	s0,64(sp)
+ffffffffc0200de6:	74e2                	ld	s1,56(sp)
+ffffffffc0200de8:	7942                	ld	s2,48(sp)
+ffffffffc0200dea:	79a2                	ld	s3,40(sp)
+ffffffffc0200dec:	7a02                	ld	s4,32(sp)
+ffffffffc0200dee:	6ae2                	ld	s5,24(sp)
+ffffffffc0200df0:	6b42                	ld	s6,16(sp)
+ffffffffc0200df2:	6ba2                	ld	s7,8(sp)
+ffffffffc0200df4:	6c02                	ld	s8,0(sp)
+ffffffffc0200df6:	6161                	addi	sp,sp,80
+ffffffffc0200df8:	8082                	ret
     while ((le = list_next(le)) != &free_list) {
-ffffffffc0200dfc:	4981                	li	s3,0
+ffffffffc0200dfa:	4981                	li	s3,0
     int count = 0, total = 0;
-ffffffffc0200dfe:	4481                	li	s1,0
-ffffffffc0200e00:	4901                	li	s2,0
-ffffffffc0200e02:	bb35                	j	ffffffffc0200b3e <default_check+0x42>
+ffffffffc0200dfc:	4481                	li	s1,0
+ffffffffc0200dfe:	4901                	li	s2,0
+ffffffffc0200e00:	b3b9                	j	ffffffffc0200b4e <default_check+0x42>
         assert(PageProperty(p));
-ffffffffc0200e04:	00004697          	auipc	a3,0x4
-ffffffffc0200e08:	01468693          	addi	a3,a3,20 # ffffffffc0204e18 <etext+0x8c8>
-ffffffffc0200e0c:	00004617          	auipc	a2,0x4
-ffffffffc0200e10:	01c60613          	addi	a2,a2,28 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200e14:	0f000593          	li	a1,240
-ffffffffc0200e18:	00004517          	auipc	a0,0x4
-ffffffffc0200e1c:	02850513          	addi	a0,a0,40 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200e20:	d40ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200e02:	00004697          	auipc	a3,0x4
+ffffffffc0200e06:	fee68693          	addi	a3,a3,-18 # ffffffffc0204df0 <commands+0x728>
+ffffffffc0200e0a:	00004617          	auipc	a2,0x4
+ffffffffc0200e0e:	ff660613          	addi	a2,a2,-10 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200e12:	0f000593          	li	a1,240
+ffffffffc0200e16:	00004517          	auipc	a0,0x4
+ffffffffc0200e1a:	00250513          	addi	a0,a0,2 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200e1e:	d56ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(p0 != p1 && p0 != p2 && p1 != p2);
-ffffffffc0200e24:	00004697          	auipc	a3,0x4
-ffffffffc0200e28:	0b468693          	addi	a3,a3,180 # ffffffffc0204ed8 <etext+0x988>
-ffffffffc0200e2c:	00004617          	auipc	a2,0x4
-ffffffffc0200e30:	ffc60613          	addi	a2,a2,-4 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200e34:	0bd00593          	li	a1,189
-ffffffffc0200e38:	00004517          	auipc	a0,0x4
-ffffffffc0200e3c:	00850513          	addi	a0,a0,8 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200e40:	d20ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200e22:	00004697          	auipc	a3,0x4
+ffffffffc0200e26:	08e68693          	addi	a3,a3,142 # ffffffffc0204eb0 <commands+0x7e8>
+ffffffffc0200e2a:	00004617          	auipc	a2,0x4
+ffffffffc0200e2e:	fd660613          	addi	a2,a2,-42 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200e32:	0bd00593          	li	a1,189
+ffffffffc0200e36:	00004517          	auipc	a0,0x4
+ffffffffc0200e3a:	fe250513          	addi	a0,a0,-30 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200e3e:	d36ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(page_ref(p0) == 0 && page_ref(p1) == 0 && page_ref(p2) == 0);
-ffffffffc0200e44:	00004697          	auipc	a3,0x4
-ffffffffc0200e48:	0bc68693          	addi	a3,a3,188 # ffffffffc0204f00 <etext+0x9b0>
-ffffffffc0200e4c:	00004617          	auipc	a2,0x4
-ffffffffc0200e50:	fdc60613          	addi	a2,a2,-36 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200e54:	0be00593          	li	a1,190
-ffffffffc0200e58:	00004517          	auipc	a0,0x4
-ffffffffc0200e5c:	fe850513          	addi	a0,a0,-24 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200e60:	d00ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200e42:	00004697          	auipc	a3,0x4
+ffffffffc0200e46:	09668693          	addi	a3,a3,150 # ffffffffc0204ed8 <commands+0x810>
+ffffffffc0200e4a:	00004617          	auipc	a2,0x4
+ffffffffc0200e4e:	fb660613          	addi	a2,a2,-74 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200e52:	0be00593          	li	a1,190
+ffffffffc0200e56:	00004517          	auipc	a0,0x4
+ffffffffc0200e5a:	fc250513          	addi	a0,a0,-62 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200e5e:	d16ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(page2pa(p0) < npage * PGSIZE);
-ffffffffc0200e64:	00004697          	auipc	a3,0x4
-ffffffffc0200e68:	0dc68693          	addi	a3,a3,220 # ffffffffc0204f40 <etext+0x9f0>
-ffffffffc0200e6c:	00004617          	auipc	a2,0x4
-ffffffffc0200e70:	fbc60613          	addi	a2,a2,-68 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200e74:	0c000593          	li	a1,192
-ffffffffc0200e78:	00004517          	auipc	a0,0x4
-ffffffffc0200e7c:	fc850513          	addi	a0,a0,-56 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200e80:	ce0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200e62:	00004697          	auipc	a3,0x4
+ffffffffc0200e66:	0b668693          	addi	a3,a3,182 # ffffffffc0204f18 <commands+0x850>
+ffffffffc0200e6a:	00004617          	auipc	a2,0x4
+ffffffffc0200e6e:	f9660613          	addi	a2,a2,-106 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200e72:	0c000593          	li	a1,192
+ffffffffc0200e76:	00004517          	auipc	a0,0x4
+ffffffffc0200e7a:	fa250513          	addi	a0,a0,-94 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200e7e:	cf6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(!list_empty(&free_list));
-ffffffffc0200e84:	00004697          	auipc	a3,0x4
-ffffffffc0200e88:	14468693          	addi	a3,a3,324 # ffffffffc0204fc8 <etext+0xa78>
-ffffffffc0200e8c:	00004617          	auipc	a2,0x4
-ffffffffc0200e90:	f9c60613          	addi	a2,a2,-100 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200e94:	0d900593          	li	a1,217
-ffffffffc0200e98:	00004517          	auipc	a0,0x4
-ffffffffc0200e9c:	fa850513          	addi	a0,a0,-88 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200ea0:	cc0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200e82:	00004697          	auipc	a3,0x4
+ffffffffc0200e86:	11e68693          	addi	a3,a3,286 # ffffffffc0204fa0 <commands+0x8d8>
+ffffffffc0200e8a:	00004617          	auipc	a2,0x4
+ffffffffc0200e8e:	f7660613          	addi	a2,a2,-138 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200e92:	0d900593          	li	a1,217
+ffffffffc0200e96:	00004517          	auipc	a0,0x4
+ffffffffc0200e9a:	f8250513          	addi	a0,a0,-126 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200e9e:	cd6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert((p0 = alloc_page()) != NULL);
-ffffffffc0200ea4:	00004697          	auipc	a3,0x4
-ffffffffc0200ea8:	fd468693          	addi	a3,a3,-44 # ffffffffc0204e78 <etext+0x928>
-ffffffffc0200eac:	00004617          	auipc	a2,0x4
-ffffffffc0200eb0:	f7c60613          	addi	a2,a2,-132 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200eb4:	0d200593          	li	a1,210
-ffffffffc0200eb8:	00004517          	auipc	a0,0x4
-ffffffffc0200ebc:	f8850513          	addi	a0,a0,-120 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200ec0:	ca0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200ea2:	00004697          	auipc	a3,0x4
+ffffffffc0200ea6:	fae68693          	addi	a3,a3,-82 # ffffffffc0204e50 <commands+0x788>
+ffffffffc0200eaa:	00004617          	auipc	a2,0x4
+ffffffffc0200eae:	f5660613          	addi	a2,a2,-170 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200eb2:	0d200593          	li	a1,210
+ffffffffc0200eb6:	00004517          	auipc	a0,0x4
+ffffffffc0200eba:	f6250513          	addi	a0,a0,-158 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200ebe:	cb6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(nr_free == 3);
-ffffffffc0200ec4:	00004697          	auipc	a3,0x4
-ffffffffc0200ec8:	0f468693          	addi	a3,a3,244 # ffffffffc0204fb8 <etext+0xa68>
-ffffffffc0200ecc:	00004617          	auipc	a2,0x4
-ffffffffc0200ed0:	f5c60613          	addi	a2,a2,-164 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200ed4:	0d000593          	li	a1,208
-ffffffffc0200ed8:	00004517          	auipc	a0,0x4
-ffffffffc0200edc:	f6850513          	addi	a0,a0,-152 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200ee0:	c80ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200ec2:	00004697          	auipc	a3,0x4
+ffffffffc0200ec6:	0ce68693          	addi	a3,a3,206 # ffffffffc0204f90 <commands+0x8c8>
+ffffffffc0200eca:	00004617          	auipc	a2,0x4
+ffffffffc0200ece:	f3660613          	addi	a2,a2,-202 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200ed2:	0d000593          	li	a1,208
+ffffffffc0200ed6:	00004517          	auipc	a0,0x4
+ffffffffc0200eda:	f4250513          	addi	a0,a0,-190 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200ede:	c96ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(alloc_page() == NULL);
-ffffffffc0200ee4:	00004697          	auipc	a3,0x4
-ffffffffc0200ee8:	0bc68693          	addi	a3,a3,188 # ffffffffc0204fa0 <etext+0xa50>
-ffffffffc0200eec:	00004617          	auipc	a2,0x4
-ffffffffc0200ef0:	f3c60613          	addi	a2,a2,-196 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200ef4:	0cb00593          	li	a1,203
-ffffffffc0200ef8:	00004517          	auipc	a0,0x4
-ffffffffc0200efc:	f4850513          	addi	a0,a0,-184 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200f00:	c60ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200ee2:	00004697          	auipc	a3,0x4
+ffffffffc0200ee6:	09668693          	addi	a3,a3,150 # ffffffffc0204f78 <commands+0x8b0>
+ffffffffc0200eea:	00004617          	auipc	a2,0x4
+ffffffffc0200eee:	f1660613          	addi	a2,a2,-234 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200ef2:	0cb00593          	li	a1,203
+ffffffffc0200ef6:	00004517          	auipc	a0,0x4
+ffffffffc0200efa:	f2250513          	addi	a0,a0,-222 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200efe:	c76ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(page2pa(p2) < npage * PGSIZE);
-ffffffffc0200f04:	00004697          	auipc	a3,0x4
-ffffffffc0200f08:	07c68693          	addi	a3,a3,124 # ffffffffc0204f80 <etext+0xa30>
-ffffffffc0200f0c:	00004617          	auipc	a2,0x4
-ffffffffc0200f10:	f1c60613          	addi	a2,a2,-228 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200f14:	0c200593          	li	a1,194
-ffffffffc0200f18:	00004517          	auipc	a0,0x4
-ffffffffc0200f1c:	f2850513          	addi	a0,a0,-216 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200f20:	c40ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200f02:	00004697          	auipc	a3,0x4
+ffffffffc0200f06:	05668693          	addi	a3,a3,86 # ffffffffc0204f58 <commands+0x890>
+ffffffffc0200f0a:	00004617          	auipc	a2,0x4
+ffffffffc0200f0e:	ef660613          	addi	a2,a2,-266 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200f12:	0c200593          	li	a1,194
+ffffffffc0200f16:	00004517          	auipc	a0,0x4
+ffffffffc0200f1a:	f0250513          	addi	a0,a0,-254 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200f1e:	c56ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(p0 != NULL);
-ffffffffc0200f24:	00004697          	auipc	a3,0x4
-ffffffffc0200f28:	0ec68693          	addi	a3,a3,236 # ffffffffc0205010 <etext+0xac0>
-ffffffffc0200f2c:	00004617          	auipc	a2,0x4
-ffffffffc0200f30:	efc60613          	addi	a2,a2,-260 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200f34:	0f800593          	li	a1,248
-ffffffffc0200f38:	00004517          	auipc	a0,0x4
-ffffffffc0200f3c:	f0850513          	addi	a0,a0,-248 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200f40:	c20ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200f22:	00004697          	auipc	a3,0x4
+ffffffffc0200f26:	0c668693          	addi	a3,a3,198 # ffffffffc0204fe8 <commands+0x920>
+ffffffffc0200f2a:	00004617          	auipc	a2,0x4
+ffffffffc0200f2e:	ed660613          	addi	a2,a2,-298 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200f32:	0f800593          	li	a1,248
+ffffffffc0200f36:	00004517          	auipc	a0,0x4
+ffffffffc0200f3a:	ee250513          	addi	a0,a0,-286 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200f3e:	c36ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(nr_free == 0);
-ffffffffc0200f44:	00004697          	auipc	a3,0x4
-ffffffffc0200f48:	0bc68693          	addi	a3,a3,188 # ffffffffc0205000 <etext+0xab0>
-ffffffffc0200f4c:	00004617          	auipc	a2,0x4
-ffffffffc0200f50:	edc60613          	addi	a2,a2,-292 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200f54:	0df00593          	li	a1,223
-ffffffffc0200f58:	00004517          	auipc	a0,0x4
-ffffffffc0200f5c:	ee850513          	addi	a0,a0,-280 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200f60:	c00ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200f42:	00004697          	auipc	a3,0x4
+ffffffffc0200f46:	09668693          	addi	a3,a3,150 # ffffffffc0204fd8 <commands+0x910>
+ffffffffc0200f4a:	00004617          	auipc	a2,0x4
+ffffffffc0200f4e:	eb660613          	addi	a2,a2,-330 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200f52:	0df00593          	li	a1,223
+ffffffffc0200f56:	00004517          	auipc	a0,0x4
+ffffffffc0200f5a:	ec250513          	addi	a0,a0,-318 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200f5e:	c16ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(alloc_page() == NULL);
-ffffffffc0200f64:	00004697          	auipc	a3,0x4
-ffffffffc0200f68:	03c68693          	addi	a3,a3,60 # ffffffffc0204fa0 <etext+0xa50>
-ffffffffc0200f6c:	00004617          	auipc	a2,0x4
-ffffffffc0200f70:	ebc60613          	addi	a2,a2,-324 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200f74:	0dd00593          	li	a1,221
-ffffffffc0200f78:	00004517          	auipc	a0,0x4
-ffffffffc0200f7c:	ec850513          	addi	a0,a0,-312 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200f80:	be0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200f62:	00004697          	auipc	a3,0x4
+ffffffffc0200f66:	01668693          	addi	a3,a3,22 # ffffffffc0204f78 <commands+0x8b0>
+ffffffffc0200f6a:	00004617          	auipc	a2,0x4
+ffffffffc0200f6e:	e9660613          	addi	a2,a2,-362 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200f72:	0dd00593          	li	a1,221
+ffffffffc0200f76:	00004517          	auipc	a0,0x4
+ffffffffc0200f7a:	ea250513          	addi	a0,a0,-350 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200f7e:	bf6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert((p = alloc_page()) == p0);
-ffffffffc0200f84:	00004697          	auipc	a3,0x4
-ffffffffc0200f88:	05c68693          	addi	a3,a3,92 # ffffffffc0204fe0 <etext+0xa90>
-ffffffffc0200f8c:	00004617          	auipc	a2,0x4
-ffffffffc0200f90:	e9c60613          	addi	a2,a2,-356 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200f94:	0dc00593          	li	a1,220
-ffffffffc0200f98:	00004517          	auipc	a0,0x4
-ffffffffc0200f9c:	ea850513          	addi	a0,a0,-344 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200fa0:	bc0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200f82:	00004697          	auipc	a3,0x4
+ffffffffc0200f86:	03668693          	addi	a3,a3,54 # ffffffffc0204fb8 <commands+0x8f0>
+ffffffffc0200f8a:	00004617          	auipc	a2,0x4
+ffffffffc0200f8e:	e7660613          	addi	a2,a2,-394 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200f92:	0dc00593          	li	a1,220
+ffffffffc0200f96:	00004517          	auipc	a0,0x4
+ffffffffc0200f9a:	e8250513          	addi	a0,a0,-382 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200f9e:	bd6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert((p0 = alloc_page()) != NULL);
-ffffffffc0200fa4:	00004697          	auipc	a3,0x4
-ffffffffc0200fa8:	ed468693          	addi	a3,a3,-300 # ffffffffc0204e78 <etext+0x928>
-ffffffffc0200fac:	00004617          	auipc	a2,0x4
-ffffffffc0200fb0:	e7c60613          	addi	a2,a2,-388 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200fb4:	0b900593          	li	a1,185
-ffffffffc0200fb8:	00004517          	auipc	a0,0x4
-ffffffffc0200fbc:	e8850513          	addi	a0,a0,-376 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200fc0:	ba0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200fa2:	00004697          	auipc	a3,0x4
+ffffffffc0200fa6:	eae68693          	addi	a3,a3,-338 # ffffffffc0204e50 <commands+0x788>
+ffffffffc0200faa:	00004617          	auipc	a2,0x4
+ffffffffc0200fae:	e5660613          	addi	a2,a2,-426 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200fb2:	0b900593          	li	a1,185
+ffffffffc0200fb6:	00004517          	auipc	a0,0x4
+ffffffffc0200fba:	e6250513          	addi	a0,a0,-414 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200fbe:	bb6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(alloc_page() == NULL);
-ffffffffc0200fc4:	00004697          	auipc	a3,0x4
-ffffffffc0200fc8:	fdc68693          	addi	a3,a3,-36 # ffffffffc0204fa0 <etext+0xa50>
-ffffffffc0200fcc:	00004617          	auipc	a2,0x4
-ffffffffc0200fd0:	e5c60613          	addi	a2,a2,-420 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200fd4:	0d600593          	li	a1,214
-ffffffffc0200fd8:	00004517          	auipc	a0,0x4
-ffffffffc0200fdc:	e6850513          	addi	a0,a0,-408 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0200fe0:	b80ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200fc2:	00004697          	auipc	a3,0x4
+ffffffffc0200fc6:	fb668693          	addi	a3,a3,-74 # ffffffffc0204f78 <commands+0x8b0>
+ffffffffc0200fca:	00004617          	auipc	a2,0x4
+ffffffffc0200fce:	e3660613          	addi	a2,a2,-458 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200fd2:	0d600593          	li	a1,214
+ffffffffc0200fd6:	00004517          	auipc	a0,0x4
+ffffffffc0200fda:	e4250513          	addi	a0,a0,-446 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200fde:	b96ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert((p2 = alloc_page()) != NULL);
-ffffffffc0200fe4:	00004697          	auipc	a3,0x4
-ffffffffc0200fe8:	ed468693          	addi	a3,a3,-300 # ffffffffc0204eb8 <etext+0x968>
-ffffffffc0200fec:	00004617          	auipc	a2,0x4
-ffffffffc0200ff0:	e3c60613          	addi	a2,a2,-452 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0200ff4:	0d400593          	li	a1,212
-ffffffffc0200ff8:	00004517          	auipc	a0,0x4
-ffffffffc0200ffc:	e4850513          	addi	a0,a0,-440 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201000:	b60ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0200fe2:	00004697          	auipc	a3,0x4
+ffffffffc0200fe6:	eae68693          	addi	a3,a3,-338 # ffffffffc0204e90 <commands+0x7c8>
+ffffffffc0200fea:	00004617          	auipc	a2,0x4
+ffffffffc0200fee:	e1660613          	addi	a2,a2,-490 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0200ff2:	0d400593          	li	a1,212
+ffffffffc0200ff6:	00004517          	auipc	a0,0x4
+ffffffffc0200ffa:	e2250513          	addi	a0,a0,-478 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0200ffe:	b76ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert((p1 = alloc_page()) != NULL);
-ffffffffc0201004:	00004697          	auipc	a3,0x4
-ffffffffc0201008:	e9468693          	addi	a3,a3,-364 # ffffffffc0204e98 <etext+0x948>
-ffffffffc020100c:	00004617          	auipc	a2,0x4
-ffffffffc0201010:	e1c60613          	addi	a2,a2,-484 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201014:	0d300593          	li	a1,211
-ffffffffc0201018:	00004517          	auipc	a0,0x4
-ffffffffc020101c:	e2850513          	addi	a0,a0,-472 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201020:	b40ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201002:	00004697          	auipc	a3,0x4
+ffffffffc0201006:	e6e68693          	addi	a3,a3,-402 # ffffffffc0204e70 <commands+0x7a8>
+ffffffffc020100a:	00004617          	auipc	a2,0x4
+ffffffffc020100e:	df660613          	addi	a2,a2,-522 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201012:	0d300593          	li	a1,211
+ffffffffc0201016:	00004517          	auipc	a0,0x4
+ffffffffc020101a:	e0250513          	addi	a0,a0,-510 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020101e:	b56ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert((p2 = alloc_page()) != NULL);
-ffffffffc0201024:	00004697          	auipc	a3,0x4
-ffffffffc0201028:	e9468693          	addi	a3,a3,-364 # ffffffffc0204eb8 <etext+0x968>
-ffffffffc020102c:	00004617          	auipc	a2,0x4
-ffffffffc0201030:	dfc60613          	addi	a2,a2,-516 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201034:	0bb00593          	li	a1,187
-ffffffffc0201038:	00004517          	auipc	a0,0x4
-ffffffffc020103c:	e0850513          	addi	a0,a0,-504 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201040:	b20ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201022:	00004697          	auipc	a3,0x4
+ffffffffc0201026:	e6e68693          	addi	a3,a3,-402 # ffffffffc0204e90 <commands+0x7c8>
+ffffffffc020102a:	00004617          	auipc	a2,0x4
+ffffffffc020102e:	dd660613          	addi	a2,a2,-554 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201032:	0bb00593          	li	a1,187
+ffffffffc0201036:	00004517          	auipc	a0,0x4
+ffffffffc020103a:	de250513          	addi	a0,a0,-542 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020103e:	b36ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(count == 0);
-ffffffffc0201044:	00004697          	auipc	a3,0x4
-ffffffffc0201048:	11c68693          	addi	a3,a3,284 # ffffffffc0205160 <etext+0xc10>
-ffffffffc020104c:	00004617          	auipc	a2,0x4
-ffffffffc0201050:	ddc60613          	addi	a2,a2,-548 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201054:	12500593          	li	a1,293
-ffffffffc0201058:	00004517          	auipc	a0,0x4
-ffffffffc020105c:	de850513          	addi	a0,a0,-536 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201060:	b00ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201042:	00004697          	auipc	a3,0x4
+ffffffffc0201046:	0f668693          	addi	a3,a3,246 # ffffffffc0205138 <commands+0xa70>
+ffffffffc020104a:	00004617          	auipc	a2,0x4
+ffffffffc020104e:	db660613          	addi	a2,a2,-586 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201052:	12500593          	li	a1,293
+ffffffffc0201056:	00004517          	auipc	a0,0x4
+ffffffffc020105a:	dc250513          	addi	a0,a0,-574 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020105e:	b16ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(nr_free == 0);
-ffffffffc0201064:	00004697          	auipc	a3,0x4
-ffffffffc0201068:	f9c68693          	addi	a3,a3,-100 # ffffffffc0205000 <etext+0xab0>
-ffffffffc020106c:	00004617          	auipc	a2,0x4
-ffffffffc0201070:	dbc60613          	addi	a2,a2,-580 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201074:	11a00593          	li	a1,282
-ffffffffc0201078:	00004517          	auipc	a0,0x4
-ffffffffc020107c:	dc850513          	addi	a0,a0,-568 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201080:	ae0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201062:	00004697          	auipc	a3,0x4
+ffffffffc0201066:	f7668693          	addi	a3,a3,-138 # ffffffffc0204fd8 <commands+0x910>
+ffffffffc020106a:	00004617          	auipc	a2,0x4
+ffffffffc020106e:	d9660613          	addi	a2,a2,-618 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201072:	11a00593          	li	a1,282
+ffffffffc0201076:	00004517          	auipc	a0,0x4
+ffffffffc020107a:	da250513          	addi	a0,a0,-606 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020107e:	af6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(alloc_page() == NULL);
-ffffffffc0201084:	00004697          	auipc	a3,0x4
-ffffffffc0201088:	f1c68693          	addi	a3,a3,-228 # ffffffffc0204fa0 <etext+0xa50>
-ffffffffc020108c:	00004617          	auipc	a2,0x4
-ffffffffc0201090:	d9c60613          	addi	a2,a2,-612 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201094:	11800593          	li	a1,280
-ffffffffc0201098:	00004517          	auipc	a0,0x4
-ffffffffc020109c:	da850513          	addi	a0,a0,-600 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc02010a0:	ac0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201082:	00004697          	auipc	a3,0x4
+ffffffffc0201086:	ef668693          	addi	a3,a3,-266 # ffffffffc0204f78 <commands+0x8b0>
+ffffffffc020108a:	00004617          	auipc	a2,0x4
+ffffffffc020108e:	d7660613          	addi	a2,a2,-650 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201092:	11800593          	li	a1,280
+ffffffffc0201096:	00004517          	auipc	a0,0x4
+ffffffffc020109a:	d8250513          	addi	a0,a0,-638 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020109e:	ad6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(page2pa(p1) < npage * PGSIZE);
-ffffffffc02010a4:	00004697          	auipc	a3,0x4
-ffffffffc02010a8:	ebc68693          	addi	a3,a3,-324 # ffffffffc0204f60 <etext+0xa10>
-ffffffffc02010ac:	00004617          	auipc	a2,0x4
-ffffffffc02010b0:	d7c60613          	addi	a2,a2,-644 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02010b4:	0c100593          	li	a1,193
-ffffffffc02010b8:	00004517          	auipc	a0,0x4
-ffffffffc02010bc:	d8850513          	addi	a0,a0,-632 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc02010c0:	aa0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02010a2:	00004697          	auipc	a3,0x4
+ffffffffc02010a6:	e9668693          	addi	a3,a3,-362 # ffffffffc0204f38 <commands+0x870>
+ffffffffc02010aa:	00004617          	auipc	a2,0x4
+ffffffffc02010ae:	d5660613          	addi	a2,a2,-682 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02010b2:	0c100593          	li	a1,193
+ffffffffc02010b6:	00004517          	auipc	a0,0x4
+ffffffffc02010ba:	d6250513          	addi	a0,a0,-670 # ffffffffc0204e18 <commands+0x750>
+ffffffffc02010be:	ab6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert((p0 = alloc_pages(2)) == p2 + 1);
-ffffffffc02010c4:	00004697          	auipc	a3,0x4
-ffffffffc02010c8:	05c68693          	addi	a3,a3,92 # ffffffffc0205120 <etext+0xbd0>
-ffffffffc02010cc:	00004617          	auipc	a2,0x4
-ffffffffc02010d0:	d5c60613          	addi	a2,a2,-676 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02010d4:	11200593          	li	a1,274
-ffffffffc02010d8:	00004517          	auipc	a0,0x4
-ffffffffc02010dc:	d6850513          	addi	a0,a0,-664 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc02010e0:	a80ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02010c2:	00004697          	auipc	a3,0x4
+ffffffffc02010c6:	03668693          	addi	a3,a3,54 # ffffffffc02050f8 <commands+0xa30>
+ffffffffc02010ca:	00004617          	auipc	a2,0x4
+ffffffffc02010ce:	d3660613          	addi	a2,a2,-714 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02010d2:	11200593          	li	a1,274
+ffffffffc02010d6:	00004517          	auipc	a0,0x4
+ffffffffc02010da:	d4250513          	addi	a0,a0,-702 # ffffffffc0204e18 <commands+0x750>
+ffffffffc02010de:	a96ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert((p0 = alloc_page()) == p2 - 1);
-ffffffffc02010e4:	00004697          	auipc	a3,0x4
-ffffffffc02010e8:	01c68693          	addi	a3,a3,28 # ffffffffc0205100 <etext+0xbb0>
-ffffffffc02010ec:	00004617          	auipc	a2,0x4
-ffffffffc02010f0:	d3c60613          	addi	a2,a2,-708 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02010f4:	11000593          	li	a1,272
-ffffffffc02010f8:	00004517          	auipc	a0,0x4
-ffffffffc02010fc:	d4850513          	addi	a0,a0,-696 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201100:	a60ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02010e2:	00004697          	auipc	a3,0x4
+ffffffffc02010e6:	ff668693          	addi	a3,a3,-10 # ffffffffc02050d8 <commands+0xa10>
+ffffffffc02010ea:	00004617          	auipc	a2,0x4
+ffffffffc02010ee:	d1660613          	addi	a2,a2,-746 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02010f2:	11000593          	li	a1,272
+ffffffffc02010f6:	00004517          	auipc	a0,0x4
+ffffffffc02010fa:	d2250513          	addi	a0,a0,-734 # ffffffffc0204e18 <commands+0x750>
+ffffffffc02010fe:	a76ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(PageProperty(p1) && p1->property == 3);
-ffffffffc0201104:	00004697          	auipc	a3,0x4
-ffffffffc0201108:	fd468693          	addi	a3,a3,-44 # ffffffffc02050d8 <etext+0xb88>
-ffffffffc020110c:	00004617          	auipc	a2,0x4
-ffffffffc0201110:	d1c60613          	addi	a2,a2,-740 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201114:	10e00593          	li	a1,270
-ffffffffc0201118:	00004517          	auipc	a0,0x4
-ffffffffc020111c:	d2850513          	addi	a0,a0,-728 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201120:	a40ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201102:	00004697          	auipc	a3,0x4
+ffffffffc0201106:	fae68693          	addi	a3,a3,-82 # ffffffffc02050b0 <commands+0x9e8>
+ffffffffc020110a:	00004617          	auipc	a2,0x4
+ffffffffc020110e:	cf660613          	addi	a2,a2,-778 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201112:	10e00593          	li	a1,270
+ffffffffc0201116:	00004517          	auipc	a0,0x4
+ffffffffc020111a:	d0250513          	addi	a0,a0,-766 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020111e:	a56ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(PageProperty(p0) && p0->property == 1);
-ffffffffc0201124:	00004697          	auipc	a3,0x4
-ffffffffc0201128:	f8c68693          	addi	a3,a3,-116 # ffffffffc02050b0 <etext+0xb60>
-ffffffffc020112c:	00004617          	auipc	a2,0x4
-ffffffffc0201130:	cfc60613          	addi	a2,a2,-772 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201134:	10d00593          	li	a1,269
-ffffffffc0201138:	00004517          	auipc	a0,0x4
-ffffffffc020113c:	d0850513          	addi	a0,a0,-760 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201140:	a20ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201122:	00004697          	auipc	a3,0x4
+ffffffffc0201126:	f6668693          	addi	a3,a3,-154 # ffffffffc0205088 <commands+0x9c0>
+ffffffffc020112a:	00004617          	auipc	a2,0x4
+ffffffffc020112e:	cd660613          	addi	a2,a2,-810 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201132:	10d00593          	li	a1,269
+ffffffffc0201136:	00004517          	auipc	a0,0x4
+ffffffffc020113a:	ce250513          	addi	a0,a0,-798 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020113e:	a36ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(p0 + 2 == p1);
-ffffffffc0201144:	00004697          	auipc	a3,0x4
-ffffffffc0201148:	f5c68693          	addi	a3,a3,-164 # ffffffffc02050a0 <etext+0xb50>
-ffffffffc020114c:	00004617          	auipc	a2,0x4
-ffffffffc0201150:	cdc60613          	addi	a2,a2,-804 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201154:	10800593          	li	a1,264
-ffffffffc0201158:	00004517          	auipc	a0,0x4
-ffffffffc020115c:	ce850513          	addi	a0,a0,-792 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201160:	a00ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201142:	00004697          	auipc	a3,0x4
+ffffffffc0201146:	f3668693          	addi	a3,a3,-202 # ffffffffc0205078 <commands+0x9b0>
+ffffffffc020114a:	00004617          	auipc	a2,0x4
+ffffffffc020114e:	cb660613          	addi	a2,a2,-842 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201152:	10800593          	li	a1,264
+ffffffffc0201156:	00004517          	auipc	a0,0x4
+ffffffffc020115a:	cc250513          	addi	a0,a0,-830 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020115e:	a16ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(alloc_page() == NULL);
-ffffffffc0201164:	00004697          	auipc	a3,0x4
-ffffffffc0201168:	e3c68693          	addi	a3,a3,-452 # ffffffffc0204fa0 <etext+0xa50>
-ffffffffc020116c:	00004617          	auipc	a2,0x4
-ffffffffc0201170:	cbc60613          	addi	a2,a2,-836 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201174:	10700593          	li	a1,263
-ffffffffc0201178:	00004517          	auipc	a0,0x4
-ffffffffc020117c:	cc850513          	addi	a0,a0,-824 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201180:	9e0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201162:	00004697          	auipc	a3,0x4
+ffffffffc0201166:	e1668693          	addi	a3,a3,-490 # ffffffffc0204f78 <commands+0x8b0>
+ffffffffc020116a:	00004617          	auipc	a2,0x4
+ffffffffc020116e:	c9660613          	addi	a2,a2,-874 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201172:	10700593          	li	a1,263
+ffffffffc0201176:	00004517          	auipc	a0,0x4
+ffffffffc020117a:	ca250513          	addi	a0,a0,-862 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020117e:	9f6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert((p1 = alloc_pages(3)) != NULL);
-ffffffffc0201184:	00004697          	auipc	a3,0x4
-ffffffffc0201188:	efc68693          	addi	a3,a3,-260 # ffffffffc0205080 <etext+0xb30>
-ffffffffc020118c:	00004617          	auipc	a2,0x4
-ffffffffc0201190:	c9c60613          	addi	a2,a2,-868 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201194:	10600593          	li	a1,262
-ffffffffc0201198:	00004517          	auipc	a0,0x4
-ffffffffc020119c:	ca850513          	addi	a0,a0,-856 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc02011a0:	9c0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201182:	00004697          	auipc	a3,0x4
+ffffffffc0201186:	ed668693          	addi	a3,a3,-298 # ffffffffc0205058 <commands+0x990>
+ffffffffc020118a:	00004617          	auipc	a2,0x4
+ffffffffc020118e:	c7660613          	addi	a2,a2,-906 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201192:	10600593          	li	a1,262
+ffffffffc0201196:	00004517          	auipc	a0,0x4
+ffffffffc020119a:	c8250513          	addi	a0,a0,-894 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020119e:	9d6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(PageProperty(p0 + 2) && p0[2].property == 3);
-ffffffffc02011a4:	00004697          	auipc	a3,0x4
-ffffffffc02011a8:	eac68693          	addi	a3,a3,-340 # ffffffffc0205050 <etext+0xb00>
-ffffffffc02011ac:	00004617          	auipc	a2,0x4
-ffffffffc02011b0:	c7c60613          	addi	a2,a2,-900 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02011b4:	10500593          	li	a1,261
-ffffffffc02011b8:	00004517          	auipc	a0,0x4
-ffffffffc02011bc:	c8850513          	addi	a0,a0,-888 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc02011c0:	9a0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02011a2:	00004697          	auipc	a3,0x4
+ffffffffc02011a6:	e8668693          	addi	a3,a3,-378 # ffffffffc0205028 <commands+0x960>
+ffffffffc02011aa:	00004617          	auipc	a2,0x4
+ffffffffc02011ae:	c5660613          	addi	a2,a2,-938 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02011b2:	10500593          	li	a1,261
+ffffffffc02011b6:	00004517          	auipc	a0,0x4
+ffffffffc02011ba:	c6250513          	addi	a0,a0,-926 # ffffffffc0204e18 <commands+0x750>
+ffffffffc02011be:	9b6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(alloc_pages(4) == NULL);
-ffffffffc02011c4:	00004697          	auipc	a3,0x4
-ffffffffc02011c8:	e7468693          	addi	a3,a3,-396 # ffffffffc0205038 <etext+0xae8>
-ffffffffc02011cc:	00004617          	auipc	a2,0x4
-ffffffffc02011d0:	c5c60613          	addi	a2,a2,-932 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02011d4:	10400593          	li	a1,260
-ffffffffc02011d8:	00004517          	auipc	a0,0x4
-ffffffffc02011dc:	c6850513          	addi	a0,a0,-920 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc02011e0:	980ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02011c2:	00004697          	auipc	a3,0x4
+ffffffffc02011c6:	e4e68693          	addi	a3,a3,-434 # ffffffffc0205010 <commands+0x948>
+ffffffffc02011ca:	00004617          	auipc	a2,0x4
+ffffffffc02011ce:	c3660613          	addi	a2,a2,-970 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02011d2:	10400593          	li	a1,260
+ffffffffc02011d6:	00004517          	auipc	a0,0x4
+ffffffffc02011da:	c4250513          	addi	a0,a0,-958 # ffffffffc0204e18 <commands+0x750>
+ffffffffc02011de:	996ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(alloc_page() == NULL);
-ffffffffc02011e4:	00004697          	auipc	a3,0x4
-ffffffffc02011e8:	dbc68693          	addi	a3,a3,-580 # ffffffffc0204fa0 <etext+0xa50>
-ffffffffc02011ec:	00004617          	auipc	a2,0x4
-ffffffffc02011f0:	c3c60613          	addi	a2,a2,-964 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02011f4:	0fe00593          	li	a1,254
-ffffffffc02011f8:	00004517          	auipc	a0,0x4
-ffffffffc02011fc:	c4850513          	addi	a0,a0,-952 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201200:	960ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02011e2:	00004697          	auipc	a3,0x4
+ffffffffc02011e6:	d9668693          	addi	a3,a3,-618 # ffffffffc0204f78 <commands+0x8b0>
+ffffffffc02011ea:	00004617          	auipc	a2,0x4
+ffffffffc02011ee:	c1660613          	addi	a2,a2,-1002 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02011f2:	0fe00593          	li	a1,254
+ffffffffc02011f6:	00004517          	auipc	a0,0x4
+ffffffffc02011fa:	c2250513          	addi	a0,a0,-990 # ffffffffc0204e18 <commands+0x750>
+ffffffffc02011fe:	976ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(!PageProperty(p0));
-ffffffffc0201204:	00004697          	auipc	a3,0x4
-ffffffffc0201208:	e1c68693          	addi	a3,a3,-484 # ffffffffc0205020 <etext+0xad0>
-ffffffffc020120c:	00004617          	auipc	a2,0x4
-ffffffffc0201210:	c1c60613          	addi	a2,a2,-996 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201214:	0f900593          	li	a1,249
-ffffffffc0201218:	00004517          	auipc	a0,0x4
-ffffffffc020121c:	c2850513          	addi	a0,a0,-984 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201220:	940ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201202:	00004697          	auipc	a3,0x4
+ffffffffc0201206:	df668693          	addi	a3,a3,-522 # ffffffffc0204ff8 <commands+0x930>
+ffffffffc020120a:	00004617          	auipc	a2,0x4
+ffffffffc020120e:	bf660613          	addi	a2,a2,-1034 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201212:	0f900593          	li	a1,249
+ffffffffc0201216:	00004517          	auipc	a0,0x4
+ffffffffc020121a:	c0250513          	addi	a0,a0,-1022 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020121e:	956ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert((p0 = alloc_pages(5)) != NULL);
-ffffffffc0201224:	00004697          	auipc	a3,0x4
-ffffffffc0201228:	f1c68693          	addi	a3,a3,-228 # ffffffffc0205140 <etext+0xbf0>
-ffffffffc020122c:	00004617          	auipc	a2,0x4
-ffffffffc0201230:	bfc60613          	addi	a2,a2,-1028 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201234:	11700593          	li	a1,279
-ffffffffc0201238:	00004517          	auipc	a0,0x4
-ffffffffc020123c:	c0850513          	addi	a0,a0,-1016 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201240:	920ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201222:	00004697          	auipc	a3,0x4
+ffffffffc0201226:	ef668693          	addi	a3,a3,-266 # ffffffffc0205118 <commands+0xa50>
+ffffffffc020122a:	00004617          	auipc	a2,0x4
+ffffffffc020122e:	bd660613          	addi	a2,a2,-1066 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201232:	11700593          	li	a1,279
+ffffffffc0201236:	00004517          	auipc	a0,0x4
+ffffffffc020123a:	be250513          	addi	a0,a0,-1054 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020123e:	936ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(total == 0);
-ffffffffc0201244:	00004697          	auipc	a3,0x4
-ffffffffc0201248:	f2c68693          	addi	a3,a3,-212 # ffffffffc0205170 <etext+0xc20>
-ffffffffc020124c:	00004617          	auipc	a2,0x4
-ffffffffc0201250:	bdc60613          	addi	a2,a2,-1060 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201254:	12600593          	li	a1,294
-ffffffffc0201258:	00004517          	auipc	a0,0x4
-ffffffffc020125c:	be850513          	addi	a0,a0,-1048 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201260:	900ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201242:	00004697          	auipc	a3,0x4
+ffffffffc0201246:	f0668693          	addi	a3,a3,-250 # ffffffffc0205148 <commands+0xa80>
+ffffffffc020124a:	00004617          	auipc	a2,0x4
+ffffffffc020124e:	bb660613          	addi	a2,a2,-1098 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201252:	12600593          	li	a1,294
+ffffffffc0201256:	00004517          	auipc	a0,0x4
+ffffffffc020125a:	bc250513          	addi	a0,a0,-1086 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020125e:	916ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(total == nr_free_pages());
-ffffffffc0201264:	00004697          	auipc	a3,0x4
-ffffffffc0201268:	bf468693          	addi	a3,a3,-1036 # ffffffffc0204e58 <etext+0x908>
-ffffffffc020126c:	00004617          	auipc	a2,0x4
-ffffffffc0201270:	bbc60613          	addi	a2,a2,-1092 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201274:	0f300593          	li	a1,243
-ffffffffc0201278:	00004517          	auipc	a0,0x4
-ffffffffc020127c:	bc850513          	addi	a0,a0,-1080 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201280:	8e0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201262:	00004697          	auipc	a3,0x4
+ffffffffc0201266:	bce68693          	addi	a3,a3,-1074 # ffffffffc0204e30 <commands+0x768>
+ffffffffc020126a:	00004617          	auipc	a2,0x4
+ffffffffc020126e:	b9660613          	addi	a2,a2,-1130 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201272:	0f300593          	li	a1,243
+ffffffffc0201276:	00004517          	auipc	a0,0x4
+ffffffffc020127a:	ba250513          	addi	a0,a0,-1118 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020127e:	8f6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert((p1 = alloc_page()) != NULL);
-ffffffffc0201284:	00004697          	auipc	a3,0x4
-ffffffffc0201288:	c1468693          	addi	a3,a3,-1004 # ffffffffc0204e98 <etext+0x948>
-ffffffffc020128c:	00004617          	auipc	a2,0x4
-ffffffffc0201290:	b9c60613          	addi	a2,a2,-1124 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0201294:	0ba00593          	li	a1,186
-ffffffffc0201298:	00004517          	auipc	a0,0x4
-ffffffffc020129c:	ba850513          	addi	a0,a0,-1112 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc02012a0:	8c0ff0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0201282:	00004697          	auipc	a3,0x4
+ffffffffc0201286:	bee68693          	addi	a3,a3,-1042 # ffffffffc0204e70 <commands+0x7a8>
+ffffffffc020128a:	00004617          	auipc	a2,0x4
+ffffffffc020128e:	b7660613          	addi	a2,a2,-1162 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201292:	0ba00593          	li	a1,186
+ffffffffc0201296:	00004517          	auipc	a0,0x4
+ffffffffc020129a:	b8250513          	addi	a0,a0,-1150 # ffffffffc0204e18 <commands+0x750>
+ffffffffc020129e:	8d6ff0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc02012a4 <default_free_pages>:
+ffffffffc02012a2 <default_free_pages>:
 default_free_pages(struct Page *base, size_t n) {
-ffffffffc02012a4:	1141                	addi	sp,sp,-16
-ffffffffc02012a6:	e406                	sd	ra,8(sp)
+ffffffffc02012a2:	1141                	addi	sp,sp,-16
+ffffffffc02012a4:	e406                	sd	ra,8(sp)
     assert(n > 0);
-ffffffffc02012a8:	14058a63          	beqz	a1,ffffffffc02013fc <default_free_pages+0x158>
+ffffffffc02012a6:	14058a63          	beqz	a1,ffffffffc02013fa <default_free_pages+0x158>
     for (; p != base + n; p ++) {
-ffffffffc02012ac:	00359713          	slli	a4,a1,0x3
-ffffffffc02012b0:	972e                	add	a4,a4,a1
-ffffffffc02012b2:	070e                	slli	a4,a4,0x3
-ffffffffc02012b4:	00e506b3          	add	a3,a0,a4
-    struct Page *p = base;
-ffffffffc02012b8:	87aa                	mv	a5,a0
-    for (; p != base + n; p ++) {
-ffffffffc02012ba:	c30d                	beqz	a4,ffffffffc02012dc <default_free_pages+0x38>
-ffffffffc02012bc:	6798                	ld	a4,8(a5)
+ffffffffc02012aa:	00359693          	slli	a3,a1,0x3
+ffffffffc02012ae:	96ae                	add	a3,a3,a1
+ffffffffc02012b0:	068e                	slli	a3,a3,0x3
+ffffffffc02012b2:	96aa                	add	a3,a3,a0
+ffffffffc02012b4:	87aa                	mv	a5,a0
+ffffffffc02012b6:	02d50263          	beq	a0,a3,ffffffffc02012da <default_free_pages+0x38>
+ffffffffc02012ba:	6798                	ld	a4,8(a5)
         assert(!PageReserved(p) && !PageProperty(p));
-ffffffffc02012be:	8b05                	andi	a4,a4,1
-ffffffffc02012c0:	10071e63          	bnez	a4,ffffffffc02013dc <default_free_pages+0x138>
-ffffffffc02012c4:	6798                	ld	a4,8(a5)
-ffffffffc02012c6:	8b09                	andi	a4,a4,2
-ffffffffc02012c8:	10071a63          	bnez	a4,ffffffffc02013dc <default_free_pages+0x138>
+ffffffffc02012bc:	8b05                	andi	a4,a4,1
+ffffffffc02012be:	10071e63          	bnez	a4,ffffffffc02013da <default_free_pages+0x138>
+ffffffffc02012c2:	6798                	ld	a4,8(a5)
+ffffffffc02012c4:	8b09                	andi	a4,a4,2
+ffffffffc02012c6:	10071a63          	bnez	a4,ffffffffc02013da <default_free_pages+0x138>
         p->flags = 0;
-ffffffffc02012cc:	0007b423          	sd	zero,8(a5)
+ffffffffc02012ca:	0007b423          	sd	zero,8(a5)
     return pa2page(PDE_ADDR(pde));
 }
 
 static inline int page_ref(struct Page *page) { return page->ref; }
 
 static inline void set_page_ref(struct Page *page, int val) { page->ref = val; }
-ffffffffc02012d0:	0007a023          	sw	zero,0(a5)
+ffffffffc02012ce:	0007a023          	sw	zero,0(a5)
     for (; p != base + n; p ++) {
-ffffffffc02012d4:	04878793          	addi	a5,a5,72
-ffffffffc02012d8:	fed792e3          	bne	a5,a3,ffffffffc02012bc <default_free_pages+0x18>
+ffffffffc02012d2:	04878793          	addi	a5,a5,72
+ffffffffc02012d6:	fed792e3          	bne	a5,a3,ffffffffc02012ba <default_free_pages+0x18>
     base->property = n;
-ffffffffc02012dc:	2581                	sext.w	a1,a1
-ffffffffc02012de:	cd0c                	sw	a1,24(a0)
+ffffffffc02012da:	2581                	sext.w	a1,a1
+ffffffffc02012dc:	cd0c                	sw	a1,24(a0)
     SetPageProperty(base);
-ffffffffc02012e0:	00850893          	addi	a7,a0,8
+ffffffffc02012de:	00850893          	addi	a7,a0,8
     __op_bit(or, __NOP, nr, ((volatile unsigned long *)addr));
-ffffffffc02012e4:	4789                	li	a5,2
-ffffffffc02012e6:	40f8b02f          	amoor.d	zero,a5,(a7)
+ffffffffc02012e2:	4789                	li	a5,2
+ffffffffc02012e4:	40f8b02f          	amoor.d	zero,a5,(a7)
     nr_free += n;
-ffffffffc02012ea:	00010697          	auipc	a3,0x10
-ffffffffc02012ee:	d5668693          	addi	a3,a3,-682 # ffffffffc0211040 <free_area>
-ffffffffc02012f2:	4a98                	lw	a4,16(a3)
+ffffffffc02012e8:	00010697          	auipc	a3,0x10
+ffffffffc02012ec:	d5868693          	addi	a3,a3,-680 # ffffffffc0211040 <free_area>
+ffffffffc02012f0:	4a98                	lw	a4,16(a3)
     return list->next == list;
-ffffffffc02012f4:	669c                	ld	a5,8(a3)
-ffffffffc02012f6:	9f2d                	addw	a4,a4,a1
-ffffffffc02012f8:	ca98                	sw	a4,16(a3)
+ffffffffc02012f2:	669c                	ld	a5,8(a3)
+        list_add(&free_list, &(base->page_link));
+ffffffffc02012f4:	02050613          	addi	a2,a0,32
+    nr_free += n;
+ffffffffc02012f8:	9db9                	addw	a1,a1,a4
+ffffffffc02012fa:	ca8c                	sw	a1,16(a3)
     if (list_empty(&free_list)) {
-ffffffffc02012fa:	0ad78563          	beq	a5,a3,ffffffffc02013a4 <default_free_pages+0x100>
+ffffffffc02012fc:	0ad78863          	beq	a5,a3,ffffffffc02013ac <default_free_pages+0x10a>
             struct Page* page = le2page(le, page_link);
-ffffffffc02012fe:	fe078713          	addi	a4,a5,-32
-ffffffffc0201302:	4581                	li	a1,0
-ffffffffc0201304:	02050613          	addi	a2,a0,32
+ffffffffc0201300:	fe078713          	addi	a4,a5,-32
+ffffffffc0201304:	0006b803          	ld	a6,0(a3)
+    if (list_empty(&free_list)) {
+ffffffffc0201308:	4581                	li	a1,0
             if (base < page) {
-ffffffffc0201308:	00e56a63          	bltu	a0,a4,ffffffffc020131c <default_free_pages+0x78>
+ffffffffc020130a:	00e56a63          	bltu	a0,a4,ffffffffc020131e <default_free_pages+0x7c>
     return listelm->next;
-ffffffffc020130c:	6798                	ld	a4,8(a5)
+ffffffffc020130e:	6798                	ld	a4,8(a5)
             } else if (list_next(le) == &free_list) {
-ffffffffc020130e:	06d70263          	beq	a4,a3,ffffffffc0201372 <default_free_pages+0xce>
-    struct Page *p = base;
-ffffffffc0201312:	87ba                	mv	a5,a4
+ffffffffc0201310:	06d70263          	beq	a4,a3,ffffffffc0201374 <default_free_pages+0xd2>
+    for (; p != base + n; p ++) {
+ffffffffc0201314:	87ba                	mv	a5,a4
             struct Page* page = le2page(le, page_link);
-ffffffffc0201314:	fe078713          	addi	a4,a5,-32
+ffffffffc0201316:	fe078713          	addi	a4,a5,-32
             if (base < page) {
-ffffffffc0201318:	fee57ae3          	bgeu	a0,a4,ffffffffc020130c <default_free_pages+0x68>
-ffffffffc020131c:	c199                	beqz	a1,ffffffffc0201322 <default_free_pages+0x7e>
-ffffffffc020131e:	0106b023          	sd	a6,0(a3)
+ffffffffc020131a:	fee57ae3          	bgeu	a0,a4,ffffffffc020130e <default_free_pages+0x6c>
+ffffffffc020131e:	c199                	beqz	a1,ffffffffc0201324 <default_free_pages+0x82>
+ffffffffc0201320:	0106b023          	sd	a6,0(a3)
     __list_add(elm, listelm->prev, listelm);
-ffffffffc0201322:	6398                	ld	a4,0(a5)
+ffffffffc0201324:	6398                	ld	a4,0(a5)
  * This is only for internal list manipulation where we know
  * the prev/next entries already!
  * */
 static inline void
 __list_add(list_entry_t *elm, list_entry_t *prev, list_entry_t *next) {
     prev->next = next->prev = elm;
-ffffffffc0201324:	e390                	sd	a2,0(a5)
-ffffffffc0201326:	e710                	sd	a2,8(a4)
+ffffffffc0201326:	e390                	sd	a2,0(a5)
+ffffffffc0201328:	e710                	sd	a2,8(a4)
     elm->next = next;
-ffffffffc0201328:	f51c                	sd	a5,40(a0)
+ffffffffc020132a:	f51c                	sd	a5,40(a0)
     elm->prev = prev;
-ffffffffc020132a:	f118                	sd	a4,32(a0)
+ffffffffc020132c:	f118                	sd	a4,32(a0)
     if (le != &free_list) {
-ffffffffc020132c:	02d70063          	beq	a4,a3,ffffffffc020134c <default_free_pages+0xa8>
+ffffffffc020132e:	02d70063          	beq	a4,a3,ffffffffc020134e <default_free_pages+0xac>
         if (p + p->property == base) {
-ffffffffc0201330:	ff872803          	lw	a6,-8(a4)
+ffffffffc0201332:	ff872803          	lw	a6,-8(a4)
         p = le2page(le, page_link);
-ffffffffc0201334:	fe070593          	addi	a1,a4,-32
+ffffffffc0201336:	fe070593          	addi	a1,a4,-32
         if (p + p->property == base) {
-ffffffffc0201338:	02081613          	slli	a2,a6,0x20
-ffffffffc020133c:	9201                	srli	a2,a2,0x20
-ffffffffc020133e:	00361793          	slli	a5,a2,0x3
-ffffffffc0201342:	97b2                	add	a5,a5,a2
-ffffffffc0201344:	078e                	slli	a5,a5,0x3
-ffffffffc0201346:	97ae                	add	a5,a5,a1
-ffffffffc0201348:	02f50f63          	beq	a0,a5,ffffffffc0201386 <default_free_pages+0xe2>
+ffffffffc020133a:	02081613          	slli	a2,a6,0x20
+ffffffffc020133e:	9201                	srli	a2,a2,0x20
+ffffffffc0201340:	00361793          	slli	a5,a2,0x3
+ffffffffc0201344:	97b2                	add	a5,a5,a2
+ffffffffc0201346:	078e                	slli	a5,a5,0x3
+ffffffffc0201348:	97ae                	add	a5,a5,a1
+ffffffffc020134a:	02f50f63          	beq	a0,a5,ffffffffc0201388 <default_free_pages+0xe6>
     return listelm->next;
-ffffffffc020134c:	7518                	ld	a4,40(a0)
+ffffffffc020134e:	7518                	ld	a4,40(a0)
     if (le != &free_list) {
-ffffffffc020134e:	00d70f63          	beq	a4,a3,ffffffffc020136c <default_free_pages+0xc8>
+ffffffffc0201350:	00d70f63          	beq	a4,a3,ffffffffc020136e <default_free_pages+0xcc>
         if (base + base->property == p) {
-ffffffffc0201352:	4d0c                	lw	a1,24(a0)
+ffffffffc0201354:	4d0c                	lw	a1,24(a0)
         p = le2page(le, page_link);
-ffffffffc0201354:	fe070693          	addi	a3,a4,-32
+ffffffffc0201356:	fe070693          	addi	a3,a4,-32
         if (base + base->property == p) {
-ffffffffc0201358:	02059613          	slli	a2,a1,0x20
-ffffffffc020135c:	9201                	srli	a2,a2,0x20
-ffffffffc020135e:	00361793          	slli	a5,a2,0x3
-ffffffffc0201362:	97b2                	add	a5,a5,a2
-ffffffffc0201364:	078e                	slli	a5,a5,0x3
-ffffffffc0201366:	97aa                	add	a5,a5,a0
-ffffffffc0201368:	04f68a63          	beq	a3,a5,ffffffffc02013bc <default_free_pages+0x118>
+ffffffffc020135a:	02059613          	slli	a2,a1,0x20
+ffffffffc020135e:	9201                	srli	a2,a2,0x20
+ffffffffc0201360:	00361793          	slli	a5,a2,0x3
+ffffffffc0201364:	97b2                	add	a5,a5,a2
+ffffffffc0201366:	078e                	slli	a5,a5,0x3
+ffffffffc0201368:	97aa                	add	a5,a5,a0
+ffffffffc020136a:	04f68863          	beq	a3,a5,ffffffffc02013ba <default_free_pages+0x118>
 }
-ffffffffc020136c:	60a2                	ld	ra,8(sp)
-ffffffffc020136e:	0141                	addi	sp,sp,16
-ffffffffc0201370:	8082                	ret
+ffffffffc020136e:	60a2                	ld	ra,8(sp)
+ffffffffc0201370:	0141                	addi	sp,sp,16
+ffffffffc0201372:	8082                	ret
     prev->next = next->prev = elm;
-ffffffffc0201372:	e790                	sd	a2,8(a5)
+ffffffffc0201374:	e790                	sd	a2,8(a5)
     elm->next = next;
-ffffffffc0201374:	f514                	sd	a3,40(a0)
+ffffffffc0201376:	f514                	sd	a3,40(a0)
     return listelm->next;
-ffffffffc0201376:	6798                	ld	a4,8(a5)
+ffffffffc0201378:	6798                	ld	a4,8(a5)
     elm->prev = prev;
-ffffffffc0201378:	f11c                	sd	a5,32(a0)
-                list_add(le, &(base->page_link));
-ffffffffc020137a:	8832                	mv	a6,a2
+ffffffffc020137a:	f11c                	sd	a5,32(a0)
         while ((le = list_next(le)) != &free_list) {
-ffffffffc020137c:	02d70d63          	beq	a4,a3,ffffffffc02013b6 <default_free_pages+0x112>
-ffffffffc0201380:	4585                	li	a1,1
-    struct Page *p = base;
-ffffffffc0201382:	87ba                	mv	a5,a4
-ffffffffc0201384:	bf41                	j	ffffffffc0201314 <default_free_pages+0x70>
+ffffffffc020137c:	02d70563          	beq	a4,a3,ffffffffc02013a6 <default_free_pages+0x104>
+    prev->next = next->prev = elm;
+ffffffffc0201380:	8832                	mv	a6,a2
+ffffffffc0201382:	4585                	li	a1,1
+    for (; p != base + n; p ++) {
+ffffffffc0201384:	87ba                	mv	a5,a4
+ffffffffc0201386:	bf41                	j	ffffffffc0201316 <default_free_pages+0x74>
             p->property += base->property;
-ffffffffc0201386:	4d1c                	lw	a5,24(a0)
-ffffffffc0201388:	010787bb          	addw	a5,a5,a6
-ffffffffc020138c:	fef72c23          	sw	a5,-8(a4)
+ffffffffc0201388:	4d1c                	lw	a5,24(a0)
+ffffffffc020138a:	0107883b          	addw	a6,a5,a6
+ffffffffc020138e:	ff072c23          	sw	a6,-8(a4)
     __op_bit(and, __NOT, nr, ((volatile unsigned long *)addr));
-ffffffffc0201390:	57f5                	li	a5,-3
-ffffffffc0201392:	60f8b02f          	amoand.d	zero,a5,(a7)
+ffffffffc0201392:	57f5                	li	a5,-3
+ffffffffc0201394:	60f8b02f          	amoand.d	zero,a5,(a7)
     __list_del(listelm->prev, listelm->next);
-ffffffffc0201396:	7110                	ld	a2,32(a0)
-ffffffffc0201398:	751c                	ld	a5,40(a0)
+ffffffffc0201398:	7110                	ld	a2,32(a0)
+ffffffffc020139a:	751c                	ld	a5,40(a0)
             base = p;
-ffffffffc020139a:	852e                	mv	a0,a1
+ffffffffc020139c:	852e                	mv	a0,a1
  * This is only for internal list manipulation where we know
  * the prev/next entries already!
  * */
 static inline void
 __list_del(list_entry_t *prev, list_entry_t *next) {
     prev->next = next;
-ffffffffc020139c:	e61c                	sd	a5,8(a2)
+ffffffffc020139e:	e61c                	sd	a5,8(a2)
     return listelm->next;
-ffffffffc020139e:	6718                	ld	a4,8(a4)
+ffffffffc02013a0:	6718                	ld	a4,8(a4)
     next->prev = prev;
-ffffffffc02013a0:	e390                	sd	a2,0(a5)
-ffffffffc02013a2:	b775                	j	ffffffffc020134e <default_free_pages+0xaa>
-}
-ffffffffc02013a4:	60a2                	ld	ra,8(sp)
-        list_add(&free_list, &(base->page_link));
-ffffffffc02013a6:	02050713          	addi	a4,a0,32
-    prev->next = next->prev = elm;
-ffffffffc02013aa:	e398                	sd	a4,0(a5)
-ffffffffc02013ac:	e798                	sd	a4,8(a5)
-    elm->next = next;
-ffffffffc02013ae:	f51c                	sd	a5,40(a0)
-    elm->prev = prev;
-ffffffffc02013b0:	f11c                	sd	a5,32(a0)
-}
-ffffffffc02013b2:	0141                	addi	sp,sp,16
-ffffffffc02013b4:	8082                	ret
-ffffffffc02013b6:	e290                	sd	a2,0(a3)
-    return listelm->prev;
-ffffffffc02013b8:	873e                	mv	a4,a5
-ffffffffc02013ba:	bf8d                	j	ffffffffc020132c <default_free_pages+0x88>
-            base->property += p->property;
-ffffffffc02013bc:	ff872783          	lw	a5,-8(a4)
-ffffffffc02013c0:	fe870693          	addi	a3,a4,-24
-ffffffffc02013c4:	9fad                	addw	a5,a5,a1
-ffffffffc02013c6:	cd1c                	sw	a5,24(a0)
-ffffffffc02013c8:	57f5                	li	a5,-3
-ffffffffc02013ca:	60f6b02f          	amoand.d	zero,a5,(a3)
-    __list_del(listelm->prev, listelm->next);
-ffffffffc02013ce:	6314                	ld	a3,0(a4)
-ffffffffc02013d0:	671c                	ld	a5,8(a4)
-}
-ffffffffc02013d2:	60a2                	ld	ra,8(sp)
-    prev->next = next;
-ffffffffc02013d4:	e69c                	sd	a5,8(a3)
-    next->prev = prev;
-ffffffffc02013d6:	e394                	sd	a3,0(a5)
-ffffffffc02013d8:	0141                	addi	sp,sp,16
-ffffffffc02013da:	8082                	ret
-        assert(!PageReserved(p) && !PageProperty(p));
-ffffffffc02013dc:	00004697          	auipc	a3,0x4
-ffffffffc02013e0:	dac68693          	addi	a3,a3,-596 # ffffffffc0205188 <etext+0xc38>
-ffffffffc02013e4:	00004617          	auipc	a2,0x4
-ffffffffc02013e8:	a4460613          	addi	a2,a2,-1468 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02013ec:	08300593          	li	a1,131
-ffffffffc02013f0:	00004517          	auipc	a0,0x4
-ffffffffc02013f4:	a5050513          	addi	a0,a0,-1456 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc02013f8:	f69fe0ef          	jal	ffffffffc0200360 <__panic>
-    assert(n > 0);
-ffffffffc02013fc:	00004697          	auipc	a3,0x4
-ffffffffc0201400:	d8468693          	addi	a3,a3,-636 # ffffffffc0205180 <etext+0xc30>
-ffffffffc0201404:	00004617          	auipc	a2,0x4
-ffffffffc0201408:	a2460613          	addi	a2,a2,-1500 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020140c:	08000593          	li	a1,128
-ffffffffc0201410:	00004517          	auipc	a0,0x4
-ffffffffc0201414:	a3050513          	addi	a0,a0,-1488 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc0201418:	f49fe0ef          	jal	ffffffffc0200360 <__panic>
-
-ffffffffc020141c <default_alloc_pages>:
-    assert(n > 0);
-ffffffffc020141c:	c959                	beqz	a0,ffffffffc02014b2 <default_alloc_pages+0x96>
-    if (n > nr_free) {
-ffffffffc020141e:	00010617          	auipc	a2,0x10
-ffffffffc0201422:	c2260613          	addi	a2,a2,-990 # ffffffffc0211040 <free_area>
-ffffffffc0201426:	4a0c                	lw	a1,16(a2)
-ffffffffc0201428:	86aa                	mv	a3,a0
-ffffffffc020142a:	02059793          	slli	a5,a1,0x20
-ffffffffc020142e:	9381                	srli	a5,a5,0x20
-ffffffffc0201430:	00a7eb63          	bltu	a5,a0,ffffffffc0201446 <default_alloc_pages+0x2a>
-    list_entry_t *le = &free_list;
-ffffffffc0201434:	87b2                	mv	a5,a2
-ffffffffc0201436:	a029                	j	ffffffffc0201440 <default_alloc_pages+0x24>
-        if (p->property >= n) {
-ffffffffc0201438:	ff87e703          	lwu	a4,-8(a5)
-ffffffffc020143c:	00d77763          	bgeu	a4,a3,ffffffffc020144a <default_alloc_pages+0x2e>
-    return listelm->next;
-ffffffffc0201440:	679c                	ld	a5,8(a5)
-    while ((le = list_next(le)) != &free_list) {
-ffffffffc0201442:	fec79be3          	bne	a5,a2,ffffffffc0201438 <default_alloc_pages+0x1c>
-        return NULL;
-ffffffffc0201446:	4501                	li	a0,0
-}
-ffffffffc0201448:	8082                	ret
-    __list_del(listelm->prev, listelm->next);
-ffffffffc020144a:	6798                	ld	a4,8(a5)
-    return listelm->prev;
-ffffffffc020144c:	0007b803          	ld	a6,0(a5)
-        if (page->property > n) {
-ffffffffc0201450:	ff87a883          	lw	a7,-8(a5)
-        struct Page *p = le2page(le, page_link);
-ffffffffc0201454:	fe078513          	addi	a0,a5,-32
-    prev->next = next;
-ffffffffc0201458:	00e83423          	sd	a4,8(a6)
-    next->prev = prev;
-ffffffffc020145c:	01073023          	sd	a6,0(a4)
-        if (page->property > n) {
-ffffffffc0201460:	02089713          	slli	a4,a7,0x20
-ffffffffc0201464:	9301                	srli	a4,a4,0x20
-            p->property = page->property - n;
-ffffffffc0201466:	0006831b          	sext.w	t1,a3
-        if (page->property > n) {
-ffffffffc020146a:	02e6fc63          	bgeu	a3,a4,ffffffffc02014a2 <default_alloc_pages+0x86>
-            struct Page *p = page + n;
-ffffffffc020146e:	00369713          	slli	a4,a3,0x3
-ffffffffc0201472:	9736                	add	a4,a4,a3
-ffffffffc0201474:	070e                	slli	a4,a4,0x3
-ffffffffc0201476:	972a                	add	a4,a4,a0
-            p->property = page->property - n;
-ffffffffc0201478:	406888bb          	subw	a7,a7,t1
-ffffffffc020147c:	01172c23          	sw	a7,24(a4)
-    __op_bit(or, __NOP, nr, ((volatile unsigned long *)addr));
-ffffffffc0201480:	4689                	li	a3,2
-ffffffffc0201482:	00870593          	addi	a1,a4,8
-ffffffffc0201486:	40d5b02f          	amoor.d	zero,a3,(a1)
-    __list_add(elm, listelm, listelm->next);
-ffffffffc020148a:	00883683          	ld	a3,8(a6)
-            list_add(prev, &(p->page_link));
-ffffffffc020148e:	02070893          	addi	a7,a4,32
-        nr_free -= n;
-ffffffffc0201492:	4a0c                	lw	a1,16(a2)
-    prev->next = next->prev = elm;
-ffffffffc0201494:	0116b023          	sd	a7,0(a3)
-ffffffffc0201498:	01183423          	sd	a7,8(a6)
-    elm->next = next;
-ffffffffc020149c:	f714                	sd	a3,40(a4)
-    elm->prev = prev;
-ffffffffc020149e:	03073023          	sd	a6,32(a4)
-ffffffffc02014a2:	406585bb          	subw	a1,a1,t1
-ffffffffc02014a6:	ca0c                	sw	a1,16(a2)
-    __op_bit(and, __NOT, nr, ((volatile unsigned long *)addr));
-ffffffffc02014a8:	5775                	li	a4,-3
-ffffffffc02014aa:	17a1                	addi	a5,a5,-24
-ffffffffc02014ac:	60e7b02f          	amoand.d	zero,a4,(a5)
-}
-ffffffffc02014b0:	8082                	ret
-default_alloc_pages(size_t n) {
-ffffffffc02014b2:	1141                	addi	sp,sp,-16
-    assert(n > 0);
-ffffffffc02014b4:	00004697          	auipc	a3,0x4
-ffffffffc02014b8:	ccc68693          	addi	a3,a3,-820 # ffffffffc0205180 <etext+0xc30>
-ffffffffc02014bc:	00004617          	auipc	a2,0x4
-ffffffffc02014c0:	96c60613          	addi	a2,a2,-1684 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02014c4:	06200593          	li	a1,98
-ffffffffc02014c8:	00004517          	auipc	a0,0x4
-ffffffffc02014cc:	97850513          	addi	a0,a0,-1672 # ffffffffc0204e40 <etext+0x8f0>
-default_alloc_pages(size_t n) {
-ffffffffc02014d0:	e406                	sd	ra,8(sp)
-    assert(n > 0);
-ffffffffc02014d2:	e8ffe0ef          	jal	ffffffffc0200360 <__panic>
-
-ffffffffc02014d6 <default_init_memmap>:
-default_init_memmap(struct Page *base, size_t n) {
-ffffffffc02014d6:	1141                	addi	sp,sp,-16
-ffffffffc02014d8:	e406                	sd	ra,8(sp)
-    assert(n > 0);
-ffffffffc02014da:	c9e1                	beqz	a1,ffffffffc02015aa <default_init_memmap+0xd4>
-    for (; p != base + n; p ++) {
-ffffffffc02014dc:	00359713          	slli	a4,a1,0x3
-ffffffffc02014e0:	972e                	add	a4,a4,a1
-ffffffffc02014e2:	070e                	slli	a4,a4,0x3
-ffffffffc02014e4:	00e506b3          	add	a3,a0,a4
-    struct Page *p = base;
-ffffffffc02014e8:	87aa                	mv	a5,a0
-    for (; p != base + n; p ++) {
-ffffffffc02014ea:	cf11                	beqz	a4,ffffffffc0201506 <default_init_memmap+0x30>
-    return (((*(volatile unsigned long *)addr) >> nr) & 1);
-ffffffffc02014ec:	6798                	ld	a4,8(a5)
-        assert(PageReserved(p));
-ffffffffc02014ee:	8b05                	andi	a4,a4,1
-ffffffffc02014f0:	cf49                	beqz	a4,ffffffffc020158a <default_init_memmap+0xb4>
-        p->flags = p->property = 0;
-ffffffffc02014f2:	0007ac23          	sw	zero,24(a5)
-ffffffffc02014f6:	0007b423          	sd	zero,8(a5)
-ffffffffc02014fa:	0007a023          	sw	zero,0(a5)
-    for (; p != base + n; p ++) {
-ffffffffc02014fe:	04878793          	addi	a5,a5,72
-ffffffffc0201502:	fed795e3          	bne	a5,a3,ffffffffc02014ec <default_init_memmap+0x16>
-    base->property = n;
-ffffffffc0201506:	2581                	sext.w	a1,a1
-ffffffffc0201508:	cd0c                	sw	a1,24(a0)
-    __op_bit(or, __NOP, nr, ((volatile unsigned long *)addr));
-ffffffffc020150a:	4789                	li	a5,2
-ffffffffc020150c:	00850713          	addi	a4,a0,8
-ffffffffc0201510:	40f7302f          	amoor.d	zero,a5,(a4)
-    nr_free += n;
-ffffffffc0201514:	00010697          	auipc	a3,0x10
-ffffffffc0201518:	b2c68693          	addi	a3,a3,-1236 # ffffffffc0211040 <free_area>
-ffffffffc020151c:	4a98                	lw	a4,16(a3)
-    return list->next == list;
-ffffffffc020151e:	669c                	ld	a5,8(a3)
-ffffffffc0201520:	9f2d                	addw	a4,a4,a1
-ffffffffc0201522:	ca98                	sw	a4,16(a3)
-    if (list_empty(&free_list)) {
-ffffffffc0201524:	04d78663          	beq	a5,a3,ffffffffc0201570 <default_init_memmap+0x9a>
-            struct Page* page = le2page(le, page_link);
-ffffffffc0201528:	fe078713          	addi	a4,a5,-32
-ffffffffc020152c:	4581                	li	a1,0
-ffffffffc020152e:	02050613          	addi	a2,a0,32
-            if (base < page) {
-ffffffffc0201532:	00e56a63          	bltu	a0,a4,ffffffffc0201546 <default_init_memmap+0x70>
-    return listelm->next;
-ffffffffc0201536:	6798                	ld	a4,8(a5)
-            } else if (list_next(le) == &free_list) {
-ffffffffc0201538:	02d70263          	beq	a4,a3,ffffffffc020155c <default_init_memmap+0x86>
-    struct Page *p = base;
-ffffffffc020153c:	87ba                	mv	a5,a4
-            struct Page* page = le2page(le, page_link);
-ffffffffc020153e:	fe078713          	addi	a4,a5,-32
-            if (base < page) {
-ffffffffc0201542:	fee57ae3          	bgeu	a0,a4,ffffffffc0201536 <default_init_memmap+0x60>
-ffffffffc0201546:	c199                	beqz	a1,ffffffffc020154c <default_init_memmap+0x76>
-ffffffffc0201548:	0106b023          	sd	a6,0(a3)
-    __list_add(elm, listelm->prev, listelm);
-ffffffffc020154c:	6398                	ld	a4,0(a5)
-}
-ffffffffc020154e:	60a2                	ld	ra,8(sp)
-    prev->next = next->prev = elm;
-ffffffffc0201550:	e390                	sd	a2,0(a5)
-ffffffffc0201552:	e710                	sd	a2,8(a4)
-    elm->next = next;
-ffffffffc0201554:	f51c                	sd	a5,40(a0)
-    elm->prev = prev;
-ffffffffc0201556:	f118                	sd	a4,32(a0)
-ffffffffc0201558:	0141                	addi	sp,sp,16
-ffffffffc020155a:	8082                	ret
-    prev->next = next->prev = elm;
-ffffffffc020155c:	e790                	sd	a2,8(a5)
-    elm->next = next;
-ffffffffc020155e:	f514                	sd	a3,40(a0)
-    return listelm->next;
-ffffffffc0201560:	6798                	ld	a4,8(a5)
-    elm->prev = prev;
-ffffffffc0201562:	f11c                	sd	a5,32(a0)
-                list_add(le, &(base->page_link));
-ffffffffc0201564:	8832                	mv	a6,a2
+ffffffffc02013a2:	e390                	sd	a2,0(a5)
+ffffffffc02013a4:	b775                	j	ffffffffc0201350 <default_free_pages+0xae>
+ffffffffc02013a6:	e290                	sd	a2,0(a3)
         while ((le = list_next(le)) != &free_list) {
-ffffffffc0201566:	00d70e63          	beq	a4,a3,ffffffffc0201582 <default_init_memmap+0xac>
-ffffffffc020156a:	4585                	li	a1,1
-    struct Page *p = base;
-ffffffffc020156c:	87ba                	mv	a5,a4
-ffffffffc020156e:	bfc1                	j	ffffffffc020153e <default_init_memmap+0x68>
+ffffffffc02013a8:	873e                	mv	a4,a5
+ffffffffc02013aa:	b761                	j	ffffffffc0201332 <default_free_pages+0x90>
 }
-ffffffffc0201570:	60a2                	ld	ra,8(sp)
-        list_add(&free_list, &(base->page_link));
-ffffffffc0201572:	02050713          	addi	a4,a0,32
+ffffffffc02013ac:	60a2                	ld	ra,8(sp)
     prev->next = next->prev = elm;
-ffffffffc0201576:	e398                	sd	a4,0(a5)
-ffffffffc0201578:	e798                	sd	a4,8(a5)
+ffffffffc02013ae:	e390                	sd	a2,0(a5)
+ffffffffc02013b0:	e790                	sd	a2,8(a5)
     elm->next = next;
-ffffffffc020157a:	f51c                	sd	a5,40(a0)
+ffffffffc02013b2:	f51c                	sd	a5,40(a0)
     elm->prev = prev;
-ffffffffc020157c:	f11c                	sd	a5,32(a0)
+ffffffffc02013b4:	f11c                	sd	a5,32(a0)
+ffffffffc02013b6:	0141                	addi	sp,sp,16
+ffffffffc02013b8:	8082                	ret
+            base->property += p->property;
+ffffffffc02013ba:	ff872783          	lw	a5,-8(a4)
+ffffffffc02013be:	fe870693          	addi	a3,a4,-24
+ffffffffc02013c2:	9dbd                	addw	a1,a1,a5
+ffffffffc02013c4:	cd0c                	sw	a1,24(a0)
+ffffffffc02013c6:	57f5                	li	a5,-3
+ffffffffc02013c8:	60f6b02f          	amoand.d	zero,a5,(a3)
+    __list_del(listelm->prev, listelm->next);
+ffffffffc02013cc:	6314                	ld	a3,0(a4)
+ffffffffc02013ce:	671c                	ld	a5,8(a4)
 }
-ffffffffc020157e:	0141                	addi	sp,sp,16
-ffffffffc0201580:	8082                	ret
-ffffffffc0201582:	60a2                	ld	ra,8(sp)
-ffffffffc0201584:	e290                	sd	a2,0(a3)
-ffffffffc0201586:	0141                	addi	sp,sp,16
-ffffffffc0201588:	8082                	ret
-        assert(PageReserved(p));
-ffffffffc020158a:	00004697          	auipc	a3,0x4
-ffffffffc020158e:	c2668693          	addi	a3,a3,-986 # ffffffffc02051b0 <etext+0xc60>
-ffffffffc0201592:	00004617          	auipc	a2,0x4
-ffffffffc0201596:	89660613          	addi	a2,a2,-1898 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020159a:	04900593          	li	a1,73
-ffffffffc020159e:	00004517          	auipc	a0,0x4
-ffffffffc02015a2:	8a250513          	addi	a0,a0,-1886 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc02015a6:	dbbfe0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02013d0:	60a2                	ld	ra,8(sp)
+    prev->next = next;
+ffffffffc02013d2:	e69c                	sd	a5,8(a3)
+    next->prev = prev;
+ffffffffc02013d4:	e394                	sd	a3,0(a5)
+ffffffffc02013d6:	0141                	addi	sp,sp,16
+ffffffffc02013d8:	8082                	ret
+        assert(!PageReserved(p) && !PageProperty(p));
+ffffffffc02013da:	00004697          	auipc	a3,0x4
+ffffffffc02013de:	d8668693          	addi	a3,a3,-634 # ffffffffc0205160 <commands+0xa98>
+ffffffffc02013e2:	00004617          	auipc	a2,0x4
+ffffffffc02013e6:	a1e60613          	addi	a2,a2,-1506 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02013ea:	08300593          	li	a1,131
+ffffffffc02013ee:	00004517          	auipc	a0,0x4
+ffffffffc02013f2:	a2a50513          	addi	a0,a0,-1494 # ffffffffc0204e18 <commands+0x750>
+ffffffffc02013f6:	f7ffe0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(n > 0);
-ffffffffc02015aa:	00004697          	auipc	a3,0x4
-ffffffffc02015ae:	bd668693          	addi	a3,a3,-1066 # ffffffffc0205180 <etext+0xc30>
-ffffffffc02015b2:	00004617          	auipc	a2,0x4
-ffffffffc02015b6:	87660613          	addi	a2,a2,-1930 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02015ba:	04600593          	li	a1,70
-ffffffffc02015be:	00004517          	auipc	a0,0x4
-ffffffffc02015c2:	88250513          	addi	a0,a0,-1918 # ffffffffc0204e40 <etext+0x8f0>
-ffffffffc02015c6:	d9bfe0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02013fa:	00004697          	auipc	a3,0x4
+ffffffffc02013fe:	d5e68693          	addi	a3,a3,-674 # ffffffffc0205158 <commands+0xa90>
+ffffffffc0201402:	00004617          	auipc	a2,0x4
+ffffffffc0201406:	9fe60613          	addi	a2,a2,-1538 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020140a:	08000593          	li	a1,128
+ffffffffc020140e:	00004517          	auipc	a0,0x4
+ffffffffc0201412:	a0a50513          	addi	a0,a0,-1526 # ffffffffc0204e18 <commands+0x750>
+ffffffffc0201416:	f5ffe0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc02015ca <pa2page.part.0>:
+ffffffffc020141a <default_alloc_pages>:
+    assert(n > 0);
+ffffffffc020141a:	c959                	beqz	a0,ffffffffc02014b0 <default_alloc_pages+0x96>
+    if (n > nr_free) {
+ffffffffc020141c:	00010597          	auipc	a1,0x10
+ffffffffc0201420:	c2458593          	addi	a1,a1,-988 # ffffffffc0211040 <free_area>
+ffffffffc0201424:	0105a803          	lw	a6,16(a1)
+ffffffffc0201428:	862a                	mv	a2,a0
+ffffffffc020142a:	02081793          	slli	a5,a6,0x20
+ffffffffc020142e:	9381                	srli	a5,a5,0x20
+ffffffffc0201430:	00a7ee63          	bltu	a5,a0,ffffffffc020144c <default_alloc_pages+0x32>
+    list_entry_t *le = &free_list;
+ffffffffc0201434:	87ae                	mv	a5,a1
+ffffffffc0201436:	a801                	j	ffffffffc0201446 <default_alloc_pages+0x2c>
+        if (p->property >= n) {
+ffffffffc0201438:	ff87a703          	lw	a4,-8(a5)
+ffffffffc020143c:	02071693          	slli	a3,a4,0x20
+ffffffffc0201440:	9281                	srli	a3,a3,0x20
+ffffffffc0201442:	00c6f763          	bgeu	a3,a2,ffffffffc0201450 <default_alloc_pages+0x36>
+    return listelm->next;
+ffffffffc0201446:	679c                	ld	a5,8(a5)
+    while ((le = list_next(le)) != &free_list) {
+ffffffffc0201448:	feb798e3          	bne	a5,a1,ffffffffc0201438 <default_alloc_pages+0x1e>
+        return NULL;
+ffffffffc020144c:	4501                	li	a0,0
+}
+ffffffffc020144e:	8082                	ret
+    return listelm->prev;
+ffffffffc0201450:	0007b883          	ld	a7,0(a5)
+    __list_del(listelm->prev, listelm->next);
+ffffffffc0201454:	0087b303          	ld	t1,8(a5)
+        struct Page *p = le2page(le, page_link);
+ffffffffc0201458:	fe078513          	addi	a0,a5,-32
+            p->property = page->property - n;
+ffffffffc020145c:	00060e1b          	sext.w	t3,a2
+    prev->next = next;
+ffffffffc0201460:	0068b423          	sd	t1,8(a7)
+    next->prev = prev;
+ffffffffc0201464:	01133023          	sd	a7,0(t1)
+        if (page->property > n) {
+ffffffffc0201468:	02d67b63          	bgeu	a2,a3,ffffffffc020149e <default_alloc_pages+0x84>
+            struct Page *p = page + n;
+ffffffffc020146c:	00361693          	slli	a3,a2,0x3
+ffffffffc0201470:	96b2                	add	a3,a3,a2
+ffffffffc0201472:	068e                	slli	a3,a3,0x3
+ffffffffc0201474:	96aa                	add	a3,a3,a0
+            p->property = page->property - n;
+ffffffffc0201476:	41c7073b          	subw	a4,a4,t3
+ffffffffc020147a:	ce98                	sw	a4,24(a3)
+    __op_bit(or, __NOP, nr, ((volatile unsigned long *)addr));
+ffffffffc020147c:	00868613          	addi	a2,a3,8
+ffffffffc0201480:	4709                	li	a4,2
+ffffffffc0201482:	40e6302f          	amoor.d	zero,a4,(a2)
+    __list_add(elm, listelm, listelm->next);
+ffffffffc0201486:	0088b703          	ld	a4,8(a7)
+            list_add(prev, &(p->page_link));
+ffffffffc020148a:	02068613          	addi	a2,a3,32
+        nr_free -= n;
+ffffffffc020148e:	0105a803          	lw	a6,16(a1)
+    prev->next = next->prev = elm;
+ffffffffc0201492:	e310                	sd	a2,0(a4)
+ffffffffc0201494:	00c8b423          	sd	a2,8(a7)
+    elm->next = next;
+ffffffffc0201498:	f698                	sd	a4,40(a3)
+    elm->prev = prev;
+ffffffffc020149a:	0316b023          	sd	a7,32(a3)
+ffffffffc020149e:	41c8083b          	subw	a6,a6,t3
+ffffffffc02014a2:	0105a823          	sw	a6,16(a1)
+    __op_bit(and, __NOT, nr, ((volatile unsigned long *)addr));
+ffffffffc02014a6:	5775                	li	a4,-3
+ffffffffc02014a8:	17a1                	addi	a5,a5,-24
+ffffffffc02014aa:	60e7b02f          	amoand.d	zero,a4,(a5)
+}
+ffffffffc02014ae:	8082                	ret
+default_alloc_pages(size_t n) {
+ffffffffc02014b0:	1141                	addi	sp,sp,-16
+    assert(n > 0);
+ffffffffc02014b2:	00004697          	auipc	a3,0x4
+ffffffffc02014b6:	ca668693          	addi	a3,a3,-858 # ffffffffc0205158 <commands+0xa90>
+ffffffffc02014ba:	00004617          	auipc	a2,0x4
+ffffffffc02014be:	94660613          	addi	a2,a2,-1722 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02014c2:	06200593          	li	a1,98
+ffffffffc02014c6:	00004517          	auipc	a0,0x4
+ffffffffc02014ca:	95250513          	addi	a0,a0,-1710 # ffffffffc0204e18 <commands+0x750>
+default_alloc_pages(size_t n) {
+ffffffffc02014ce:	e406                	sd	ra,8(sp)
+    assert(n > 0);
+ffffffffc02014d0:	ea5fe0ef          	jal	ra,ffffffffc0200374 <__panic>
+
+ffffffffc02014d4 <default_init_memmap>:
+default_init_memmap(struct Page *base, size_t n) {
+ffffffffc02014d4:	1141                	addi	sp,sp,-16
+ffffffffc02014d6:	e406                	sd	ra,8(sp)
+    assert(n > 0);
+ffffffffc02014d8:	c9e1                	beqz	a1,ffffffffc02015a8 <default_init_memmap+0xd4>
+    for (; p != base + n; p ++) {
+ffffffffc02014da:	00359693          	slli	a3,a1,0x3
+ffffffffc02014de:	96ae                	add	a3,a3,a1
+ffffffffc02014e0:	068e                	slli	a3,a3,0x3
+ffffffffc02014e2:	96aa                	add	a3,a3,a0
+ffffffffc02014e4:	87aa                	mv	a5,a0
+ffffffffc02014e6:	00d50f63          	beq	a0,a3,ffffffffc0201504 <default_init_memmap+0x30>
+    return (((*(volatile unsigned long *)addr) >> nr) & 1);
+ffffffffc02014ea:	6798                	ld	a4,8(a5)
+        assert(PageReserved(p));
+ffffffffc02014ec:	8b05                	andi	a4,a4,1
+ffffffffc02014ee:	cf49                	beqz	a4,ffffffffc0201588 <default_init_memmap+0xb4>
+        p->flags = p->property = 0;
+ffffffffc02014f0:	0007ac23          	sw	zero,24(a5)
+ffffffffc02014f4:	0007b423          	sd	zero,8(a5)
+ffffffffc02014f8:	0007a023          	sw	zero,0(a5)
+    for (; p != base + n; p ++) {
+ffffffffc02014fc:	04878793          	addi	a5,a5,72
+ffffffffc0201500:	fed795e3          	bne	a5,a3,ffffffffc02014ea <default_init_memmap+0x16>
+    base->property = n;
+ffffffffc0201504:	2581                	sext.w	a1,a1
+ffffffffc0201506:	cd0c                	sw	a1,24(a0)
+    __op_bit(or, __NOP, nr, ((volatile unsigned long *)addr));
+ffffffffc0201508:	4789                	li	a5,2
+ffffffffc020150a:	00850713          	addi	a4,a0,8
+ffffffffc020150e:	40f7302f          	amoor.d	zero,a5,(a4)
+    nr_free += n;
+ffffffffc0201512:	00010697          	auipc	a3,0x10
+ffffffffc0201516:	b2e68693          	addi	a3,a3,-1234 # ffffffffc0211040 <free_area>
+ffffffffc020151a:	4a98                	lw	a4,16(a3)
+    return list->next == list;
+ffffffffc020151c:	669c                	ld	a5,8(a3)
+        list_add(&free_list, &(base->page_link));
+ffffffffc020151e:	02050613          	addi	a2,a0,32
+    nr_free += n;
+ffffffffc0201522:	9db9                	addw	a1,a1,a4
+ffffffffc0201524:	ca8c                	sw	a1,16(a3)
+    if (list_empty(&free_list)) {
+ffffffffc0201526:	04d78a63          	beq	a5,a3,ffffffffc020157a <default_init_memmap+0xa6>
+            struct Page* page = le2page(le, page_link);
+ffffffffc020152a:	fe078713          	addi	a4,a5,-32
+ffffffffc020152e:	0006b803          	ld	a6,0(a3)
+    if (list_empty(&free_list)) {
+ffffffffc0201532:	4581                	li	a1,0
+            if (base < page) {
+ffffffffc0201534:	00e56a63          	bltu	a0,a4,ffffffffc0201548 <default_init_memmap+0x74>
+    return listelm->next;
+ffffffffc0201538:	6798                	ld	a4,8(a5)
+            } else if (list_next(le) == &free_list) {
+ffffffffc020153a:	02d70263          	beq	a4,a3,ffffffffc020155e <default_init_memmap+0x8a>
+    for (; p != base + n; p ++) {
+ffffffffc020153e:	87ba                	mv	a5,a4
+            struct Page* page = le2page(le, page_link);
+ffffffffc0201540:	fe078713          	addi	a4,a5,-32
+            if (base < page) {
+ffffffffc0201544:	fee57ae3          	bgeu	a0,a4,ffffffffc0201538 <default_init_memmap+0x64>
+ffffffffc0201548:	c199                	beqz	a1,ffffffffc020154e <default_init_memmap+0x7a>
+ffffffffc020154a:	0106b023          	sd	a6,0(a3)
+    __list_add(elm, listelm->prev, listelm);
+ffffffffc020154e:	6398                	ld	a4,0(a5)
+}
+ffffffffc0201550:	60a2                	ld	ra,8(sp)
+    prev->next = next->prev = elm;
+ffffffffc0201552:	e390                	sd	a2,0(a5)
+ffffffffc0201554:	e710                	sd	a2,8(a4)
+    elm->next = next;
+ffffffffc0201556:	f51c                	sd	a5,40(a0)
+    elm->prev = prev;
+ffffffffc0201558:	f118                	sd	a4,32(a0)
+ffffffffc020155a:	0141                	addi	sp,sp,16
+ffffffffc020155c:	8082                	ret
+    prev->next = next->prev = elm;
+ffffffffc020155e:	e790                	sd	a2,8(a5)
+    elm->next = next;
+ffffffffc0201560:	f514                	sd	a3,40(a0)
+    return listelm->next;
+ffffffffc0201562:	6798                	ld	a4,8(a5)
+    elm->prev = prev;
+ffffffffc0201564:	f11c                	sd	a5,32(a0)
+        while ((le = list_next(le)) != &free_list) {
+ffffffffc0201566:	00d70663          	beq	a4,a3,ffffffffc0201572 <default_init_memmap+0x9e>
+    prev->next = next->prev = elm;
+ffffffffc020156a:	8832                	mv	a6,a2
+ffffffffc020156c:	4585                	li	a1,1
+    for (; p != base + n; p ++) {
+ffffffffc020156e:	87ba                	mv	a5,a4
+ffffffffc0201570:	bfc1                	j	ffffffffc0201540 <default_init_memmap+0x6c>
+}
+ffffffffc0201572:	60a2                	ld	ra,8(sp)
+ffffffffc0201574:	e290                	sd	a2,0(a3)
+ffffffffc0201576:	0141                	addi	sp,sp,16
+ffffffffc0201578:	8082                	ret
+ffffffffc020157a:	60a2                	ld	ra,8(sp)
+ffffffffc020157c:	e390                	sd	a2,0(a5)
+ffffffffc020157e:	e790                	sd	a2,8(a5)
+    elm->next = next;
+ffffffffc0201580:	f51c                	sd	a5,40(a0)
+    elm->prev = prev;
+ffffffffc0201582:	f11c                	sd	a5,32(a0)
+ffffffffc0201584:	0141                	addi	sp,sp,16
+ffffffffc0201586:	8082                	ret
+        assert(PageReserved(p));
+ffffffffc0201588:	00004697          	auipc	a3,0x4
+ffffffffc020158c:	c0068693          	addi	a3,a3,-1024 # ffffffffc0205188 <commands+0xac0>
+ffffffffc0201590:	00004617          	auipc	a2,0x4
+ffffffffc0201594:	87060613          	addi	a2,a2,-1936 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0201598:	04900593          	li	a1,73
+ffffffffc020159c:	00004517          	auipc	a0,0x4
+ffffffffc02015a0:	87c50513          	addi	a0,a0,-1924 # ffffffffc0204e18 <commands+0x750>
+ffffffffc02015a4:	dd1fe0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(n > 0);
+ffffffffc02015a8:	00004697          	auipc	a3,0x4
+ffffffffc02015ac:	bb068693          	addi	a3,a3,-1104 # ffffffffc0205158 <commands+0xa90>
+ffffffffc02015b0:	00004617          	auipc	a2,0x4
+ffffffffc02015b4:	85060613          	addi	a2,a2,-1968 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02015b8:	04600593          	li	a1,70
+ffffffffc02015bc:	00004517          	auipc	a0,0x4
+ffffffffc02015c0:	85c50513          	addi	a0,a0,-1956 # ffffffffc0204e18 <commands+0x750>
+ffffffffc02015c4:	db1fe0ef          	jal	ra,ffffffffc0200374 <__panic>
+
+ffffffffc02015c8 <pa2page.part.0>:
 static inline struct Page *pa2page(uintptr_t pa) {
-ffffffffc02015ca:	1141                	addi	sp,sp,-16
+ffffffffc02015c8:	1141                	addi	sp,sp,-16
         panic("pa2page called with invalid pa");
-ffffffffc02015cc:	00004617          	auipc	a2,0x4
-ffffffffc02015d0:	c0c60613          	addi	a2,a2,-1012 # ffffffffc02051d8 <etext+0xc88>
-ffffffffc02015d4:	06500593          	li	a1,101
-ffffffffc02015d8:	00004517          	auipc	a0,0x4
-ffffffffc02015dc:	c2050513          	addi	a0,a0,-992 # ffffffffc02051f8 <etext+0xca8>
+ffffffffc02015ca:	00004617          	auipc	a2,0x4
+ffffffffc02015ce:	c1e60613          	addi	a2,a2,-994 # ffffffffc02051e8 <default_pmm_manager+0x38>
+ffffffffc02015d2:	06500593          	li	a1,101
+ffffffffc02015d6:	00004517          	auipc	a0,0x4
+ffffffffc02015da:	c3250513          	addi	a0,a0,-974 # ffffffffc0205208 <default_pmm_manager+0x58>
 static inline struct Page *pa2page(uintptr_t pa) {
-ffffffffc02015e0:	e406                	sd	ra,8(sp)
+ffffffffc02015de:	e406                	sd	ra,8(sp)
         panic("pa2page called with invalid pa");
-ffffffffc02015e2:	d7ffe0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02015e0:	d95fe0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc02015e6 <pte2page.part.0>:
+ffffffffc02015e4 <pte2page.part.0>:
 static inline struct Page *pte2page(pte_t pte) {
-ffffffffc02015e6:	1141                	addi	sp,sp,-16
+ffffffffc02015e4:	1141                	addi	sp,sp,-16
         panic("pte2page called with invalid pte");
-ffffffffc02015e8:	00004617          	auipc	a2,0x4
-ffffffffc02015ec:	c2060613          	addi	a2,a2,-992 # ffffffffc0205208 <etext+0xcb8>
-ffffffffc02015f0:	07000593          	li	a1,112
-ffffffffc02015f4:	00004517          	auipc	a0,0x4
-ffffffffc02015f8:	c0450513          	addi	a0,a0,-1020 # ffffffffc02051f8 <etext+0xca8>
+ffffffffc02015e6:	00004617          	auipc	a2,0x4
+ffffffffc02015ea:	c3260613          	addi	a2,a2,-974 # ffffffffc0205218 <default_pmm_manager+0x68>
+ffffffffc02015ee:	07000593          	li	a1,112
+ffffffffc02015f2:	00004517          	auipc	a0,0x4
+ffffffffc02015f6:	c1650513          	addi	a0,a0,-1002 # ffffffffc0205208 <default_pmm_manager+0x58>
 static inline struct Page *pte2page(pte_t pte) {
-ffffffffc02015fc:	e406                	sd	ra,8(sp)
+ffffffffc02015fa:	e406                	sd	ra,8(sp)
         panic("pte2page called with invalid pte");
-ffffffffc02015fe:	d63fe0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02015fc:	d79fe0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc0201602 <alloc_pages>:
+ffffffffc0201600 <alloc_pages>:
     pmm_manager->init_memmap(base, n);
 }
 
 // alloc_pages - call pmm->alloc_pages to allocate a continuous n*PAGESIZE
 // memory
 struct Page *alloc_pages(size_t n) {
-ffffffffc0201602:	7139                	addi	sp,sp,-64
-ffffffffc0201604:	f426                	sd	s1,40(sp)
-ffffffffc0201606:	f04a                	sd	s2,32(sp)
-ffffffffc0201608:	ec4e                	sd	s3,24(sp)
-ffffffffc020160a:	e852                	sd	s4,16(sp)
-ffffffffc020160c:	e456                	sd	s5,8(sp)
-ffffffffc020160e:	e05a                	sd	s6,0(sp)
-ffffffffc0201610:	fc06                	sd	ra,56(sp)
-ffffffffc0201612:	f822                	sd	s0,48(sp)
-ffffffffc0201614:	84aa                	mv	s1,a0
-ffffffffc0201616:	00010917          	auipc	s2,0x10
-ffffffffc020161a:	f0290913          	addi	s2,s2,-254 # ffffffffc0211518 <pmm_manager>
+ffffffffc0201600:	7139                	addi	sp,sp,-64
+ffffffffc0201602:	f426                	sd	s1,40(sp)
+ffffffffc0201604:	f04a                	sd	s2,32(sp)
+ffffffffc0201606:	ec4e                	sd	s3,24(sp)
+ffffffffc0201608:	e852                	sd	s4,16(sp)
+ffffffffc020160a:	e456                	sd	s5,8(sp)
+ffffffffc020160c:	e05a                	sd	s6,0(sp)
+ffffffffc020160e:	fc06                	sd	ra,56(sp)
+ffffffffc0201610:	f822                	sd	s0,48(sp)
+ffffffffc0201612:	84aa                	mv	s1,a0
+ffffffffc0201614:	00010917          	auipc	s2,0x10
+ffffffffc0201618:	f2490913          	addi	s2,s2,-220 # ffffffffc0211538 <pmm_manager>
     while (1) {
         local_intr_save(intr_flag);
         { page = pmm_manager->alloc_pages(n); }
         local_intr_restore(intr_flag);
 
         if (page != NULL || n > 1 || swap_init_ok == 0) break;
-ffffffffc020161e:	4a05                	li	s4,1
-ffffffffc0201620:	00010a97          	auipc	s5,0x10
-ffffffffc0201624:	f28a8a93          	addi	s5,s5,-216 # ffffffffc0211548 <swap_init_ok>
+ffffffffc020161c:	4a05                	li	s4,1
+ffffffffc020161e:	00010a97          	auipc	s5,0x10
+ffffffffc0201622:	f3aa8a93          	addi	s5,s5,-198 # ffffffffc0211558 <swap_init_ok>
 
         extern struct mm_struct *check_mm_struct;
         // cprintf("page %x, call swap_out in alloc_pages %d\n",page, n);
         swap_out(check_mm_struct, n, 0);
-ffffffffc0201628:	0005099b          	sext.w	s3,a0
-ffffffffc020162c:	00010b17          	auipc	s6,0x10
-ffffffffc0201630:	f44b0b13          	addi	s6,s6,-188 # ffffffffc0211570 <check_mm_struct>
-ffffffffc0201634:	a015                	j	ffffffffc0201658 <alloc_pages+0x56>
+ffffffffc0201626:	0005099b          	sext.w	s3,a0
+ffffffffc020162a:	00010b17          	auipc	s6,0x10
+ffffffffc020162e:	f3eb0b13          	addi	s6,s6,-194 # ffffffffc0211568 <check_mm_struct>
+ffffffffc0201632:	a01d                	j	ffffffffc0201658 <alloc_pages+0x58>
         { page = pmm_manager->alloc_pages(n); }
-ffffffffc0201636:	00093783          	ld	a5,0(s2)
-ffffffffc020163a:	6f9c                	ld	a5,24(a5)
-ffffffffc020163c:	9782                	jalr	a5
-ffffffffc020163e:	842a                	mv	s0,a0
+ffffffffc0201634:	00093783          	ld	a5,0(s2)
+ffffffffc0201638:	6f9c                	ld	a5,24(a5)
+ffffffffc020163a:	9782                	jalr	a5
+ffffffffc020163c:	842a                	mv	s0,a0
         swap_out(check_mm_struct, n, 0);
-ffffffffc0201640:	4601                	li	a2,0
-ffffffffc0201642:	85ce                	mv	a1,s3
+ffffffffc020163e:	4601                	li	a2,0
+ffffffffc0201640:	85ce                	mv	a1,s3
         if (page != NULL || n > 1 || swap_init_ok == 0) break;
-ffffffffc0201644:	ec05                	bnez	s0,ffffffffc020167c <alloc_pages+0x7a>
-ffffffffc0201646:	029a6b63          	bltu	s4,s1,ffffffffc020167c <alloc_pages+0x7a>
-ffffffffc020164a:	000aa783          	lw	a5,0(s5)
-ffffffffc020164e:	c79d                	beqz	a5,ffffffffc020167c <alloc_pages+0x7a>
+ffffffffc0201642:	ec0d                	bnez	s0,ffffffffc020167c <alloc_pages+0x7c>
+ffffffffc0201644:	029a6c63          	bltu	s4,s1,ffffffffc020167c <alloc_pages+0x7c>
+ffffffffc0201648:	000aa783          	lw	a5,0(s5)
+ffffffffc020164c:	2781                	sext.w	a5,a5
+ffffffffc020164e:	c79d                	beqz	a5,ffffffffc020167c <alloc_pages+0x7c>
         swap_out(check_mm_struct, n, 0);
 ffffffffc0201650:	000b3503          	ld	a0,0(s6)
-ffffffffc0201654:	233010ef          	jal	ffffffffc0203086 <swap_out>
+ffffffffc0201654:	189010ef          	jal	ra,ffffffffc0202fdc <swap_out>
     if (read_csr(sstatus) & SSTATUS_SIE) {
 ffffffffc0201658:	100027f3          	csrr	a5,sstatus
 ffffffffc020165c:	8b89                	andi	a5,a5,2
         { page = pmm_manager->alloc_pages(n); }
 ffffffffc020165e:	8526                	mv	a0,s1
-ffffffffc0201660:	dbf9                	beqz	a5,ffffffffc0201636 <alloc_pages+0x34>
+ffffffffc0201660:	dbf1                	beqz	a5,ffffffffc0201634 <alloc_pages+0x34>
         intr_disable();
-ffffffffc0201662:	e7bfe0ef          	jal	ffffffffc02004dc <intr_disable>
+ffffffffc0201662:	e8dfe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
 ffffffffc0201666:	00093783          	ld	a5,0(s2)
 ffffffffc020166a:	8526                	mv	a0,s1
 ffffffffc020166c:	6f9c                	ld	a5,24(a5)
 ffffffffc020166e:	9782                	jalr	a5
 ffffffffc0201670:	842a                	mv	s0,a0
         intr_enable();
-ffffffffc0201672:	e65fe0ef          	jal	ffffffffc02004d6 <intr_enable>
+ffffffffc0201672:	e77fe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
         swap_out(check_mm_struct, n, 0);
 ffffffffc0201676:	4601                	li	a2,0
 ffffffffc0201678:	85ce                	mv	a1,s3
         if (page != NULL || n > 1 || swap_init_ok == 0) break;
-ffffffffc020167a:	d471                	beqz	s0,ffffffffc0201646 <alloc_pages+0x44>
+ffffffffc020167a:	d469                	beqz	s0,ffffffffc0201644 <alloc_pages+0x44>
     }
     // cprintf("n %d,get page %x, No %d in alloc_pages\n",n,page,(page-pages));
     return page;
@@ -2890,7 +2886,7 @@ void free_pages(struct Page *base, size_t n) {
     local_intr_save(intr_flag);
     { pmm_manager->free_pages(base, n); }
 ffffffffc020169a:	00010797          	auipc	a5,0x10
-ffffffffc020169e:	e7e7b783          	ld	a5,-386(a5) # ffffffffc0211518 <pmm_manager>
+ffffffffc020169e:	e9e7b783          	ld	a5,-354(a5) # ffffffffc0211538 <pmm_manager>
 ffffffffc02016a2:	739c                	ld	a5,32(a5)
 ffffffffc02016a4:	8782                	jr	a5
 void free_pages(struct Page *base, size_t n) {
@@ -2901,10 +2897,10 @@ ffffffffc02016ac:	e426                	sd	s1,8(sp)
 ffffffffc02016ae:	842a                	mv	s0,a0
 ffffffffc02016b0:	84ae                	mv	s1,a1
         intr_disable();
-ffffffffc02016b2:	e2bfe0ef          	jal	ffffffffc02004dc <intr_disable>
+ffffffffc02016b2:	e3dfe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
     { pmm_manager->free_pages(base, n); }
 ffffffffc02016b6:	00010797          	auipc	a5,0x10
-ffffffffc02016ba:	e627b783          	ld	a5,-414(a5) # ffffffffc0211518 <pmm_manager>
+ffffffffc02016ba:	e827b783          	ld	a5,-382(a5) # ffffffffc0211538 <pmm_manager>
 ffffffffc02016be:	739c                	ld	a5,32(a5)
 ffffffffc02016c0:	85a6                	mv	a1,s1
 ffffffffc02016c2:	8522                	mv	a0,s0
@@ -2916,7 +2912,7 @@ ffffffffc02016c8:	60e2                	ld	ra,24(sp)
 ffffffffc02016ca:	64a2                	ld	s1,8(sp)
 ffffffffc02016cc:	6105                	addi	sp,sp,32
         intr_enable();
-ffffffffc02016ce:	e09fe06f          	j	ffffffffc02004d6 <intr_enable>
+ffffffffc02016ce:	e1bfe06f          	j	ffffffffc02004e8 <intr_enable>
 
 ffffffffc02016d2 <nr_free_pages>:
     if (read_csr(sstatus) & SSTATUS_SIE) {
@@ -2930,7 +2926,7 @@ size_t nr_free_pages(void) {
     local_intr_save(intr_flag);
     { ret = pmm_manager->nr_free_pages(); }
 ffffffffc02016da:	00010797          	auipc	a5,0x10
-ffffffffc02016de:	e3e7b783          	ld	a5,-450(a5) # ffffffffc0211518 <pmm_manager>
+ffffffffc02016de:	e5e7b783          	ld	a5,-418(a5) # ffffffffc0211538 <pmm_manager>
 ffffffffc02016e2:	779c                	ld	a5,40(a5)
 ffffffffc02016e4:	8782                	jr	a5
 size_t nr_free_pages(void) {
@@ -2938,15 +2934,15 @@ ffffffffc02016e6:	1141                	addi	sp,sp,-16
 ffffffffc02016e8:	e406                	sd	ra,8(sp)
 ffffffffc02016ea:	e022                	sd	s0,0(sp)
         intr_disable();
-ffffffffc02016ec:	df1fe0ef          	jal	ffffffffc02004dc <intr_disable>
+ffffffffc02016ec:	e03fe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
     { ret = pmm_manager->nr_free_pages(); }
 ffffffffc02016f0:	00010797          	auipc	a5,0x10
-ffffffffc02016f4:	e287b783          	ld	a5,-472(a5) # ffffffffc0211518 <pmm_manager>
+ffffffffc02016f4:	e487b783          	ld	a5,-440(a5) # ffffffffc0211538 <pmm_manager>
 ffffffffc02016f8:	779c                	ld	a5,40(a5)
 ffffffffc02016fa:	9782                	jalr	a5
 ffffffffc02016fc:	842a                	mv	s0,a0
         intr_enable();
-ffffffffc02016fe:	dd9fe0ef          	jal	ffffffffc02004d6 <intr_enable>
+ffffffffc02016fe:	debfe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
     local_intr_restore(intr_flag);
     return ret;
 }
@@ -2970,5458 +2966,5385 @@ ffffffffc0201714:	715d                	addi	sp,sp,-80
     pde_t *pdep1 = &pgdir[PDX1(la)];
 ffffffffc0201716:	078e                	slli	a5,a5,0x3
 pte_t *get_pte(pde_t *pgdir, uintptr_t la, bool create) {
-ffffffffc0201718:	f052                	sd	s4,32(sp)
+ffffffffc0201718:	fc26                	sd	s1,56(sp)
     pde_t *pdep1 = &pgdir[PDX1(la)];
-ffffffffc020171a:	00f50a33          	add	s4,a0,a5
+ffffffffc020171a:	00f504b3          	add	s1,a0,a5
     if (!(*pdep1 & PTE_V)) {
-ffffffffc020171e:	000a3683          	ld	a3,0(s4)
+ffffffffc020171e:	6094                	ld	a3,0(s1)
 pte_t *get_pte(pde_t *pgdir, uintptr_t la, bool create) {
-ffffffffc0201722:	f84a                	sd	s2,48(sp)
-ffffffffc0201724:	f44e                	sd	s3,40(sp)
-ffffffffc0201726:	ec56                	sd	s5,24(sp)
-ffffffffc0201728:	e486                	sd	ra,72(sp)
-ffffffffc020172a:	e0a2                	sd	s0,64(sp)
+ffffffffc0201720:	f84a                	sd	s2,48(sp)
+ffffffffc0201722:	f44e                	sd	s3,40(sp)
+ffffffffc0201724:	f052                	sd	s4,32(sp)
+ffffffffc0201726:	e486                	sd	ra,72(sp)
+ffffffffc0201728:	e0a2                	sd	s0,64(sp)
+ffffffffc020172a:	ec56                	sd	s5,24(sp)
 ffffffffc020172c:	e85a                	sd	s6,16(sp)
+ffffffffc020172e:	e45e                	sd	s7,8(sp)
     if (!(*pdep1 & PTE_V)) {
-ffffffffc020172e:	0016f793          	andi	a5,a3,1
+ffffffffc0201730:	0016f793          	andi	a5,a3,1
 pte_t *get_pte(pde_t *pgdir, uintptr_t la, bool create) {
-ffffffffc0201732:	892e                	mv	s2,a1
-ffffffffc0201734:	8ab2                	mv	s5,a2
-ffffffffc0201736:	00010997          	auipc	s3,0x10
-ffffffffc020173a:	e0298993          	addi	s3,s3,-510 # ffffffffc0211538 <npage>
+ffffffffc0201734:	892e                	mv	s2,a1
+ffffffffc0201736:	8a32                	mv	s4,a2
+ffffffffc0201738:	00010997          	auipc	s3,0x10
+ffffffffc020173c:	df098993          	addi	s3,s3,-528 # ffffffffc0211528 <npage>
     if (!(*pdep1 & PTE_V)) {
-ffffffffc020173e:	efc1                	bnez	a5,ffffffffc02017d6 <get_pte+0xca>
+ffffffffc0201740:	efb5                	bnez	a5,ffffffffc02017bc <get_pte+0xb0>
         struct Page *page;
         if (!create || (page = alloc_page()) == NULL) {
-ffffffffc0201740:	18060663          	beqz	a2,ffffffffc02018cc <get_pte+0x1c0>
-ffffffffc0201744:	4505                	li	a0,1
-ffffffffc0201746:	ebdff0ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc020174a:	842a                	mv	s0,a0
-ffffffffc020174c:	18050063          	beqz	a0,ffffffffc02018cc <get_pte+0x1c0>
-static inline void set_page_ref(struct Page *page, int val) { page->ref = val; }
-ffffffffc0201750:	fc26                	sd	s1,56(sp)
+ffffffffc0201742:	14060c63          	beqz	a2,ffffffffc020189a <get_pte+0x18e>
+ffffffffc0201746:	4505                	li	a0,1
+ffffffffc0201748:	eb9ff0ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc020174c:	842a                	mv	s0,a0
+ffffffffc020174e:	14050663          	beqz	a0,ffffffffc020189a <get_pte+0x18e>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0201752:	f8e394b7          	lui	s1,0xf8e39
-ffffffffc0201756:	e3948493          	addi	s1,s1,-455 # fffffffff8e38e39 <end+0x38c278c1>
-ffffffffc020175a:	e45e                	sd	s7,8(sp)
-ffffffffc020175c:	04b2                	slli	s1,s1,0xc
-ffffffffc020175e:	00010b97          	auipc	s7,0x10
-ffffffffc0201762:	de2b8b93          	addi	s7,s7,-542 # ffffffffc0211540 <pages>
-ffffffffc0201766:	000bb503          	ld	a0,0(s7)
-ffffffffc020176a:	e3948493          	addi	s1,s1,-455
-ffffffffc020176e:	04b2                	slli	s1,s1,0xc
-ffffffffc0201770:	e3948493          	addi	s1,s1,-455
-ffffffffc0201774:	40a40533          	sub	a0,s0,a0
-ffffffffc0201778:	04b2                	slli	s1,s1,0xc
-ffffffffc020177a:	850d                	srai	a0,a0,0x3
-ffffffffc020177c:	e3948493          	addi	s1,s1,-455
-ffffffffc0201780:	02950533          	mul	a0,a0,s1
-ffffffffc0201784:	00080b37          	lui	s6,0x80
+ffffffffc0201752:	00010b97          	auipc	s7,0x10
+ffffffffc0201756:	ddeb8b93          	addi	s7,s7,-546 # ffffffffc0211530 <pages>
+ffffffffc020175a:	000bb503          	ld	a0,0(s7)
+ffffffffc020175e:	00005b17          	auipc	s6,0x5
+ffffffffc0201762:	b62b3b03          	ld	s6,-1182(s6) # ffffffffc02062c0 <error_string+0x38>
+ffffffffc0201766:	00080ab7          	lui	s5,0x80
+ffffffffc020176a:	40a40533          	sub	a0,s0,a0
+ffffffffc020176e:	850d                	srai	a0,a0,0x3
+ffffffffc0201770:	03650533          	mul	a0,a0,s6
             return NULL;
         }
         set_page_ref(page, 1);
         uintptr_t pa = page2pa(page);
         memset(KADDR(pa), 0, PGSIZE);
-ffffffffc0201788:	00010997          	auipc	s3,0x10
-ffffffffc020178c:	db098993          	addi	s3,s3,-592 # ffffffffc0211538 <npage>
+ffffffffc0201774:	00010997          	auipc	s3,0x10
+ffffffffc0201778:	db498993          	addi	s3,s3,-588 # ffffffffc0211528 <npage>
 static inline void set_page_ref(struct Page *page, int val) { page->ref = val; }
-ffffffffc0201790:	4785                	li	a5,1
-ffffffffc0201792:	0009b703          	ld	a4,0(s3)
-ffffffffc0201796:	c01c                	sw	a5,0(s0)
+ffffffffc020177c:	4785                	li	a5,1
+ffffffffc020177e:	0009b703          	ld	a4,0(s3)
+ffffffffc0201782:	c01c                	sw	a5,0(s0)
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0201798:	955a                	add	a0,a0,s6
-ffffffffc020179a:	00c51793          	slli	a5,a0,0xc
-ffffffffc020179e:	83b1                	srli	a5,a5,0xc
+ffffffffc0201784:	9556                	add	a0,a0,s5
+ffffffffc0201786:	00c51793          	slli	a5,a0,0xc
+ffffffffc020178a:	83b1                	srli	a5,a5,0xc
     return page2ppn(page) << PGSHIFT;
-ffffffffc02017a0:	0532                	slli	a0,a0,0xc
-ffffffffc02017a2:	16e7ff63          	bgeu	a5,a4,ffffffffc0201920 <get_pte+0x214>
-ffffffffc02017a6:	00010797          	auipc	a5,0x10
-ffffffffc02017aa:	d8a7b783          	ld	a5,-630(a5) # ffffffffc0211530 <va_pa_offset>
-ffffffffc02017ae:	953e                	add	a0,a0,a5
-ffffffffc02017b0:	6605                	lui	a2,0x1
-ffffffffc02017b2:	4581                	li	a1,0
-ffffffffc02017b4:	573020ef          	jal	ffffffffc0204526 <memset>
+ffffffffc020178c:	0532                	slli	a0,a0,0xc
+ffffffffc020178e:	14e7fd63          	bgeu	a5,a4,ffffffffc02018e8 <get_pte+0x1dc>
+ffffffffc0201792:	00010797          	auipc	a5,0x10
+ffffffffc0201796:	dae7b783          	ld	a5,-594(a5) # ffffffffc0211540 <va_pa_offset>
+ffffffffc020179a:	6605                	lui	a2,0x1
+ffffffffc020179c:	4581                	li	a1,0
+ffffffffc020179e:	953e                	add	a0,a0,a5
+ffffffffc02017a0:	4a5020ef          	jal	ra,ffffffffc0204444 <memset>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc02017b8:	000bb783          	ld	a5,0(s7)
-        *pdep1 = pte_create(page2ppn(page), PTE_U | PTE_V);
-ffffffffc02017bc:	6ba2                	ld	s7,8(sp)
-ffffffffc02017be:	40f406b3          	sub	a3,s0,a5
-ffffffffc02017c2:	868d                	srai	a3,a3,0x3
-ffffffffc02017c4:	029686b3          	mul	a3,a3,s1
-ffffffffc02017c8:	74e2                	ld	s1,56(sp)
-ffffffffc02017ca:	96da                	add	a3,a3,s6
+ffffffffc02017a4:	000bb683          	ld	a3,0(s7)
+ffffffffc02017a8:	40d406b3          	sub	a3,s0,a3
+ffffffffc02017ac:	868d                	srai	a3,a3,0x3
+ffffffffc02017ae:	036686b3          	mul	a3,a3,s6
+ffffffffc02017b2:	96d6                	add	a3,a3,s5
 
 static inline void flush_tlb() { asm volatile("sfence.vma"); }
 
 // construct PTE from a page and permission bits
 static inline pte_t pte_create(uintptr_t ppn, int type) {
     return (ppn << PTE_PPN_SHIFT) | PTE_V | type;
-ffffffffc02017cc:	06aa                	slli	a3,a3,0xa
-ffffffffc02017ce:	0116e693          	ori	a3,a3,17
-ffffffffc02017d2:	00da3023          	sd	a3,0(s4)
+ffffffffc02017b4:	06aa                	slli	a3,a3,0xa
+ffffffffc02017b6:	0116e693          	ori	a3,a3,17
+        *pdep1 = pte_create(page2ppn(page), PTE_U | PTE_V);
+ffffffffc02017ba:	e094                	sd	a3,0(s1)
     }
     pde_t *pdep0 = &((pde_t *)KADDR(PDE_ADDR(*pdep1)))[PDX0(la)];
-ffffffffc02017d6:	77fd                	lui	a5,0xfffff
-ffffffffc02017d8:	068a                	slli	a3,a3,0x2
-ffffffffc02017da:	0009b703          	ld	a4,0(s3)
-ffffffffc02017de:	8efd                	and	a3,a3,a5
-ffffffffc02017e0:	00c6d793          	srli	a5,a3,0xc
-ffffffffc02017e4:	0ee7f663          	bgeu	a5,a4,ffffffffc02018d0 <get_pte+0x1c4>
-ffffffffc02017e8:	00010b17          	auipc	s6,0x10
-ffffffffc02017ec:	d48b0b13          	addi	s6,s6,-696 # ffffffffc0211530 <va_pa_offset>
-ffffffffc02017f0:	000b3603          	ld	a2,0(s6)
-ffffffffc02017f4:	01595793          	srli	a5,s2,0x15
-ffffffffc02017f8:	1ff7f793          	andi	a5,a5,511
-ffffffffc02017fc:	96b2                	add	a3,a3,a2
-ffffffffc02017fe:	078e                	slli	a5,a5,0x3
-ffffffffc0201800:	00f68433          	add	s0,a3,a5
+ffffffffc02017bc:	77fd                	lui	a5,0xfffff
+ffffffffc02017be:	068a                	slli	a3,a3,0x2
+ffffffffc02017c0:	0009b703          	ld	a4,0(s3)
+ffffffffc02017c4:	8efd                	and	a3,a3,a5
+ffffffffc02017c6:	00c6d793          	srli	a5,a3,0xc
+ffffffffc02017ca:	0ce7fa63          	bgeu	a5,a4,ffffffffc020189e <get_pte+0x192>
+ffffffffc02017ce:	00010a97          	auipc	s5,0x10
+ffffffffc02017d2:	d72a8a93          	addi	s5,s5,-654 # ffffffffc0211540 <va_pa_offset>
+ffffffffc02017d6:	000ab403          	ld	s0,0(s5)
+ffffffffc02017da:	01595793          	srli	a5,s2,0x15
+ffffffffc02017de:	1ff7f793          	andi	a5,a5,511
+ffffffffc02017e2:	96a2                	add	a3,a3,s0
+ffffffffc02017e4:	00379413          	slli	s0,a5,0x3
+ffffffffc02017e8:	9436                	add	s0,s0,a3
 //    pde_t *pdep0 = &((pde_t *)(PDE_ADDR(*pdep1)))[PDX0(la)];
     if (!(*pdep0 & PTE_V)) {
-ffffffffc0201804:	6014                	ld	a3,0(s0)
-ffffffffc0201806:	0016f793          	andi	a5,a3,1
-ffffffffc020180a:	e7d1                	bnez	a5,ffffffffc0201896 <get_pte+0x18a>
+ffffffffc02017ea:	6014                	ld	a3,0(s0)
+ffffffffc02017ec:	0016f793          	andi	a5,a3,1
+ffffffffc02017f0:	ebad                	bnez	a5,ffffffffc0201862 <get_pte+0x156>
     	struct Page *page;
     	if (!create || (page = alloc_page()) == NULL) {
-ffffffffc020180c:	0c0a8063          	beqz	s5,ffffffffc02018cc <get_pte+0x1c0>
-ffffffffc0201810:	4505                	li	a0,1
-ffffffffc0201812:	fc26                	sd	s1,56(sp)
-ffffffffc0201814:	defff0ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0201818:	84aa                	mv	s1,a0
-ffffffffc020181a:	c945                	beqz	a0,ffffffffc02018ca <get_pte+0x1be>
+ffffffffc02017f2:	0a0a0463          	beqz	s4,ffffffffc020189a <get_pte+0x18e>
+ffffffffc02017f6:	4505                	li	a0,1
+ffffffffc02017f8:	e09ff0ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc02017fc:	84aa                	mv	s1,a0
+ffffffffc02017fe:	cd51                	beqz	a0,ffffffffc020189a <get_pte+0x18e>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc020181c:	f8e39a37          	lui	s4,0xf8e39
-ffffffffc0201820:	e39a0a13          	addi	s4,s4,-455 # fffffffff8e38e39 <end+0x38c278c1>
-ffffffffc0201824:	e45e                	sd	s7,8(sp)
-ffffffffc0201826:	0a32                	slli	s4,s4,0xc
-ffffffffc0201828:	00010b97          	auipc	s7,0x10
-ffffffffc020182c:	d18b8b93          	addi	s7,s7,-744 # ffffffffc0211540 <pages>
-ffffffffc0201830:	000bb683          	ld	a3,0(s7)
-ffffffffc0201834:	e39a0a13          	addi	s4,s4,-455
-ffffffffc0201838:	0a32                	slli	s4,s4,0xc
-ffffffffc020183a:	e39a0a13          	addi	s4,s4,-455
-ffffffffc020183e:	40d506b3          	sub	a3,a0,a3
-ffffffffc0201842:	0a32                	slli	s4,s4,0xc
-ffffffffc0201844:	868d                	srai	a3,a3,0x3
-ffffffffc0201846:	e39a0a13          	addi	s4,s4,-455
-ffffffffc020184a:	034686b3          	mul	a3,a3,s4
-ffffffffc020184e:	00080ab7          	lui	s5,0x80
+ffffffffc0201800:	00010b97          	auipc	s7,0x10
+ffffffffc0201804:	d30b8b93          	addi	s7,s7,-720 # ffffffffc0211530 <pages>
+ffffffffc0201808:	000bb503          	ld	a0,0(s7)
+ffffffffc020180c:	00005b17          	auipc	s6,0x5
+ffffffffc0201810:	ab4b3b03          	ld	s6,-1356(s6) # ffffffffc02062c0 <error_string+0x38>
+ffffffffc0201814:	00080a37          	lui	s4,0x80
+ffffffffc0201818:	40a48533          	sub	a0,s1,a0
+ffffffffc020181c:	850d                	srai	a0,a0,0x3
+ffffffffc020181e:	03650533          	mul	a0,a0,s6
 static inline void set_page_ref(struct Page *page, int val) { page->ref = val; }
-ffffffffc0201852:	4785                	li	a5,1
+ffffffffc0201822:	4785                	li	a5,1
     		return NULL;
     	}
     	set_page_ref(page, 1);
     	uintptr_t pa = page2pa(page);
     	memset(KADDR(pa), 0, PGSIZE);
-ffffffffc0201854:	0009b703          	ld	a4,0(s3)
-ffffffffc0201858:	c11c                	sw	a5,0(a0)
+ffffffffc0201824:	0009b703          	ld	a4,0(s3)
+ffffffffc0201828:	c09c                	sw	a5,0(s1)
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc020185a:	96d6                	add	a3,a3,s5
-ffffffffc020185c:	00c69793          	slli	a5,a3,0xc
-ffffffffc0201860:	83b1                	srli	a5,a5,0xc
+ffffffffc020182a:	9552                	add	a0,a0,s4
+ffffffffc020182c:	00c51793          	slli	a5,a0,0xc
+ffffffffc0201830:	83b1                	srli	a5,a5,0xc
     return page2ppn(page) << PGSHIFT;
-ffffffffc0201862:	06b2                	slli	a3,a3,0xc
-ffffffffc0201864:	0ae7f263          	bgeu	a5,a4,ffffffffc0201908 <get_pte+0x1fc>
-ffffffffc0201868:	000b3503          	ld	a0,0(s6)
-ffffffffc020186c:	6605                	lui	a2,0x1
-ffffffffc020186e:	4581                	li	a1,0
-ffffffffc0201870:	9536                	add	a0,a0,a3
-ffffffffc0201872:	4b5020ef          	jal	ffffffffc0204526 <memset>
+ffffffffc0201832:	0532                	slli	a0,a0,0xc
+ffffffffc0201834:	08e7fd63          	bgeu	a5,a4,ffffffffc02018ce <get_pte+0x1c2>
+ffffffffc0201838:	000ab783          	ld	a5,0(s5)
+ffffffffc020183c:	6605                	lui	a2,0x1
+ffffffffc020183e:	4581                	li	a1,0
+ffffffffc0201840:	953e                	add	a0,a0,a5
+ffffffffc0201842:	403020ef          	jal	ra,ffffffffc0204444 <memset>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0201876:	000bb783          	ld	a5,0(s7)
+ffffffffc0201846:	000bb683          	ld	a3,0(s7)
+ffffffffc020184a:	40d486b3          	sub	a3,s1,a3
+ffffffffc020184e:	868d                	srai	a3,a3,0x3
+ffffffffc0201850:	036686b3          	mul	a3,a3,s6
+ffffffffc0201854:	96d2                	add	a3,a3,s4
+    return (ppn << PTE_PPN_SHIFT) | PTE_V | type;
+ffffffffc0201856:	06aa                	slli	a3,a3,0xa
+ffffffffc0201858:	0116e693          	ori	a3,a3,17
  //   	memset(pa, 0, PGSIZE);
     	*pdep0 = pte_create(page2ppn(page), PTE_U | PTE_V);
+ffffffffc020185c:	e014                	sd	a3,0(s0)
     }
     return &((pte_t *)KADDR(PDE_ADDR(*pdep0)))[PTX(la)];
-ffffffffc020187a:	6ba2                	ld	s7,8(sp)
-ffffffffc020187c:	40f486b3          	sub	a3,s1,a5
-ffffffffc0201880:	868d                	srai	a3,a3,0x3
-ffffffffc0201882:	034686b3          	mul	a3,a3,s4
-ffffffffc0201886:	74e2                	ld	s1,56(sp)
-ffffffffc0201888:	96d6                	add	a3,a3,s5
-    return (ppn << PTE_PPN_SHIFT) | PTE_V | type;
-ffffffffc020188a:	06aa                	slli	a3,a3,0xa
-ffffffffc020188c:	0116e693          	ori	a3,a3,17
-    	*pdep0 = pte_create(page2ppn(page), PTE_U | PTE_V);
-ffffffffc0201890:	e014                	sd	a3,0(s0)
-    return &((pte_t *)KADDR(PDE_ADDR(*pdep0)))[PTX(la)];
-ffffffffc0201892:	0009b703          	ld	a4,0(s3)
-ffffffffc0201896:	77fd                	lui	a5,0xfffff
-ffffffffc0201898:	068a                	slli	a3,a3,0x2
-ffffffffc020189a:	8efd                	and	a3,a3,a5
-ffffffffc020189c:	00c6d793          	srli	a5,a3,0xc
-ffffffffc02018a0:	04e7f663          	bgeu	a5,a4,ffffffffc02018ec <get_pte+0x1e0>
-ffffffffc02018a4:	000b3783          	ld	a5,0(s6)
-ffffffffc02018a8:	00c95913          	srli	s2,s2,0xc
-ffffffffc02018ac:	1ff97913          	andi	s2,s2,511
-ffffffffc02018b0:	96be                	add	a3,a3,a5
-ffffffffc02018b2:	090e                	slli	s2,s2,0x3
-ffffffffc02018b4:	01268533          	add	a0,a3,s2
+ffffffffc020185e:	0009b703          	ld	a4,0(s3)
+ffffffffc0201862:	068a                	slli	a3,a3,0x2
+ffffffffc0201864:	757d                	lui	a0,0xfffff
+ffffffffc0201866:	8ee9                	and	a3,a3,a0
+ffffffffc0201868:	00c6d793          	srli	a5,a3,0xc
+ffffffffc020186c:	04e7f563          	bgeu	a5,a4,ffffffffc02018b6 <get_pte+0x1aa>
+ffffffffc0201870:	000ab503          	ld	a0,0(s5)
+ffffffffc0201874:	00c95913          	srli	s2,s2,0xc
+ffffffffc0201878:	1ff97913          	andi	s2,s2,511
+ffffffffc020187c:	96aa                	add	a3,a3,a0
+ffffffffc020187e:	00391513          	slli	a0,s2,0x3
+ffffffffc0201882:	9536                	add	a0,a0,a3
 }
-ffffffffc02018b8:	60a6                	ld	ra,72(sp)
-ffffffffc02018ba:	6406                	ld	s0,64(sp)
-ffffffffc02018bc:	7942                	ld	s2,48(sp)
-ffffffffc02018be:	79a2                	ld	s3,40(sp)
-ffffffffc02018c0:	7a02                	ld	s4,32(sp)
-ffffffffc02018c2:	6ae2                	ld	s5,24(sp)
-ffffffffc02018c4:	6b42                	ld	s6,16(sp)
-ffffffffc02018c6:	6161                	addi	sp,sp,80
-ffffffffc02018c8:	8082                	ret
-ffffffffc02018ca:	74e2                	ld	s1,56(sp)
+ffffffffc0201884:	60a6                	ld	ra,72(sp)
+ffffffffc0201886:	6406                	ld	s0,64(sp)
+ffffffffc0201888:	74e2                	ld	s1,56(sp)
+ffffffffc020188a:	7942                	ld	s2,48(sp)
+ffffffffc020188c:	79a2                	ld	s3,40(sp)
+ffffffffc020188e:	7a02                	ld	s4,32(sp)
+ffffffffc0201890:	6ae2                	ld	s5,24(sp)
+ffffffffc0201892:	6b42                	ld	s6,16(sp)
+ffffffffc0201894:	6ba2                	ld	s7,8(sp)
+ffffffffc0201896:	6161                	addi	sp,sp,80
+ffffffffc0201898:	8082                	ret
             return NULL;
-ffffffffc02018cc:	4501                	li	a0,0
-ffffffffc02018ce:	b7ed                	j	ffffffffc02018b8 <get_pte+0x1ac>
+ffffffffc020189a:	4501                	li	a0,0
+ffffffffc020189c:	b7e5                	j	ffffffffc0201884 <get_pte+0x178>
     pde_t *pdep0 = &((pde_t *)KADDR(PDE_ADDR(*pdep1)))[PDX0(la)];
-ffffffffc02018d0:	00004617          	auipc	a2,0x4
-ffffffffc02018d4:	96060613          	addi	a2,a2,-1696 # ffffffffc0205230 <etext+0xce0>
-ffffffffc02018d8:	10200593          	li	a1,258
-ffffffffc02018dc:	00004517          	auipc	a0,0x4
-ffffffffc02018e0:	97c50513          	addi	a0,a0,-1668 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02018e4:	fc26                	sd	s1,56(sp)
-ffffffffc02018e6:	e45e                	sd	s7,8(sp)
-ffffffffc02018e8:	a79fe0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc020189e:	00004617          	auipc	a2,0x4
+ffffffffc02018a2:	9a260613          	addi	a2,a2,-1630 # ffffffffc0205240 <default_pmm_manager+0x90>
+ffffffffc02018a6:	10200593          	li	a1,258
+ffffffffc02018aa:	00004517          	auipc	a0,0x4
+ffffffffc02018ae:	9be50513          	addi	a0,a0,-1602 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02018b2:	ac3fe0ef          	jal	ra,ffffffffc0200374 <__panic>
     return &((pte_t *)KADDR(PDE_ADDR(*pdep0)))[PTX(la)];
-ffffffffc02018ec:	00004617          	auipc	a2,0x4
-ffffffffc02018f0:	94460613          	addi	a2,a2,-1724 # ffffffffc0205230 <etext+0xce0>
-ffffffffc02018f4:	10f00593          	li	a1,271
-ffffffffc02018f8:	00004517          	auipc	a0,0x4
-ffffffffc02018fc:	96050513          	addi	a0,a0,-1696 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0201900:	fc26                	sd	s1,56(sp)
-ffffffffc0201902:	e45e                	sd	s7,8(sp)
-ffffffffc0201904:	a5dfe0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02018b6:	00004617          	auipc	a2,0x4
+ffffffffc02018ba:	98a60613          	addi	a2,a2,-1654 # ffffffffc0205240 <default_pmm_manager+0x90>
+ffffffffc02018be:	10f00593          	li	a1,271
+ffffffffc02018c2:	00004517          	auipc	a0,0x4
+ffffffffc02018c6:	9a650513          	addi	a0,a0,-1626 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02018ca:	aabfe0ef          	jal	ra,ffffffffc0200374 <__panic>
     	memset(KADDR(pa), 0, PGSIZE);
-ffffffffc0201908:	00004617          	auipc	a2,0x4
-ffffffffc020190c:	92860613          	addi	a2,a2,-1752 # ffffffffc0205230 <etext+0xce0>
-ffffffffc0201910:	10b00593          	li	a1,267
-ffffffffc0201914:	00004517          	auipc	a0,0x4
-ffffffffc0201918:	94450513          	addi	a0,a0,-1724 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020191c:	a45fe0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02018ce:	86aa                	mv	a3,a0
+ffffffffc02018d0:	00004617          	auipc	a2,0x4
+ffffffffc02018d4:	97060613          	addi	a2,a2,-1680 # ffffffffc0205240 <default_pmm_manager+0x90>
+ffffffffc02018d8:	10b00593          	li	a1,267
+ffffffffc02018dc:	00004517          	auipc	a0,0x4
+ffffffffc02018e0:	98c50513          	addi	a0,a0,-1652 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02018e4:	a91fe0ef          	jal	ra,ffffffffc0200374 <__panic>
         memset(KADDR(pa), 0, PGSIZE);
-ffffffffc0201920:	86aa                	mv	a3,a0
-ffffffffc0201922:	00004617          	auipc	a2,0x4
-ffffffffc0201926:	90e60613          	addi	a2,a2,-1778 # ffffffffc0205230 <etext+0xce0>
-ffffffffc020192a:	0ff00593          	li	a1,255
-ffffffffc020192e:	00004517          	auipc	a0,0x4
-ffffffffc0201932:	92a50513          	addi	a0,a0,-1750 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0201936:	a2bfe0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02018e8:	86aa                	mv	a3,a0
+ffffffffc02018ea:	00004617          	auipc	a2,0x4
+ffffffffc02018ee:	95660613          	addi	a2,a2,-1706 # ffffffffc0205240 <default_pmm_manager+0x90>
+ffffffffc02018f2:	0ff00593          	li	a1,255
+ffffffffc02018f6:	00004517          	auipc	a0,0x4
+ffffffffc02018fa:	97250513          	addi	a0,a0,-1678 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02018fe:	a77fe0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc020193a <get_page>:
+ffffffffc0201902 <get_page>:
 
 // get_page - get related Page struct for linear address la using PDT pgdir
 struct Page *get_page(pde_t *pgdir, uintptr_t la, pte_t **ptep_store) {
-ffffffffc020193a:	1141                	addi	sp,sp,-16
-ffffffffc020193c:	e022                	sd	s0,0(sp)
-ffffffffc020193e:	8432                	mv	s0,a2
+ffffffffc0201902:	1141                	addi	sp,sp,-16
+ffffffffc0201904:	e022                	sd	s0,0(sp)
+ffffffffc0201906:	8432                	mv	s0,a2
     pte_t *ptep = get_pte(pgdir, la, 0);
-ffffffffc0201940:	4601                	li	a2,0
+ffffffffc0201908:	4601                	li	a2,0
 struct Page *get_page(pde_t *pgdir, uintptr_t la, pte_t **ptep_store) {
-ffffffffc0201942:	e406                	sd	ra,8(sp)
+ffffffffc020190a:	e406                	sd	ra,8(sp)
     pte_t *ptep = get_pte(pgdir, la, 0);
-ffffffffc0201944:	dc9ff0ef          	jal	ffffffffc020170c <get_pte>
+ffffffffc020190c:	e01ff0ef          	jal	ra,ffffffffc020170c <get_pte>
     if (ptep_store != NULL) {
-ffffffffc0201948:	c011                	beqz	s0,ffffffffc020194c <get_page+0x12>
+ffffffffc0201910:	c011                	beqz	s0,ffffffffc0201914 <get_page+0x12>
         *ptep_store = ptep;
-ffffffffc020194a:	e008                	sd	a0,0(s0)
+ffffffffc0201912:	e008                	sd	a0,0(s0)
     }
     if (ptep != NULL && *ptep & PTE_V) {
-ffffffffc020194c:	c511                	beqz	a0,ffffffffc0201958 <get_page+0x1e>
-ffffffffc020194e:	611c                	ld	a5,0(a0)
+ffffffffc0201914:	c511                	beqz	a0,ffffffffc0201920 <get_page+0x1e>
+ffffffffc0201916:	611c                	ld	a5,0(a0)
         return pte2page(*ptep);
     }
     return NULL;
-ffffffffc0201950:	4501                	li	a0,0
+ffffffffc0201918:	4501                	li	a0,0
     if (ptep != NULL && *ptep & PTE_V) {
-ffffffffc0201952:	0017f713          	andi	a4,a5,1
-ffffffffc0201956:	e709                	bnez	a4,ffffffffc0201960 <get_page+0x26>
+ffffffffc020191a:	0017f713          	andi	a4,a5,1
+ffffffffc020191e:	e709                	bnez	a4,ffffffffc0201928 <get_page+0x26>
 }
-ffffffffc0201958:	60a2                	ld	ra,8(sp)
-ffffffffc020195a:	6402                	ld	s0,0(sp)
-ffffffffc020195c:	0141                	addi	sp,sp,16
-ffffffffc020195e:	8082                	ret
+ffffffffc0201920:	60a2                	ld	ra,8(sp)
+ffffffffc0201922:	6402                	ld	s0,0(sp)
+ffffffffc0201924:	0141                	addi	sp,sp,16
+ffffffffc0201926:	8082                	ret
     return pa2page(PTE_ADDR(pte));
-ffffffffc0201960:	078a                	slli	a5,a5,0x2
-ffffffffc0201962:	83b1                	srli	a5,a5,0xc
+ffffffffc0201928:	078a                	slli	a5,a5,0x2
+ffffffffc020192a:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc0201964:	00010717          	auipc	a4,0x10
-ffffffffc0201968:	bd473703          	ld	a4,-1068(a4) # ffffffffc0211538 <npage>
-ffffffffc020196c:	02e7f263          	bgeu	a5,a4,ffffffffc0201990 <get_page+0x56>
+ffffffffc020192c:	00010717          	auipc	a4,0x10
+ffffffffc0201930:	bfc73703          	ld	a4,-1028(a4) # ffffffffc0211528 <npage>
+ffffffffc0201934:	02e7f263          	bgeu	a5,a4,ffffffffc0201958 <get_page+0x56>
     return &pages[PPN(pa) - nbase];
-ffffffffc0201970:	fff80737          	lui	a4,0xfff80
-ffffffffc0201974:	97ba                	add	a5,a5,a4
-ffffffffc0201976:	60a2                	ld	ra,8(sp)
-ffffffffc0201978:	6402                	ld	s0,0(sp)
-ffffffffc020197a:	00379713          	slli	a4,a5,0x3
-ffffffffc020197e:	97ba                	add	a5,a5,a4
-ffffffffc0201980:	00010517          	auipc	a0,0x10
-ffffffffc0201984:	bc053503          	ld	a0,-1088(a0) # ffffffffc0211540 <pages>
-ffffffffc0201988:	078e                	slli	a5,a5,0x3
-ffffffffc020198a:	953e                	add	a0,a0,a5
-ffffffffc020198c:	0141                	addi	sp,sp,16
-ffffffffc020198e:	8082                	ret
-ffffffffc0201990:	c3bff0ef          	jal	ffffffffc02015ca <pa2page.part.0>
+ffffffffc0201938:	fff80537          	lui	a0,0xfff80
+ffffffffc020193c:	97aa                	add	a5,a5,a0
+ffffffffc020193e:	60a2                	ld	ra,8(sp)
+ffffffffc0201940:	6402                	ld	s0,0(sp)
+ffffffffc0201942:	00379513          	slli	a0,a5,0x3
+ffffffffc0201946:	97aa                	add	a5,a5,a0
+ffffffffc0201948:	078e                	slli	a5,a5,0x3
+ffffffffc020194a:	00010517          	auipc	a0,0x10
+ffffffffc020194e:	be653503          	ld	a0,-1050(a0) # ffffffffc0211530 <pages>
+ffffffffc0201952:	953e                	add	a0,a0,a5
+ffffffffc0201954:	0141                	addi	sp,sp,16
+ffffffffc0201956:	8082                	ret
+ffffffffc0201958:	c71ff0ef          	jal	ra,ffffffffc02015c8 <pa2page.part.0>
 
-ffffffffc0201994 <page_remove>:
+ffffffffc020195c <page_remove>:
     }
 }
 
 // page_remove - free an Page which is related linear address la and has an
 // validated pte
 void page_remove(pde_t *pgdir, uintptr_t la) {
-ffffffffc0201994:	1101                	addi	sp,sp,-32
+ffffffffc020195c:	1101                	addi	sp,sp,-32
     pte_t *ptep = get_pte(pgdir, la, 0);
-ffffffffc0201996:	4601                	li	a2,0
+ffffffffc020195e:	4601                	li	a2,0
 void page_remove(pde_t *pgdir, uintptr_t la) {
-ffffffffc0201998:	ec06                	sd	ra,24(sp)
+ffffffffc0201960:	ec06                	sd	ra,24(sp)
+ffffffffc0201962:	e822                	sd	s0,16(sp)
     pte_t *ptep = get_pte(pgdir, la, 0);
-ffffffffc020199a:	d73ff0ef          	jal	ffffffffc020170c <get_pte>
+ffffffffc0201964:	da9ff0ef          	jal	ra,ffffffffc020170c <get_pte>
     if (ptep != NULL) {
-ffffffffc020199e:	c901                	beqz	a0,ffffffffc02019ae <page_remove+0x1a>
+ffffffffc0201968:	c511                	beqz	a0,ffffffffc0201974 <page_remove+0x18>
     if (*ptep & PTE_V) {  //(1) check if this page table entry is
-ffffffffc02019a0:	611c                	ld	a5,0(a0)
-ffffffffc02019a2:	e822                	sd	s0,16(sp)
-ffffffffc02019a4:	842a                	mv	s0,a0
-ffffffffc02019a6:	0017f713          	andi	a4,a5,1
-ffffffffc02019aa:	e709                	bnez	a4,ffffffffc02019b4 <page_remove+0x20>
-ffffffffc02019ac:	6442                	ld	s0,16(sp)
+ffffffffc020196a:	611c                	ld	a5,0(a0)
+ffffffffc020196c:	842a                	mv	s0,a0
+ffffffffc020196e:	0017f713          	andi	a4,a5,1
+ffffffffc0201972:	e709                	bnez	a4,ffffffffc020197c <page_remove+0x20>
         page_remove_pte(pgdir, la, ptep);
     }
 }
-ffffffffc02019ae:	60e2                	ld	ra,24(sp)
-ffffffffc02019b0:	6105                	addi	sp,sp,32
-ffffffffc02019b2:	8082                	ret
+ffffffffc0201974:	60e2                	ld	ra,24(sp)
+ffffffffc0201976:	6442                	ld	s0,16(sp)
+ffffffffc0201978:	6105                	addi	sp,sp,32
+ffffffffc020197a:	8082                	ret
     return pa2page(PTE_ADDR(pte));
-ffffffffc02019b4:	078a                	slli	a5,a5,0x2
-ffffffffc02019b6:	83b1                	srli	a5,a5,0xc
+ffffffffc020197c:	078a                	slli	a5,a5,0x2
+ffffffffc020197e:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc02019b8:	00010717          	auipc	a4,0x10
-ffffffffc02019bc:	b8073703          	ld	a4,-1152(a4) # ffffffffc0211538 <npage>
-ffffffffc02019c0:	06e7f563          	bgeu	a5,a4,ffffffffc0201a2a <page_remove+0x96>
+ffffffffc0201980:	00010717          	auipc	a4,0x10
+ffffffffc0201984:	ba873703          	ld	a4,-1112(a4) # ffffffffc0211528 <npage>
+ffffffffc0201988:	06e7f563          	bgeu	a5,a4,ffffffffc02019f2 <page_remove+0x96>
     return &pages[PPN(pa) - nbase];
-ffffffffc02019c4:	fff80737          	lui	a4,0xfff80
-ffffffffc02019c8:	97ba                	add	a5,a5,a4
-ffffffffc02019ca:	00379713          	slli	a4,a5,0x3
-ffffffffc02019ce:	97ba                	add	a5,a5,a4
-ffffffffc02019d0:	078e                	slli	a5,a5,0x3
-ffffffffc02019d2:	00010517          	auipc	a0,0x10
-ffffffffc02019d6:	b6e53503          	ld	a0,-1170(a0) # ffffffffc0211540 <pages>
-ffffffffc02019da:	953e                	add	a0,a0,a5
+ffffffffc020198c:	fff80737          	lui	a4,0xfff80
+ffffffffc0201990:	97ba                	add	a5,a5,a4
+ffffffffc0201992:	00379513          	slli	a0,a5,0x3
+ffffffffc0201996:	97aa                	add	a5,a5,a0
+ffffffffc0201998:	078e                	slli	a5,a5,0x3
+ffffffffc020199a:	00010517          	auipc	a0,0x10
+ffffffffc020199e:	b9653503          	ld	a0,-1130(a0) # ffffffffc0211530 <pages>
+ffffffffc02019a2:	953e                	add	a0,a0,a5
     page->ref -= 1;
-ffffffffc02019dc:	411c                	lw	a5,0(a0)
-ffffffffc02019de:	fff7871b          	addiw	a4,a5,-1 # ffffffffffffefff <end+0x3fdeda87>
-ffffffffc02019e2:	c118                	sw	a4,0(a0)
+ffffffffc02019a4:	411c                	lw	a5,0(a0)
+ffffffffc02019a6:	fff7871b          	addiw	a4,a5,-1
+ffffffffc02019aa:	c118                	sw	a4,0(a0)
         if (page_ref(page) ==
-ffffffffc02019e4:	cb09                	beqz	a4,ffffffffc02019f6 <page_remove+0x62>
+ffffffffc02019ac:	cb09                	beqz	a4,ffffffffc02019be <page_remove+0x62>
         *ptep = 0;                  //(5) clear second page table entry
-ffffffffc02019e6:	00043023          	sd	zero,0(s0)
+ffffffffc02019ae:	00043023          	sd	zero,0(s0)
 static inline void flush_tlb() { asm volatile("sfence.vma"); }
-ffffffffc02019ea:	12000073          	sfence.vma
-ffffffffc02019ee:	6442                	ld	s0,16(sp)
+ffffffffc02019b2:	12000073          	sfence.vma
 }
-ffffffffc02019f0:	60e2                	ld	ra,24(sp)
-ffffffffc02019f2:	6105                	addi	sp,sp,32
-ffffffffc02019f4:	8082                	ret
+ffffffffc02019b6:	60e2                	ld	ra,24(sp)
+ffffffffc02019b8:	6442                	ld	s0,16(sp)
+ffffffffc02019ba:	6105                	addi	sp,sp,32
+ffffffffc02019bc:	8082                	ret
     if (read_csr(sstatus) & SSTATUS_SIE) {
-ffffffffc02019f6:	100027f3          	csrr	a5,sstatus
-ffffffffc02019fa:	8b89                	andi	a5,a5,2
-ffffffffc02019fc:	eb89                	bnez	a5,ffffffffc0201a0e <page_remove+0x7a>
+ffffffffc02019be:	100027f3          	csrr	a5,sstatus
+ffffffffc02019c2:	8b89                	andi	a5,a5,2
+ffffffffc02019c4:	eb89                	bnez	a5,ffffffffc02019d6 <page_remove+0x7a>
     { pmm_manager->free_pages(base, n); }
-ffffffffc02019fe:	00010797          	auipc	a5,0x10
-ffffffffc0201a02:	b1a7b783          	ld	a5,-1254(a5) # ffffffffc0211518 <pmm_manager>
-ffffffffc0201a06:	739c                	ld	a5,32(a5)
-ffffffffc0201a08:	4585                	li	a1,1
-ffffffffc0201a0a:	9782                	jalr	a5
+ffffffffc02019c6:	00010797          	auipc	a5,0x10
+ffffffffc02019ca:	b727b783          	ld	a5,-1166(a5) # ffffffffc0211538 <pmm_manager>
+ffffffffc02019ce:	739c                	ld	a5,32(a5)
+ffffffffc02019d0:	4585                	li	a1,1
+ffffffffc02019d2:	9782                	jalr	a5
     if (flag) {
-ffffffffc0201a0c:	bfe9                	j	ffffffffc02019e6 <page_remove+0x52>
+ffffffffc02019d4:	bfe9                	j	ffffffffc02019ae <page_remove+0x52>
         intr_disable();
-ffffffffc0201a0e:	e42a                	sd	a0,8(sp)
-ffffffffc0201a10:	acdfe0ef          	jal	ffffffffc02004dc <intr_disable>
-ffffffffc0201a14:	00010797          	auipc	a5,0x10
-ffffffffc0201a18:	b047b783          	ld	a5,-1276(a5) # ffffffffc0211518 <pmm_manager>
-ffffffffc0201a1c:	739c                	ld	a5,32(a5)
-ffffffffc0201a1e:	6522                	ld	a0,8(sp)
-ffffffffc0201a20:	4585                	li	a1,1
-ffffffffc0201a22:	9782                	jalr	a5
+ffffffffc02019d6:	e42a                	sd	a0,8(sp)
+ffffffffc02019d8:	b17fe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+ffffffffc02019dc:	00010797          	auipc	a5,0x10
+ffffffffc02019e0:	b5c7b783          	ld	a5,-1188(a5) # ffffffffc0211538 <pmm_manager>
+ffffffffc02019e4:	739c                	ld	a5,32(a5)
+ffffffffc02019e6:	6522                	ld	a0,8(sp)
+ffffffffc02019e8:	4585                	li	a1,1
+ffffffffc02019ea:	9782                	jalr	a5
         intr_enable();
-ffffffffc0201a24:	ab3fe0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc0201a28:	bf7d                	j	ffffffffc02019e6 <page_remove+0x52>
-ffffffffc0201a2a:	ba1ff0ef          	jal	ffffffffc02015ca <pa2page.part.0>
+ffffffffc02019ec:	afdfe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc02019f0:	bf7d                	j	ffffffffc02019ae <page_remove+0x52>
+ffffffffc02019f2:	bd7ff0ef          	jal	ra,ffffffffc02015c8 <pa2page.part.0>
 
-ffffffffc0201a2e <page_insert>:
+ffffffffc02019f6 <page_insert>:
 //  page:  the Page which need to map
 //  la:    the linear address need to map
 //  perm:  the permission of this Page which is setted in related pte
 // return value: always 0
 // note: PT is changed, so the TLB need to be invalidate
 int page_insert(pde_t *pgdir, struct Page *page, uintptr_t la, uint32_t perm) {
-ffffffffc0201a2e:	7179                	addi	sp,sp,-48
-ffffffffc0201a30:	87b2                	mv	a5,a2
-ffffffffc0201a32:	f022                	sd	s0,32(sp)
+ffffffffc02019f6:	7179                	addi	sp,sp,-48
+ffffffffc02019f8:	87b2                	mv	a5,a2
+ffffffffc02019fa:	f022                	sd	s0,32(sp)
     pte_t *ptep = get_pte(pgdir, la, 1);
-ffffffffc0201a34:	4605                	li	a2,1
+ffffffffc02019fc:	4605                	li	a2,1
 int page_insert(pde_t *pgdir, struct Page *page, uintptr_t la, uint32_t perm) {
-ffffffffc0201a36:	842e                	mv	s0,a1
+ffffffffc02019fe:	842e                	mv	s0,a1
     pte_t *ptep = get_pte(pgdir, la, 1);
-ffffffffc0201a38:	85be                	mv	a1,a5
+ffffffffc0201a00:	85be                	mv	a1,a5
 int page_insert(pde_t *pgdir, struct Page *page, uintptr_t la, uint32_t perm) {
-ffffffffc0201a3a:	ec26                	sd	s1,24(sp)
-ffffffffc0201a3c:	f406                	sd	ra,40(sp)
-ffffffffc0201a3e:	84b6                	mv	s1,a3
+ffffffffc0201a02:	ec26                	sd	s1,24(sp)
+ffffffffc0201a04:	f406                	sd	ra,40(sp)
+ffffffffc0201a06:	e84a                	sd	s2,16(sp)
+ffffffffc0201a08:	e44e                	sd	s3,8(sp)
+ffffffffc0201a0a:	e052                	sd	s4,0(sp)
+ffffffffc0201a0c:	84b6                	mv	s1,a3
     pte_t *ptep = get_pte(pgdir, la, 1);
-ffffffffc0201a40:	ccdff0ef          	jal	ffffffffc020170c <get_pte>
+ffffffffc0201a0e:	cffff0ef          	jal	ra,ffffffffc020170c <get_pte>
     if (ptep == NULL) {
-ffffffffc0201a44:	c975                	beqz	a0,ffffffffc0201b38 <page_insert+0x10a>
+ffffffffc0201a12:	cd71                	beqz	a0,ffffffffc0201aee <page_insert+0xf8>
     page->ref += 1;
-ffffffffc0201a46:	4014                	lw	a3,0(s0)
+ffffffffc0201a14:	4014                	lw	a3,0(s0)
         return -E_NO_MEM;
     }
     page_ref_inc(page);
     if (*ptep & PTE_V) {
-ffffffffc0201a48:	611c                	ld	a5,0(a0)
-ffffffffc0201a4a:	e44e                	sd	s3,8(sp)
-ffffffffc0201a4c:	0016871b          	addiw	a4,a3,1
-ffffffffc0201a50:	c018                	sw	a4,0(s0)
-ffffffffc0201a52:	0017f713          	andi	a4,a5,1
-ffffffffc0201a56:	89aa                	mv	s3,a0
-ffffffffc0201a58:	eb21                	bnez	a4,ffffffffc0201aa8 <page_insert+0x7a>
-    return &pages[PPN(pa) - nbase];
-ffffffffc0201a5a:	00010717          	auipc	a4,0x10
-ffffffffc0201a5e:	ae673703          	ld	a4,-1306(a4) # ffffffffc0211540 <pages>
+ffffffffc0201a16:	611c                	ld	a5,0(a0)
+ffffffffc0201a18:	89aa                	mv	s3,a0
+ffffffffc0201a1a:	0016871b          	addiw	a4,a3,1
+ffffffffc0201a1e:	c018                	sw	a4,0(s0)
+ffffffffc0201a20:	0017f713          	andi	a4,a5,1
+ffffffffc0201a24:	e331                	bnez	a4,ffffffffc0201a68 <page_insert+0x72>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0201a62:	f8e397b7          	lui	a5,0xf8e39
-ffffffffc0201a66:	e3978793          	addi	a5,a5,-455 # fffffffff8e38e39 <end+0x38c278c1>
-ffffffffc0201a6a:	07b2                	slli	a5,a5,0xc
-ffffffffc0201a6c:	e3978793          	addi	a5,a5,-455
-ffffffffc0201a70:	07b2                	slli	a5,a5,0xc
-ffffffffc0201a72:	e3978793          	addi	a5,a5,-455
-ffffffffc0201a76:	8c19                	sub	s0,s0,a4
-ffffffffc0201a78:	07b2                	slli	a5,a5,0xc
-ffffffffc0201a7a:	840d                	srai	s0,s0,0x3
-ffffffffc0201a7c:	e3978793          	addi	a5,a5,-455
-ffffffffc0201a80:	02f407b3          	mul	a5,s0,a5
-ffffffffc0201a84:	00080737          	lui	a4,0x80
-ffffffffc0201a88:	97ba                	add	a5,a5,a4
+ffffffffc0201a26:	00010797          	auipc	a5,0x10
+ffffffffc0201a2a:	b0a7b783          	ld	a5,-1270(a5) # ffffffffc0211530 <pages>
+ffffffffc0201a2e:	40f407b3          	sub	a5,s0,a5
+ffffffffc0201a32:	878d                	srai	a5,a5,0x3
+ffffffffc0201a34:	00005417          	auipc	s0,0x5
+ffffffffc0201a38:	88c43403          	ld	s0,-1908(s0) # ffffffffc02062c0 <error_string+0x38>
+ffffffffc0201a3c:	028787b3          	mul	a5,a5,s0
+ffffffffc0201a40:	00080437          	lui	s0,0x80
+ffffffffc0201a44:	97a2                	add	a5,a5,s0
     return (ppn << PTE_PPN_SHIFT) | PTE_V | type;
-ffffffffc0201a8a:	07aa                	slli	a5,a5,0xa
-ffffffffc0201a8c:	8cdd                	or	s1,s1,a5
-ffffffffc0201a8e:	0014e493          	ori	s1,s1,1
+ffffffffc0201a46:	07aa                	slli	a5,a5,0xa
+ffffffffc0201a48:	8cdd                	or	s1,s1,a5
+ffffffffc0201a4a:	0014e493          	ori	s1,s1,1
             page_ref_dec(page);
         } else {
             page_remove_pte(pgdir, la, ptep);
         }
     }
     *ptep = pte_create(page2ppn(page), PTE_V | perm);
-ffffffffc0201a92:	0099b023          	sd	s1,0(s3)
+ffffffffc0201a4e:	0099b023          	sd	s1,0(s3)
 static inline void flush_tlb() { asm volatile("sfence.vma"); }
-ffffffffc0201a96:	12000073          	sfence.vma
+ffffffffc0201a52:	12000073          	sfence.vma
     tlb_invalidate(pgdir, la);
     return 0;
-ffffffffc0201a9a:	69a2                	ld	s3,8(sp)
-ffffffffc0201a9c:	4501                	li	a0,0
+ffffffffc0201a56:	4501                	li	a0,0
 }
-ffffffffc0201a9e:	70a2                	ld	ra,40(sp)
-ffffffffc0201aa0:	7402                	ld	s0,32(sp)
-ffffffffc0201aa2:	64e2                	ld	s1,24(sp)
-ffffffffc0201aa4:	6145                	addi	sp,sp,48
-ffffffffc0201aa6:	8082                	ret
+ffffffffc0201a58:	70a2                	ld	ra,40(sp)
+ffffffffc0201a5a:	7402                	ld	s0,32(sp)
+ffffffffc0201a5c:	64e2                	ld	s1,24(sp)
+ffffffffc0201a5e:	6942                	ld	s2,16(sp)
+ffffffffc0201a60:	69a2                	ld	s3,8(sp)
+ffffffffc0201a62:	6a02                	ld	s4,0(sp)
+ffffffffc0201a64:	6145                	addi	sp,sp,48
+ffffffffc0201a66:	8082                	ret
     return pa2page(PTE_ADDR(pte));
-ffffffffc0201aa8:	078a                	slli	a5,a5,0x2
-ffffffffc0201aaa:	e84a                	sd	s2,16(sp)
-ffffffffc0201aac:	e052                	sd	s4,0(sp)
-ffffffffc0201aae:	83b1                	srli	a5,a5,0xc
+ffffffffc0201a68:	00279713          	slli	a4,a5,0x2
+ffffffffc0201a6c:	8331                	srli	a4,a4,0xc
     if (PPN(pa) >= npage) {
-ffffffffc0201ab0:	00010717          	auipc	a4,0x10
-ffffffffc0201ab4:	a8873703          	ld	a4,-1400(a4) # ffffffffc0211538 <npage>
-ffffffffc0201ab8:	08e7f263          	bgeu	a5,a4,ffffffffc0201b3c <page_insert+0x10e>
+ffffffffc0201a6e:	00010797          	auipc	a5,0x10
+ffffffffc0201a72:	aba7b783          	ld	a5,-1350(a5) # ffffffffc0211528 <npage>
+ffffffffc0201a76:	06f77e63          	bgeu	a4,a5,ffffffffc0201af2 <page_insert+0xfc>
     return &pages[PPN(pa) - nbase];
-ffffffffc0201abc:	fff80737          	lui	a4,0xfff80
-ffffffffc0201ac0:	97ba                	add	a5,a5,a4
-ffffffffc0201ac2:	00010a17          	auipc	s4,0x10
-ffffffffc0201ac6:	a7ea0a13          	addi	s4,s4,-1410 # ffffffffc0211540 <pages>
-ffffffffc0201aca:	000a3703          	ld	a4,0(s4)
-ffffffffc0201ace:	00379913          	slli	s2,a5,0x3
-ffffffffc0201ad2:	993e                	add	s2,s2,a5
-ffffffffc0201ad4:	090e                	slli	s2,s2,0x3
-ffffffffc0201ad6:	993a                	add	s2,s2,a4
+ffffffffc0201a7a:	fff807b7          	lui	a5,0xfff80
+ffffffffc0201a7e:	973e                	add	a4,a4,a5
+ffffffffc0201a80:	00010a17          	auipc	s4,0x10
+ffffffffc0201a84:	ab0a0a13          	addi	s4,s4,-1360 # ffffffffc0211530 <pages>
+ffffffffc0201a88:	000a3783          	ld	a5,0(s4)
+ffffffffc0201a8c:	00371913          	slli	s2,a4,0x3
+ffffffffc0201a90:	993a                	add	s2,s2,a4
+ffffffffc0201a92:	090e                	slli	s2,s2,0x3
+ffffffffc0201a94:	993e                	add	s2,s2,a5
         if (p == page) {
-ffffffffc0201ad8:	03240263          	beq	s0,s2,ffffffffc0201afc <page_insert+0xce>
+ffffffffc0201a96:	03240063          	beq	s0,s2,ffffffffc0201ab6 <page_insert+0xc0>
     page->ref -= 1;
-ffffffffc0201adc:	00092783          	lw	a5,0(s2)
-ffffffffc0201ae0:	fff7871b          	addiw	a4,a5,-1
-ffffffffc0201ae4:	00e92023          	sw	a4,0(s2)
+ffffffffc0201a9a:	00092783          	lw	a5,0(s2)
+ffffffffc0201a9e:	fff7871b          	addiw	a4,a5,-1
+ffffffffc0201aa2:	00e92023          	sw	a4,0(s2)
         if (page_ref(page) ==
-ffffffffc0201ae8:	cf11                	beqz	a4,ffffffffc0201b04 <page_insert+0xd6>
+ffffffffc0201aa6:	cb11                	beqz	a4,ffffffffc0201aba <page_insert+0xc4>
         *ptep = 0;                  //(5) clear second page table entry
-ffffffffc0201aea:	0009b023          	sd	zero,0(s3)
+ffffffffc0201aa8:	0009b023          	sd	zero,0(s3)
 static inline void flush_tlb() { asm volatile("sfence.vma"); }
-ffffffffc0201aee:	12000073          	sfence.vma
+ffffffffc0201aac:	12000073          	sfence.vma
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0201af2:	000a3703          	ld	a4,0(s4)
-ffffffffc0201af6:	6942                	ld	s2,16(sp)
-ffffffffc0201af8:	6a02                	ld	s4,0(sp)
+ffffffffc0201ab0:	000a3783          	ld	a5,0(s4)
 }
-ffffffffc0201afa:	b7a5                	j	ffffffffc0201a62 <page_insert+0x34>
-    return page->ref;
-ffffffffc0201afc:	6942                	ld	s2,16(sp)
-ffffffffc0201afe:	6a02                	ld	s4,0(sp)
+ffffffffc0201ab4:	bfad                	j	ffffffffc0201a2e <page_insert+0x38>
     page->ref -= 1;
-ffffffffc0201b00:	c014                	sw	a3,0(s0)
+ffffffffc0201ab6:	c014                	sw	a3,0(s0)
     return page->ref;
-ffffffffc0201b02:	b785                	j	ffffffffc0201a62 <page_insert+0x34>
+ffffffffc0201ab8:	bf9d                	j	ffffffffc0201a2e <page_insert+0x38>
     if (read_csr(sstatus) & SSTATUS_SIE) {
-ffffffffc0201b04:	100027f3          	csrr	a5,sstatus
-ffffffffc0201b08:	8b89                	andi	a5,a5,2
-ffffffffc0201b0a:	eb91                	bnez	a5,ffffffffc0201b1e <page_insert+0xf0>
+ffffffffc0201aba:	100027f3          	csrr	a5,sstatus
+ffffffffc0201abe:	8b89                	andi	a5,a5,2
+ffffffffc0201ac0:	eb91                	bnez	a5,ffffffffc0201ad4 <page_insert+0xde>
     { pmm_manager->free_pages(base, n); }
-ffffffffc0201b0c:	00010797          	auipc	a5,0x10
-ffffffffc0201b10:	a0c7b783          	ld	a5,-1524(a5) # ffffffffc0211518 <pmm_manager>
-ffffffffc0201b14:	739c                	ld	a5,32(a5)
-ffffffffc0201b16:	4585                	li	a1,1
-ffffffffc0201b18:	854a                	mv	a0,s2
-ffffffffc0201b1a:	9782                	jalr	a5
+ffffffffc0201ac2:	00010797          	auipc	a5,0x10
+ffffffffc0201ac6:	a767b783          	ld	a5,-1418(a5) # ffffffffc0211538 <pmm_manager>
+ffffffffc0201aca:	739c                	ld	a5,32(a5)
+ffffffffc0201acc:	4585                	li	a1,1
+ffffffffc0201ace:	854a                	mv	a0,s2
+ffffffffc0201ad0:	9782                	jalr	a5
     if (flag) {
-ffffffffc0201b1c:	b7f9                	j	ffffffffc0201aea <page_insert+0xbc>
+ffffffffc0201ad2:	bfd9                	j	ffffffffc0201aa8 <page_insert+0xb2>
         intr_disable();
-ffffffffc0201b1e:	9bffe0ef          	jal	ffffffffc02004dc <intr_disable>
-ffffffffc0201b22:	00010797          	auipc	a5,0x10
-ffffffffc0201b26:	9f67b783          	ld	a5,-1546(a5) # ffffffffc0211518 <pmm_manager>
-ffffffffc0201b2a:	739c                	ld	a5,32(a5)
-ffffffffc0201b2c:	4585                	li	a1,1
-ffffffffc0201b2e:	854a                	mv	a0,s2
-ffffffffc0201b30:	9782                	jalr	a5
+ffffffffc0201ad4:	a1bfe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+ffffffffc0201ad8:	00010797          	auipc	a5,0x10
+ffffffffc0201adc:	a607b783          	ld	a5,-1440(a5) # ffffffffc0211538 <pmm_manager>
+ffffffffc0201ae0:	739c                	ld	a5,32(a5)
+ffffffffc0201ae2:	4585                	li	a1,1
+ffffffffc0201ae4:	854a                	mv	a0,s2
+ffffffffc0201ae6:	9782                	jalr	a5
         intr_enable();
-ffffffffc0201b32:	9a5fe0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc0201b36:	bf55                	j	ffffffffc0201aea <page_insert+0xbc>
+ffffffffc0201ae8:	a01fe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc0201aec:	bf75                	j	ffffffffc0201aa8 <page_insert+0xb2>
         return -E_NO_MEM;
-ffffffffc0201b38:	5571                	li	a0,-4
-ffffffffc0201b3a:	b795                	j	ffffffffc0201a9e <page_insert+0x70>
-ffffffffc0201b3c:	a8fff0ef          	jal	ffffffffc02015ca <pa2page.part.0>
+ffffffffc0201aee:	5571                	li	a0,-4
+ffffffffc0201af0:	b7a5                	j	ffffffffc0201a58 <page_insert+0x62>
+ffffffffc0201af2:	ad7ff0ef          	jal	ra,ffffffffc02015c8 <pa2page.part.0>
 
-ffffffffc0201b40 <pmm_init>:
+ffffffffc0201af6 <pmm_init>:
     pmm_manager = &default_pmm_manager;
-ffffffffc0201b40:	00004797          	auipc	a5,0x4
-ffffffffc0201b44:	69878793          	addi	a5,a5,1688 # ffffffffc02061d8 <default_pmm_manager>
+ffffffffc0201af6:	00003797          	auipc	a5,0x3
+ffffffffc0201afa:	6ba78793          	addi	a5,a5,1722 # ffffffffc02051b0 <default_pmm_manager>
     cprintf("memory management: %s\n", pmm_manager->name);
-ffffffffc0201b48:	638c                	ld	a1,0(a5)
+ffffffffc0201afe:	638c                	ld	a1,0(a5)
 void pmm_init(void) {
-ffffffffc0201b4a:	7159                	addi	sp,sp,-112
-ffffffffc0201b4c:	f486                	sd	ra,104(sp)
-ffffffffc0201b4e:	eca6                	sd	s1,88(sp)
-ffffffffc0201b50:	e4ce                	sd	s3,72(sp)
-ffffffffc0201b52:	f85a                	sd	s6,48(sp)
-ffffffffc0201b54:	f45e                	sd	s7,40(sp)
-ffffffffc0201b56:	f0a2                	sd	s0,96(sp)
-ffffffffc0201b58:	e8ca                	sd	s2,80(sp)
-ffffffffc0201b5a:	e0d2                	sd	s4,64(sp)
-ffffffffc0201b5c:	fc56                	sd	s5,56(sp)
-ffffffffc0201b5e:	f062                	sd	s8,32(sp)
-ffffffffc0201b60:	ec66                	sd	s9,24(sp)
-    pmm_manager = &default_pmm_manager;
-ffffffffc0201b62:	00010b97          	auipc	s7,0x10
-ffffffffc0201b66:	9b6b8b93          	addi	s7,s7,-1610 # ffffffffc0211518 <pmm_manager>
+ffffffffc0201b00:	7159                	addi	sp,sp,-112
+ffffffffc0201b02:	f45e                	sd	s7,40(sp)
     cprintf("memory management: %s\n", pmm_manager->name);
-ffffffffc0201b6a:	00003517          	auipc	a0,0x3
-ffffffffc0201b6e:	6fe50513          	addi	a0,a0,1790 # ffffffffc0205268 <etext+0xd18>
+ffffffffc0201b04:	00003517          	auipc	a0,0x3
+ffffffffc0201b08:	77450513          	addi	a0,a0,1908 # ffffffffc0205278 <default_pmm_manager+0xc8>
     pmm_manager = &default_pmm_manager;
-ffffffffc0201b72:	00fbb023          	sd	a5,0(s7)
+ffffffffc0201b0c:	00010b97          	auipc	s7,0x10
+ffffffffc0201b10:	a2cb8b93          	addi	s7,s7,-1492 # ffffffffc0211538 <pmm_manager>
+void pmm_init(void) {
+ffffffffc0201b14:	f486                	sd	ra,104(sp)
+ffffffffc0201b16:	f0a2                	sd	s0,96(sp)
+ffffffffc0201b18:	eca6                	sd	s1,88(sp)
+ffffffffc0201b1a:	e8ca                	sd	s2,80(sp)
+ffffffffc0201b1c:	e4ce                	sd	s3,72(sp)
+ffffffffc0201b1e:	f85a                	sd	s6,48(sp)
+    pmm_manager = &default_pmm_manager;
+ffffffffc0201b20:	00fbb023          	sd	a5,0(s7)
+void pmm_init(void) {
+ffffffffc0201b24:	e0d2                	sd	s4,64(sp)
+ffffffffc0201b26:	fc56                	sd	s5,56(sp)
+ffffffffc0201b28:	f062                	sd	s8,32(sp)
+ffffffffc0201b2a:	ec66                	sd	s9,24(sp)
+ffffffffc0201b2c:	e86a                	sd	s10,16(sp)
     cprintf("memory management: %s\n", pmm_manager->name);
-ffffffffc0201b76:	d44fe0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0201b2e:	d8cfe0ef          	jal	ra,ffffffffc02000ba <cprintf>
     pmm_manager->init();
-ffffffffc0201b7a:	000bb783          	ld	a5,0(s7)
+ffffffffc0201b32:	000bb783          	ld	a5,0(s7)
+    cprintf("membegin %llx memend %llx mem_size %llx\n",mem_begin, mem_end, mem_size);
+ffffffffc0201b36:	4445                	li	s0,17
+ffffffffc0201b38:	40100913          	li	s2,1025
+    pmm_manager->init();
+ffffffffc0201b3c:	679c                	ld	a5,8(a5)
     va_pa_offset = KERNBASE - 0x80200000;
-ffffffffc0201b7e:	00010997          	auipc	s3,0x10
-ffffffffc0201b82:	9b298993          	addi	s3,s3,-1614 # ffffffffc0211530 <va_pa_offset>
+ffffffffc0201b3e:	00010997          	auipc	s3,0x10
+ffffffffc0201b42:	a0298993          	addi	s3,s3,-1534 # ffffffffc0211540 <va_pa_offset>
     npage = maxpa / PGSIZE;
-ffffffffc0201b86:	00010497          	auipc	s1,0x10
-ffffffffc0201b8a:	9b248493          	addi	s1,s1,-1614 # ffffffffc0211538 <npage>
+ffffffffc0201b46:	00010497          	auipc	s1,0x10
+ffffffffc0201b4a:	9e248493          	addi	s1,s1,-1566 # ffffffffc0211528 <npage>
     pmm_manager->init();
-ffffffffc0201b8e:	679c                	ld	a5,8(a5)
-    pages = (struct Page *)ROUNDUP((void *)end, PGSIZE);
-ffffffffc0201b90:	00010b17          	auipc	s6,0x10
-ffffffffc0201b94:	9b0b0b13          	addi	s6,s6,-1616 # ffffffffc0211540 <pages>
-    pmm_manager->init();
-ffffffffc0201b98:	9782                	jalr	a5
+ffffffffc0201b4e:	9782                	jalr	a5
     va_pa_offset = KERNBASE - 0x80200000;
-ffffffffc0201b9a:	57f5                	li	a5,-3
+ffffffffc0201b50:	57f5                	li	a5,-3
+ffffffffc0201b52:	07fa                	slli	a5,a5,0x1e
     cprintf("membegin %llx memend %llx mem_size %llx\n",mem_begin, mem_end, mem_size);
-ffffffffc0201b9c:	4645                	li	a2,17
-ffffffffc0201b9e:	40100593          	li	a1,1025
+ffffffffc0201b54:	07e006b7          	lui	a3,0x7e00
+ffffffffc0201b58:	01b41613          	slli	a2,s0,0x1b
+ffffffffc0201b5c:	01591593          	slli	a1,s2,0x15
+ffffffffc0201b60:	00003517          	auipc	a0,0x3
+ffffffffc0201b64:	73050513          	addi	a0,a0,1840 # ffffffffc0205290 <default_pmm_manager+0xe0>
     va_pa_offset = KERNBASE - 0x80200000;
-ffffffffc0201ba2:	07fa                	slli	a5,a5,0x1e
+ffffffffc0201b68:	00f9b023          	sd	a5,0(s3)
     cprintf("membegin %llx memend %llx mem_size %llx\n",mem_begin, mem_end, mem_size);
-ffffffffc0201ba4:	07e006b7          	lui	a3,0x7e00
-ffffffffc0201ba8:	066e                	slli	a2,a2,0x1b
-ffffffffc0201baa:	05d6                	slli	a1,a1,0x15
-ffffffffc0201bac:	00003517          	auipc	a0,0x3
-ffffffffc0201bb0:	6d450513          	addi	a0,a0,1748 # ffffffffc0205280 <etext+0xd30>
-    va_pa_offset = KERNBASE - 0x80200000;
-ffffffffc0201bb4:	00f9b023          	sd	a5,0(s3)
-    cprintf("membegin %llx memend %llx mem_size %llx\n",mem_begin, mem_end, mem_size);
-ffffffffc0201bb8:	d02fe0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0201b6c:	d4efe0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("physcial memory map:\n");
-ffffffffc0201bbc:	00003517          	auipc	a0,0x3
-ffffffffc0201bc0:	6f450513          	addi	a0,a0,1780 # ffffffffc02052b0 <etext+0xd60>
-ffffffffc0201bc4:	cf6fe0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0201b70:	00003517          	auipc	a0,0x3
+ffffffffc0201b74:	75050513          	addi	a0,a0,1872 # ffffffffc02052c0 <default_pmm_manager+0x110>
+ffffffffc0201b78:	d42fe0ef          	jal	ra,ffffffffc02000ba <cprintf>
     cprintf("  memory: 0x%08lx, [0x%08lx, 0x%08lx].\n", mem_size, mem_begin,
-ffffffffc0201bc8:	46c5                	li	a3,17
-ffffffffc0201bca:	06ee                	slli	a3,a3,0x1b
-ffffffffc0201bcc:	40100613          	li	a2,1025
-ffffffffc0201bd0:	16fd                	addi	a3,a3,-1 # 7dfffff <kern_entry-0xffffffffb8400001>
-ffffffffc0201bd2:	0656                	slli	a2,a2,0x15
-ffffffffc0201bd4:	07e005b7          	lui	a1,0x7e00
-ffffffffc0201bd8:	00003517          	auipc	a0,0x3
-ffffffffc0201bdc:	6f050513          	addi	a0,a0,1776 # ffffffffc02052c8 <etext+0xd78>
-ffffffffc0201be0:	cdafe0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0201b7c:	01b41693          	slli	a3,s0,0x1b
+ffffffffc0201b80:	16fd                	addi	a3,a3,-1
+ffffffffc0201b82:	07e005b7          	lui	a1,0x7e00
+ffffffffc0201b86:	01591613          	slli	a2,s2,0x15
+ffffffffc0201b8a:	00003517          	auipc	a0,0x3
+ffffffffc0201b8e:	74e50513          	addi	a0,a0,1870 # ffffffffc02052d8 <default_pmm_manager+0x128>
+ffffffffc0201b92:	d28fe0ef          	jal	ra,ffffffffc02000ba <cprintf>
     pages = (struct Page *)ROUNDUP((void *)end, PGSIZE);
-ffffffffc0201be4:	777d                	lui	a4,0xfffff
-ffffffffc0201be6:	00011797          	auipc	a5,0x11
-ffffffffc0201bea:	99178793          	addi	a5,a5,-1647 # ffffffffc0212577 <end+0xfff>
-ffffffffc0201bee:	8ff9                	and	a5,a5,a4
+ffffffffc0201b96:	777d                	lui	a4,0xfffff
+ffffffffc0201b98:	00011797          	auipc	a5,0x11
+ffffffffc0201b9c:	9db78793          	addi	a5,a5,-1573 # ffffffffc0212573 <end+0xfff>
+ffffffffc0201ba0:	8ff9                	and	a5,a5,a4
+ffffffffc0201ba2:	00010b17          	auipc	s6,0x10
+ffffffffc0201ba6:	98eb0b13          	addi	s6,s6,-1650 # ffffffffc0211530 <pages>
     npage = maxpa / PGSIZE;
-ffffffffc0201bf0:	00088737          	lui	a4,0x88
-ffffffffc0201bf4:	e098                	sd	a4,0(s1)
+ffffffffc0201baa:	00088737          	lui	a4,0x88
+ffffffffc0201bae:	e098                	sd	a4,0(s1)
     pages = (struct Page *)ROUNDUP((void *)end, PGSIZE);
-ffffffffc0201bf6:	00fb3023          	sd	a5,0(s6)
-ffffffffc0201bfa:	4705                	li	a4,1
-ffffffffc0201bfc:	07a1                	addi	a5,a5,8
-ffffffffc0201bfe:	40e7b02f          	amoor.d	zero,a4,(a5)
+ffffffffc0201bb0:	00fb3023          	sd	a5,0(s6)
+ffffffffc0201bb4:	4681                	li	a3,0
     for (size_t i = 0; i < npage - nbase; i++) {
-ffffffffc0201c02:	04800693          	li	a3,72
-ffffffffc0201c06:	4505                	li	a0,1
-ffffffffc0201c08:	fff805b7          	lui	a1,0xfff80
+ffffffffc0201bb6:	4701                	li	a4,0
+ffffffffc0201bb8:	4505                	li	a0,1
+ffffffffc0201bba:	fff805b7          	lui	a1,0xfff80
+ffffffffc0201bbe:	a019                	j	ffffffffc0201bc4 <pmm_init+0xce>
         SetPageReserved(pages + i);
-ffffffffc0201c0c:	000b3783          	ld	a5,0(s6)
-ffffffffc0201c10:	97b6                	add	a5,a5,a3
-ffffffffc0201c12:	07a1                	addi	a5,a5,8
-ffffffffc0201c14:	40a7b02f          	amoor.d	zero,a0,(a5)
+ffffffffc0201bc0:	000b3783          	ld	a5,0(s6)
+ffffffffc0201bc4:	97b6                	add	a5,a5,a3
+ffffffffc0201bc6:	07a1                	addi	a5,a5,8
+ffffffffc0201bc8:	40a7b02f          	amoor.d	zero,a0,(a5)
     for (size_t i = 0; i < npage - nbase; i++) {
-ffffffffc0201c18:	609c                	ld	a5,0(s1)
-ffffffffc0201c1a:	0705                	addi	a4,a4,1 # 88001 <kern_entry-0xffffffffc0177fff>
-ffffffffc0201c1c:	04868693          	addi	a3,a3,72
-ffffffffc0201c20:	00b78633          	add	a2,a5,a1
-ffffffffc0201c24:	fec764e3          	bltu	a4,a2,ffffffffc0201c0c <pmm_init+0xcc>
+ffffffffc0201bcc:	609c                	ld	a5,0(s1)
+ffffffffc0201bce:	0705                	addi	a4,a4,1
+ffffffffc0201bd0:	04868693          	addi	a3,a3,72 # 7e00048 <kern_entry-0xffffffffb83fffb8>
+ffffffffc0201bd4:	00b78633          	add	a2,a5,a1
+ffffffffc0201bd8:	fec764e3          	bltu	a4,a2,ffffffffc0201bc0 <pmm_init+0xca>
     uintptr_t freemem = PADDR((uintptr_t)pages + sizeof(struct Page) * (npage - nbase));
-ffffffffc0201c28:	000b3503          	ld	a0,0(s6)
-ffffffffc0201c2c:	00379693          	slli	a3,a5,0x3
-ffffffffc0201c30:	96be                	add	a3,a3,a5
-ffffffffc0201c32:	fdc00737          	lui	a4,0xfdc00
-ffffffffc0201c36:	972a                	add	a4,a4,a0
-ffffffffc0201c38:	068e                	slli	a3,a3,0x3
-ffffffffc0201c3a:	96ba                	add	a3,a3,a4
-ffffffffc0201c3c:	c0200737          	lui	a4,0xc0200
-ffffffffc0201c40:	68e6e563          	bltu	a3,a4,ffffffffc02022ca <pmm_init+0x78a>
-ffffffffc0201c44:	0009b703          	ld	a4,0(s3)
+ffffffffc0201bdc:	000b3503          	ld	a0,0(s6)
+ffffffffc0201be0:	00379693          	slli	a3,a5,0x3
+ffffffffc0201be4:	96be                	add	a3,a3,a5
+ffffffffc0201be6:	fdc00737          	lui	a4,0xfdc00
+ffffffffc0201bea:	972a                	add	a4,a4,a0
+ffffffffc0201bec:	068e                	slli	a3,a3,0x3
+ffffffffc0201bee:	96ba                	add	a3,a3,a4
+ffffffffc0201bf0:	c0200737          	lui	a4,0xc0200
+ffffffffc0201bf4:	64e6e463          	bltu	a3,a4,ffffffffc020223c <pmm_init+0x746>
+ffffffffc0201bf8:	0009b703          	ld	a4,0(s3)
     if (freemem < mem_end) {
-ffffffffc0201c48:	4645                	li	a2,17
-ffffffffc0201c4a:	066e                	slli	a2,a2,0x1b
+ffffffffc0201bfc:	4645                	li	a2,17
+ffffffffc0201bfe:	066e                	slli	a2,a2,0x1b
     uintptr_t freemem = PADDR((uintptr_t)pages + sizeof(struct Page) * (npage - nbase));
-ffffffffc0201c4c:	8e99                	sub	a3,a3,a4
+ffffffffc0201c00:	8e99                	sub	a3,a3,a4
     if (freemem < mem_end) {
-ffffffffc0201c4e:	50c6e363          	bltu	a3,a2,ffffffffc0202154 <pmm_init+0x614>
+ffffffffc0201c02:	4ec6e263          	bltu	a3,a2,ffffffffc02020e6 <pmm_init+0x5f0>
 
     return page;
 }
 
 static void check_alloc_page(void) {
     pmm_manager->check();
-ffffffffc0201c52:	000bb783          	ld	a5,0(s7)
+ffffffffc0201c06:	000bb783          	ld	a5,0(s7)
     boot_pgdir = (pte_t*)boot_page_table_sv39;
-ffffffffc0201c56:	00010917          	auipc	s2,0x10
-ffffffffc0201c5a:	8d290913          	addi	s2,s2,-1838 # ffffffffc0211528 <boot_pgdir>
+ffffffffc0201c0a:	00010917          	auipc	s2,0x10
+ffffffffc0201c0e:	91690913          	addi	s2,s2,-1770 # ffffffffc0211520 <boot_pgdir>
     pmm_manager->check();
-ffffffffc0201c5e:	7b9c                	ld	a5,48(a5)
-ffffffffc0201c60:	9782                	jalr	a5
+ffffffffc0201c12:	7b9c                	ld	a5,48(a5)
+ffffffffc0201c14:	9782                	jalr	a5
     cprintf("check_alloc_page() succeeded!\n");
-ffffffffc0201c62:	00003517          	auipc	a0,0x3
-ffffffffc0201c66:	6b650513          	addi	a0,a0,1718 # ffffffffc0205318 <etext+0xdc8>
-ffffffffc0201c6a:	c50fe0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0201c16:	00003517          	auipc	a0,0x3
+ffffffffc0201c1a:	71250513          	addi	a0,a0,1810 # ffffffffc0205328 <default_pmm_manager+0x178>
+ffffffffc0201c1e:	c9cfe0ef          	jal	ra,ffffffffc02000ba <cprintf>
     boot_pgdir = (pte_t*)boot_page_table_sv39;
-ffffffffc0201c6e:	00007697          	auipc	a3,0x7
-ffffffffc0201c72:	39268693          	addi	a3,a3,914 # ffffffffc0209000 <boot_page_table_sv39>
-ffffffffc0201c76:	00d93023          	sd	a3,0(s2)
+ffffffffc0201c22:	00007697          	auipc	a3,0x7
+ffffffffc0201c26:	3de68693          	addi	a3,a3,990 # ffffffffc0209000 <boot_page_table_sv39>
+ffffffffc0201c2a:	00d93023          	sd	a3,0(s2)
     boot_cr3 = PADDR(boot_pgdir);
-ffffffffc0201c7a:	c02007b7          	lui	a5,0xc0200
-ffffffffc0201c7e:	22f6eee3          	bltu	a3,a5,ffffffffc02026ba <pmm_init+0xb7a>
-ffffffffc0201c82:	0009b783          	ld	a5,0(s3)
-ffffffffc0201c86:	8e9d                	sub	a3,a3,a5
-ffffffffc0201c88:	00010797          	auipc	a5,0x10
-ffffffffc0201c8c:	88d7bc23          	sd	a3,-1896(a5) # ffffffffc0211520 <boot_cr3>
+ffffffffc0201c2e:	c02007b7          	lui	a5,0xc0200
+ffffffffc0201c32:	62f6e163          	bltu	a3,a5,ffffffffc0202254 <pmm_init+0x75e>
+ffffffffc0201c36:	0009b783          	ld	a5,0(s3)
+ffffffffc0201c3a:	8e9d                	sub	a3,a3,a5
+ffffffffc0201c3c:	00010797          	auipc	a5,0x10
+ffffffffc0201c40:	8cd7be23          	sd	a3,-1828(a5) # ffffffffc0211518 <boot_cr3>
     if (read_csr(sstatus) & SSTATUS_SIE) {
-ffffffffc0201c90:	100027f3          	csrr	a5,sstatus
-ffffffffc0201c94:	8b89                	andi	a5,a5,2
-ffffffffc0201c96:	4e079863          	bnez	a5,ffffffffc0202186 <pmm_init+0x646>
+ffffffffc0201c44:	100027f3          	csrr	a5,sstatus
+ffffffffc0201c48:	8b89                	andi	a5,a5,2
+ffffffffc0201c4a:	4c079763          	bnez	a5,ffffffffc0202118 <pmm_init+0x622>
     { ret = pmm_manager->nr_free_pages(); }
-ffffffffc0201c9a:	000bb783          	ld	a5,0(s7)
-ffffffffc0201c9e:	779c                	ld	a5,40(a5)
-ffffffffc0201ca0:	9782                	jalr	a5
-ffffffffc0201ca2:	842a                	mv	s0,a0
+ffffffffc0201c4e:	000bb783          	ld	a5,0(s7)
+ffffffffc0201c52:	779c                	ld	a5,40(a5)
+ffffffffc0201c54:	9782                	jalr	a5
+ffffffffc0201c56:	842a                	mv	s0,a0
     // so npage is always larger than KMEMSIZE / PGSIZE
     size_t nr_free_store;
 
     nr_free_store=nr_free_pages();
 
     assert(npage <= KERNTOP / PGSIZE);
-ffffffffc0201ca4:	6098                	ld	a4,0(s1)
-ffffffffc0201ca6:	c80007b7          	lui	a5,0xc8000
-ffffffffc0201caa:	83b1                	srli	a5,a5,0xc
-ffffffffc0201cac:	66e7eb63          	bltu	a5,a4,ffffffffc0202322 <pmm_init+0x7e2>
+ffffffffc0201c58:	6098                	ld	a4,0(s1)
+ffffffffc0201c5a:	c80007b7          	lui	a5,0xc8000
+ffffffffc0201c5e:	83b1                	srli	a5,a5,0xc
+ffffffffc0201c60:	62e7e663          	bltu	a5,a4,ffffffffc020228c <pmm_init+0x796>
     assert(boot_pgdir != NULL && (uint32_t)PGOFF(boot_pgdir) == 0);
-ffffffffc0201cb0:	00093503          	ld	a0,0(s2)
-ffffffffc0201cb4:	64050763          	beqz	a0,ffffffffc0202302 <pmm_init+0x7c2>
-ffffffffc0201cb8:	03451793          	slli	a5,a0,0x34
-ffffffffc0201cbc:	64079363          	bnez	a5,ffffffffc0202302 <pmm_init+0x7c2>
+ffffffffc0201c64:	00093503          	ld	a0,0(s2)
+ffffffffc0201c68:	60050263          	beqz	a0,ffffffffc020226c <pmm_init+0x776>
+ffffffffc0201c6c:	03451793          	slli	a5,a0,0x34
+ffffffffc0201c70:	5e079e63          	bnez	a5,ffffffffc020226c <pmm_init+0x776>
     assert(get_page(boot_pgdir, 0x0, NULL) == NULL);
-ffffffffc0201cc0:	4601                	li	a2,0
-ffffffffc0201cc2:	4581                	li	a1,0
-ffffffffc0201cc4:	c77ff0ef          	jal	ffffffffc020193a <get_page>
-ffffffffc0201cc8:	6a051f63          	bnez	a0,ffffffffc0202386 <pmm_init+0x846>
+ffffffffc0201c74:	4601                	li	a2,0
+ffffffffc0201c76:	4581                	li	a1,0
+ffffffffc0201c78:	c8bff0ef          	jal	ra,ffffffffc0201902 <get_page>
+ffffffffc0201c7c:	66051a63          	bnez	a0,ffffffffc02022f0 <pmm_init+0x7fa>
 
     struct Page *p1, *p2;
     p1 = alloc_page();
-ffffffffc0201ccc:	4505                	li	a0,1
-ffffffffc0201cce:	935ff0ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0201cd2:	8a2a                	mv	s4,a0
+ffffffffc0201c80:	4505                	li	a0,1
+ffffffffc0201c82:	97fff0ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0201c86:	8a2a                	mv	s4,a0
     assert(page_insert(boot_pgdir, p1, 0x0, 0) == 0);
-ffffffffc0201cd4:	00093503          	ld	a0,0(s2)
-ffffffffc0201cd8:	4681                	li	a3,0
-ffffffffc0201cda:	4601                	li	a2,0
-ffffffffc0201cdc:	85d2                	mv	a1,s4
-ffffffffc0201cde:	d51ff0ef          	jal	ffffffffc0201a2e <page_insert>
-ffffffffc0201ce2:	68051263          	bnez	a0,ffffffffc0202366 <pmm_init+0x826>
+ffffffffc0201c88:	00093503          	ld	a0,0(s2)
+ffffffffc0201c8c:	4681                	li	a3,0
+ffffffffc0201c8e:	4601                	li	a2,0
+ffffffffc0201c90:	85d2                	mv	a1,s4
+ffffffffc0201c92:	d65ff0ef          	jal	ra,ffffffffc02019f6 <page_insert>
+ffffffffc0201c96:	62051d63          	bnez	a0,ffffffffc02022d0 <pmm_init+0x7da>
     pte_t *ptep;
     assert((ptep = get_pte(boot_pgdir, 0x0, 0)) != NULL);
-ffffffffc0201ce6:	00093503          	ld	a0,0(s2)
-ffffffffc0201cea:	4601                	li	a2,0
-ffffffffc0201cec:	4581                	li	a1,0
-ffffffffc0201cee:	a1fff0ef          	jal	ffffffffc020170c <get_pte>
-ffffffffc0201cf2:	64050a63          	beqz	a0,ffffffffc0202346 <pmm_init+0x806>
+ffffffffc0201c9a:	00093503          	ld	a0,0(s2)
+ffffffffc0201c9e:	4601                	li	a2,0
+ffffffffc0201ca0:	4581                	li	a1,0
+ffffffffc0201ca2:	a6bff0ef          	jal	ra,ffffffffc020170c <get_pte>
+ffffffffc0201ca6:	60050563          	beqz	a0,ffffffffc02022b0 <pmm_init+0x7ba>
     assert(pte2page(*ptep) == p1);
-ffffffffc0201cf6:	611c                	ld	a5,0(a0)
+ffffffffc0201caa:	611c                	ld	a5,0(a0)
     if (!(pte & PTE_V)) {
-ffffffffc0201cf8:	0017f713          	andi	a4,a5,1
-ffffffffc0201cfc:	64070363          	beqz	a4,ffffffffc0202342 <pmm_init+0x802>
+ffffffffc0201cac:	0017f713          	andi	a4,a5,1
+ffffffffc0201cb0:	5e070e63          	beqz	a4,ffffffffc02022ac <pmm_init+0x7b6>
     if (PPN(pa) >= npage) {
-ffffffffc0201d00:	6090                	ld	a2,0(s1)
+ffffffffc0201cb4:	6090                	ld	a2,0(s1)
     return pa2page(PTE_ADDR(pte));
-ffffffffc0201d02:	078a                	slli	a5,a5,0x2
-ffffffffc0201d04:	83b1                	srli	a5,a5,0xc
+ffffffffc0201cb6:	078a                	slli	a5,a5,0x2
+ffffffffc0201cb8:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc0201d06:	5ac7f063          	bgeu	a5,a2,ffffffffc02022a6 <pmm_init+0x766>
+ffffffffc0201cba:	56c7ff63          	bgeu	a5,a2,ffffffffc0202238 <pmm_init+0x742>
     return &pages[PPN(pa) - nbase];
-ffffffffc0201d0a:	fff80737          	lui	a4,0xfff80
-ffffffffc0201d0e:	97ba                	add	a5,a5,a4
-ffffffffc0201d10:	000b3683          	ld	a3,0(s6)
-ffffffffc0201d14:	00379713          	slli	a4,a5,0x3
-ffffffffc0201d18:	97ba                	add	a5,a5,a4
-ffffffffc0201d1a:	078e                	slli	a5,a5,0x3
-ffffffffc0201d1c:	97b6                	add	a5,a5,a3
-ffffffffc0201d1e:	58fa1663          	bne	s4,a5,ffffffffc02022aa <pmm_init+0x76a>
+ffffffffc0201cbe:	fff80737          	lui	a4,0xfff80
+ffffffffc0201cc2:	97ba                	add	a5,a5,a4
+ffffffffc0201cc4:	000b3683          	ld	a3,0(s6)
+ffffffffc0201cc8:	00379713          	slli	a4,a5,0x3
+ffffffffc0201ccc:	97ba                	add	a5,a5,a4
+ffffffffc0201cce:	078e                	slli	a5,a5,0x3
+ffffffffc0201cd0:	97b6                	add	a5,a5,a3
+ffffffffc0201cd2:	14fa18e3          	bne	s4,a5,ffffffffc0202622 <pmm_init+0xb2c>
     assert(page_ref(p1) == 1);
-ffffffffc0201d22:	000a2703          	lw	a4,0(s4)
-ffffffffc0201d26:	4785                	li	a5,1
-ffffffffc0201d28:	1cf711e3          	bne	a4,a5,ffffffffc02026ea <pmm_init+0xbaa>
+ffffffffc0201cd6:	000a2703          	lw	a4,0(s4)
+ffffffffc0201cda:	4785                	li	a5,1
+ffffffffc0201cdc:	16f71fe3          	bne	a4,a5,ffffffffc020265a <pmm_init+0xb64>
 
     ptep = (pte_t *)KADDR(PDE_ADDR(boot_pgdir[0]));
-ffffffffc0201d2c:	00093503          	ld	a0,0(s2)
-ffffffffc0201d30:	77fd                	lui	a5,0xfffff
-ffffffffc0201d32:	6114                	ld	a3,0(a0)
-ffffffffc0201d34:	068a                	slli	a3,a3,0x2
-ffffffffc0201d36:	8efd                	and	a3,a3,a5
-ffffffffc0201d38:	00c6d713          	srli	a4,a3,0xc
-ffffffffc0201d3c:	18c77be3          	bgeu	a4,a2,ffffffffc02026d2 <pmm_init+0xb92>
-ffffffffc0201d40:	0009bc03          	ld	s8,0(s3)
+ffffffffc0201ce0:	00093503          	ld	a0,0(s2)
+ffffffffc0201ce4:	77fd                	lui	a5,0xfffff
+ffffffffc0201ce6:	6114                	ld	a3,0(a0)
+ffffffffc0201ce8:	068a                	slli	a3,a3,0x2
+ffffffffc0201cea:	8efd                	and	a3,a3,a5
+ffffffffc0201cec:	00c6d713          	srli	a4,a3,0xc
+ffffffffc0201cf0:	14c779e3          	bgeu	a4,a2,ffffffffc0202642 <pmm_init+0xb4c>
+ffffffffc0201cf4:	0009bc03          	ld	s8,0(s3)
     ptep = (pte_t *)KADDR(PDE_ADDR(ptep[0])) + 1;
-ffffffffc0201d44:	96e2                	add	a3,a3,s8
-ffffffffc0201d46:	0006ba83          	ld	s5,0(a3)
-ffffffffc0201d4a:	0a8a                	slli	s5,s5,0x2
-ffffffffc0201d4c:	00fafab3          	and	s5,s5,a5
-ffffffffc0201d50:	00cad793          	srli	a5,s5,0xc
-ffffffffc0201d54:	6ac7f963          	bgeu	a5,a2,ffffffffc0202406 <pmm_init+0x8c6>
+ffffffffc0201cf8:	96e2                	add	a3,a3,s8
+ffffffffc0201cfa:	0006ba83          	ld	s5,0(a3)
+ffffffffc0201cfe:	0a8a                	slli	s5,s5,0x2
+ffffffffc0201d00:	00fafab3          	and	s5,s5,a5
+ffffffffc0201d04:	00cad793          	srli	a5,s5,0xc
+ffffffffc0201d08:	66c7f463          	bgeu	a5,a2,ffffffffc0202370 <pmm_init+0x87a>
     assert(get_pte(boot_pgdir, PGSIZE, 0) == ptep);
-ffffffffc0201d58:	4601                	li	a2,0
-ffffffffc0201d5a:	6585                	lui	a1,0x1
+ffffffffc0201d0c:	4601                	li	a2,0
+ffffffffc0201d0e:	6585                	lui	a1,0x1
     ptep = (pte_t *)KADDR(PDE_ADDR(ptep[0])) + 1;
-ffffffffc0201d5c:	9c56                	add	s8,s8,s5
+ffffffffc0201d10:	9ae2                	add	s5,s5,s8
     assert(get_pte(boot_pgdir, PGSIZE, 0) == ptep);
-ffffffffc0201d5e:	9afff0ef          	jal	ffffffffc020170c <get_pte>
+ffffffffc0201d12:	9fbff0ef          	jal	ra,ffffffffc020170c <get_pte>
     ptep = (pte_t *)KADDR(PDE_ADDR(ptep[0])) + 1;
-ffffffffc0201d62:	0c21                	addi	s8,s8,8
+ffffffffc0201d16:	0aa1                	addi	s5,s5,8
     assert(get_pte(boot_pgdir, PGSIZE, 0) == ptep);
-ffffffffc0201d64:	69851163          	bne	a0,s8,ffffffffc02023e6 <pmm_init+0x8a6>
+ffffffffc0201d18:	63551c63          	bne	a0,s5,ffffffffc0202350 <pmm_init+0x85a>
 
     p2 = alloc_page();
-ffffffffc0201d68:	4505                	li	a0,1
-ffffffffc0201d6a:	899ff0ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0201d6e:	8aaa                	mv	s5,a0
+ffffffffc0201d1c:	4505                	li	a0,1
+ffffffffc0201d1e:	8e3ff0ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0201d22:	8aaa                	mv	s5,a0
     assert(page_insert(boot_pgdir, p2, PGSIZE, PTE_U | PTE_W) == 0);
-ffffffffc0201d70:	00093503          	ld	a0,0(s2)
-ffffffffc0201d74:	46d1                	li	a3,20
-ffffffffc0201d76:	6605                	lui	a2,0x1
-ffffffffc0201d78:	85d6                	mv	a1,s5
-ffffffffc0201d7a:	cb5ff0ef          	jal	ffffffffc0201a2e <page_insert>
-ffffffffc0201d7e:	64051463          	bnez	a0,ffffffffc02023c6 <pmm_init+0x886>
+ffffffffc0201d24:	00093503          	ld	a0,0(s2)
+ffffffffc0201d28:	46d1                	li	a3,20
+ffffffffc0201d2a:	6605                	lui	a2,0x1
+ffffffffc0201d2c:	85d6                	mv	a1,s5
+ffffffffc0201d2e:	cc9ff0ef          	jal	ra,ffffffffc02019f6 <page_insert>
+ffffffffc0201d32:	5c051f63          	bnez	a0,ffffffffc0202310 <pmm_init+0x81a>
     assert((ptep = get_pte(boot_pgdir, PGSIZE, 0)) != NULL);
-ffffffffc0201d82:	00093503          	ld	a0,0(s2)
-ffffffffc0201d86:	4601                	li	a2,0
-ffffffffc0201d88:	6585                	lui	a1,0x1
-ffffffffc0201d8a:	983ff0ef          	jal	ffffffffc020170c <get_pte>
-ffffffffc0201d8e:	60050c63          	beqz	a0,ffffffffc02023a6 <pmm_init+0x866>
+ffffffffc0201d36:	00093503          	ld	a0,0(s2)
+ffffffffc0201d3a:	4601                	li	a2,0
+ffffffffc0201d3c:	6585                	lui	a1,0x1
+ffffffffc0201d3e:	9cfff0ef          	jal	ra,ffffffffc020170c <get_pte>
+ffffffffc0201d42:	12050ce3          	beqz	a0,ffffffffc020267a <pmm_init+0xb84>
     assert(*ptep & PTE_U);
-ffffffffc0201d92:	611c                	ld	a5,0(a0)
-ffffffffc0201d94:	0107f713          	andi	a4,a5,16
-ffffffffc0201d98:	76070463          	beqz	a4,ffffffffc0202500 <pmm_init+0x9c0>
+ffffffffc0201d46:	611c                	ld	a5,0(a0)
+ffffffffc0201d48:	0107f713          	andi	a4,a5,16
+ffffffffc0201d4c:	72070f63          	beqz	a4,ffffffffc020248a <pmm_init+0x994>
     assert(*ptep & PTE_W);
-ffffffffc0201d9c:	8b91                	andi	a5,a5,4
-ffffffffc0201d9e:	74078163          	beqz	a5,ffffffffc02024e0 <pmm_init+0x9a0>
+ffffffffc0201d50:	8b91                	andi	a5,a5,4
+ffffffffc0201d52:	6e078c63          	beqz	a5,ffffffffc020244a <pmm_init+0x954>
     assert(boot_pgdir[0] & PTE_U);
-ffffffffc0201da2:	00093503          	ld	a0,0(s2)
-ffffffffc0201da6:	611c                	ld	a5,0(a0)
-ffffffffc0201da8:	8bc1                	andi	a5,a5,16
-ffffffffc0201daa:	70078b63          	beqz	a5,ffffffffc02024c0 <pmm_init+0x980>
+ffffffffc0201d56:	00093503          	ld	a0,0(s2)
+ffffffffc0201d5a:	611c                	ld	a5,0(a0)
+ffffffffc0201d5c:	8bc1                	andi	a5,a5,16
+ffffffffc0201d5e:	6c078663          	beqz	a5,ffffffffc020242a <pmm_init+0x934>
     assert(page_ref(p2) == 1);
-ffffffffc0201dae:	000aa703          	lw	a4,0(s5) # 80000 <kern_entry-0xffffffffc0180000>
-ffffffffc0201db2:	4785                	li	a5,1
-ffffffffc0201db4:	6ef71663          	bne	a4,a5,ffffffffc02024a0 <pmm_init+0x960>
+ffffffffc0201d62:	000aa703          	lw	a4,0(s5)
+ffffffffc0201d66:	4785                	li	a5,1
+ffffffffc0201d68:	5cf71463          	bne	a4,a5,ffffffffc0202330 <pmm_init+0x83a>
 
     assert(page_insert(boot_pgdir, p1, PGSIZE, 0) == 0);
-ffffffffc0201db8:	4681                	li	a3,0
-ffffffffc0201dba:	6605                	lui	a2,0x1
-ffffffffc0201dbc:	85d2                	mv	a1,s4
-ffffffffc0201dbe:	c71ff0ef          	jal	ffffffffc0201a2e <page_insert>
-ffffffffc0201dc2:	6a051f63          	bnez	a0,ffffffffc0202480 <pmm_init+0x940>
+ffffffffc0201d6c:	4681                	li	a3,0
+ffffffffc0201d6e:	6605                	lui	a2,0x1
+ffffffffc0201d70:	85d2                	mv	a1,s4
+ffffffffc0201d72:	c85ff0ef          	jal	ra,ffffffffc02019f6 <page_insert>
+ffffffffc0201d76:	66051a63          	bnez	a0,ffffffffc02023ea <pmm_init+0x8f4>
     assert(page_ref(p1) == 2);
-ffffffffc0201dc6:	000a2703          	lw	a4,0(s4)
-ffffffffc0201dca:	4789                	li	a5,2
-ffffffffc0201dcc:	68f71a63          	bne	a4,a5,ffffffffc0202460 <pmm_init+0x920>
+ffffffffc0201d7a:	000a2703          	lw	a4,0(s4)
+ffffffffc0201d7e:	4789                	li	a5,2
+ffffffffc0201d80:	64f71563          	bne	a4,a5,ffffffffc02023ca <pmm_init+0x8d4>
     assert(page_ref(p2) == 0);
-ffffffffc0201dd0:	000aa783          	lw	a5,0(s5)
-ffffffffc0201dd4:	66079663          	bnez	a5,ffffffffc0202440 <pmm_init+0x900>
+ffffffffc0201d84:	000aa783          	lw	a5,0(s5)
+ffffffffc0201d88:	62079163          	bnez	a5,ffffffffc02023aa <pmm_init+0x8b4>
     assert((ptep = get_pte(boot_pgdir, PGSIZE, 0)) != NULL);
-ffffffffc0201dd8:	00093503          	ld	a0,0(s2)
-ffffffffc0201ddc:	4601                	li	a2,0
-ffffffffc0201dde:	6585                	lui	a1,0x1
-ffffffffc0201de0:	92dff0ef          	jal	ffffffffc020170c <get_pte>
-ffffffffc0201de4:	62050e63          	beqz	a0,ffffffffc0202420 <pmm_init+0x8e0>
+ffffffffc0201d8c:	00093503          	ld	a0,0(s2)
+ffffffffc0201d90:	4601                	li	a2,0
+ffffffffc0201d92:	6585                	lui	a1,0x1
+ffffffffc0201d94:	979ff0ef          	jal	ra,ffffffffc020170c <get_pte>
+ffffffffc0201d98:	5e050963          	beqz	a0,ffffffffc020238a <pmm_init+0x894>
     assert(pte2page(*ptep) == p1);
-ffffffffc0201de8:	6118                	ld	a4,0(a0)
+ffffffffc0201d9c:	6118                	ld	a4,0(a0)
     if (!(pte & PTE_V)) {
-ffffffffc0201dea:	00177793          	andi	a5,a4,1
-ffffffffc0201dee:	54078a63          	beqz	a5,ffffffffc0202342 <pmm_init+0x802>
+ffffffffc0201d9e:	00177793          	andi	a5,a4,1
+ffffffffc0201da2:	50078563          	beqz	a5,ffffffffc02022ac <pmm_init+0x7b6>
     if (PPN(pa) >= npage) {
-ffffffffc0201df2:	6094                	ld	a3,0(s1)
+ffffffffc0201da6:	6094                	ld	a3,0(s1)
     return pa2page(PTE_ADDR(pte));
-ffffffffc0201df4:	00271793          	slli	a5,a4,0x2
-ffffffffc0201df8:	83b1                	srli	a5,a5,0xc
+ffffffffc0201da8:	00271793          	slli	a5,a4,0x2
+ffffffffc0201dac:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc0201dfa:	4ad7f663          	bgeu	a5,a3,ffffffffc02022a6 <pmm_init+0x766>
+ffffffffc0201dae:	48d7f563          	bgeu	a5,a3,ffffffffc0202238 <pmm_init+0x742>
     return &pages[PPN(pa) - nbase];
-ffffffffc0201dfe:	fff806b7          	lui	a3,0xfff80
-ffffffffc0201e02:	97b6                	add	a5,a5,a3
-ffffffffc0201e04:	000b3603          	ld	a2,0(s6)
-ffffffffc0201e08:	00379693          	slli	a3,a5,0x3
-ffffffffc0201e0c:	97b6                	add	a5,a5,a3
-ffffffffc0201e0e:	078e                	slli	a5,a5,0x3
-ffffffffc0201e10:	97b2                	add	a5,a5,a2
-ffffffffc0201e12:	76fa1763          	bne	s4,a5,ffffffffc0202580 <pmm_init+0xa40>
+ffffffffc0201db2:	fff806b7          	lui	a3,0xfff80
+ffffffffc0201db6:	97b6                	add	a5,a5,a3
+ffffffffc0201db8:	000b3603          	ld	a2,0(s6)
+ffffffffc0201dbc:	00379693          	slli	a3,a5,0x3
+ffffffffc0201dc0:	97b6                	add	a5,a5,a3
+ffffffffc0201dc2:	078e                	slli	a5,a5,0x3
+ffffffffc0201dc4:	97b2                	add	a5,a5,a2
+ffffffffc0201dc6:	72fa1263          	bne	s4,a5,ffffffffc02024ea <pmm_init+0x9f4>
     assert((*ptep & PTE_U) == 0);
-ffffffffc0201e16:	8b41                	andi	a4,a4,16
-ffffffffc0201e18:	74071463          	bnez	a4,ffffffffc0202560 <pmm_init+0xa20>
+ffffffffc0201dca:	8b41                	andi	a4,a4,16
+ffffffffc0201dcc:	6e071f63          	bnez	a4,ffffffffc02024ca <pmm_init+0x9d4>
 
     page_remove(boot_pgdir, 0x0);
-ffffffffc0201e1c:	00093503          	ld	a0,0(s2)
-ffffffffc0201e20:	4581                	li	a1,0
-ffffffffc0201e22:	b73ff0ef          	jal	ffffffffc0201994 <page_remove>
+ffffffffc0201dd0:	00093503          	ld	a0,0(s2)
+ffffffffc0201dd4:	4581                	li	a1,0
+ffffffffc0201dd6:	b87ff0ef          	jal	ra,ffffffffc020195c <page_remove>
     assert(page_ref(p1) == 1);
-ffffffffc0201e26:	000a2703          	lw	a4,0(s4)
-ffffffffc0201e2a:	4785                	li	a5,1
-ffffffffc0201e2c:	70f71a63          	bne	a4,a5,ffffffffc0202540 <pmm_init+0xa00>
+ffffffffc0201dda:	000a2703          	lw	a4,0(s4)
+ffffffffc0201dde:	4785                	li	a5,1
+ffffffffc0201de0:	6cf71563          	bne	a4,a5,ffffffffc02024aa <pmm_init+0x9b4>
     assert(page_ref(p2) == 0);
-ffffffffc0201e30:	000aa783          	lw	a5,0(s5)
-ffffffffc0201e34:	6e079663          	bnez	a5,ffffffffc0202520 <pmm_init+0x9e0>
+ffffffffc0201de4:	000aa783          	lw	a5,0(s5)
+ffffffffc0201de8:	78079d63          	bnez	a5,ffffffffc0202582 <pmm_init+0xa8c>
 
     page_remove(boot_pgdir, PGSIZE);
-ffffffffc0201e38:	00093503          	ld	a0,0(s2)
-ffffffffc0201e3c:	6585                	lui	a1,0x1
-ffffffffc0201e3e:	b57ff0ef          	jal	ffffffffc0201994 <page_remove>
+ffffffffc0201dec:	00093503          	ld	a0,0(s2)
+ffffffffc0201df0:	6585                	lui	a1,0x1
+ffffffffc0201df2:	b6bff0ef          	jal	ra,ffffffffc020195c <page_remove>
     assert(page_ref(p1) == 0);
-ffffffffc0201e42:	000a2783          	lw	a5,0(s4)
-ffffffffc0201e46:	7a079a63          	bnez	a5,ffffffffc02025fa <pmm_init+0xaba>
+ffffffffc0201df6:	000a2783          	lw	a5,0(s4)
+ffffffffc0201dfa:	76079463          	bnez	a5,ffffffffc0202562 <pmm_init+0xa6c>
     assert(page_ref(p2) == 0);
-ffffffffc0201e4a:	000aa783          	lw	a5,0(s5)
-ffffffffc0201e4e:	78079663          	bnez	a5,ffffffffc02025da <pmm_init+0xa9a>
+ffffffffc0201dfe:	000aa783          	lw	a5,0(s5)
+ffffffffc0201e02:	74079063          	bnez	a5,ffffffffc0202542 <pmm_init+0xa4c>
 
     assert(page_ref(pde2page(boot_pgdir[0])) == 1);
-ffffffffc0201e52:	00093a03          	ld	s4,0(s2)
+ffffffffc0201e06:	00093a03          	ld	s4,0(s2)
     if (PPN(pa) >= npage) {
-ffffffffc0201e56:	6090                	ld	a2,0(s1)
+ffffffffc0201e0a:	6090                	ld	a2,0(s1)
     return pa2page(PDE_ADDR(pde));
-ffffffffc0201e58:	000a3783          	ld	a5,0(s4)
-ffffffffc0201e5c:	078a                	slli	a5,a5,0x2
-ffffffffc0201e5e:	83b1                	srli	a5,a5,0xc
+ffffffffc0201e0c:	000a3783          	ld	a5,0(s4)
+ffffffffc0201e10:	078a                	slli	a5,a5,0x2
+ffffffffc0201e12:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc0201e60:	44c7f363          	bgeu	a5,a2,ffffffffc02022a6 <pmm_init+0x766>
+ffffffffc0201e14:	42c7f263          	bgeu	a5,a2,ffffffffc0202238 <pmm_init+0x742>
     return &pages[PPN(pa) - nbase];
-ffffffffc0201e64:	fff80737          	lui	a4,0xfff80
-ffffffffc0201e68:	97ba                	add	a5,a5,a4
-ffffffffc0201e6a:	00379713          	slli	a4,a5,0x3
-ffffffffc0201e6e:	000b3503          	ld	a0,0(s6)
-ffffffffc0201e72:	973e                	add	a4,a4,a5
-ffffffffc0201e74:	070e                	slli	a4,a4,0x3
+ffffffffc0201e18:	fff80737          	lui	a4,0xfff80
+ffffffffc0201e1c:	973e                	add	a4,a4,a5
+ffffffffc0201e1e:	00371793          	slli	a5,a4,0x3
+ffffffffc0201e22:	000b3503          	ld	a0,0(s6)
+ffffffffc0201e26:	97ba                	add	a5,a5,a4
+ffffffffc0201e28:	078e                	slli	a5,a5,0x3
 static inline int page_ref(struct Page *page) { return page->ref; }
-ffffffffc0201e76:	00e507b3          	add	a5,a0,a4
-ffffffffc0201e7a:	4394                	lw	a3,0(a5)
-ffffffffc0201e7c:	4785                	li	a5,1
-ffffffffc0201e7e:	72f69e63          	bne	a3,a5,ffffffffc02025ba <pmm_init+0xa7a>
+ffffffffc0201e2a:	00f50733          	add	a4,a0,a5
+ffffffffc0201e2e:	4314                	lw	a3,0(a4)
+ffffffffc0201e30:	4705                	li	a4,1
+ffffffffc0201e32:	6ee69863          	bne	a3,a4,ffffffffc0202522 <pmm_init+0xa2c>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0201e82:	f8e397b7          	lui	a5,0xf8e39
-ffffffffc0201e86:	e3978793          	addi	a5,a5,-455 # fffffffff8e38e39 <end+0x38c278c1>
-ffffffffc0201e8a:	07b2                	slli	a5,a5,0xc
-ffffffffc0201e8c:	e3978793          	addi	a5,a5,-455
-ffffffffc0201e90:	07b2                	slli	a5,a5,0xc
-ffffffffc0201e92:	e3978793          	addi	a5,a5,-455
-ffffffffc0201e96:	07b2                	slli	a5,a5,0xc
-ffffffffc0201e98:	870d                	srai	a4,a4,0x3
-ffffffffc0201e9a:	e3978793          	addi	a5,a5,-455
-ffffffffc0201e9e:	02f707b3          	mul	a5,a4,a5
-ffffffffc0201ea2:	00080737          	lui	a4,0x80
-ffffffffc0201ea6:	97ba                	add	a5,a5,a4
-    return page2ppn(page) << PGSHIFT;
-ffffffffc0201ea8:	00c79693          	slli	a3,a5,0xc
+ffffffffc0201e36:	4037d693          	srai	a3,a5,0x3
+ffffffffc0201e3a:	00004c97          	auipc	s9,0x4
+ffffffffc0201e3e:	486cbc83          	ld	s9,1158(s9) # ffffffffc02062c0 <error_string+0x38>
+ffffffffc0201e42:	039686b3          	mul	a3,a3,s9
+ffffffffc0201e46:	000805b7          	lui	a1,0x80
+ffffffffc0201e4a:	96ae                	add	a3,a3,a1
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc0201eac:	6ec7fb63          	bgeu	a5,a2,ffffffffc02025a2 <pmm_init+0xa62>
+ffffffffc0201e4c:	00c69713          	slli	a4,a3,0xc
+ffffffffc0201e50:	8331                	srli	a4,a4,0xc
+    return page2ppn(page) << PGSHIFT;
+ffffffffc0201e52:	06b2                	slli	a3,a3,0xc
+static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
+ffffffffc0201e54:	6ac77b63          	bgeu	a4,a2,ffffffffc020250a <pmm_init+0xa14>
 
     pde_t *pd1=boot_pgdir,*pd0=page2kva(pde2page(boot_pgdir[0]));
     free_page(pde2page(pd0[0]));
-ffffffffc0201eb0:	0009b783          	ld	a5,0(s3)
-ffffffffc0201eb4:	97b6                	add	a5,a5,a3
+ffffffffc0201e58:	0009b703          	ld	a4,0(s3)
+ffffffffc0201e5c:	96ba                	add	a3,a3,a4
     return pa2page(PDE_ADDR(pde));
-ffffffffc0201eb6:	639c                	ld	a5,0(a5)
-ffffffffc0201eb8:	078a                	slli	a5,a5,0x2
-ffffffffc0201eba:	83b1                	srli	a5,a5,0xc
+ffffffffc0201e5e:	629c                	ld	a5,0(a3)
+ffffffffc0201e60:	078a                	slli	a5,a5,0x2
+ffffffffc0201e62:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc0201ebc:	3ec7f563          	bgeu	a5,a2,ffffffffc02022a6 <pmm_init+0x766>
+ffffffffc0201e64:	3cc7fa63          	bgeu	a5,a2,ffffffffc0202238 <pmm_init+0x742>
     return &pages[PPN(pa) - nbase];
-ffffffffc0201ec0:	8f99                	sub	a5,a5,a4
-ffffffffc0201ec2:	00379713          	slli	a4,a5,0x3
-ffffffffc0201ec6:	97ba                	add	a5,a5,a4
-ffffffffc0201ec8:	078e                	slli	a5,a5,0x3
-ffffffffc0201eca:	953e                	add	a0,a0,a5
-ffffffffc0201ecc:	100027f3          	csrr	a5,sstatus
-ffffffffc0201ed0:	8b89                	andi	a5,a5,2
-ffffffffc0201ed2:	30079463          	bnez	a5,ffffffffc02021da <pmm_init+0x69a>
+ffffffffc0201e68:	8f8d                	sub	a5,a5,a1
+ffffffffc0201e6a:	00379713          	slli	a4,a5,0x3
+ffffffffc0201e6e:	97ba                	add	a5,a5,a4
+ffffffffc0201e70:	078e                	slli	a5,a5,0x3
+ffffffffc0201e72:	953e                	add	a0,a0,a5
+ffffffffc0201e74:	100027f3          	csrr	a5,sstatus
+ffffffffc0201e78:	8b89                	andi	a5,a5,2
+ffffffffc0201e7a:	2e079963          	bnez	a5,ffffffffc020216c <pmm_init+0x676>
     { pmm_manager->free_pages(base, n); }
-ffffffffc0201ed6:	000bb783          	ld	a5,0(s7)
-ffffffffc0201eda:	4585                	li	a1,1
-ffffffffc0201edc:	739c                	ld	a5,32(a5)
-ffffffffc0201ede:	9782                	jalr	a5
+ffffffffc0201e7e:	000bb783          	ld	a5,0(s7)
+ffffffffc0201e82:	4585                	li	a1,1
+ffffffffc0201e84:	739c                	ld	a5,32(a5)
+ffffffffc0201e86:	9782                	jalr	a5
     return pa2page(PDE_ADDR(pde));
-ffffffffc0201ee0:	000a3783          	ld	a5,0(s4)
+ffffffffc0201e88:	000a3783          	ld	a5,0(s4)
     if (PPN(pa) >= npage) {
-ffffffffc0201ee4:	6098                	ld	a4,0(s1)
+ffffffffc0201e8c:	6098                	ld	a4,0(s1)
     return pa2page(PDE_ADDR(pde));
-ffffffffc0201ee6:	078a                	slli	a5,a5,0x2
-ffffffffc0201ee8:	83b1                	srli	a5,a5,0xc
+ffffffffc0201e8e:	078a                	slli	a5,a5,0x2
+ffffffffc0201e90:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc0201eea:	3ae7fe63          	bgeu	a5,a4,ffffffffc02022a6 <pmm_init+0x766>
+ffffffffc0201e92:	3ae7f363          	bgeu	a5,a4,ffffffffc0202238 <pmm_init+0x742>
     return &pages[PPN(pa) - nbase];
-ffffffffc0201eee:	fff80737          	lui	a4,0xfff80
-ffffffffc0201ef2:	97ba                	add	a5,a5,a4
-ffffffffc0201ef4:	000b3503          	ld	a0,0(s6)
-ffffffffc0201ef8:	00379713          	slli	a4,a5,0x3
-ffffffffc0201efc:	97ba                	add	a5,a5,a4
-ffffffffc0201efe:	078e                	slli	a5,a5,0x3
-ffffffffc0201f00:	953e                	add	a0,a0,a5
-ffffffffc0201f02:	100027f3          	csrr	a5,sstatus
-ffffffffc0201f06:	8b89                	andi	a5,a5,2
-ffffffffc0201f08:	2a079d63          	bnez	a5,ffffffffc02021c2 <pmm_init+0x682>
-ffffffffc0201f0c:	000bb783          	ld	a5,0(s7)
-ffffffffc0201f10:	4585                	li	a1,1
-ffffffffc0201f12:	739c                	ld	a5,32(a5)
-ffffffffc0201f14:	9782                	jalr	a5
+ffffffffc0201e96:	fff80737          	lui	a4,0xfff80
+ffffffffc0201e9a:	97ba                	add	a5,a5,a4
+ffffffffc0201e9c:	000b3503          	ld	a0,0(s6)
+ffffffffc0201ea0:	00379713          	slli	a4,a5,0x3
+ffffffffc0201ea4:	97ba                	add	a5,a5,a4
+ffffffffc0201ea6:	078e                	slli	a5,a5,0x3
+ffffffffc0201ea8:	953e                	add	a0,a0,a5
+ffffffffc0201eaa:	100027f3          	csrr	a5,sstatus
+ffffffffc0201eae:	8b89                	andi	a5,a5,2
+ffffffffc0201eb0:	2a079263          	bnez	a5,ffffffffc0202154 <pmm_init+0x65e>
+ffffffffc0201eb4:	000bb783          	ld	a5,0(s7)
+ffffffffc0201eb8:	4585                	li	a1,1
+ffffffffc0201eba:	739c                	ld	a5,32(a5)
+ffffffffc0201ebc:	9782                	jalr	a5
     free_page(pde2page(pd1[0]));
     boot_pgdir[0] = 0;
-ffffffffc0201f16:	00093783          	ld	a5,0(s2)
-ffffffffc0201f1a:	0007b023          	sd	zero,0(a5)
-ffffffffc0201f1e:	100027f3          	csrr	a5,sstatus
-ffffffffc0201f22:	8b89                	andi	a5,a5,2
-ffffffffc0201f24:	28079563          	bnez	a5,ffffffffc02021ae <pmm_init+0x66e>
+ffffffffc0201ebe:	00093783          	ld	a5,0(s2)
+ffffffffc0201ec2:	0007b023          	sd	zero,0(a5) # fffffffffffff000 <end+0x3fdeda8c>
+ffffffffc0201ec6:	100027f3          	csrr	a5,sstatus
+ffffffffc0201eca:	8b89                	andi	a5,a5,2
+ffffffffc0201ecc:	26079a63          	bnez	a5,ffffffffc0202140 <pmm_init+0x64a>
     { ret = pmm_manager->nr_free_pages(); }
-ffffffffc0201f28:	000bb783          	ld	a5,0(s7)
-ffffffffc0201f2c:	779c                	ld	a5,40(a5)
-ffffffffc0201f2e:	9782                	jalr	a5
-ffffffffc0201f30:	8a2a                	mv	s4,a0
+ffffffffc0201ed0:	000bb783          	ld	a5,0(s7)
+ffffffffc0201ed4:	779c                	ld	a5,40(a5)
+ffffffffc0201ed6:	9782                	jalr	a5
+ffffffffc0201ed8:	8a2a                	mv	s4,a0
 
     assert(nr_free_store==nr_free_pages());
-ffffffffc0201f32:	77441463          	bne	s0,s4,ffffffffc020269a <pmm_init+0xb5a>
+ffffffffc0201eda:	73441463          	bne	s0,s4,ffffffffc0202602 <pmm_init+0xb0c>
 
     cprintf("check_pgdir() succeeded!\n");
-ffffffffc0201f36:	00003517          	auipc	a0,0x3
-ffffffffc0201f3a:	6ca50513          	addi	a0,a0,1738 # ffffffffc0205600 <etext+0x10b0>
-ffffffffc0201f3e:	97cfe0ef          	jal	ffffffffc02000ba <cprintf>
-ffffffffc0201f42:	100027f3          	csrr	a5,sstatus
-ffffffffc0201f46:	8b89                	andi	a5,a5,2
-ffffffffc0201f48:	24079963          	bnez	a5,ffffffffc020219a <pmm_init+0x65a>
+ffffffffc0201ede:	00003517          	auipc	a0,0x3
+ffffffffc0201ee2:	73250513          	addi	a0,a0,1842 # ffffffffc0205610 <default_pmm_manager+0x460>
+ffffffffc0201ee6:	9d4fe0ef          	jal	ra,ffffffffc02000ba <cprintf>
+ffffffffc0201eea:	100027f3          	csrr	a5,sstatus
+ffffffffc0201eee:	8b89                	andi	a5,a5,2
+ffffffffc0201ef0:	22079e63          	bnez	a5,ffffffffc020212c <pmm_init+0x636>
     { ret = pmm_manager->nr_free_pages(); }
-ffffffffc0201f4c:	000bb783          	ld	a5,0(s7)
-ffffffffc0201f50:	779c                	ld	a5,40(a5)
-ffffffffc0201f52:	9782                	jalr	a5
-ffffffffc0201f54:	8c2a                	mv	s8,a0
+ffffffffc0201ef4:	000bb783          	ld	a5,0(s7)
+ffffffffc0201ef8:	779c                	ld	a5,40(a5)
+ffffffffc0201efa:	9782                	jalr	a5
+ffffffffc0201efc:	8c2a                	mv	s8,a0
     pte_t *ptep;
     int i;
 
     nr_free_store=nr_free_pages();
 
     for (i = ROUNDDOWN(KERNBASE, PGSIZE); i < npage * PGSIZE; i += PGSIZE) {
-ffffffffc0201f56:	6098                	ld	a4,0(s1)
-ffffffffc0201f58:	c0200437          	lui	s0,0xc0200
+ffffffffc0201efe:	6098                	ld	a4,0(s1)
+ffffffffc0201f00:	c0200437          	lui	s0,0xc0200
         assert((ptep = get_pte(boot_pgdir, (uintptr_t)KADDR(i), 0)) != NULL);
         assert(PTE_ADDR(*ptep) == i);
-ffffffffc0201f5c:	7afd                	lui	s5,0xfffff
+ffffffffc0201f04:	7afd                	lui	s5,0xfffff
     for (i = ROUNDDOWN(KERNBASE, PGSIZE); i < npage * PGSIZE; i += PGSIZE) {
-ffffffffc0201f5e:	00c71793          	slli	a5,a4,0xc
-ffffffffc0201f62:	6a05                	lui	s4,0x1
-ffffffffc0201f64:	02f47c63          	bgeu	s0,a5,ffffffffc0201f9c <pmm_init+0x45c>
+ffffffffc0201f06:	00c71793          	slli	a5,a4,0xc
+ffffffffc0201f0a:	6a05                	lui	s4,0x1
+ffffffffc0201f0c:	02f47c63          	bgeu	s0,a5,ffffffffc0201f44 <pmm_init+0x44e>
         assert((ptep = get_pte(boot_pgdir, (uintptr_t)KADDR(i), 0)) != NULL);
-ffffffffc0201f68:	00c45793          	srli	a5,s0,0xc
-ffffffffc0201f6c:	00093503          	ld	a0,0(s2)
-ffffffffc0201f70:	2ce7fe63          	bgeu	a5,a4,ffffffffc020224c <pmm_init+0x70c>
-ffffffffc0201f74:	0009b583          	ld	a1,0(s3)
-ffffffffc0201f78:	4601                	li	a2,0
-ffffffffc0201f7a:	95a2                	add	a1,a1,s0
-ffffffffc0201f7c:	f90ff0ef          	jal	ffffffffc020170c <get_pte>
-ffffffffc0201f80:	30050363          	beqz	a0,ffffffffc0202286 <pmm_init+0x746>
+ffffffffc0201f10:	00c45793          	srli	a5,s0,0xc
+ffffffffc0201f14:	00093503          	ld	a0,0(s2)
+ffffffffc0201f18:	30e7f363          	bgeu	a5,a4,ffffffffc020221e <pmm_init+0x728>
+ffffffffc0201f1c:	0009b583          	ld	a1,0(s3)
+ffffffffc0201f20:	4601                	li	a2,0
+ffffffffc0201f22:	95a2                	add	a1,a1,s0
+ffffffffc0201f24:	fe8ff0ef          	jal	ra,ffffffffc020170c <get_pte>
+ffffffffc0201f28:	2c050b63          	beqz	a0,ffffffffc02021fe <pmm_init+0x708>
         assert(PTE_ADDR(*ptep) == i);
-ffffffffc0201f84:	611c                	ld	a5,0(a0)
-ffffffffc0201f86:	078a                	slli	a5,a5,0x2
-ffffffffc0201f88:	0157f7b3          	and	a5,a5,s5
-ffffffffc0201f8c:	2c879d63          	bne	a5,s0,ffffffffc0202266 <pmm_init+0x726>
+ffffffffc0201f2c:	611c                	ld	a5,0(a0)
+ffffffffc0201f2e:	078a                	slli	a5,a5,0x2
+ffffffffc0201f30:	0157f7b3          	and	a5,a5,s5
+ffffffffc0201f34:	2a879563          	bne	a5,s0,ffffffffc02021de <pmm_init+0x6e8>
     for (i = ROUNDDOWN(KERNBASE, PGSIZE); i < npage * PGSIZE; i += PGSIZE) {
-ffffffffc0201f90:	6098                	ld	a4,0(s1)
-ffffffffc0201f92:	9452                	add	s0,s0,s4
-ffffffffc0201f94:	00c71793          	slli	a5,a4,0xc
-ffffffffc0201f98:	fcf468e3          	bltu	s0,a5,ffffffffc0201f68 <pmm_init+0x428>
+ffffffffc0201f38:	6098                	ld	a4,0(s1)
+ffffffffc0201f3a:	9452                	add	s0,s0,s4
+ffffffffc0201f3c:	00c71793          	slli	a5,a4,0xc
+ffffffffc0201f40:	fcf468e3          	bltu	s0,a5,ffffffffc0201f10 <pmm_init+0x41a>
     }
 
 
     assert(boot_pgdir[0] == 0);
-ffffffffc0201f9c:	00093783          	ld	a5,0(s2)
-ffffffffc0201fa0:	639c                	ld	a5,0(a5)
-ffffffffc0201fa2:	6c079c63          	bnez	a5,ffffffffc020267a <pmm_init+0xb3a>
+ffffffffc0201f44:	00093783          	ld	a5,0(s2)
+ffffffffc0201f48:	639c                	ld	a5,0(a5)
+ffffffffc0201f4a:	68079c63          	bnez	a5,ffffffffc02025e2 <pmm_init+0xaec>
 
     struct Page *p;
     p = alloc_page();
-ffffffffc0201fa6:	4505                	li	a0,1
-ffffffffc0201fa8:	e5aff0ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0201fac:	8a2a                	mv	s4,a0
+ffffffffc0201f4e:	4505                	li	a0,1
+ffffffffc0201f50:	eb0ff0ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0201f54:	8aaa                	mv	s5,a0
     assert(page_insert(boot_pgdir, p, 0x100, PTE_W | PTE_R) == 0);
-ffffffffc0201fae:	00093503          	ld	a0,0(s2)
-ffffffffc0201fb2:	4699                	li	a3,6
-ffffffffc0201fb4:	10000613          	li	a2,256
-ffffffffc0201fb8:	85d2                	mv	a1,s4
-ffffffffc0201fba:	a75ff0ef          	jal	ffffffffc0201a2e <page_insert>
-ffffffffc0201fbe:	68051e63          	bnez	a0,ffffffffc020265a <pmm_init+0xb1a>
+ffffffffc0201f56:	00093503          	ld	a0,0(s2)
+ffffffffc0201f5a:	4699                	li	a3,6
+ffffffffc0201f5c:	10000613          	li	a2,256
+ffffffffc0201f60:	85d6                	mv	a1,s5
+ffffffffc0201f62:	a95ff0ef          	jal	ra,ffffffffc02019f6 <page_insert>
+ffffffffc0201f66:	64051e63          	bnez	a0,ffffffffc02025c2 <pmm_init+0xacc>
     assert(page_ref(p) == 1);
-ffffffffc0201fc2:	000a2703          	lw	a4,0(s4) # 1000 <kern_entry-0xffffffffc01ff000>
-ffffffffc0201fc6:	4785                	li	a5,1
-ffffffffc0201fc8:	66f71963          	bne	a4,a5,ffffffffc020263a <pmm_init+0xafa>
+ffffffffc0201f6a:	000aa703          	lw	a4,0(s5) # fffffffffffff000 <end+0x3fdeda8c>
+ffffffffc0201f6e:	4785                	li	a5,1
+ffffffffc0201f70:	62f71963          	bne	a4,a5,ffffffffc02025a2 <pmm_init+0xaac>
     assert(page_insert(boot_pgdir, p, 0x100 + PGSIZE, PTE_W | PTE_R) == 0);
-ffffffffc0201fcc:	00093503          	ld	a0,0(s2)
-ffffffffc0201fd0:	6605                	lui	a2,0x1
-ffffffffc0201fd2:	4699                	li	a3,6
-ffffffffc0201fd4:	10060613          	addi	a2,a2,256 # 1100 <kern_entry-0xffffffffc01fef00>
-ffffffffc0201fd8:	85d2                	mv	a1,s4
-ffffffffc0201fda:	a55ff0ef          	jal	ffffffffc0201a2e <page_insert>
-ffffffffc0201fde:	62051e63          	bnez	a0,ffffffffc020261a <pmm_init+0xada>
+ffffffffc0201f74:	00093503          	ld	a0,0(s2)
+ffffffffc0201f78:	6405                	lui	s0,0x1
+ffffffffc0201f7a:	4699                	li	a3,6
+ffffffffc0201f7c:	10040613          	addi	a2,s0,256 # 1100 <kern_entry-0xffffffffc01fef00>
+ffffffffc0201f80:	85d6                	mv	a1,s5
+ffffffffc0201f82:	a75ff0ef          	jal	ra,ffffffffc02019f6 <page_insert>
+ffffffffc0201f86:	48051263          	bnez	a0,ffffffffc020240a <pmm_init+0x914>
     assert(page_ref(p) == 2);
-ffffffffc0201fe2:	000a2703          	lw	a4,0(s4)
-ffffffffc0201fe6:	4789                	li	a5,2
-ffffffffc0201fe8:	76f71163          	bne	a4,a5,ffffffffc020274a <pmm_init+0xc0a>
+ffffffffc0201f8a:	000aa703          	lw	a4,0(s5)
+ffffffffc0201f8e:	4789                	li	a5,2
+ffffffffc0201f90:	74f71563          	bne	a4,a5,ffffffffc02026da <pmm_init+0xbe4>
 
     const char *str = "ucore: Hello world!!";
     strcpy((void *)0x100, str);
-ffffffffc0201fec:	00003597          	auipc	a1,0x3
-ffffffffc0201ff0:	74c58593          	addi	a1,a1,1868 # ffffffffc0205738 <etext+0x11e8>
-ffffffffc0201ff4:	10000513          	li	a0,256
-ffffffffc0201ff8:	4ce020ef          	jal	ffffffffc02044c6 <strcpy>
+ffffffffc0201f94:	00003597          	auipc	a1,0x3
+ffffffffc0201f98:	7b458593          	addi	a1,a1,1972 # ffffffffc0205748 <default_pmm_manager+0x598>
+ffffffffc0201f9c:	10000513          	li	a0,256
+ffffffffc0201fa0:	45e020ef          	jal	ra,ffffffffc02043fe <strcpy>
     assert(strcmp((void *)0x100, (void *)(0x100 + PGSIZE)) == 0);
-ffffffffc0201ffc:	6585                	lui	a1,0x1
-ffffffffc0201ffe:	10058593          	addi	a1,a1,256 # 1100 <kern_entry-0xffffffffc01fef00>
-ffffffffc0202002:	10000513          	li	a0,256
-ffffffffc0202006:	4d2020ef          	jal	ffffffffc02044d8 <strcmp>
-ffffffffc020200a:	72051063          	bnez	a0,ffffffffc020272a <pmm_init+0xbea>
+ffffffffc0201fa4:	10040593          	addi	a1,s0,256
+ffffffffc0201fa8:	10000513          	li	a0,256
+ffffffffc0201fac:	464020ef          	jal	ra,ffffffffc0204410 <strcmp>
+ffffffffc0201fb0:	70051563          	bnez	a0,ffffffffc02026ba <pmm_init+0xbc4>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc020200e:	f8e39437          	lui	s0,0xf8e39
-ffffffffc0202012:	e3940413          	addi	s0,s0,-455 # fffffffff8e38e39 <end+0x38c278c1>
-ffffffffc0202016:	0432                	slli	s0,s0,0xc
-ffffffffc0202018:	000b3683          	ld	a3,0(s6)
-ffffffffc020201c:	e3940413          	addi	s0,s0,-455
-ffffffffc0202020:	0432                	slli	s0,s0,0xc
-ffffffffc0202022:	e3940413          	addi	s0,s0,-455
-ffffffffc0202026:	40da06b3          	sub	a3,s4,a3
-ffffffffc020202a:	0432                	slli	s0,s0,0xc
-ffffffffc020202c:	868d                	srai	a3,a3,0x3
-ffffffffc020202e:	e3940413          	addi	s0,s0,-455
-ffffffffc0202032:	028686b3          	mul	a3,a3,s0
-ffffffffc0202036:	00080cb7          	lui	s9,0x80
+ffffffffc0201fb4:	000b3683          	ld	a3,0(s6)
+ffffffffc0201fb8:	00080d37          	lui	s10,0x80
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc020203a:	6098                	ld	a4,0(s1)
+ffffffffc0201fbc:	547d                	li	s0,-1
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc020203c:	96e6                	add	a3,a3,s9
+ffffffffc0201fbe:	40da86b3          	sub	a3,s5,a3
+ffffffffc0201fc2:	868d                	srai	a3,a3,0x3
+ffffffffc0201fc4:	039686b3          	mul	a3,a3,s9
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc020203e:	00c69793          	slli	a5,a3,0xc
-ffffffffc0202042:	83b1                	srli	a5,a5,0xc
+ffffffffc0201fc8:	609c                	ld	a5,0(s1)
+ffffffffc0201fca:	8031                	srli	s0,s0,0xc
+static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
+ffffffffc0201fcc:	96ea                	add	a3,a3,s10
+static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
+ffffffffc0201fce:	0086f733          	and	a4,a3,s0
     return page2ppn(page) << PGSHIFT;
-ffffffffc0202044:	06b2                	slli	a3,a3,0xc
+ffffffffc0201fd2:	06b2                	slli	a3,a3,0xc
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc0202046:	54e7fe63          	bgeu	a5,a4,ffffffffc02025a2 <pmm_init+0xa62>
+ffffffffc0201fd4:	52f77b63          	bgeu	a4,a5,ffffffffc020250a <pmm_init+0xa14>
 
     *(char *)(page2kva(p) + 0x100) = '\0';
-ffffffffc020204a:	0009b783          	ld	a5,0(s3)
+ffffffffc0201fd8:	0009b783          	ld	a5,0(s3)
     assert(strlen((const char *)0x100) == 0);
-ffffffffc020204e:	10000513          	li	a0,256
+ffffffffc0201fdc:	10000513          	li	a0,256
     *(char *)(page2kva(p) + 0x100) = '\0';
-ffffffffc0202052:	97b6                	add	a5,a5,a3
-ffffffffc0202054:	10078023          	sb	zero,256(a5)
+ffffffffc0201fe0:	96be                	add	a3,a3,a5
+ffffffffc0201fe2:	10068023          	sb	zero,256(a3) # fffffffffff80100 <end+0x3fd6eb8c>
     assert(strlen((const char *)0x100) == 0);
-ffffffffc0202058:	438020ef          	jal	ffffffffc0204490 <strlen>
-ffffffffc020205c:	6a051763          	bnez	a0,ffffffffc020270a <pmm_init+0xbca>
+ffffffffc0201fe6:	3e2020ef          	jal	ra,ffffffffc02043c8 <strlen>
+ffffffffc0201fea:	6a051863          	bnez	a0,ffffffffc020269a <pmm_init+0xba4>
 
     pde_t *pd1=boot_pgdir,*pd0=page2kva(pde2page(boot_pgdir[0]));
-ffffffffc0202060:	00093a83          	ld	s5,0(s2)
+ffffffffc0201fee:	00093a03          	ld	s4,0(s2)
     if (PPN(pa) >= npage) {
-ffffffffc0202064:	6090                	ld	a2,0(s1)
+ffffffffc0201ff2:	6098                	ld	a4,0(s1)
     return pa2page(PDE_ADDR(pde));
-ffffffffc0202066:	000ab783          	ld	a5,0(s5) # fffffffffffff000 <end+0x3fdeda88>
-ffffffffc020206a:	078a                	slli	a5,a5,0x2
-ffffffffc020206c:	83b1                	srli	a5,a5,0xc
+ffffffffc0201ff4:	000a3783          	ld	a5,0(s4) # 1000 <kern_entry-0xffffffffc01ff000>
+ffffffffc0201ff8:	078a                	slli	a5,a5,0x2
+ffffffffc0201ffa:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc020206e:	22c7fc63          	bgeu	a5,a2,ffffffffc02022a6 <pmm_init+0x766>
+ffffffffc0201ffc:	22e7fe63          	bgeu	a5,a4,ffffffffc0202238 <pmm_init+0x742>
     return &pages[PPN(pa) - nbase];
-ffffffffc0202072:	419787b3          	sub	a5,a5,s9
-ffffffffc0202076:	00379713          	slli	a4,a5,0x3
+ffffffffc0202000:	41a787b3          	sub	a5,a5,s10
+ffffffffc0202004:	00379693          	slli	a3,a5,0x3
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc020207a:	97ba                	add	a5,a5,a4
-ffffffffc020207c:	028787b3          	mul	a5,a5,s0
-ffffffffc0202080:	97e6                	add	a5,a5,s9
-    return page2ppn(page) << PGSHIFT;
-ffffffffc0202082:	00c79413          	slli	s0,a5,0xc
+ffffffffc0202008:	96be                	add	a3,a3,a5
+ffffffffc020200a:	03968cb3          	mul	s9,a3,s9
+ffffffffc020200e:	01ac86b3          	add	a3,s9,s10
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc0202086:	50c7fd63          	bgeu	a5,a2,ffffffffc02025a0 <pmm_init+0xa60>
-ffffffffc020208a:	0009b783          	ld	a5,0(s3)
-ffffffffc020208e:	943e                	add	s0,s0,a5
-ffffffffc0202090:	100027f3          	csrr	a5,sstatus
-ffffffffc0202094:	8b89                	andi	a5,a5,2
-ffffffffc0202096:	1a079063          	bnez	a5,ffffffffc0202236 <pmm_init+0x6f6>
+ffffffffc0202012:	8c75                	and	s0,s0,a3
+    return page2ppn(page) << PGSHIFT;
+ffffffffc0202014:	06b2                	slli	a3,a3,0xc
+static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
+ffffffffc0202016:	4ee47a63          	bgeu	s0,a4,ffffffffc020250a <pmm_init+0xa14>
+ffffffffc020201a:	0009b403          	ld	s0,0(s3)
+ffffffffc020201e:	9436                	add	s0,s0,a3
+ffffffffc0202020:	100027f3          	csrr	a5,sstatus
+ffffffffc0202024:	8b89                	andi	a5,a5,2
+ffffffffc0202026:	1a079163          	bnez	a5,ffffffffc02021c8 <pmm_init+0x6d2>
     { pmm_manager->free_pages(base, n); }
-ffffffffc020209a:	000bb783          	ld	a5,0(s7)
-ffffffffc020209e:	4585                	li	a1,1
-ffffffffc02020a0:	8552                	mv	a0,s4
-ffffffffc02020a2:	739c                	ld	a5,32(a5)
-ffffffffc02020a4:	9782                	jalr	a5
+ffffffffc020202a:	000bb783          	ld	a5,0(s7)
+ffffffffc020202e:	4585                	li	a1,1
+ffffffffc0202030:	8556                	mv	a0,s5
+ffffffffc0202032:	739c                	ld	a5,32(a5)
+ffffffffc0202034:	9782                	jalr	a5
     return pa2page(PDE_ADDR(pde));
-ffffffffc02020a6:	601c                	ld	a5,0(s0)
+ffffffffc0202036:	601c                	ld	a5,0(s0)
     if (PPN(pa) >= npage) {
-ffffffffc02020a8:	6098                	ld	a4,0(s1)
+ffffffffc0202038:	6098                	ld	a4,0(s1)
     return pa2page(PDE_ADDR(pde));
-ffffffffc02020aa:	078a                	slli	a5,a5,0x2
-ffffffffc02020ac:	83b1                	srli	a5,a5,0xc
+ffffffffc020203a:	078a                	slli	a5,a5,0x2
+ffffffffc020203c:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc02020ae:	1ee7fc63          	bgeu	a5,a4,ffffffffc02022a6 <pmm_init+0x766>
+ffffffffc020203e:	1ee7fd63          	bgeu	a5,a4,ffffffffc0202238 <pmm_init+0x742>
     return &pages[PPN(pa) - nbase];
-ffffffffc02020b2:	fff80737          	lui	a4,0xfff80
-ffffffffc02020b6:	97ba                	add	a5,a5,a4
-ffffffffc02020b8:	000b3503          	ld	a0,0(s6)
-ffffffffc02020bc:	00379713          	slli	a4,a5,0x3
-ffffffffc02020c0:	97ba                	add	a5,a5,a4
-ffffffffc02020c2:	078e                	slli	a5,a5,0x3
-ffffffffc02020c4:	953e                	add	a0,a0,a5
-ffffffffc02020c6:	100027f3          	csrr	a5,sstatus
-ffffffffc02020ca:	8b89                	andi	a5,a5,2
-ffffffffc02020cc:	14079963          	bnez	a5,ffffffffc020221e <pmm_init+0x6de>
-ffffffffc02020d0:	000bb783          	ld	a5,0(s7)
-ffffffffc02020d4:	4585                	li	a1,1
-ffffffffc02020d6:	739c                	ld	a5,32(a5)
-ffffffffc02020d8:	9782                	jalr	a5
+ffffffffc0202042:	fff80737          	lui	a4,0xfff80
+ffffffffc0202046:	97ba                	add	a5,a5,a4
+ffffffffc0202048:	000b3503          	ld	a0,0(s6)
+ffffffffc020204c:	00379713          	slli	a4,a5,0x3
+ffffffffc0202050:	97ba                	add	a5,a5,a4
+ffffffffc0202052:	078e                	slli	a5,a5,0x3
+ffffffffc0202054:	953e                	add	a0,a0,a5
+ffffffffc0202056:	100027f3          	csrr	a5,sstatus
+ffffffffc020205a:	8b89                	andi	a5,a5,2
+ffffffffc020205c:	14079a63          	bnez	a5,ffffffffc02021b0 <pmm_init+0x6ba>
+ffffffffc0202060:	000bb783          	ld	a5,0(s7)
+ffffffffc0202064:	4585                	li	a1,1
+ffffffffc0202066:	739c                	ld	a5,32(a5)
+ffffffffc0202068:	9782                	jalr	a5
     return pa2page(PDE_ADDR(pde));
-ffffffffc02020da:	000ab783          	ld	a5,0(s5)
+ffffffffc020206a:	000a3783          	ld	a5,0(s4)
     if (PPN(pa) >= npage) {
-ffffffffc02020de:	6098                	ld	a4,0(s1)
+ffffffffc020206e:	6098                	ld	a4,0(s1)
     return pa2page(PDE_ADDR(pde));
-ffffffffc02020e0:	078a                	slli	a5,a5,0x2
-ffffffffc02020e2:	83b1                	srli	a5,a5,0xc
+ffffffffc0202070:	078a                	slli	a5,a5,0x2
+ffffffffc0202072:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc02020e4:	1ce7f163          	bgeu	a5,a4,ffffffffc02022a6 <pmm_init+0x766>
+ffffffffc0202074:	1ce7f263          	bgeu	a5,a4,ffffffffc0202238 <pmm_init+0x742>
     return &pages[PPN(pa) - nbase];
-ffffffffc02020e8:	fff80737          	lui	a4,0xfff80
-ffffffffc02020ec:	97ba                	add	a5,a5,a4
-ffffffffc02020ee:	000b3503          	ld	a0,0(s6)
-ffffffffc02020f2:	00379713          	slli	a4,a5,0x3
-ffffffffc02020f6:	97ba                	add	a5,a5,a4
-ffffffffc02020f8:	078e                	slli	a5,a5,0x3
-ffffffffc02020fa:	953e                	add	a0,a0,a5
-ffffffffc02020fc:	100027f3          	csrr	a5,sstatus
-ffffffffc0202100:	8b89                	andi	a5,a5,2
-ffffffffc0202102:	10079263          	bnez	a5,ffffffffc0202206 <pmm_init+0x6c6>
-ffffffffc0202106:	000bb783          	ld	a5,0(s7)
-ffffffffc020210a:	4585                	li	a1,1
-ffffffffc020210c:	739c                	ld	a5,32(a5)
-ffffffffc020210e:	9782                	jalr	a5
+ffffffffc0202078:	fff80737          	lui	a4,0xfff80
+ffffffffc020207c:	97ba                	add	a5,a5,a4
+ffffffffc020207e:	000b3503          	ld	a0,0(s6)
+ffffffffc0202082:	00379713          	slli	a4,a5,0x3
+ffffffffc0202086:	97ba                	add	a5,a5,a4
+ffffffffc0202088:	078e                	slli	a5,a5,0x3
+ffffffffc020208a:	953e                	add	a0,a0,a5
+ffffffffc020208c:	100027f3          	csrr	a5,sstatus
+ffffffffc0202090:	8b89                	andi	a5,a5,2
+ffffffffc0202092:	10079363          	bnez	a5,ffffffffc0202198 <pmm_init+0x6a2>
+ffffffffc0202096:	000bb783          	ld	a5,0(s7)
+ffffffffc020209a:	4585                	li	a1,1
+ffffffffc020209c:	739c                	ld	a5,32(a5)
+ffffffffc020209e:	9782                	jalr	a5
     free_page(p);
     free_page(pde2page(pd0[0]));
     free_page(pde2page(pd1[0]));
     boot_pgdir[0] = 0;
-ffffffffc0202110:	00093783          	ld	a5,0(s2)
-ffffffffc0202114:	0007b023          	sd	zero,0(a5)
-ffffffffc0202118:	100027f3          	csrr	a5,sstatus
-ffffffffc020211c:	8b89                	andi	a5,a5,2
-ffffffffc020211e:	0c079a63          	bnez	a5,ffffffffc02021f2 <pmm_init+0x6b2>
+ffffffffc02020a0:	00093783          	ld	a5,0(s2)
+ffffffffc02020a4:	0007b023          	sd	zero,0(a5)
+ffffffffc02020a8:	100027f3          	csrr	a5,sstatus
+ffffffffc02020ac:	8b89                	andi	a5,a5,2
+ffffffffc02020ae:	0c079b63          	bnez	a5,ffffffffc0202184 <pmm_init+0x68e>
     { ret = pmm_manager->nr_free_pages(); }
-ffffffffc0202122:	000bb783          	ld	a5,0(s7)
-ffffffffc0202126:	779c                	ld	a5,40(a5)
-ffffffffc0202128:	9782                	jalr	a5
-ffffffffc020212a:	842a                	mv	s0,a0
+ffffffffc02020b2:	000bb783          	ld	a5,0(s7)
+ffffffffc02020b6:	779c                	ld	a5,40(a5)
+ffffffffc02020b8:	9782                	jalr	a5
+ffffffffc02020ba:	842a                	mv	s0,a0
 
     assert(nr_free_store==nr_free_pages());
-ffffffffc020212c:	1a8c1b63          	bne	s8,s0,ffffffffc02022e2 <pmm_init+0x7a2>
+ffffffffc02020bc:	3a8c1763          	bne	s8,s0,ffffffffc020246a <pmm_init+0x974>
 }
-ffffffffc0202130:	7406                	ld	s0,96(sp)
-ffffffffc0202132:	70a6                	ld	ra,104(sp)
-ffffffffc0202134:	64e6                	ld	s1,88(sp)
-ffffffffc0202136:	6946                	ld	s2,80(sp)
-ffffffffc0202138:	69a6                	ld	s3,72(sp)
-ffffffffc020213a:	6a06                	ld	s4,64(sp)
-ffffffffc020213c:	7ae2                	ld	s5,56(sp)
-ffffffffc020213e:	7b42                	ld	s6,48(sp)
-ffffffffc0202140:	7ba2                	ld	s7,40(sp)
-ffffffffc0202142:	7c02                	ld	s8,32(sp)
-ffffffffc0202144:	6ce2                	ld	s9,24(sp)
+ffffffffc02020c0:	7406                	ld	s0,96(sp)
+ffffffffc02020c2:	70a6                	ld	ra,104(sp)
+ffffffffc02020c4:	64e6                	ld	s1,88(sp)
+ffffffffc02020c6:	6946                	ld	s2,80(sp)
+ffffffffc02020c8:	69a6                	ld	s3,72(sp)
+ffffffffc02020ca:	6a06                	ld	s4,64(sp)
+ffffffffc02020cc:	7ae2                	ld	s5,56(sp)
+ffffffffc02020ce:	7b42                	ld	s6,48(sp)
+ffffffffc02020d0:	7ba2                	ld	s7,40(sp)
+ffffffffc02020d2:	7c02                	ld	s8,32(sp)
+ffffffffc02020d4:	6ce2                	ld	s9,24(sp)
+ffffffffc02020d6:	6d42                	ld	s10,16(sp)
 
     cprintf("check_boot_pgdir() succeeded!\n");
-ffffffffc0202146:	00003517          	auipc	a0,0x3
-ffffffffc020214a:	66a50513          	addi	a0,a0,1642 # ffffffffc02057b0 <etext+0x1260>
+ffffffffc02020d8:	00003517          	auipc	a0,0x3
+ffffffffc02020dc:	6e850513          	addi	a0,a0,1768 # ffffffffc02057c0 <default_pmm_manager+0x610>
 }
-ffffffffc020214e:	6165                	addi	sp,sp,112
+ffffffffc02020e0:	6165                	addi	sp,sp,112
     cprintf("check_boot_pgdir() succeeded!\n");
-ffffffffc0202150:	f6bfd06f          	j	ffffffffc02000ba <cprintf>
+ffffffffc02020e2:	fd9fd06f          	j	ffffffffc02000ba <cprintf>
     mem_begin = ROUNDUP(freemem, PGSIZE);
-ffffffffc0202154:	6705                	lui	a4,0x1
-ffffffffc0202156:	177d                	addi	a4,a4,-1 # fff <kern_entry-0xffffffffc01ff001>
-ffffffffc0202158:	96ba                	add	a3,a3,a4
-ffffffffc020215a:	777d                	lui	a4,0xfffff
-ffffffffc020215c:	8f75                	and	a4,a4,a3
+ffffffffc02020e6:	6705                	lui	a4,0x1
+ffffffffc02020e8:	177d                	addi	a4,a4,-1
+ffffffffc02020ea:	96ba                	add	a3,a3,a4
+ffffffffc02020ec:	777d                	lui	a4,0xfffff
+ffffffffc02020ee:	8f75                	and	a4,a4,a3
     if (PPN(pa) >= npage) {
-ffffffffc020215e:	00c75693          	srli	a3,a4,0xc
-ffffffffc0202162:	14f6f263          	bgeu	a3,a5,ffffffffc02022a6 <pmm_init+0x766>
+ffffffffc02020f0:	00c75693          	srli	a3,a4,0xc
+ffffffffc02020f4:	14f6f263          	bgeu	a3,a5,ffffffffc0202238 <pmm_init+0x742>
     pmm_manager->init_memmap(base, n);
-ffffffffc0202166:	000bb583          	ld	a1,0(s7)
+ffffffffc02020f8:	000bb803          	ld	a6,0(s7)
     return &pages[PPN(pa) - nbase];
-ffffffffc020216a:	fff807b7          	lui	a5,0xfff80
-ffffffffc020216e:	96be                	add	a3,a3,a5
-ffffffffc0202170:	00369793          	slli	a5,a3,0x3
-ffffffffc0202174:	97b6                	add	a5,a5,a3
-ffffffffc0202176:	6994                	ld	a3,16(a1)
+ffffffffc02020fc:	95b6                	add	a1,a1,a3
+ffffffffc02020fe:	00359793          	slli	a5,a1,0x3
+ffffffffc0202102:	97ae                	add	a5,a5,a1
+ffffffffc0202104:	01083683          	ld	a3,16(a6)
         init_memmap(pa2page(mem_begin), (mem_end - mem_begin) / PGSIZE);
-ffffffffc0202178:	8e19                	sub	a2,a2,a4
-ffffffffc020217a:	078e                	slli	a5,a5,0x3
+ffffffffc0202108:	40e60733          	sub	a4,a2,a4
+ffffffffc020210c:	078e                	slli	a5,a5,0x3
     pmm_manager->init_memmap(base, n);
-ffffffffc020217c:	00c65593          	srli	a1,a2,0xc
-ffffffffc0202180:	953e                	add	a0,a0,a5
-ffffffffc0202182:	9682                	jalr	a3
+ffffffffc020210e:	00c75593          	srli	a1,a4,0xc
+ffffffffc0202112:	953e                	add	a0,a0,a5
+ffffffffc0202114:	9682                	jalr	a3
 }
-ffffffffc0202184:	b4f9                	j	ffffffffc0201c52 <pmm_init+0x112>
+ffffffffc0202116:	bcc5                	j	ffffffffc0201c06 <pmm_init+0x110>
         intr_disable();
-ffffffffc0202186:	b56fe0ef          	jal	ffffffffc02004dc <intr_disable>
+ffffffffc0202118:	bd6fe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
     { ret = pmm_manager->nr_free_pages(); }
-ffffffffc020218a:	000bb783          	ld	a5,0(s7)
-ffffffffc020218e:	779c                	ld	a5,40(a5)
-ffffffffc0202190:	9782                	jalr	a5
-ffffffffc0202192:	842a                	mv	s0,a0
+ffffffffc020211c:	000bb783          	ld	a5,0(s7)
+ffffffffc0202120:	779c                	ld	a5,40(a5)
+ffffffffc0202122:	9782                	jalr	a5
+ffffffffc0202124:	842a                	mv	s0,a0
         intr_enable();
-ffffffffc0202194:	b42fe0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc0202198:	b631                	j	ffffffffc0201ca4 <pmm_init+0x164>
+ffffffffc0202126:	bc2fe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc020212a:	b63d                	j	ffffffffc0201c58 <pmm_init+0x162>
         intr_disable();
-ffffffffc020219a:	b42fe0ef          	jal	ffffffffc02004dc <intr_disable>
+ffffffffc020212c:	bc2fe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+ffffffffc0202130:	000bb783          	ld	a5,0(s7)
+ffffffffc0202134:	779c                	ld	a5,40(a5)
+ffffffffc0202136:	9782                	jalr	a5
+ffffffffc0202138:	8c2a                	mv	s8,a0
+        intr_enable();
+ffffffffc020213a:	baefe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc020213e:	b3c1                	j	ffffffffc0201efe <pmm_init+0x408>
+        intr_disable();
+ffffffffc0202140:	baefe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+ffffffffc0202144:	000bb783          	ld	a5,0(s7)
+ffffffffc0202148:	779c                	ld	a5,40(a5)
+ffffffffc020214a:	9782                	jalr	a5
+ffffffffc020214c:	8a2a                	mv	s4,a0
+        intr_enable();
+ffffffffc020214e:	b9afe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc0202152:	b361                	j	ffffffffc0201eda <pmm_init+0x3e4>
+ffffffffc0202154:	e42a                	sd	a0,8(sp)
+        intr_disable();
+ffffffffc0202156:	b98fe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+    { pmm_manager->free_pages(base, n); }
+ffffffffc020215a:	000bb783          	ld	a5,0(s7)
+ffffffffc020215e:	6522                	ld	a0,8(sp)
+ffffffffc0202160:	4585                	li	a1,1
+ffffffffc0202162:	739c                	ld	a5,32(a5)
+ffffffffc0202164:	9782                	jalr	a5
+        intr_enable();
+ffffffffc0202166:	b82fe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc020216a:	bb91                	j	ffffffffc0201ebe <pmm_init+0x3c8>
+ffffffffc020216c:	e42a                	sd	a0,8(sp)
+        intr_disable();
+ffffffffc020216e:	b80fe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+ffffffffc0202172:	000bb783          	ld	a5,0(s7)
+ffffffffc0202176:	6522                	ld	a0,8(sp)
+ffffffffc0202178:	4585                	li	a1,1
+ffffffffc020217a:	739c                	ld	a5,32(a5)
+ffffffffc020217c:	9782                	jalr	a5
+        intr_enable();
+ffffffffc020217e:	b6afe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc0202182:	b319                	j	ffffffffc0201e88 <pmm_init+0x392>
+        intr_disable();
+ffffffffc0202184:	b6afe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+    { ret = pmm_manager->nr_free_pages(); }
+ffffffffc0202188:	000bb783          	ld	a5,0(s7)
+ffffffffc020218c:	779c                	ld	a5,40(a5)
+ffffffffc020218e:	9782                	jalr	a5
+ffffffffc0202190:	842a                	mv	s0,a0
+        intr_enable();
+ffffffffc0202192:	b56fe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc0202196:	b71d                	j	ffffffffc02020bc <pmm_init+0x5c6>
+ffffffffc0202198:	e42a                	sd	a0,8(sp)
+        intr_disable();
+ffffffffc020219a:	b54fe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+    { pmm_manager->free_pages(base, n); }
 ffffffffc020219e:	000bb783          	ld	a5,0(s7)
-ffffffffc02021a2:	779c                	ld	a5,40(a5)
-ffffffffc02021a4:	9782                	jalr	a5
-ffffffffc02021a6:	8c2a                	mv	s8,a0
+ffffffffc02021a2:	6522                	ld	a0,8(sp)
+ffffffffc02021a4:	4585                	li	a1,1
+ffffffffc02021a6:	739c                	ld	a5,32(a5)
+ffffffffc02021a8:	9782                	jalr	a5
         intr_enable();
-ffffffffc02021a8:	b2efe0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc02021ac:	b36d                	j	ffffffffc0201f56 <pmm_init+0x416>
+ffffffffc02021aa:	b3efe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc02021ae:	bdcd                	j	ffffffffc02020a0 <pmm_init+0x5aa>
+ffffffffc02021b0:	e42a                	sd	a0,8(sp)
         intr_disable();
-ffffffffc02021ae:	b2efe0ef          	jal	ffffffffc02004dc <intr_disable>
-ffffffffc02021b2:	000bb783          	ld	a5,0(s7)
-ffffffffc02021b6:	779c                	ld	a5,40(a5)
-ffffffffc02021b8:	9782                	jalr	a5
-ffffffffc02021ba:	8a2a                	mv	s4,a0
+ffffffffc02021b2:	b3cfe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+ffffffffc02021b6:	000bb783          	ld	a5,0(s7)
+ffffffffc02021ba:	6522                	ld	a0,8(sp)
+ffffffffc02021bc:	4585                	li	a1,1
+ffffffffc02021be:	739c                	ld	a5,32(a5)
+ffffffffc02021c0:	9782                	jalr	a5
         intr_enable();
-ffffffffc02021bc:	b1afe0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc02021c0:	bb8d                	j	ffffffffc0201f32 <pmm_init+0x3f2>
-ffffffffc02021c2:	e42a                	sd	a0,8(sp)
+ffffffffc02021c2:	b26fe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc02021c6:	b555                	j	ffffffffc020206a <pmm_init+0x574>
         intr_disable();
-ffffffffc02021c4:	b18fe0ef          	jal	ffffffffc02004dc <intr_disable>
-    { pmm_manager->free_pages(base, n); }
-ffffffffc02021c8:	000bb783          	ld	a5,0(s7)
-ffffffffc02021cc:	6522                	ld	a0,8(sp)
-ffffffffc02021ce:	4585                	li	a1,1
-ffffffffc02021d0:	739c                	ld	a5,32(a5)
-ffffffffc02021d2:	9782                	jalr	a5
+ffffffffc02021c8:	b26fe0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+ffffffffc02021cc:	000bb783          	ld	a5,0(s7)
+ffffffffc02021d0:	4585                	li	a1,1
+ffffffffc02021d2:	8556                	mv	a0,s5
+ffffffffc02021d4:	739c                	ld	a5,32(a5)
+ffffffffc02021d6:	9782                	jalr	a5
         intr_enable();
-ffffffffc02021d4:	b02fe0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc02021d8:	bb3d                	j	ffffffffc0201f16 <pmm_init+0x3d6>
-ffffffffc02021da:	e42a                	sd	a0,8(sp)
-        intr_disable();
-ffffffffc02021dc:	b00fe0ef          	jal	ffffffffc02004dc <intr_disable>
-ffffffffc02021e0:	000bb783          	ld	a5,0(s7)
-ffffffffc02021e4:	6522                	ld	a0,8(sp)
-ffffffffc02021e6:	4585                	li	a1,1
-ffffffffc02021e8:	739c                	ld	a5,32(a5)
-ffffffffc02021ea:	9782                	jalr	a5
-        intr_enable();
-ffffffffc02021ec:	aeafe0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc02021f0:	b9c5                	j	ffffffffc0201ee0 <pmm_init+0x3a0>
-        intr_disable();
-ffffffffc02021f2:	aeafe0ef          	jal	ffffffffc02004dc <intr_disable>
-    { ret = pmm_manager->nr_free_pages(); }
-ffffffffc02021f6:	000bb783          	ld	a5,0(s7)
-ffffffffc02021fa:	779c                	ld	a5,40(a5)
-ffffffffc02021fc:	9782                	jalr	a5
-ffffffffc02021fe:	842a                	mv	s0,a0
-        intr_enable();
-ffffffffc0202200:	ad6fe0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc0202204:	b725                	j	ffffffffc020212c <pmm_init+0x5ec>
-ffffffffc0202206:	e42a                	sd	a0,8(sp)
-        intr_disable();
-ffffffffc0202208:	ad4fe0ef          	jal	ffffffffc02004dc <intr_disable>
-    { pmm_manager->free_pages(base, n); }
-ffffffffc020220c:	000bb783          	ld	a5,0(s7)
-ffffffffc0202210:	6522                	ld	a0,8(sp)
-ffffffffc0202212:	4585                	li	a1,1
-ffffffffc0202214:	739c                	ld	a5,32(a5)
-ffffffffc0202216:	9782                	jalr	a5
-        intr_enable();
-ffffffffc0202218:	abefe0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc020221c:	bdd5                	j	ffffffffc0202110 <pmm_init+0x5d0>
-ffffffffc020221e:	e42a                	sd	a0,8(sp)
-        intr_disable();
-ffffffffc0202220:	abcfe0ef          	jal	ffffffffc02004dc <intr_disable>
-ffffffffc0202224:	000bb783          	ld	a5,0(s7)
-ffffffffc0202228:	6522                	ld	a0,8(sp)
-ffffffffc020222a:	4585                	li	a1,1
-ffffffffc020222c:	739c                	ld	a5,32(a5)
-ffffffffc020222e:	9782                	jalr	a5
-        intr_enable();
-ffffffffc0202230:	aa6fe0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc0202234:	b55d                	j	ffffffffc02020da <pmm_init+0x59a>
-        intr_disable();
-ffffffffc0202236:	aa6fe0ef          	jal	ffffffffc02004dc <intr_disable>
-ffffffffc020223a:	000bb783          	ld	a5,0(s7)
-ffffffffc020223e:	4585                	li	a1,1
-ffffffffc0202240:	8552                	mv	a0,s4
-ffffffffc0202242:	739c                	ld	a5,32(a5)
-ffffffffc0202244:	9782                	jalr	a5
-        intr_enable();
-ffffffffc0202246:	a90fe0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc020224a:	bdb1                	j	ffffffffc02020a6 <pmm_init+0x566>
-        assert((ptep = get_pte(boot_pgdir, (uintptr_t)KADDR(i), 0)) != NULL);
-ffffffffc020224c:	86a2                	mv	a3,s0
-ffffffffc020224e:	00003617          	auipc	a2,0x3
-ffffffffc0202252:	fe260613          	addi	a2,a2,-30 # ffffffffc0205230 <etext+0xce0>
-ffffffffc0202256:	1cd00593          	li	a1,461
-ffffffffc020225a:	00003517          	auipc	a0,0x3
-ffffffffc020225e:	ffe50513          	addi	a0,a0,-2 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202262:	8fefe0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02021d8:	b10fe0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc02021dc:	bda9                	j	ffffffffc0202036 <pmm_init+0x540>
         assert(PTE_ADDR(*ptep) == i);
-ffffffffc0202266:	00003697          	auipc	a3,0x3
-ffffffffc020226a:	3fa68693          	addi	a3,a3,1018 # ffffffffc0205660 <etext+0x1110>
-ffffffffc020226e:	00003617          	auipc	a2,0x3
-ffffffffc0202272:	bba60613          	addi	a2,a2,-1094 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202276:	1ce00593          	li	a1,462
-ffffffffc020227a:	00003517          	auipc	a0,0x3
-ffffffffc020227e:	fde50513          	addi	a0,a0,-34 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202282:	8defe0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02021de:	00003697          	auipc	a3,0x3
+ffffffffc02021e2:	49268693          	addi	a3,a3,1170 # ffffffffc0205670 <default_pmm_manager+0x4c0>
+ffffffffc02021e6:	00003617          	auipc	a2,0x3
+ffffffffc02021ea:	c1a60613          	addi	a2,a2,-998 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02021ee:	1ce00593          	li	a1,462
+ffffffffc02021f2:	00003517          	auipc	a0,0x3
+ffffffffc02021f6:	07650513          	addi	a0,a0,118 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02021fa:	97afe0ef          	jal	ra,ffffffffc0200374 <__panic>
         assert((ptep = get_pte(boot_pgdir, (uintptr_t)KADDR(i), 0)) != NULL);
-ffffffffc0202286:	00003697          	auipc	a3,0x3
-ffffffffc020228a:	39a68693          	addi	a3,a3,922 # ffffffffc0205620 <etext+0x10d0>
-ffffffffc020228e:	00003617          	auipc	a2,0x3
-ffffffffc0202292:	b9a60613          	addi	a2,a2,-1126 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202296:	1cd00593          	li	a1,461
-ffffffffc020229a:	00003517          	auipc	a0,0x3
-ffffffffc020229e:	fbe50513          	addi	a0,a0,-66 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02022a2:	8befe0ef          	jal	ffffffffc0200360 <__panic>
-ffffffffc02022a6:	b24ff0ef          	jal	ffffffffc02015ca <pa2page.part.0>
-    assert(pte2page(*ptep) == p1);
-ffffffffc02022aa:	00003697          	auipc	a3,0x3
-ffffffffc02022ae:	16e68693          	addi	a3,a3,366 # ffffffffc0205418 <etext+0xec8>
-ffffffffc02022b2:	00003617          	auipc	a2,0x3
-ffffffffc02022b6:	b7660613          	addi	a2,a2,-1162 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02022ba:	19b00593          	li	a1,411
-ffffffffc02022be:	00003517          	auipc	a0,0x3
-ffffffffc02022c2:	f9a50513          	addi	a0,a0,-102 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02022c6:	89afe0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02021fe:	00003697          	auipc	a3,0x3
+ffffffffc0202202:	43268693          	addi	a3,a3,1074 # ffffffffc0205630 <default_pmm_manager+0x480>
+ffffffffc0202206:	00003617          	auipc	a2,0x3
+ffffffffc020220a:	bfa60613          	addi	a2,a2,-1030 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020220e:	1cd00593          	li	a1,461
+ffffffffc0202212:	00003517          	auipc	a0,0x3
+ffffffffc0202216:	05650513          	addi	a0,a0,86 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020221a:	95afe0ef          	jal	ra,ffffffffc0200374 <__panic>
+ffffffffc020221e:	86a2                	mv	a3,s0
+ffffffffc0202220:	00003617          	auipc	a2,0x3
+ffffffffc0202224:	02060613          	addi	a2,a2,32 # ffffffffc0205240 <default_pmm_manager+0x90>
+ffffffffc0202228:	1cd00593          	li	a1,461
+ffffffffc020222c:	00003517          	auipc	a0,0x3
+ffffffffc0202230:	03c50513          	addi	a0,a0,60 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202234:	940fe0ef          	jal	ra,ffffffffc0200374 <__panic>
+ffffffffc0202238:	b90ff0ef          	jal	ra,ffffffffc02015c8 <pa2page.part.0>
     uintptr_t freemem = PADDR((uintptr_t)pages + sizeof(struct Page) * (npage - nbase));
-ffffffffc02022ca:	00003617          	auipc	a2,0x3
-ffffffffc02022ce:	02660613          	addi	a2,a2,38 # ffffffffc02052f0 <etext+0xda0>
-ffffffffc02022d2:	07700593          	li	a1,119
-ffffffffc02022d6:	00003517          	auipc	a0,0x3
-ffffffffc02022da:	f8250513          	addi	a0,a0,-126 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02022de:	882fe0ef          	jal	ffffffffc0200360 <__panic>
-    assert(nr_free_store==nr_free_pages());
-ffffffffc02022e2:	00003697          	auipc	a3,0x3
-ffffffffc02022e6:	2fe68693          	addi	a3,a3,766 # ffffffffc02055e0 <etext+0x1090>
-ffffffffc02022ea:	00003617          	auipc	a2,0x3
-ffffffffc02022ee:	b3e60613          	addi	a2,a2,-1218 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02022f2:	1e800593          	li	a1,488
-ffffffffc02022f6:	00003517          	auipc	a0,0x3
-ffffffffc02022fa:	f6250513          	addi	a0,a0,-158 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02022fe:	862fe0ef          	jal	ffffffffc0200360 <__panic>
-    assert(boot_pgdir != NULL && (uint32_t)PGOFF(boot_pgdir) == 0);
-ffffffffc0202302:	00003697          	auipc	a3,0x3
-ffffffffc0202306:	05668693          	addi	a3,a3,86 # ffffffffc0205358 <etext+0xe08>
-ffffffffc020230a:	00003617          	auipc	a2,0x3
-ffffffffc020230e:	b1e60613          	addi	a2,a2,-1250 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202312:	19300593          	li	a1,403
-ffffffffc0202316:	00003517          	auipc	a0,0x3
-ffffffffc020231a:	f4250513          	addi	a0,a0,-190 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020231e:	842fe0ef          	jal	ffffffffc0200360 <__panic>
-    assert(npage <= KERNTOP / PGSIZE);
-ffffffffc0202322:	00003697          	auipc	a3,0x3
-ffffffffc0202326:	01668693          	addi	a3,a3,22 # ffffffffc0205338 <etext+0xde8>
-ffffffffc020232a:	00003617          	auipc	a2,0x3
-ffffffffc020232e:	afe60613          	addi	a2,a2,-1282 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202332:	19200593          	li	a1,402
-ffffffffc0202336:	00003517          	auipc	a0,0x3
-ffffffffc020233a:	f2250513          	addi	a0,a0,-222 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020233e:	822fe0ef          	jal	ffffffffc0200360 <__panic>
-ffffffffc0202342:	aa4ff0ef          	jal	ffffffffc02015e6 <pte2page.part.0>
-    assert((ptep = get_pte(boot_pgdir, 0x0, 0)) != NULL);
-ffffffffc0202346:	00003697          	auipc	a3,0x3
-ffffffffc020234a:	0a268693          	addi	a3,a3,162 # ffffffffc02053e8 <etext+0xe98>
-ffffffffc020234e:	00003617          	auipc	a2,0x3
-ffffffffc0202352:	ada60613          	addi	a2,a2,-1318 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202356:	19a00593          	li	a1,410
-ffffffffc020235a:	00003517          	auipc	a0,0x3
-ffffffffc020235e:	efe50513          	addi	a0,a0,-258 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202362:	ffffd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_insert(boot_pgdir, p1, 0x0, 0) == 0);
-ffffffffc0202366:	00003697          	auipc	a3,0x3
-ffffffffc020236a:	05268693          	addi	a3,a3,82 # ffffffffc02053b8 <etext+0xe68>
-ffffffffc020236e:	00003617          	auipc	a2,0x3
-ffffffffc0202372:	aba60613          	addi	a2,a2,-1350 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202376:	19800593          	li	a1,408
-ffffffffc020237a:	00003517          	auipc	a0,0x3
-ffffffffc020237e:	ede50513          	addi	a0,a0,-290 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202382:	fdffd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(get_page(boot_pgdir, 0x0, NULL) == NULL);
-ffffffffc0202386:	00003697          	auipc	a3,0x3
-ffffffffc020238a:	00a68693          	addi	a3,a3,10 # ffffffffc0205390 <etext+0xe40>
-ffffffffc020238e:	00003617          	auipc	a2,0x3
-ffffffffc0202392:	a9a60613          	addi	a2,a2,-1382 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202396:	19400593          	li	a1,404
-ffffffffc020239a:	00003517          	auipc	a0,0x3
-ffffffffc020239e:	ebe50513          	addi	a0,a0,-322 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02023a2:	fbffd0ef          	jal	ffffffffc0200360 <__panic>
-    assert((ptep = get_pte(boot_pgdir, PGSIZE, 0)) != NULL);
-ffffffffc02023a6:	00003697          	auipc	a3,0x3
-ffffffffc02023aa:	10268693          	addi	a3,a3,258 # ffffffffc02054a8 <etext+0xf58>
-ffffffffc02023ae:	00003617          	auipc	a2,0x3
-ffffffffc02023b2:	a7a60613          	addi	a2,a2,-1414 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02023b6:	1a400593          	li	a1,420
-ffffffffc02023ba:	00003517          	auipc	a0,0x3
-ffffffffc02023be:	e9e50513          	addi	a0,a0,-354 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02023c2:	f9ffd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_insert(boot_pgdir, p2, PGSIZE, PTE_U | PTE_W) == 0);
-ffffffffc02023c6:	00003697          	auipc	a3,0x3
-ffffffffc02023ca:	0aa68693          	addi	a3,a3,170 # ffffffffc0205470 <etext+0xf20>
-ffffffffc02023ce:	00003617          	auipc	a2,0x3
-ffffffffc02023d2:	a5a60613          	addi	a2,a2,-1446 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02023d6:	1a300593          	li	a1,419
-ffffffffc02023da:	00003517          	auipc	a0,0x3
-ffffffffc02023de:	e7e50513          	addi	a0,a0,-386 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02023e2:	f7ffd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(get_pte(boot_pgdir, PGSIZE, 0) == ptep);
-ffffffffc02023e6:	00003697          	auipc	a3,0x3
-ffffffffc02023ea:	06268693          	addi	a3,a3,98 # ffffffffc0205448 <etext+0xef8>
-ffffffffc02023ee:	00003617          	auipc	a2,0x3
-ffffffffc02023f2:	a3a60613          	addi	a2,a2,-1478 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02023f6:	1a000593          	li	a1,416
-ffffffffc02023fa:	00003517          	auipc	a0,0x3
-ffffffffc02023fe:	e5e50513          	addi	a0,a0,-418 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202402:	f5ffd0ef          	jal	ffffffffc0200360 <__panic>
-    ptep = (pte_t *)KADDR(PDE_ADDR(ptep[0])) + 1;
-ffffffffc0202406:	86d6                	mv	a3,s5
-ffffffffc0202408:	00003617          	auipc	a2,0x3
-ffffffffc020240c:	e2860613          	addi	a2,a2,-472 # ffffffffc0205230 <etext+0xce0>
-ffffffffc0202410:	19f00593          	li	a1,415
-ffffffffc0202414:	00003517          	auipc	a0,0x3
-ffffffffc0202418:	e4450513          	addi	a0,a0,-444 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020241c:	f45fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert((ptep = get_pte(boot_pgdir, PGSIZE, 0)) != NULL);
-ffffffffc0202420:	00003697          	auipc	a3,0x3
-ffffffffc0202424:	08868693          	addi	a3,a3,136 # ffffffffc02054a8 <etext+0xf58>
-ffffffffc0202428:	00003617          	auipc	a2,0x3
-ffffffffc020242c:	a0060613          	addi	a2,a2,-1536 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202430:	1ad00593          	li	a1,429
-ffffffffc0202434:	00003517          	auipc	a0,0x3
-ffffffffc0202438:	e2450513          	addi	a0,a0,-476 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020243c:	f25fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_ref(p2) == 0);
-ffffffffc0202440:	00003697          	auipc	a3,0x3
-ffffffffc0202444:	13068693          	addi	a3,a3,304 # ffffffffc0205570 <etext+0x1020>
-ffffffffc0202448:	00003617          	auipc	a2,0x3
-ffffffffc020244c:	9e060613          	addi	a2,a2,-1568 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202450:	1ac00593          	li	a1,428
-ffffffffc0202454:	00003517          	auipc	a0,0x3
-ffffffffc0202458:	e0450513          	addi	a0,a0,-508 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020245c:	f05fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_ref(p1) == 2);
-ffffffffc0202460:	00003697          	auipc	a3,0x3
-ffffffffc0202464:	0f868693          	addi	a3,a3,248 # ffffffffc0205558 <etext+0x1008>
-ffffffffc0202468:	00003617          	auipc	a2,0x3
-ffffffffc020246c:	9c060613          	addi	a2,a2,-1600 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202470:	1ab00593          	li	a1,427
-ffffffffc0202474:	00003517          	auipc	a0,0x3
-ffffffffc0202478:	de450513          	addi	a0,a0,-540 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020247c:	ee5fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_insert(boot_pgdir, p1, PGSIZE, 0) == 0);
-ffffffffc0202480:	00003697          	auipc	a3,0x3
-ffffffffc0202484:	0a868693          	addi	a3,a3,168 # ffffffffc0205528 <etext+0xfd8>
-ffffffffc0202488:	00003617          	auipc	a2,0x3
-ffffffffc020248c:	9a060613          	addi	a2,a2,-1632 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202490:	1aa00593          	li	a1,426
-ffffffffc0202494:	00003517          	auipc	a0,0x3
-ffffffffc0202498:	dc450513          	addi	a0,a0,-572 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020249c:	ec5fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_ref(p2) == 1);
-ffffffffc02024a0:	00003697          	auipc	a3,0x3
-ffffffffc02024a4:	07068693          	addi	a3,a3,112 # ffffffffc0205510 <etext+0xfc0>
-ffffffffc02024a8:	00003617          	auipc	a2,0x3
-ffffffffc02024ac:	98060613          	addi	a2,a2,-1664 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02024b0:	1a800593          	li	a1,424
-ffffffffc02024b4:	00003517          	auipc	a0,0x3
-ffffffffc02024b8:	da450513          	addi	a0,a0,-604 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02024bc:	ea5fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(boot_pgdir[0] & PTE_U);
-ffffffffc02024c0:	00003697          	auipc	a3,0x3
-ffffffffc02024c4:	03868693          	addi	a3,a3,56 # ffffffffc02054f8 <etext+0xfa8>
-ffffffffc02024c8:	00003617          	auipc	a2,0x3
-ffffffffc02024cc:	96060613          	addi	a2,a2,-1696 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02024d0:	1a700593          	li	a1,423
-ffffffffc02024d4:	00003517          	auipc	a0,0x3
-ffffffffc02024d8:	d8450513          	addi	a0,a0,-636 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02024dc:	e85fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(*ptep & PTE_W);
-ffffffffc02024e0:	00003697          	auipc	a3,0x3
-ffffffffc02024e4:	00868693          	addi	a3,a3,8 # ffffffffc02054e8 <etext+0xf98>
-ffffffffc02024e8:	00003617          	auipc	a2,0x3
-ffffffffc02024ec:	94060613          	addi	a2,a2,-1728 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02024f0:	1a600593          	li	a1,422
-ffffffffc02024f4:	00003517          	auipc	a0,0x3
-ffffffffc02024f8:	d6450513          	addi	a0,a0,-668 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02024fc:	e65fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(*ptep & PTE_U);
-ffffffffc0202500:	00003697          	auipc	a3,0x3
-ffffffffc0202504:	fd868693          	addi	a3,a3,-40 # ffffffffc02054d8 <etext+0xf88>
-ffffffffc0202508:	00003617          	auipc	a2,0x3
-ffffffffc020250c:	92060613          	addi	a2,a2,-1760 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202510:	1a500593          	li	a1,421
-ffffffffc0202514:	00003517          	auipc	a0,0x3
-ffffffffc0202518:	d4450513          	addi	a0,a0,-700 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020251c:	e45fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_ref(p2) == 0);
-ffffffffc0202520:	00003697          	auipc	a3,0x3
-ffffffffc0202524:	05068693          	addi	a3,a3,80 # ffffffffc0205570 <etext+0x1020>
-ffffffffc0202528:	00003617          	auipc	a2,0x3
-ffffffffc020252c:	90060613          	addi	a2,a2,-1792 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202530:	1b300593          	li	a1,435
-ffffffffc0202534:	00003517          	auipc	a0,0x3
-ffffffffc0202538:	d2450513          	addi	a0,a0,-732 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020253c:	e25fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_ref(p1) == 1);
-ffffffffc0202540:	00003697          	auipc	a3,0x3
-ffffffffc0202544:	ef068693          	addi	a3,a3,-272 # ffffffffc0205430 <etext+0xee0>
-ffffffffc0202548:	00003617          	auipc	a2,0x3
-ffffffffc020254c:	8e060613          	addi	a2,a2,-1824 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202550:	1b200593          	li	a1,434
-ffffffffc0202554:	00003517          	auipc	a0,0x3
-ffffffffc0202558:	d0450513          	addi	a0,a0,-764 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020255c:	e05fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert((*ptep & PTE_U) == 0);
-ffffffffc0202560:	00003697          	auipc	a3,0x3
-ffffffffc0202564:	02868693          	addi	a3,a3,40 # ffffffffc0205588 <etext+0x1038>
-ffffffffc0202568:	00003617          	auipc	a2,0x3
-ffffffffc020256c:	8c060613          	addi	a2,a2,-1856 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202570:	1af00593          	li	a1,431
-ffffffffc0202574:	00003517          	auipc	a0,0x3
-ffffffffc0202578:	ce450513          	addi	a0,a0,-796 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020257c:	de5fd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(pte2page(*ptep) == p1);
-ffffffffc0202580:	00003697          	auipc	a3,0x3
-ffffffffc0202584:	e9868693          	addi	a3,a3,-360 # ffffffffc0205418 <etext+0xec8>
-ffffffffc0202588:	00003617          	auipc	a2,0x3
-ffffffffc020258c:	8a060613          	addi	a2,a2,-1888 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202590:	1ae00593          	li	a1,430
-ffffffffc0202594:	00003517          	auipc	a0,0x3
-ffffffffc0202598:	cc450513          	addi	a0,a0,-828 # ffffffffc0205258 <etext+0xd08>
-ffffffffc020259c:	dc5fd0ef          	jal	ffffffffc0200360 <__panic>
-static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc02025a0:	86a2                	mv	a3,s0
-ffffffffc02025a2:	00003617          	auipc	a2,0x3
-ffffffffc02025a6:	c8e60613          	addi	a2,a2,-882 # ffffffffc0205230 <etext+0xce0>
-ffffffffc02025aa:	06a00593          	li	a1,106
-ffffffffc02025ae:	00003517          	auipc	a0,0x3
-ffffffffc02025b2:	c4a50513          	addi	a0,a0,-950 # ffffffffc02051f8 <etext+0xca8>
-ffffffffc02025b6:	dabfd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_ref(pde2page(boot_pgdir[0])) == 1);
-ffffffffc02025ba:	00003697          	auipc	a3,0x3
-ffffffffc02025be:	ffe68693          	addi	a3,a3,-2 # ffffffffc02055b8 <etext+0x1068>
-ffffffffc02025c2:	00003617          	auipc	a2,0x3
-ffffffffc02025c6:	86660613          	addi	a2,a2,-1946 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02025ca:	1b900593          	li	a1,441
-ffffffffc02025ce:	00003517          	auipc	a0,0x3
-ffffffffc02025d2:	c8a50513          	addi	a0,a0,-886 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02025d6:	d8bfd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_ref(p2) == 0);
-ffffffffc02025da:	00003697          	auipc	a3,0x3
-ffffffffc02025de:	f9668693          	addi	a3,a3,-106 # ffffffffc0205570 <etext+0x1020>
-ffffffffc02025e2:	00003617          	auipc	a2,0x3
-ffffffffc02025e6:	84660613          	addi	a2,a2,-1978 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02025ea:	1b700593          	li	a1,439
-ffffffffc02025ee:	00003517          	auipc	a0,0x3
-ffffffffc02025f2:	c6a50513          	addi	a0,a0,-918 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02025f6:	d6bfd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_ref(p1) == 0);
-ffffffffc02025fa:	00003697          	auipc	a3,0x3
-ffffffffc02025fe:	fa668693          	addi	a3,a3,-90 # ffffffffc02055a0 <etext+0x1050>
-ffffffffc0202602:	00003617          	auipc	a2,0x3
-ffffffffc0202606:	82660613          	addi	a2,a2,-2010 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020260a:	1b600593          	li	a1,438
-ffffffffc020260e:	00003517          	auipc	a0,0x3
-ffffffffc0202612:	c4a50513          	addi	a0,a0,-950 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202616:	d4bfd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_insert(boot_pgdir, p, 0x100 + PGSIZE, PTE_W | PTE_R) == 0);
-ffffffffc020261a:	00003697          	auipc	a3,0x3
-ffffffffc020261e:	0c668693          	addi	a3,a3,198 # ffffffffc02056e0 <etext+0x1190>
-ffffffffc0202622:	00003617          	auipc	a2,0x3
-ffffffffc0202626:	80660613          	addi	a2,a2,-2042 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020262a:	1d800593          	li	a1,472
-ffffffffc020262e:	00003517          	auipc	a0,0x3
-ffffffffc0202632:	c2a50513          	addi	a0,a0,-982 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202636:	d2bfd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_ref(p) == 1);
-ffffffffc020263a:	00003697          	auipc	a3,0x3
-ffffffffc020263e:	08e68693          	addi	a3,a3,142 # ffffffffc02056c8 <etext+0x1178>
-ffffffffc0202642:	00002617          	auipc	a2,0x2
-ffffffffc0202646:	7e660613          	addi	a2,a2,2022 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020264a:	1d700593          	li	a1,471
-ffffffffc020264e:	00003517          	auipc	a0,0x3
-ffffffffc0202652:	c0a50513          	addi	a0,a0,-1014 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202656:	d0bfd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(page_insert(boot_pgdir, p, 0x100, PTE_W | PTE_R) == 0);
-ffffffffc020265a:	00003697          	auipc	a3,0x3
-ffffffffc020265e:	03668693          	addi	a3,a3,54 # ffffffffc0205690 <etext+0x1140>
-ffffffffc0202662:	00002617          	auipc	a2,0x2
-ffffffffc0202666:	7c660613          	addi	a2,a2,1990 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020266a:	1d600593          	li	a1,470
-ffffffffc020266e:	00003517          	auipc	a0,0x3
-ffffffffc0202672:	bea50513          	addi	a0,a0,-1046 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202676:	cebfd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(boot_pgdir[0] == 0);
-ffffffffc020267a:	00003697          	auipc	a3,0x3
-ffffffffc020267e:	ffe68693          	addi	a3,a3,-2 # ffffffffc0205678 <etext+0x1128>
-ffffffffc0202682:	00002617          	auipc	a2,0x2
-ffffffffc0202686:	7a660613          	addi	a2,a2,1958 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020268a:	1d200593          	li	a1,466
-ffffffffc020268e:	00003517          	auipc	a0,0x3
-ffffffffc0202692:	bca50513          	addi	a0,a0,-1078 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202696:	ccbfd0ef          	jal	ffffffffc0200360 <__panic>
-    assert(nr_free_store==nr_free_pages());
-ffffffffc020269a:	00003697          	auipc	a3,0x3
-ffffffffc020269e:	f4668693          	addi	a3,a3,-186 # ffffffffc02055e0 <etext+0x1090>
-ffffffffc02026a2:	00002617          	auipc	a2,0x2
-ffffffffc02026a6:	78660613          	addi	a2,a2,1926 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02026aa:	1c000593          	li	a1,448
-ffffffffc02026ae:	00003517          	auipc	a0,0x3
-ffffffffc02026b2:	baa50513          	addi	a0,a0,-1110 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02026b6:	cabfd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc020223c:	00003617          	auipc	a2,0x3
+ffffffffc0202240:	0c460613          	addi	a2,a2,196 # ffffffffc0205300 <default_pmm_manager+0x150>
+ffffffffc0202244:	07700593          	li	a1,119
+ffffffffc0202248:	00003517          	auipc	a0,0x3
+ffffffffc020224c:	02050513          	addi	a0,a0,32 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202250:	924fe0ef          	jal	ra,ffffffffc0200374 <__panic>
     boot_cr3 = PADDR(boot_pgdir);
-ffffffffc02026ba:	00003617          	auipc	a2,0x3
-ffffffffc02026be:	c3660613          	addi	a2,a2,-970 # ffffffffc02052f0 <etext+0xda0>
-ffffffffc02026c2:	0bd00593          	li	a1,189
-ffffffffc02026c6:	00003517          	auipc	a0,0x3
-ffffffffc02026ca:	b9250513          	addi	a0,a0,-1134 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02026ce:	c93fd0ef          	jal	ffffffffc0200360 <__panic>
-    ptep = (pte_t *)KADDR(PDE_ADDR(boot_pgdir[0]));
-ffffffffc02026d2:	00003617          	auipc	a2,0x3
-ffffffffc02026d6:	b5e60613          	addi	a2,a2,-1186 # ffffffffc0205230 <etext+0xce0>
-ffffffffc02026da:	19e00593          	li	a1,414
-ffffffffc02026de:	00003517          	auipc	a0,0x3
-ffffffffc02026e2:	b7a50513          	addi	a0,a0,-1158 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02026e6:	c7bfd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202254:	00003617          	auipc	a2,0x3
+ffffffffc0202258:	0ac60613          	addi	a2,a2,172 # ffffffffc0205300 <default_pmm_manager+0x150>
+ffffffffc020225c:	0bd00593          	li	a1,189
+ffffffffc0202260:	00003517          	auipc	a0,0x3
+ffffffffc0202264:	00850513          	addi	a0,a0,8 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202268:	90cfe0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(boot_pgdir != NULL && (uint32_t)PGOFF(boot_pgdir) == 0);
+ffffffffc020226c:	00003697          	auipc	a3,0x3
+ffffffffc0202270:	0fc68693          	addi	a3,a3,252 # ffffffffc0205368 <default_pmm_manager+0x1b8>
+ffffffffc0202274:	00003617          	auipc	a2,0x3
+ffffffffc0202278:	b8c60613          	addi	a2,a2,-1140 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020227c:	19300593          	li	a1,403
+ffffffffc0202280:	00003517          	auipc	a0,0x3
+ffffffffc0202284:	fe850513          	addi	a0,a0,-24 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202288:	8ecfe0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(npage <= KERNTOP / PGSIZE);
+ffffffffc020228c:	00003697          	auipc	a3,0x3
+ffffffffc0202290:	0bc68693          	addi	a3,a3,188 # ffffffffc0205348 <default_pmm_manager+0x198>
+ffffffffc0202294:	00003617          	auipc	a2,0x3
+ffffffffc0202298:	b6c60613          	addi	a2,a2,-1172 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020229c:	19200593          	li	a1,402
+ffffffffc02022a0:	00003517          	auipc	a0,0x3
+ffffffffc02022a4:	fc850513          	addi	a0,a0,-56 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02022a8:	8ccfe0ef          	jal	ra,ffffffffc0200374 <__panic>
+ffffffffc02022ac:	b38ff0ef          	jal	ra,ffffffffc02015e4 <pte2page.part.0>
+    assert((ptep = get_pte(boot_pgdir, 0x0, 0)) != NULL);
+ffffffffc02022b0:	00003697          	auipc	a3,0x3
+ffffffffc02022b4:	14868693          	addi	a3,a3,328 # ffffffffc02053f8 <default_pmm_manager+0x248>
+ffffffffc02022b8:	00003617          	auipc	a2,0x3
+ffffffffc02022bc:	b4860613          	addi	a2,a2,-1208 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02022c0:	19a00593          	li	a1,410
+ffffffffc02022c4:	00003517          	auipc	a0,0x3
+ffffffffc02022c8:	fa450513          	addi	a0,a0,-92 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02022cc:	8a8fe0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_insert(boot_pgdir, p1, 0x0, 0) == 0);
+ffffffffc02022d0:	00003697          	auipc	a3,0x3
+ffffffffc02022d4:	0f868693          	addi	a3,a3,248 # ffffffffc02053c8 <default_pmm_manager+0x218>
+ffffffffc02022d8:	00003617          	auipc	a2,0x3
+ffffffffc02022dc:	b2860613          	addi	a2,a2,-1240 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02022e0:	19800593          	li	a1,408
+ffffffffc02022e4:	00003517          	auipc	a0,0x3
+ffffffffc02022e8:	f8450513          	addi	a0,a0,-124 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02022ec:	888fe0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(get_page(boot_pgdir, 0x0, NULL) == NULL);
+ffffffffc02022f0:	00003697          	auipc	a3,0x3
+ffffffffc02022f4:	0b068693          	addi	a3,a3,176 # ffffffffc02053a0 <default_pmm_manager+0x1f0>
+ffffffffc02022f8:	00003617          	auipc	a2,0x3
+ffffffffc02022fc:	b0860613          	addi	a2,a2,-1272 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202300:	19400593          	li	a1,404
+ffffffffc0202304:	00003517          	auipc	a0,0x3
+ffffffffc0202308:	f6450513          	addi	a0,a0,-156 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020230c:	868fe0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_insert(boot_pgdir, p2, PGSIZE, PTE_U | PTE_W) == 0);
+ffffffffc0202310:	00003697          	auipc	a3,0x3
+ffffffffc0202314:	17068693          	addi	a3,a3,368 # ffffffffc0205480 <default_pmm_manager+0x2d0>
+ffffffffc0202318:	00003617          	auipc	a2,0x3
+ffffffffc020231c:	ae860613          	addi	a2,a2,-1304 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202320:	1a300593          	li	a1,419
+ffffffffc0202324:	00003517          	auipc	a0,0x3
+ffffffffc0202328:	f4450513          	addi	a0,a0,-188 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020232c:	848fe0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_ref(p2) == 1);
+ffffffffc0202330:	00003697          	auipc	a3,0x3
+ffffffffc0202334:	1f068693          	addi	a3,a3,496 # ffffffffc0205520 <default_pmm_manager+0x370>
+ffffffffc0202338:	00003617          	auipc	a2,0x3
+ffffffffc020233c:	ac860613          	addi	a2,a2,-1336 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202340:	1a800593          	li	a1,424
+ffffffffc0202344:	00003517          	auipc	a0,0x3
+ffffffffc0202348:	f2450513          	addi	a0,a0,-220 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020234c:	828fe0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(get_pte(boot_pgdir, PGSIZE, 0) == ptep);
+ffffffffc0202350:	00003697          	auipc	a3,0x3
+ffffffffc0202354:	10868693          	addi	a3,a3,264 # ffffffffc0205458 <default_pmm_manager+0x2a8>
+ffffffffc0202358:	00003617          	auipc	a2,0x3
+ffffffffc020235c:	aa860613          	addi	a2,a2,-1368 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202360:	1a000593          	li	a1,416
+ffffffffc0202364:	00003517          	auipc	a0,0x3
+ffffffffc0202368:	f0450513          	addi	a0,a0,-252 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020236c:	808fe0ef          	jal	ra,ffffffffc0200374 <__panic>
+    ptep = (pte_t *)KADDR(PDE_ADDR(ptep[0])) + 1;
+ffffffffc0202370:	86d6                	mv	a3,s5
+ffffffffc0202372:	00003617          	auipc	a2,0x3
+ffffffffc0202376:	ece60613          	addi	a2,a2,-306 # ffffffffc0205240 <default_pmm_manager+0x90>
+ffffffffc020237a:	19f00593          	li	a1,415
+ffffffffc020237e:	00003517          	auipc	a0,0x3
+ffffffffc0202382:	eea50513          	addi	a0,a0,-278 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202386:	feffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert((ptep = get_pte(boot_pgdir, PGSIZE, 0)) != NULL);
+ffffffffc020238a:	00003697          	auipc	a3,0x3
+ffffffffc020238e:	12e68693          	addi	a3,a3,302 # ffffffffc02054b8 <default_pmm_manager+0x308>
+ffffffffc0202392:	00003617          	auipc	a2,0x3
+ffffffffc0202396:	a6e60613          	addi	a2,a2,-1426 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020239a:	1ad00593          	li	a1,429
+ffffffffc020239e:	00003517          	auipc	a0,0x3
+ffffffffc02023a2:	eca50513          	addi	a0,a0,-310 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02023a6:	fcffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_ref(p2) == 0);
+ffffffffc02023aa:	00003697          	auipc	a3,0x3
+ffffffffc02023ae:	1d668693          	addi	a3,a3,470 # ffffffffc0205580 <default_pmm_manager+0x3d0>
+ffffffffc02023b2:	00003617          	auipc	a2,0x3
+ffffffffc02023b6:	a4e60613          	addi	a2,a2,-1458 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02023ba:	1ac00593          	li	a1,428
+ffffffffc02023be:	00003517          	auipc	a0,0x3
+ffffffffc02023c2:	eaa50513          	addi	a0,a0,-342 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02023c6:	faffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_ref(p1) == 2);
+ffffffffc02023ca:	00003697          	auipc	a3,0x3
+ffffffffc02023ce:	19e68693          	addi	a3,a3,414 # ffffffffc0205568 <default_pmm_manager+0x3b8>
+ffffffffc02023d2:	00003617          	auipc	a2,0x3
+ffffffffc02023d6:	a2e60613          	addi	a2,a2,-1490 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02023da:	1ab00593          	li	a1,427
+ffffffffc02023de:	00003517          	auipc	a0,0x3
+ffffffffc02023e2:	e8a50513          	addi	a0,a0,-374 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02023e6:	f8ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_insert(boot_pgdir, p1, PGSIZE, 0) == 0);
+ffffffffc02023ea:	00003697          	auipc	a3,0x3
+ffffffffc02023ee:	14e68693          	addi	a3,a3,334 # ffffffffc0205538 <default_pmm_manager+0x388>
+ffffffffc02023f2:	00003617          	auipc	a2,0x3
+ffffffffc02023f6:	a0e60613          	addi	a2,a2,-1522 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02023fa:	1aa00593          	li	a1,426
+ffffffffc02023fe:	00003517          	auipc	a0,0x3
+ffffffffc0202402:	e6a50513          	addi	a0,a0,-406 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202406:	f6ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_insert(boot_pgdir, p, 0x100 + PGSIZE, PTE_W | PTE_R) == 0);
+ffffffffc020240a:	00003697          	auipc	a3,0x3
+ffffffffc020240e:	2e668693          	addi	a3,a3,742 # ffffffffc02056f0 <default_pmm_manager+0x540>
+ffffffffc0202412:	00003617          	auipc	a2,0x3
+ffffffffc0202416:	9ee60613          	addi	a2,a2,-1554 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020241a:	1d800593          	li	a1,472
+ffffffffc020241e:	00003517          	auipc	a0,0x3
+ffffffffc0202422:	e4a50513          	addi	a0,a0,-438 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202426:	f4ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(boot_pgdir[0] & PTE_U);
+ffffffffc020242a:	00003697          	auipc	a3,0x3
+ffffffffc020242e:	0de68693          	addi	a3,a3,222 # ffffffffc0205508 <default_pmm_manager+0x358>
+ffffffffc0202432:	00003617          	auipc	a2,0x3
+ffffffffc0202436:	9ce60613          	addi	a2,a2,-1586 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020243a:	1a700593          	li	a1,423
+ffffffffc020243e:	00003517          	auipc	a0,0x3
+ffffffffc0202442:	e2a50513          	addi	a0,a0,-470 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202446:	f2ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(*ptep & PTE_W);
+ffffffffc020244a:	00003697          	auipc	a3,0x3
+ffffffffc020244e:	0ae68693          	addi	a3,a3,174 # ffffffffc02054f8 <default_pmm_manager+0x348>
+ffffffffc0202452:	00003617          	auipc	a2,0x3
+ffffffffc0202456:	9ae60613          	addi	a2,a2,-1618 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020245a:	1a600593          	li	a1,422
+ffffffffc020245e:	00003517          	auipc	a0,0x3
+ffffffffc0202462:	e0a50513          	addi	a0,a0,-502 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202466:	f0ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(nr_free_store==nr_free_pages());
+ffffffffc020246a:	00003697          	auipc	a3,0x3
+ffffffffc020246e:	18668693          	addi	a3,a3,390 # ffffffffc02055f0 <default_pmm_manager+0x440>
+ffffffffc0202472:	00003617          	auipc	a2,0x3
+ffffffffc0202476:	98e60613          	addi	a2,a2,-1650 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020247a:	1e800593          	li	a1,488
+ffffffffc020247e:	00003517          	auipc	a0,0x3
+ffffffffc0202482:	dea50513          	addi	a0,a0,-534 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202486:	eeffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(*ptep & PTE_U);
+ffffffffc020248a:	00003697          	auipc	a3,0x3
+ffffffffc020248e:	05e68693          	addi	a3,a3,94 # ffffffffc02054e8 <default_pmm_manager+0x338>
+ffffffffc0202492:	00003617          	auipc	a2,0x3
+ffffffffc0202496:	96e60613          	addi	a2,a2,-1682 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020249a:	1a500593          	li	a1,421
+ffffffffc020249e:	00003517          	auipc	a0,0x3
+ffffffffc02024a2:	dca50513          	addi	a0,a0,-566 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02024a6:	ecffd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(page_ref(p1) == 1);
-ffffffffc02026ea:	00003697          	auipc	a3,0x3
-ffffffffc02026ee:	d4668693          	addi	a3,a3,-698 # ffffffffc0205430 <etext+0xee0>
-ffffffffc02026f2:	00002617          	auipc	a2,0x2
-ffffffffc02026f6:	73660613          	addi	a2,a2,1846 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02026fa:	19c00593          	li	a1,412
-ffffffffc02026fe:	00003517          	auipc	a0,0x3
-ffffffffc0202702:	b5a50513          	addi	a0,a0,-1190 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202706:	c5bfd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02024aa:	00003697          	auipc	a3,0x3
+ffffffffc02024ae:	f9668693          	addi	a3,a3,-106 # ffffffffc0205440 <default_pmm_manager+0x290>
+ffffffffc02024b2:	00003617          	auipc	a2,0x3
+ffffffffc02024b6:	94e60613          	addi	a2,a2,-1714 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02024ba:	1b200593          	li	a1,434
+ffffffffc02024be:	00003517          	auipc	a0,0x3
+ffffffffc02024c2:	daa50513          	addi	a0,a0,-598 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02024c6:	eaffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert((*ptep & PTE_U) == 0);
+ffffffffc02024ca:	00003697          	auipc	a3,0x3
+ffffffffc02024ce:	0ce68693          	addi	a3,a3,206 # ffffffffc0205598 <default_pmm_manager+0x3e8>
+ffffffffc02024d2:	00003617          	auipc	a2,0x3
+ffffffffc02024d6:	92e60613          	addi	a2,a2,-1746 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02024da:	1af00593          	li	a1,431
+ffffffffc02024de:	00003517          	auipc	a0,0x3
+ffffffffc02024e2:	d8a50513          	addi	a0,a0,-630 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02024e6:	e8ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(pte2page(*ptep) == p1);
+ffffffffc02024ea:	00003697          	auipc	a3,0x3
+ffffffffc02024ee:	f3e68693          	addi	a3,a3,-194 # ffffffffc0205428 <default_pmm_manager+0x278>
+ffffffffc02024f2:	00003617          	auipc	a2,0x3
+ffffffffc02024f6:	90e60613          	addi	a2,a2,-1778 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02024fa:	1ae00593          	li	a1,430
+ffffffffc02024fe:	00003517          	auipc	a0,0x3
+ffffffffc0202502:	d6a50513          	addi	a0,a0,-662 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202506:	e6ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
+ffffffffc020250a:	00003617          	auipc	a2,0x3
+ffffffffc020250e:	d3660613          	addi	a2,a2,-714 # ffffffffc0205240 <default_pmm_manager+0x90>
+ffffffffc0202512:	06a00593          	li	a1,106
+ffffffffc0202516:	00003517          	auipc	a0,0x3
+ffffffffc020251a:	cf250513          	addi	a0,a0,-782 # ffffffffc0205208 <default_pmm_manager+0x58>
+ffffffffc020251e:	e57fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_ref(pde2page(boot_pgdir[0])) == 1);
+ffffffffc0202522:	00003697          	auipc	a3,0x3
+ffffffffc0202526:	0a668693          	addi	a3,a3,166 # ffffffffc02055c8 <default_pmm_manager+0x418>
+ffffffffc020252a:	00003617          	auipc	a2,0x3
+ffffffffc020252e:	8d660613          	addi	a2,a2,-1834 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202532:	1b900593          	li	a1,441
+ffffffffc0202536:	00003517          	auipc	a0,0x3
+ffffffffc020253a:	d3250513          	addi	a0,a0,-718 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020253e:	e37fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_ref(p2) == 0);
+ffffffffc0202542:	00003697          	auipc	a3,0x3
+ffffffffc0202546:	03e68693          	addi	a3,a3,62 # ffffffffc0205580 <default_pmm_manager+0x3d0>
+ffffffffc020254a:	00003617          	auipc	a2,0x3
+ffffffffc020254e:	8b660613          	addi	a2,a2,-1866 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202552:	1b700593          	li	a1,439
+ffffffffc0202556:	00003517          	auipc	a0,0x3
+ffffffffc020255a:	d1250513          	addi	a0,a0,-750 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020255e:	e17fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_ref(p1) == 0);
+ffffffffc0202562:	00003697          	auipc	a3,0x3
+ffffffffc0202566:	04e68693          	addi	a3,a3,78 # ffffffffc02055b0 <default_pmm_manager+0x400>
+ffffffffc020256a:	00003617          	auipc	a2,0x3
+ffffffffc020256e:	89660613          	addi	a2,a2,-1898 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202572:	1b600593          	li	a1,438
+ffffffffc0202576:	00003517          	auipc	a0,0x3
+ffffffffc020257a:	cf250513          	addi	a0,a0,-782 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020257e:	df7fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_ref(p2) == 0);
+ffffffffc0202582:	00003697          	auipc	a3,0x3
+ffffffffc0202586:	ffe68693          	addi	a3,a3,-2 # ffffffffc0205580 <default_pmm_manager+0x3d0>
+ffffffffc020258a:	00003617          	auipc	a2,0x3
+ffffffffc020258e:	87660613          	addi	a2,a2,-1930 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202592:	1b300593          	li	a1,435
+ffffffffc0202596:	00003517          	auipc	a0,0x3
+ffffffffc020259a:	cd250513          	addi	a0,a0,-814 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020259e:	dd7fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_ref(p) == 1);
+ffffffffc02025a2:	00003697          	auipc	a3,0x3
+ffffffffc02025a6:	13668693          	addi	a3,a3,310 # ffffffffc02056d8 <default_pmm_manager+0x528>
+ffffffffc02025aa:	00003617          	auipc	a2,0x3
+ffffffffc02025ae:	85660613          	addi	a2,a2,-1962 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02025b2:	1d700593          	li	a1,471
+ffffffffc02025b6:	00003517          	auipc	a0,0x3
+ffffffffc02025ba:	cb250513          	addi	a0,a0,-846 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02025be:	db7fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_insert(boot_pgdir, p, 0x100, PTE_W | PTE_R) == 0);
+ffffffffc02025c2:	00003697          	auipc	a3,0x3
+ffffffffc02025c6:	0de68693          	addi	a3,a3,222 # ffffffffc02056a0 <default_pmm_manager+0x4f0>
+ffffffffc02025ca:	00003617          	auipc	a2,0x3
+ffffffffc02025ce:	83660613          	addi	a2,a2,-1994 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02025d2:	1d600593          	li	a1,470
+ffffffffc02025d6:	00003517          	auipc	a0,0x3
+ffffffffc02025da:	c9250513          	addi	a0,a0,-878 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02025de:	d97fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(boot_pgdir[0] == 0);
+ffffffffc02025e2:	00003697          	auipc	a3,0x3
+ffffffffc02025e6:	0a668693          	addi	a3,a3,166 # ffffffffc0205688 <default_pmm_manager+0x4d8>
+ffffffffc02025ea:	00003617          	auipc	a2,0x3
+ffffffffc02025ee:	81660613          	addi	a2,a2,-2026 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02025f2:	1d200593          	li	a1,466
+ffffffffc02025f6:	00003517          	auipc	a0,0x3
+ffffffffc02025fa:	c7250513          	addi	a0,a0,-910 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02025fe:	d77fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(nr_free_store==nr_free_pages());
+ffffffffc0202602:	00003697          	auipc	a3,0x3
+ffffffffc0202606:	fee68693          	addi	a3,a3,-18 # ffffffffc02055f0 <default_pmm_manager+0x440>
+ffffffffc020260a:	00002617          	auipc	a2,0x2
+ffffffffc020260e:	7f660613          	addi	a2,a2,2038 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202612:	1c000593          	li	a1,448
+ffffffffc0202616:	00003517          	auipc	a0,0x3
+ffffffffc020261a:	c5250513          	addi	a0,a0,-942 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020261e:	d57fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(pte2page(*ptep) == p1);
+ffffffffc0202622:	00003697          	auipc	a3,0x3
+ffffffffc0202626:	e0668693          	addi	a3,a3,-506 # ffffffffc0205428 <default_pmm_manager+0x278>
+ffffffffc020262a:	00002617          	auipc	a2,0x2
+ffffffffc020262e:	7d660613          	addi	a2,a2,2006 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202632:	19b00593          	li	a1,411
+ffffffffc0202636:	00003517          	auipc	a0,0x3
+ffffffffc020263a:	c3250513          	addi	a0,a0,-974 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020263e:	d37fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    ptep = (pte_t *)KADDR(PDE_ADDR(boot_pgdir[0]));
+ffffffffc0202642:	00003617          	auipc	a2,0x3
+ffffffffc0202646:	bfe60613          	addi	a2,a2,-1026 # ffffffffc0205240 <default_pmm_manager+0x90>
+ffffffffc020264a:	19e00593          	li	a1,414
+ffffffffc020264e:	00003517          	auipc	a0,0x3
+ffffffffc0202652:	c1a50513          	addi	a0,a0,-998 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202656:	d1ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(page_ref(p1) == 1);
+ffffffffc020265a:	00003697          	auipc	a3,0x3
+ffffffffc020265e:	de668693          	addi	a3,a3,-538 # ffffffffc0205440 <default_pmm_manager+0x290>
+ffffffffc0202662:	00002617          	auipc	a2,0x2
+ffffffffc0202666:	79e60613          	addi	a2,a2,1950 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020266a:	19c00593          	li	a1,412
+ffffffffc020266e:	00003517          	auipc	a0,0x3
+ffffffffc0202672:	bfa50513          	addi	a0,a0,-1030 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202676:	cfffd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert((ptep = get_pte(boot_pgdir, PGSIZE, 0)) != NULL);
+ffffffffc020267a:	00003697          	auipc	a3,0x3
+ffffffffc020267e:	e3e68693          	addi	a3,a3,-450 # ffffffffc02054b8 <default_pmm_manager+0x308>
+ffffffffc0202682:	00002617          	auipc	a2,0x2
+ffffffffc0202686:	77e60613          	addi	a2,a2,1918 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020268a:	1a400593          	li	a1,420
+ffffffffc020268e:	00003517          	auipc	a0,0x3
+ffffffffc0202692:	bda50513          	addi	a0,a0,-1062 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202696:	cdffd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(strlen((const char *)0x100) == 0);
-ffffffffc020270a:	00003697          	auipc	a3,0x3
-ffffffffc020270e:	07e68693          	addi	a3,a3,126 # ffffffffc0205788 <etext+0x1238>
-ffffffffc0202712:	00002617          	auipc	a2,0x2
-ffffffffc0202716:	71660613          	addi	a2,a2,1814 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020271a:	1e000593          	li	a1,480
-ffffffffc020271e:	00003517          	auipc	a0,0x3
-ffffffffc0202722:	b3a50513          	addi	a0,a0,-1222 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202726:	c3bfd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc020269a:	00003697          	auipc	a3,0x3
+ffffffffc020269e:	0fe68693          	addi	a3,a3,254 # ffffffffc0205798 <default_pmm_manager+0x5e8>
+ffffffffc02026a2:	00002617          	auipc	a2,0x2
+ffffffffc02026a6:	75e60613          	addi	a2,a2,1886 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02026aa:	1e000593          	li	a1,480
+ffffffffc02026ae:	00003517          	auipc	a0,0x3
+ffffffffc02026b2:	bba50513          	addi	a0,a0,-1094 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02026b6:	cbffd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(strcmp((void *)0x100, (void *)(0x100 + PGSIZE)) == 0);
-ffffffffc020272a:	00003697          	auipc	a3,0x3
-ffffffffc020272e:	02668693          	addi	a3,a3,38 # ffffffffc0205750 <etext+0x1200>
-ffffffffc0202732:	00002617          	auipc	a2,0x2
-ffffffffc0202736:	6f660613          	addi	a2,a2,1782 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020273a:	1dd00593          	li	a1,477
-ffffffffc020273e:	00003517          	auipc	a0,0x3
-ffffffffc0202742:	b1a50513          	addi	a0,a0,-1254 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202746:	c1bfd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02026ba:	00003697          	auipc	a3,0x3
+ffffffffc02026be:	0a668693          	addi	a3,a3,166 # ffffffffc0205760 <default_pmm_manager+0x5b0>
+ffffffffc02026c2:	00002617          	auipc	a2,0x2
+ffffffffc02026c6:	73e60613          	addi	a2,a2,1854 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02026ca:	1dd00593          	li	a1,477
+ffffffffc02026ce:	00003517          	auipc	a0,0x3
+ffffffffc02026d2:	b9a50513          	addi	a0,a0,-1126 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02026d6:	c9ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(page_ref(p) == 2);
-ffffffffc020274a:	00003697          	auipc	a3,0x3
-ffffffffc020274e:	fd668693          	addi	a3,a3,-42 # ffffffffc0205720 <etext+0x11d0>
-ffffffffc0202752:	00002617          	auipc	a2,0x2
-ffffffffc0202756:	6d660613          	addi	a2,a2,1750 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020275a:	1d900593          	li	a1,473
-ffffffffc020275e:	00003517          	auipc	a0,0x3
-ffffffffc0202762:	afa50513          	addi	a0,a0,-1286 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202766:	bfbfd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02026da:	00003697          	auipc	a3,0x3
+ffffffffc02026de:	05668693          	addi	a3,a3,86 # ffffffffc0205730 <default_pmm_manager+0x580>
+ffffffffc02026e2:	00002617          	auipc	a2,0x2
+ffffffffc02026e6:	71e60613          	addi	a2,a2,1822 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02026ea:	1d900593          	li	a1,473
+ffffffffc02026ee:	00003517          	auipc	a0,0x3
+ffffffffc02026f2:	b7a50513          	addi	a0,a0,-1158 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc02026f6:	c7ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc020276a <tlb_invalidate>:
+ffffffffc02026fa <tlb_invalidate>:
 static inline void flush_tlb() { asm volatile("sfence.vma"); }
-ffffffffc020276a:	12000073          	sfence.vma
+ffffffffc02026fa:	12000073          	sfence.vma
 void tlb_invalidate(pde_t *pgdir, uintptr_t la) { flush_tlb(); }
-ffffffffc020276e:	8082                	ret
+ffffffffc02026fe:	8082                	ret
 
-ffffffffc0202770 <pgdir_alloc_page>:
+ffffffffc0202700 <pgdir_alloc_page>:
 struct Page *pgdir_alloc_page(pde_t *pgdir, uintptr_t la, uint32_t perm) {
-ffffffffc0202770:	7179                	addi	sp,sp,-48
-ffffffffc0202772:	e84a                	sd	s2,16(sp)
-ffffffffc0202774:	892a                	mv	s2,a0
+ffffffffc0202700:	7179                	addi	sp,sp,-48
+ffffffffc0202702:	e84a                	sd	s2,16(sp)
+ffffffffc0202704:	892a                	mv	s2,a0
     struct Page *page = alloc_page();
-ffffffffc0202776:	4505                	li	a0,1
+ffffffffc0202706:	4505                	li	a0,1
 struct Page *pgdir_alloc_page(pde_t *pgdir, uintptr_t la, uint32_t perm) {
-ffffffffc0202778:	ec26                	sd	s1,24(sp)
-ffffffffc020277a:	e44e                	sd	s3,8(sp)
-ffffffffc020277c:	f406                	sd	ra,40(sp)
-ffffffffc020277e:	f022                	sd	s0,32(sp)
-ffffffffc0202780:	84ae                	mv	s1,a1
-ffffffffc0202782:	89b2                	mv	s3,a2
+ffffffffc0202708:	f022                	sd	s0,32(sp)
+ffffffffc020270a:	ec26                	sd	s1,24(sp)
+ffffffffc020270c:	e44e                	sd	s3,8(sp)
+ffffffffc020270e:	f406                	sd	ra,40(sp)
+ffffffffc0202710:	84ae                	mv	s1,a1
+ffffffffc0202712:	89b2                	mv	s3,a2
     struct Page *page = alloc_page();
-ffffffffc0202784:	e7ffe0ef          	jal	ffffffffc0201602 <alloc_pages>
+ffffffffc0202714:	eedfe0ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0202718:	842a                	mv	s0,a0
     if (page != NULL) {
-ffffffffc0202788:	c131                	beqz	a0,ffffffffc02027cc <pgdir_alloc_page+0x5c>
+ffffffffc020271a:	cd09                	beqz	a0,ffffffffc0202734 <pgdir_alloc_page+0x34>
         if (page_insert(pgdir, page, la, perm) != 0) {
-ffffffffc020278a:	842a                	mv	s0,a0
-ffffffffc020278c:	85aa                	mv	a1,a0
-ffffffffc020278e:	86ce                	mv	a3,s3
-ffffffffc0202790:	8626                	mv	a2,s1
-ffffffffc0202792:	854a                	mv	a0,s2
-ffffffffc0202794:	a9aff0ef          	jal	ffffffffc0201a2e <page_insert>
-ffffffffc0202798:	ed11                	bnez	a0,ffffffffc02027b4 <pgdir_alloc_page+0x44>
+ffffffffc020271c:	85aa                	mv	a1,a0
+ffffffffc020271e:	86ce                	mv	a3,s3
+ffffffffc0202720:	8626                	mv	a2,s1
+ffffffffc0202722:	854a                	mv	a0,s2
+ffffffffc0202724:	ad2ff0ef          	jal	ra,ffffffffc02019f6 <page_insert>
+ffffffffc0202728:	ed21                	bnez	a0,ffffffffc0202780 <pgdir_alloc_page+0x80>
         if (swap_init_ok) {
-ffffffffc020279a:	0000f797          	auipc	a5,0xf
-ffffffffc020279e:	dae7a783          	lw	a5,-594(a5) # ffffffffc0211548 <swap_init_ok>
-ffffffffc02027a2:	e79d                	bnez	a5,ffffffffc02027d0 <pgdir_alloc_page+0x60>
+ffffffffc020272a:	0000f797          	auipc	a5,0xf
+ffffffffc020272e:	e2e7a783          	lw	a5,-466(a5) # ffffffffc0211558 <swap_init_ok>
+ffffffffc0202732:	eb89                	bnez	a5,ffffffffc0202744 <pgdir_alloc_page+0x44>
 }
-ffffffffc02027a4:	70a2                	ld	ra,40(sp)
-ffffffffc02027a6:	8522                	mv	a0,s0
-ffffffffc02027a8:	7402                	ld	s0,32(sp)
-ffffffffc02027aa:	64e2                	ld	s1,24(sp)
-ffffffffc02027ac:	6942                	ld	s2,16(sp)
-ffffffffc02027ae:	69a2                	ld	s3,8(sp)
-ffffffffc02027b0:	6145                	addi	sp,sp,48
-ffffffffc02027b2:	8082                	ret
-    if (read_csr(sstatus) & SSTATUS_SIE) {
-ffffffffc02027b4:	100027f3          	csrr	a5,sstatus
-ffffffffc02027b8:	8b89                	andi	a5,a5,2
-ffffffffc02027ba:	eba9                	bnez	a5,ffffffffc020280c <pgdir_alloc_page+0x9c>
-    { pmm_manager->free_pages(base, n); }
-ffffffffc02027bc:	0000f797          	auipc	a5,0xf
-ffffffffc02027c0:	d5c7b783          	ld	a5,-676(a5) # ffffffffc0211518 <pmm_manager>
-ffffffffc02027c4:	739c                	ld	a5,32(a5)
-ffffffffc02027c6:	4585                	li	a1,1
-ffffffffc02027c8:	8522                	mv	a0,s0
-ffffffffc02027ca:	9782                	jalr	a5
-            return NULL;
-ffffffffc02027cc:	4401                	li	s0,0
-ffffffffc02027ce:	bfd9                	j	ffffffffc02027a4 <pgdir_alloc_page+0x34>
+ffffffffc0202734:	70a2                	ld	ra,40(sp)
+ffffffffc0202736:	8522                	mv	a0,s0
+ffffffffc0202738:	7402                	ld	s0,32(sp)
+ffffffffc020273a:	64e2                	ld	s1,24(sp)
+ffffffffc020273c:	6942                	ld	s2,16(sp)
+ffffffffc020273e:	69a2                	ld	s3,8(sp)
+ffffffffc0202740:	6145                	addi	sp,sp,48
+ffffffffc0202742:	8082                	ret
             swap_map_swappable(check_mm_struct, la, page, 0);
-ffffffffc02027d0:	4681                	li	a3,0
-ffffffffc02027d2:	8622                	mv	a2,s0
-ffffffffc02027d4:	85a6                	mv	a1,s1
-ffffffffc02027d6:	0000f517          	auipc	a0,0xf
-ffffffffc02027da:	d9a53503          	ld	a0,-614(a0) # ffffffffc0211570 <check_mm_struct>
-ffffffffc02027de:	09d000ef          	jal	ffffffffc020307a <swap_map_swappable>
+ffffffffc0202744:	4681                	li	a3,0
+ffffffffc0202746:	8622                	mv	a2,s0
+ffffffffc0202748:	85a6                	mv	a1,s1
+ffffffffc020274a:	0000f517          	auipc	a0,0xf
+ffffffffc020274e:	e1e53503          	ld	a0,-482(a0) # ffffffffc0211568 <check_mm_struct>
+ffffffffc0202752:	07f000ef          	jal	ra,ffffffffc0202fd0 <swap_map_swappable>
             assert(page_ref(page) == 1);
-ffffffffc02027e2:	4018                	lw	a4,0(s0)
+ffffffffc0202756:	4018                	lw	a4,0(s0)
             page->pra_vaddr = la;
-ffffffffc02027e4:	e024                	sd	s1,64(s0)
+ffffffffc0202758:	e024                	sd	s1,64(s0)
             assert(page_ref(page) == 1);
-ffffffffc02027e6:	4785                	li	a5,1
-ffffffffc02027e8:	faf70ee3          	beq	a4,a5,ffffffffc02027a4 <pgdir_alloc_page+0x34>
-ffffffffc02027ec:	00003697          	auipc	a3,0x3
-ffffffffc02027f0:	fe468693          	addi	a3,a3,-28 # ffffffffc02057d0 <etext+0x1280>
-ffffffffc02027f4:	00002617          	auipc	a2,0x2
-ffffffffc02027f8:	63460613          	addi	a2,a2,1588 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02027fc:	17a00593          	li	a1,378
-ffffffffc0202800:	00003517          	auipc	a0,0x3
-ffffffffc0202804:	a5850513          	addi	a0,a0,-1448 # ffffffffc0205258 <etext+0xd08>
-ffffffffc0202808:	b59fd0ef          	jal	ffffffffc0200360 <__panic>
-        intr_disable();
-ffffffffc020280c:	cd1fd0ef          	jal	ffffffffc02004dc <intr_disable>
+ffffffffc020275a:	4785                	li	a5,1
+ffffffffc020275c:	fcf70ce3          	beq	a4,a5,ffffffffc0202734 <pgdir_alloc_page+0x34>
+ffffffffc0202760:	00003697          	auipc	a3,0x3
+ffffffffc0202764:	08068693          	addi	a3,a3,128 # ffffffffc02057e0 <default_pmm_manager+0x630>
+ffffffffc0202768:	00002617          	auipc	a2,0x2
+ffffffffc020276c:	69860613          	addi	a2,a2,1688 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202770:	17a00593          	li	a1,378
+ffffffffc0202774:	00003517          	auipc	a0,0x3
+ffffffffc0202778:	af450513          	addi	a0,a0,-1292 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020277c:	bf9fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+    if (read_csr(sstatus) & SSTATUS_SIE) {
+ffffffffc0202780:	100027f3          	csrr	a5,sstatus
+ffffffffc0202784:	8b89                	andi	a5,a5,2
+ffffffffc0202786:	eb99                	bnez	a5,ffffffffc020279c <pgdir_alloc_page+0x9c>
     { pmm_manager->free_pages(base, n); }
-ffffffffc0202810:	0000f797          	auipc	a5,0xf
-ffffffffc0202814:	d087b783          	ld	a5,-760(a5) # ffffffffc0211518 <pmm_manager>
-ffffffffc0202818:	739c                	ld	a5,32(a5)
-ffffffffc020281a:	8522                	mv	a0,s0
-ffffffffc020281c:	4585                	li	a1,1
-ffffffffc020281e:	9782                	jalr	a5
+ffffffffc0202788:	0000f797          	auipc	a5,0xf
+ffffffffc020278c:	db07b783          	ld	a5,-592(a5) # ffffffffc0211538 <pmm_manager>
+ffffffffc0202790:	739c                	ld	a5,32(a5)
+ffffffffc0202792:	8522                	mv	a0,s0
+ffffffffc0202794:	4585                	li	a1,1
+ffffffffc0202796:	9782                	jalr	a5
             return NULL;
-ffffffffc0202820:	4401                	li	s0,0
+ffffffffc0202798:	4401                	li	s0,0
+ffffffffc020279a:	bf69                	j	ffffffffc0202734 <pgdir_alloc_page+0x34>
+        intr_disable();
+ffffffffc020279c:	d53fd0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+    { pmm_manager->free_pages(base, n); }
+ffffffffc02027a0:	0000f797          	auipc	a5,0xf
+ffffffffc02027a4:	d987b783          	ld	a5,-616(a5) # ffffffffc0211538 <pmm_manager>
+ffffffffc02027a8:	739c                	ld	a5,32(a5)
+ffffffffc02027aa:	8522                	mv	a0,s0
+ffffffffc02027ac:	4585                	li	a1,1
+ffffffffc02027ae:	9782                	jalr	a5
+            return NULL;
+ffffffffc02027b0:	4401                	li	s0,0
         intr_enable();
-ffffffffc0202822:	cb5fd0ef          	jal	ffffffffc02004d6 <intr_enable>
-ffffffffc0202826:	bfbd                	j	ffffffffc02027a4 <pgdir_alloc_page+0x34>
+ffffffffc02027b2:	d37fd0ef          	jal	ra,ffffffffc02004e8 <intr_enable>
+ffffffffc02027b6:	bfbd                	j	ffffffffc0202734 <pgdir_alloc_page+0x34>
 
-ffffffffc0202828 <kmalloc>:
+ffffffffc02027b8 <kmalloc>:
 }
 
 void *kmalloc(size_t n) {
-ffffffffc0202828:	1141                	addi	sp,sp,-16
+ffffffffc02027b8:	1141                	addi	sp,sp,-16
     void *ptr = NULL;
     struct Page *base = NULL;
     assert(n > 0 && n < 1024 * 0124);
-ffffffffc020282a:	67d5                	lui	a5,0x15
+ffffffffc02027ba:	67d5                	lui	a5,0x15
 void *kmalloc(size_t n) {
-ffffffffc020282c:	e406                	sd	ra,8(sp)
+ffffffffc02027bc:	e406                	sd	ra,8(sp)
     assert(n > 0 && n < 1024 * 0124);
-ffffffffc020282e:	fff50713          	addi	a4,a0,-1
-ffffffffc0202832:	17f9                	addi	a5,a5,-2 # 14ffe <kern_entry-0xffffffffc01eb002>
-ffffffffc0202834:	06e7e363          	bltu	a5,a4,ffffffffc020289a <kmalloc+0x72>
+ffffffffc02027be:	fff50713          	addi	a4,a0,-1
+ffffffffc02027c2:	17f9                	addi	a5,a5,-2
+ffffffffc02027c4:	04e7ea63          	bltu	a5,a4,ffffffffc0202818 <kmalloc+0x60>
     int num_pages = (n + PGSIZE - 1) / PGSIZE;
-ffffffffc0202838:	6785                	lui	a5,0x1
-ffffffffc020283a:	17fd                	addi	a5,a5,-1 # fff <kern_entry-0xffffffffc01ff001>
-ffffffffc020283c:	953e                	add	a0,a0,a5
+ffffffffc02027c8:	6785                	lui	a5,0x1
+ffffffffc02027ca:	17fd                	addi	a5,a5,-1
+ffffffffc02027cc:	953e                	add	a0,a0,a5
     base = alloc_pages(num_pages);
-ffffffffc020283e:	8131                	srli	a0,a0,0xc
-ffffffffc0202840:	dc3fe0ef          	jal	ffffffffc0201602 <alloc_pages>
+ffffffffc02027ce:	8131                	srli	a0,a0,0xc
+ffffffffc02027d0:	e31fe0ef          	jal	ra,ffffffffc0201600 <alloc_pages>
     assert(base != NULL);
-ffffffffc0202844:	c941                	beqz	a0,ffffffffc02028d4 <kmalloc+0xac>
+ffffffffc02027d4:	cd3d                	beqz	a0,ffffffffc0202852 <kmalloc+0x9a>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0202846:	f8e397b7          	lui	a5,0xf8e39
-ffffffffc020284a:	e3978793          	addi	a5,a5,-455 # fffffffff8e38e39 <end+0x38c278c1>
-ffffffffc020284e:	07b2                	slli	a5,a5,0xc
-ffffffffc0202850:	e3978793          	addi	a5,a5,-455
-ffffffffc0202854:	07b2                	slli	a5,a5,0xc
-ffffffffc0202856:	0000f717          	auipc	a4,0xf
-ffffffffc020285a:	cea73703          	ld	a4,-790(a4) # ffffffffc0211540 <pages>
-ffffffffc020285e:	e3978793          	addi	a5,a5,-455
-ffffffffc0202862:	8d19                	sub	a0,a0,a4
-ffffffffc0202864:	07b2                	slli	a5,a5,0xc
-ffffffffc0202866:	e3978793          	addi	a5,a5,-455
-ffffffffc020286a:	850d                	srai	a0,a0,0x3
-ffffffffc020286c:	02f50533          	mul	a0,a0,a5
-ffffffffc0202870:	000807b7          	lui	a5,0x80
+ffffffffc02027d6:	0000f797          	auipc	a5,0xf
+ffffffffc02027da:	d5a7b783          	ld	a5,-678(a5) # ffffffffc0211530 <pages>
+ffffffffc02027de:	8d1d                	sub	a0,a0,a5
+ffffffffc02027e0:	00004697          	auipc	a3,0x4
+ffffffffc02027e4:	ae06b683          	ld	a3,-1312(a3) # ffffffffc02062c0 <error_string+0x38>
+ffffffffc02027e8:	850d                	srai	a0,a0,0x3
+ffffffffc02027ea:	02d50533          	mul	a0,a0,a3
+ffffffffc02027ee:	000806b7          	lui	a3,0x80
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc0202874:	0000f717          	auipc	a4,0xf
-ffffffffc0202878:	cc473703          	ld	a4,-828(a4) # ffffffffc0211538 <npage>
+ffffffffc02027f2:	0000f717          	auipc	a4,0xf
+ffffffffc02027f6:	d3673703          	ld	a4,-714(a4) # ffffffffc0211528 <npage>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc020287c:	953e                	add	a0,a0,a5
+ffffffffc02027fa:	9536                	add	a0,a0,a3
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc020287e:	00c51793          	slli	a5,a0,0xc
-ffffffffc0202882:	83b1                	srli	a5,a5,0xc
+ffffffffc02027fc:	00c51793          	slli	a5,a0,0xc
+ffffffffc0202800:	83b1                	srli	a5,a5,0xc
     return page2ppn(page) << PGSHIFT;
-ffffffffc0202884:	0532                	slli	a0,a0,0xc
+ffffffffc0202802:	0532                	slli	a0,a0,0xc
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc0202886:	02e7fa63          	bgeu	a5,a4,ffffffffc02028ba <kmalloc+0x92>
+ffffffffc0202804:	02e7fa63          	bgeu	a5,a4,ffffffffc0202838 <kmalloc+0x80>
     ptr = page2kva(base);
     return ptr;
 }
-ffffffffc020288a:	60a2                	ld	ra,8(sp)
-ffffffffc020288c:	0000f797          	auipc	a5,0xf
-ffffffffc0202890:	ca47b783          	ld	a5,-860(a5) # ffffffffc0211530 <va_pa_offset>
-ffffffffc0202894:	953e                	add	a0,a0,a5
-ffffffffc0202896:	0141                	addi	sp,sp,16
-ffffffffc0202898:	8082                	ret
+ffffffffc0202808:	60a2                	ld	ra,8(sp)
+ffffffffc020280a:	0000f797          	auipc	a5,0xf
+ffffffffc020280e:	d367b783          	ld	a5,-714(a5) # ffffffffc0211540 <va_pa_offset>
+ffffffffc0202812:	953e                	add	a0,a0,a5
+ffffffffc0202814:	0141                	addi	sp,sp,16
+ffffffffc0202816:	8082                	ret
     assert(n > 0 && n < 1024 * 0124);
-ffffffffc020289a:	00003697          	auipc	a3,0x3
-ffffffffc020289e:	f4e68693          	addi	a3,a3,-178 # ffffffffc02057e8 <etext+0x1298>
-ffffffffc02028a2:	00002617          	auipc	a2,0x2
-ffffffffc02028a6:	58660613          	addi	a2,a2,1414 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02028aa:	1f000593          	li	a1,496
-ffffffffc02028ae:	00003517          	auipc	a0,0x3
-ffffffffc02028b2:	9aa50513          	addi	a0,a0,-1622 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02028b6:	aabfd0ef          	jal	ffffffffc0200360 <__panic>
-ffffffffc02028ba:	86aa                	mv	a3,a0
-ffffffffc02028bc:	00003617          	auipc	a2,0x3
-ffffffffc02028c0:	97460613          	addi	a2,a2,-1676 # ffffffffc0205230 <etext+0xce0>
-ffffffffc02028c4:	06a00593          	li	a1,106
-ffffffffc02028c8:	00003517          	auipc	a0,0x3
-ffffffffc02028cc:	93050513          	addi	a0,a0,-1744 # ffffffffc02051f8 <etext+0xca8>
-ffffffffc02028d0:	a91fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202818:	00003697          	auipc	a3,0x3
+ffffffffc020281c:	fe068693          	addi	a3,a3,-32 # ffffffffc02057f8 <default_pmm_manager+0x648>
+ffffffffc0202820:	00002617          	auipc	a2,0x2
+ffffffffc0202824:	5e060613          	addi	a2,a2,1504 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202828:	1f000593          	li	a1,496
+ffffffffc020282c:	00003517          	auipc	a0,0x3
+ffffffffc0202830:	a3c50513          	addi	a0,a0,-1476 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202834:	b41fd0ef          	jal	ra,ffffffffc0200374 <__panic>
+ffffffffc0202838:	86aa                	mv	a3,a0
+ffffffffc020283a:	00003617          	auipc	a2,0x3
+ffffffffc020283e:	a0660613          	addi	a2,a2,-1530 # ffffffffc0205240 <default_pmm_manager+0x90>
+ffffffffc0202842:	06a00593          	li	a1,106
+ffffffffc0202846:	00003517          	auipc	a0,0x3
+ffffffffc020284a:	9c250513          	addi	a0,a0,-1598 # ffffffffc0205208 <default_pmm_manager+0x58>
+ffffffffc020284e:	b27fd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(base != NULL);
-ffffffffc02028d4:	00003697          	auipc	a3,0x3
-ffffffffc02028d8:	f3468693          	addi	a3,a3,-204 # ffffffffc0205808 <etext+0x12b8>
-ffffffffc02028dc:	00002617          	auipc	a2,0x2
-ffffffffc02028e0:	54c60613          	addi	a2,a2,1356 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02028e4:	1f300593          	li	a1,499
-ffffffffc02028e8:	00003517          	auipc	a0,0x3
-ffffffffc02028ec:	97050513          	addi	a0,a0,-1680 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02028f0:	a71fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202852:	00003697          	auipc	a3,0x3
+ffffffffc0202856:	fc668693          	addi	a3,a3,-58 # ffffffffc0205818 <default_pmm_manager+0x668>
+ffffffffc020285a:	00002617          	auipc	a2,0x2
+ffffffffc020285e:	5a660613          	addi	a2,a2,1446 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202862:	1f300593          	li	a1,499
+ffffffffc0202866:	00003517          	auipc	a0,0x3
+ffffffffc020286a:	a0250513          	addi	a0,a0,-1534 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc020286e:	b07fd0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc02028f4 <kfree>:
+ffffffffc0202872 <kfree>:
 
 void kfree(void *ptr, size_t n) {
-ffffffffc02028f4:	1101                	addi	sp,sp,-32
+ffffffffc0202872:	1101                	addi	sp,sp,-32
     assert(n > 0 && n < 1024 * 0124);
-ffffffffc02028f6:	67d5                	lui	a5,0x15
+ffffffffc0202874:	67d5                	lui	a5,0x15
 void kfree(void *ptr, size_t n) {
-ffffffffc02028f8:	ec06                	sd	ra,24(sp)
+ffffffffc0202876:	ec06                	sd	ra,24(sp)
     assert(n > 0 && n < 1024 * 0124);
-ffffffffc02028fa:	fff58713          	addi	a4,a1,-1
-ffffffffc02028fe:	17f9                	addi	a5,a5,-2 # 14ffe <kern_entry-0xffffffffc01eb002>
-ffffffffc0202900:	0ae7ee63          	bltu	a5,a4,ffffffffc02029bc <kfree+0xc8>
+ffffffffc0202878:	fff58713          	addi	a4,a1,-1
+ffffffffc020287c:	17f9                	addi	a5,a5,-2
+ffffffffc020287e:	0ae7ee63          	bltu	a5,a4,ffffffffc020293a <kfree+0xc8>
     assert(ptr != NULL);
-ffffffffc0202904:	cd41                	beqz	a0,ffffffffc020299c <kfree+0xa8>
+ffffffffc0202882:	cd41                	beqz	a0,ffffffffc020291a <kfree+0xa8>
     struct Page *base = NULL;
     int num_pages = (n + PGSIZE - 1) / PGSIZE;
-ffffffffc0202906:	6785                	lui	a5,0x1
-ffffffffc0202908:	17fd                	addi	a5,a5,-1 # fff <kern_entry-0xffffffffc01ff001>
-ffffffffc020290a:	95be                	add	a1,a1,a5
+ffffffffc0202884:	6785                	lui	a5,0x1
+ffffffffc0202886:	17fd                	addi	a5,a5,-1
+ffffffffc0202888:	95be                	add	a1,a1,a5
 static inline struct Page *kva2page(void *kva) { return pa2page(PADDR(kva)); }
-ffffffffc020290c:	c02007b7          	lui	a5,0xc0200
-ffffffffc0202910:	81b1                	srli	a1,a1,0xc
-ffffffffc0202912:	06f56863          	bltu	a0,a5,ffffffffc0202982 <kfree+0x8e>
-ffffffffc0202916:	0000f797          	auipc	a5,0xf
-ffffffffc020291a:	c1a7b783          	ld	a5,-998(a5) # ffffffffc0211530 <va_pa_offset>
-ffffffffc020291e:	8d1d                	sub	a0,a0,a5
+ffffffffc020288a:	c02007b7          	lui	a5,0xc0200
+ffffffffc020288e:	81b1                	srli	a1,a1,0xc
+ffffffffc0202890:	06f56863          	bltu	a0,a5,ffffffffc0202900 <kfree+0x8e>
+ffffffffc0202894:	0000f697          	auipc	a3,0xf
+ffffffffc0202898:	cac6b683          	ld	a3,-852(a3) # ffffffffc0211540 <va_pa_offset>
+ffffffffc020289c:	8d15                	sub	a0,a0,a3
     if (PPN(pa) >= npage) {
-ffffffffc0202920:	8131                	srli	a0,a0,0xc
-ffffffffc0202922:	0000f797          	auipc	a5,0xf
-ffffffffc0202926:	c167b783          	ld	a5,-1002(a5) # ffffffffc0211538 <npage>
-ffffffffc020292a:	04f57a63          	bgeu	a0,a5,ffffffffc020297e <kfree+0x8a>
+ffffffffc020289e:	8131                	srli	a0,a0,0xc
+ffffffffc02028a0:	0000f797          	auipc	a5,0xf
+ffffffffc02028a4:	c887b783          	ld	a5,-888(a5) # ffffffffc0211528 <npage>
+ffffffffc02028a8:	04f57a63          	bgeu	a0,a5,ffffffffc02028fc <kfree+0x8a>
     return &pages[PPN(pa) - nbase];
-ffffffffc020292e:	fff807b7          	lui	a5,0xfff80
-ffffffffc0202932:	953e                	add	a0,a0,a5
-ffffffffc0202934:	00351793          	slli	a5,a0,0x3
-ffffffffc0202938:	97aa                	add	a5,a5,a0
-ffffffffc020293a:	078e                	slli	a5,a5,0x3
-ffffffffc020293c:	0000f517          	auipc	a0,0xf
-ffffffffc0202940:	c0453503          	ld	a0,-1020(a0) # ffffffffc0211540 <pages>
-ffffffffc0202944:	953e                	add	a0,a0,a5
+ffffffffc02028ac:	fff806b7          	lui	a3,0xfff80
+ffffffffc02028b0:	9536                	add	a0,a0,a3
+ffffffffc02028b2:	00351793          	slli	a5,a0,0x3
+ffffffffc02028b6:	953e                	add	a0,a0,a5
+ffffffffc02028b8:	050e                	slli	a0,a0,0x3
+ffffffffc02028ba:	0000f797          	auipc	a5,0xf
+ffffffffc02028be:	c767b783          	ld	a5,-906(a5) # ffffffffc0211530 <pages>
+ffffffffc02028c2:	953e                	add	a0,a0,a5
     if (read_csr(sstatus) & SSTATUS_SIE) {
-ffffffffc0202946:	100027f3          	csrr	a5,sstatus
-ffffffffc020294a:	8b89                	andi	a5,a5,2
-ffffffffc020294c:	eb89                	bnez	a5,ffffffffc020295e <kfree+0x6a>
+ffffffffc02028c4:	100027f3          	csrr	a5,sstatus
+ffffffffc02028c8:	8b89                	andi	a5,a5,2
+ffffffffc02028ca:	eb89                	bnez	a5,ffffffffc02028dc <kfree+0x6a>
     { pmm_manager->free_pages(base, n); }
-ffffffffc020294e:	0000f797          	auipc	a5,0xf
-ffffffffc0202952:	bca7b783          	ld	a5,-1078(a5) # ffffffffc0211518 <pmm_manager>
+ffffffffc02028cc:	0000f797          	auipc	a5,0xf
+ffffffffc02028d0:	c6c7b783          	ld	a5,-916(a5) # ffffffffc0211538 <pmm_manager>
     base = kva2page(ptr);
     free_pages(base, num_pages);
 }
-ffffffffc0202956:	60e2                	ld	ra,24(sp)
+ffffffffc02028d4:	60e2                	ld	ra,24(sp)
     { pmm_manager->free_pages(base, n); }
-ffffffffc0202958:	739c                	ld	a5,32(a5)
+ffffffffc02028d6:	739c                	ld	a5,32(a5)
 }
-ffffffffc020295a:	6105                	addi	sp,sp,32
+ffffffffc02028d8:	6105                	addi	sp,sp,32
     { pmm_manager->free_pages(base, n); }
-ffffffffc020295c:	8782                	jr	a5
+ffffffffc02028da:	8782                	jr	a5
         intr_disable();
-ffffffffc020295e:	e42a                	sd	a0,8(sp)
-ffffffffc0202960:	e02e                	sd	a1,0(sp)
-ffffffffc0202962:	b7bfd0ef          	jal	ffffffffc02004dc <intr_disable>
-ffffffffc0202966:	0000f797          	auipc	a5,0xf
-ffffffffc020296a:	bb27b783          	ld	a5,-1102(a5) # ffffffffc0211518 <pmm_manager>
-ffffffffc020296e:	6582                	ld	a1,0(sp)
-ffffffffc0202970:	6522                	ld	a0,8(sp)
-ffffffffc0202972:	739c                	ld	a5,32(a5)
-ffffffffc0202974:	9782                	jalr	a5
+ffffffffc02028dc:	e42a                	sd	a0,8(sp)
+ffffffffc02028de:	e02e                	sd	a1,0(sp)
+ffffffffc02028e0:	c0ffd0ef          	jal	ra,ffffffffc02004ee <intr_disable>
+ffffffffc02028e4:	0000f797          	auipc	a5,0xf
+ffffffffc02028e8:	c547b783          	ld	a5,-940(a5) # ffffffffc0211538 <pmm_manager>
+ffffffffc02028ec:	6582                	ld	a1,0(sp)
+ffffffffc02028ee:	6522                	ld	a0,8(sp)
+ffffffffc02028f0:	739c                	ld	a5,32(a5)
+ffffffffc02028f2:	9782                	jalr	a5
 }
-ffffffffc0202976:	60e2                	ld	ra,24(sp)
-ffffffffc0202978:	6105                	addi	sp,sp,32
+ffffffffc02028f4:	60e2                	ld	ra,24(sp)
+ffffffffc02028f6:	6105                	addi	sp,sp,32
         intr_enable();
-ffffffffc020297a:	b5dfd06f          	j	ffffffffc02004d6 <intr_enable>
-ffffffffc020297e:	c4dfe0ef          	jal	ffffffffc02015ca <pa2page.part.0>
+ffffffffc02028f8:	bf1fd06f          	j	ffffffffc02004e8 <intr_enable>
+ffffffffc02028fc:	ccdfe0ef          	jal	ra,ffffffffc02015c8 <pa2page.part.0>
 static inline struct Page *kva2page(void *kva) { return pa2page(PADDR(kva)); }
-ffffffffc0202982:	86aa                	mv	a3,a0
-ffffffffc0202984:	00003617          	auipc	a2,0x3
-ffffffffc0202988:	96c60613          	addi	a2,a2,-1684 # ffffffffc02052f0 <etext+0xda0>
-ffffffffc020298c:	06c00593          	li	a1,108
-ffffffffc0202990:	00003517          	auipc	a0,0x3
-ffffffffc0202994:	86850513          	addi	a0,a0,-1944 # ffffffffc02051f8 <etext+0xca8>
-ffffffffc0202998:	9c9fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202900:	86aa                	mv	a3,a0
+ffffffffc0202902:	00003617          	auipc	a2,0x3
+ffffffffc0202906:	9fe60613          	addi	a2,a2,-1538 # ffffffffc0205300 <default_pmm_manager+0x150>
+ffffffffc020290a:	06c00593          	li	a1,108
+ffffffffc020290e:	00003517          	auipc	a0,0x3
+ffffffffc0202912:	8fa50513          	addi	a0,a0,-1798 # ffffffffc0205208 <default_pmm_manager+0x58>
+ffffffffc0202916:	a5ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(ptr != NULL);
-ffffffffc020299c:	00003697          	auipc	a3,0x3
-ffffffffc02029a0:	e7c68693          	addi	a3,a3,-388 # ffffffffc0205818 <etext+0x12c8>
-ffffffffc02029a4:	00002617          	auipc	a2,0x2
-ffffffffc02029a8:	48460613          	addi	a2,a2,1156 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02029ac:	1fa00593          	li	a1,506
-ffffffffc02029b0:	00003517          	auipc	a0,0x3
-ffffffffc02029b4:	8a850513          	addi	a0,a0,-1880 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02029b8:	9a9fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc020291a:	00003697          	auipc	a3,0x3
+ffffffffc020291e:	f0e68693          	addi	a3,a3,-242 # ffffffffc0205828 <default_pmm_manager+0x678>
+ffffffffc0202922:	00002617          	auipc	a2,0x2
+ffffffffc0202926:	4de60613          	addi	a2,a2,1246 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020292a:	1fa00593          	li	a1,506
+ffffffffc020292e:	00003517          	auipc	a0,0x3
+ffffffffc0202932:	93a50513          	addi	a0,a0,-1734 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202936:	a3ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(n > 0 && n < 1024 * 0124);
-ffffffffc02029bc:	00003697          	auipc	a3,0x3
-ffffffffc02029c0:	e2c68693          	addi	a3,a3,-468 # ffffffffc02057e8 <etext+0x1298>
-ffffffffc02029c4:	00002617          	auipc	a2,0x2
-ffffffffc02029c8:	46460613          	addi	a2,a2,1124 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02029cc:	1f900593          	li	a1,505
-ffffffffc02029d0:	00003517          	auipc	a0,0x3
-ffffffffc02029d4:	88850513          	addi	a0,a0,-1912 # ffffffffc0205258 <etext+0xd08>
-ffffffffc02029d8:	989fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc020293a:	00003697          	auipc	a3,0x3
+ffffffffc020293e:	ebe68693          	addi	a3,a3,-322 # ffffffffc02057f8 <default_pmm_manager+0x648>
+ffffffffc0202942:	00002617          	auipc	a2,0x2
+ffffffffc0202946:	4be60613          	addi	a2,a2,1214 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020294a:	1f900593          	li	a1,505
+ffffffffc020294e:	00003517          	auipc	a0,0x3
+ffffffffc0202952:	91a50513          	addi	a0,a0,-1766 # ffffffffc0205268 <default_pmm_manager+0xb8>
+ffffffffc0202956:	a1ffd0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc02029dc <swap_init>:
+ffffffffc020295a <swap_init>:
 
 static void check_swap(void);
 
 int
 swap_init(void)
 {
-ffffffffc02029dc:	7135                	addi	sp,sp,-160
-ffffffffc02029de:	ed06                	sd	ra,152(sp)
+ffffffffc020295a:	7135                	addi	sp,sp,-160
+ffffffffc020295c:	ed06                	sd	ra,152(sp)
+ffffffffc020295e:	e922                	sd	s0,144(sp)
+ffffffffc0202960:	e526                	sd	s1,136(sp)
+ffffffffc0202962:	e14a                	sd	s2,128(sp)
+ffffffffc0202964:	fcce                	sd	s3,120(sp)
+ffffffffc0202966:	f8d2                	sd	s4,112(sp)
+ffffffffc0202968:	f4d6                	sd	s5,104(sp)
+ffffffffc020296a:	f0da                	sd	s6,96(sp)
+ffffffffc020296c:	ecde                	sd	s7,88(sp)
+ffffffffc020296e:	e8e2                	sd	s8,80(sp)
+ffffffffc0202970:	e4e6                	sd	s9,72(sp)
+ffffffffc0202972:	e0ea                	sd	s10,64(sp)
+ffffffffc0202974:	fc6e                	sd	s11,56(sp)
      swapfs_init();
-ffffffffc02029e0:	484010ef          	jal	ffffffffc0203e64 <swapfs_init>
+ffffffffc0202976:	444010ef          	jal	ra,ffffffffc0203dba <swapfs_init>
 
      // Since the IDE is faked, it can only store 7 pages at most to pass the test
      if (!(7 <= max_swap_offset &&
-ffffffffc02029e4:	0000f697          	auipc	a3,0xf
-ffffffffc02029e8:	b6c6b683          	ld	a3,-1172(a3) # ffffffffc0211550 <max_swap_offset>
-ffffffffc02029ec:	010007b7          	lui	a5,0x1000
-ffffffffc02029f0:	ff968713          	addi	a4,a3,-7
-ffffffffc02029f4:	17e1                	addi	a5,a5,-8 # fffff8 <kern_entry-0xffffffffbf200008>
-ffffffffc02029f6:	40e7e463          	bltu	a5,a4,ffffffffc0202dfe <swap_init+0x422>
+ffffffffc020297a:	0000f697          	auipc	a3,0xf
+ffffffffc020297e:	bce6b683          	ld	a3,-1074(a3) # ffffffffc0211548 <max_swap_offset>
+ffffffffc0202982:	010007b7          	lui	a5,0x1000
+ffffffffc0202986:	ff968713          	addi	a4,a3,-7
+ffffffffc020298a:	17e1                	addi	a5,a5,-8
+ffffffffc020298c:	3ee7e063          	bltu	a5,a4,ffffffffc0202d6c <swap_init+0x412>
         max_swap_offset < MAX_SWAP_OFFSET_LIMIT)) {
         panic("bad max_swap_offset %08x.\n", max_swap_offset);
      }
 
      sm = &swap_manager_clock;//use first in first out Page Replacement Algorithm
-ffffffffc02029fa:	00007797          	auipc	a5,0x7
-ffffffffc02029fe:	60678793          	addi	a5,a5,1542 # ffffffffc020a000 <swap_manager_clock>
+ffffffffc0202990:	00007797          	auipc	a5,0x7
+ffffffffc0202994:	67078793          	addi	a5,a5,1648 # ffffffffc020a000 <swap_manager_clock>
      int r = sm->init();
-ffffffffc0202a02:	6798                	ld	a4,8(a5)
-ffffffffc0202a04:	fcce                	sd	s3,120(sp)
-ffffffffc0202a06:	f0da                	sd	s6,96(sp)
+ffffffffc0202998:	6798                	ld	a4,8(a5)
      sm = &swap_manager_clock;//use first in first out Page Replacement Algorithm
-ffffffffc0202a08:	0000fb17          	auipc	s6,0xf
-ffffffffc0202a0c:	b50b0b13          	addi	s6,s6,-1200 # ffffffffc0211558 <sm>
-ffffffffc0202a10:	00fb3023          	sd	a5,0(s6)
+ffffffffc020299a:	0000fb17          	auipc	s6,0xf
+ffffffffc020299e:	bb6b0b13          	addi	s6,s6,-1098 # ffffffffc0211550 <sm>
+ffffffffc02029a2:	00fb3023          	sd	a5,0(s6)
      int r = sm->init();
-ffffffffc0202a14:	9702                	jalr	a4
-ffffffffc0202a16:	89aa                	mv	s3,a0
+ffffffffc02029a6:	9702                	jalr	a4
+ffffffffc02029a8:	89aa                	mv	s3,a0
      
      if (r == 0)
-ffffffffc0202a18:	c519                	beqz	a0,ffffffffc0202a26 <swap_init+0x4a>
+ffffffffc02029aa:	c10d                	beqz	a0,ffffffffc02029cc <swap_init+0x72>
           cprintf("SWAP: manager = %s\n", sm->name);
           check_swap();
      }
 
      return r;
 }
-ffffffffc0202a1a:	60ea                	ld	ra,152(sp)
-ffffffffc0202a1c:	7b06                	ld	s6,96(sp)
-ffffffffc0202a1e:	854e                	mv	a0,s3
-ffffffffc0202a20:	79e6                	ld	s3,120(sp)
-ffffffffc0202a22:	610d                	addi	sp,sp,160
-ffffffffc0202a24:	8082                	ret
+ffffffffc02029ac:	60ea                	ld	ra,152(sp)
+ffffffffc02029ae:	644a                	ld	s0,144(sp)
+ffffffffc02029b0:	64aa                	ld	s1,136(sp)
+ffffffffc02029b2:	690a                	ld	s2,128(sp)
+ffffffffc02029b4:	7a46                	ld	s4,112(sp)
+ffffffffc02029b6:	7aa6                	ld	s5,104(sp)
+ffffffffc02029b8:	7b06                	ld	s6,96(sp)
+ffffffffc02029ba:	6be6                	ld	s7,88(sp)
+ffffffffc02029bc:	6c46                	ld	s8,80(sp)
+ffffffffc02029be:	6ca6                	ld	s9,72(sp)
+ffffffffc02029c0:	6d06                	ld	s10,64(sp)
+ffffffffc02029c2:	7de2                	ld	s11,56(sp)
+ffffffffc02029c4:	854e                	mv	a0,s3
+ffffffffc02029c6:	79e6                	ld	s3,120(sp)
+ffffffffc02029c8:	610d                	addi	sp,sp,160
+ffffffffc02029ca:	8082                	ret
           cprintf("SWAP: manager = %s\n", sm->name);
-ffffffffc0202a26:	000b3783          	ld	a5,0(s6)
-ffffffffc0202a2a:	00003517          	auipc	a0,0x3
-ffffffffc0202a2e:	e2e50513          	addi	a0,a0,-466 # ffffffffc0205858 <etext+0x1308>
-ffffffffc0202a32:	e922                	sd	s0,144(sp)
-ffffffffc0202a34:	638c                	ld	a1,0(a5)
-          swap_init_ok = 1;
-ffffffffc0202a36:	4785                	li	a5,1
-ffffffffc0202a38:	e526                	sd	s1,136(sp)
-ffffffffc0202a3a:	e0ea                	sd	s10,64(sp)
-ffffffffc0202a3c:	0000f717          	auipc	a4,0xf
-ffffffffc0202a40:	b0f72623          	sw	a5,-1268(a4) # ffffffffc0211548 <swap_init_ok>
-          cprintf("SWAP: manager = %s\n", sm->name);
-ffffffffc0202a44:	e14a                	sd	s2,128(sp)
-ffffffffc0202a46:	f8d2                	sd	s4,112(sp)
-ffffffffc0202a48:	f4d6                	sd	s5,104(sp)
-ffffffffc0202a4a:	ecde                	sd	s7,88(sp)
-ffffffffc0202a4c:	e8e2                	sd	s8,80(sp)
-ffffffffc0202a4e:	e4e6                	sd	s9,72(sp)
-ffffffffc0202a50:	fc6e                	sd	s11,56(sp)
+ffffffffc02029cc:	000b3783          	ld	a5,0(s6)
+ffffffffc02029d0:	00003517          	auipc	a0,0x3
+ffffffffc02029d4:	e9850513          	addi	a0,a0,-360 # ffffffffc0205868 <default_pmm_manager+0x6b8>
     return listelm->next;
-ffffffffc0202a52:	0000e497          	auipc	s1,0xe
-ffffffffc0202a56:	5ee48493          	addi	s1,s1,1518 # ffffffffc0211040 <free_area>
-ffffffffc0202a5a:	e60fd0ef          	jal	ffffffffc02000ba <cprintf>
-ffffffffc0202a5e:	649c                	ld	a5,8(s1)
+ffffffffc02029d8:	0000e497          	auipc	s1,0xe
+ffffffffc02029dc:	66848493          	addi	s1,s1,1640 # ffffffffc0211040 <free_area>
+ffffffffc02029e0:	638c                	ld	a1,0(a5)
+          swap_init_ok = 1;
+ffffffffc02029e2:	4785                	li	a5,1
+ffffffffc02029e4:	0000f717          	auipc	a4,0xf
+ffffffffc02029e8:	b6f72a23          	sw	a5,-1164(a4) # ffffffffc0211558 <swap_init_ok>
+          cprintf("SWAP: manager = %s\n", sm->name);
+ffffffffc02029ec:	ecefd0ef          	jal	ra,ffffffffc02000ba <cprintf>
+ffffffffc02029f0:	649c                	ld	a5,8(s1)
 
 static void
 check_swap(void)
 {
     //backup mem env
      int ret, count = 0, total = 0, i;
-ffffffffc0202a60:	4401                	li	s0,0
-ffffffffc0202a62:	4d01                	li	s10,0
+ffffffffc02029f2:	4401                	li	s0,0
+ffffffffc02029f4:	4d01                	li	s10,0
      list_entry_t *le = &free_list;
      while ((le = list_next(le)) != &free_list) {
-ffffffffc0202a64:	2e978363          	beq	a5,s1,ffffffffc0202d4a <swap_init+0x36e>
+ffffffffc02029f6:	2c978163          	beq	a5,s1,ffffffffc0202cb8 <swap_init+0x35e>
     return (((*(volatile unsigned long *)addr) >> nr) & 1);
-ffffffffc0202a68:	fe87b703          	ld	a4,-24(a5)
+ffffffffc02029fa:	fe87b703          	ld	a4,-24(a5)
         struct Page *p = le2page(le, page_link);
         assert(PageProperty(p));
-ffffffffc0202a6c:	8b09                	andi	a4,a4,2
-ffffffffc0202a6e:	2e070063          	beqz	a4,ffffffffc0202d4e <swap_init+0x372>
+ffffffffc02029fe:	8b09                	andi	a4,a4,2
+ffffffffc0202a00:	2a070e63          	beqz	a4,ffffffffc0202cbc <swap_init+0x362>
         count ++, total += p->property;
-ffffffffc0202a72:	ff87a703          	lw	a4,-8(a5)
-ffffffffc0202a76:	679c                	ld	a5,8(a5)
-ffffffffc0202a78:	2d05                	addiw	s10,s10,1
-ffffffffc0202a7a:	9c39                	addw	s0,s0,a4
+ffffffffc0202a04:	ff87a703          	lw	a4,-8(a5)
+ffffffffc0202a08:	679c                	ld	a5,8(a5)
+ffffffffc0202a0a:	2d05                	addiw	s10,s10,1
+ffffffffc0202a0c:	9c39                	addw	s0,s0,a4
      while ((le = list_next(le)) != &free_list) {
-ffffffffc0202a7c:	fe9796e3          	bne	a5,s1,ffffffffc0202a68 <swap_init+0x8c>
+ffffffffc0202a0e:	fe9796e3          	bne	a5,s1,ffffffffc02029fa <swap_init+0xa0>
      }
      assert(total == nr_free_pages());
-ffffffffc0202a80:	8922                	mv	s2,s0
-ffffffffc0202a82:	c51fe0ef          	jal	ffffffffc02016d2 <nr_free_pages>
-ffffffffc0202a86:	4b251463          	bne	a0,s2,ffffffffc0202f2e <swap_init+0x552>
+ffffffffc0202a12:	8922                	mv	s2,s0
+ffffffffc0202a14:	cbffe0ef          	jal	ra,ffffffffc02016d2 <nr_free_pages>
+ffffffffc0202a18:	47251663          	bne	a0,s2,ffffffffc0202e84 <swap_init+0x52a>
      cprintf("BEGIN check_swap: count %d, total %d\n",count,total);
-ffffffffc0202a8a:	8622                	mv	a2,s0
-ffffffffc0202a8c:	85ea                	mv	a1,s10
-ffffffffc0202a8e:	00003517          	auipc	a0,0x3
-ffffffffc0202a92:	de250513          	addi	a0,a0,-542 # ffffffffc0205870 <etext+0x1320>
-ffffffffc0202a96:	e24fd0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0202a1c:	8622                	mv	a2,s0
+ffffffffc0202a1e:	85ea                	mv	a1,s10
+ffffffffc0202a20:	00003517          	auipc	a0,0x3
+ffffffffc0202a24:	e6050513          	addi	a0,a0,-416 # ffffffffc0205880 <default_pmm_manager+0x6d0>
+ffffffffc0202a28:	e92fd0ef          	jal	ra,ffffffffc02000ba <cprintf>
      
      //now we set the phy pages env     
      struct mm_struct *mm = mm_create();
-ffffffffc0202a9a:	32f000ef          	jal	ffffffffc02035c8 <mm_create>
-ffffffffc0202a9e:	ec2a                	sd	a0,24(sp)
+ffffffffc0202a2c:	301000ef          	jal	ra,ffffffffc020352c <mm_create>
+ffffffffc0202a30:	8aaa                	mv	s5,a0
      assert(mm != NULL);
-ffffffffc0202aa0:	56050763          	beqz	a0,ffffffffc020300e <swap_init+0x632>
+ffffffffc0202a32:	52050963          	beqz	a0,ffffffffc0202f64 <swap_init+0x60a>
 
      extern struct mm_struct *check_mm_struct;
      assert(check_mm_struct == NULL);
-ffffffffc0202aa4:	0000f797          	auipc	a5,0xf
-ffffffffc0202aa8:	acc78793          	addi	a5,a5,-1332 # ffffffffc0211570 <check_mm_struct>
-ffffffffc0202aac:	6398                	ld	a4,0(a5)
-ffffffffc0202aae:	58071063          	bnez	a4,ffffffffc020302e <swap_init+0x652>
+ffffffffc0202a36:	0000f797          	auipc	a5,0xf
+ffffffffc0202a3a:	b3278793          	addi	a5,a5,-1230 # ffffffffc0211568 <check_mm_struct>
+ffffffffc0202a3e:	6398                	ld	a4,0(a5)
+ffffffffc0202a40:	54071263          	bnez	a4,ffffffffc0202f84 <swap_init+0x62a>
 
      check_mm_struct = mm;
 
      pde_t *pgdir = mm->pgdir = boot_pgdir;
-ffffffffc0202ab2:	0000f697          	auipc	a3,0xf
-ffffffffc0202ab6:	a766b683          	ld	a3,-1418(a3) # ffffffffc0211528 <boot_pgdir>
-     check_mm_struct = mm;
-ffffffffc0202aba:	6662                	ld	a2,24(sp)
+ffffffffc0202a44:	0000fb97          	auipc	s7,0xf
+ffffffffc0202a48:	adcbbb83          	ld	s7,-1316(s7) # ffffffffc0211520 <boot_pgdir>
      assert(pgdir[0] == 0);
-ffffffffc0202abc:	6298                	ld	a4,0(a3)
-     pde_t *pgdir = mm->pgdir = boot_pgdir;
-ffffffffc0202abe:	e836                	sd	a3,16(sp)
+ffffffffc0202a4c:	000bb703          	ld	a4,0(s7)
      check_mm_struct = mm;
-ffffffffc0202ac0:	e390                	sd	a2,0(a5)
+ffffffffc0202a50:	e388                	sd	a0,0(a5)
      pde_t *pgdir = mm->pgdir = boot_pgdir;
-ffffffffc0202ac2:	ee14                	sd	a3,24(a2)
+ffffffffc0202a52:	01753c23          	sd	s7,24(a0)
      assert(pgdir[0] == 0);
-ffffffffc0202ac4:	40071563          	bnez	a4,ffffffffc0202ece <swap_init+0x4f2>
+ffffffffc0202a56:	3c071763          	bnez	a4,ffffffffc0202e24 <swap_init+0x4ca>
 
      struct vma_struct *vma = vma_create(BEING_CHECK_VALID_VADDR, CHECK_VALID_VADDR, VM_WRITE | VM_READ);
-ffffffffc0202ac8:	6599                	lui	a1,0x6
-ffffffffc0202aca:	460d                	li	a2,3
-ffffffffc0202acc:	6505                	lui	a0,0x1
-ffffffffc0202ace:	343000ef          	jal	ffffffffc0203610 <vma_create>
-ffffffffc0202ad2:	85aa                	mv	a1,a0
+ffffffffc0202a5a:	6599                	lui	a1,0x6
+ffffffffc0202a5c:	460d                	li	a2,3
+ffffffffc0202a5e:	6505                	lui	a0,0x1
+ffffffffc0202a60:	315000ef          	jal	ra,ffffffffc0203574 <vma_create>
+ffffffffc0202a64:	85aa                	mv	a1,a0
      assert(vma != NULL);
-ffffffffc0202ad4:	40050d63          	beqz	a0,ffffffffc0202eee <swap_init+0x512>
+ffffffffc0202a66:	3c050f63          	beqz	a0,ffffffffc0202e44 <swap_init+0x4ea>
 
      insert_vma_struct(mm, vma);
-ffffffffc0202ad8:	6962                	ld	s2,24(sp)
-ffffffffc0202ada:	854a                	mv	a0,s2
-ffffffffc0202adc:	3a3000ef          	jal	ffffffffc020367e <insert_vma_struct>
+ffffffffc0202a6a:	8556                	mv	a0,s5
+ffffffffc0202a6c:	377000ef          	jal	ra,ffffffffc02035e2 <insert_vma_struct>
 
      //setup the temp Page Table vaddr 0~4MB
      cprintf("setup Page Table for vaddr 0X1000, so alloc a page\n");
-ffffffffc0202ae0:	00003517          	auipc	a0,0x3
-ffffffffc0202ae4:	e0050513          	addi	a0,a0,-512 # ffffffffc02058e0 <etext+0x1390>
-ffffffffc0202ae8:	dd2fd0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0202a70:	00003517          	auipc	a0,0x3
+ffffffffc0202a74:	e8050513          	addi	a0,a0,-384 # ffffffffc02058f0 <default_pmm_manager+0x740>
+ffffffffc0202a78:	e42fd0ef          	jal	ra,ffffffffc02000ba <cprintf>
      pte_t *temp_ptep=NULL;
      temp_ptep = get_pte(mm->pgdir, BEING_CHECK_VALID_VADDR, 1);
-ffffffffc0202aec:	01893503          	ld	a0,24(s2)
-ffffffffc0202af0:	4605                	li	a2,1
-ffffffffc0202af2:	6585                	lui	a1,0x1
-ffffffffc0202af4:	c19fe0ef          	jal	ffffffffc020170c <get_pte>
+ffffffffc0202a7c:	018ab503          	ld	a0,24(s5)
+ffffffffc0202a80:	4605                	li	a2,1
+ffffffffc0202a82:	6585                	lui	a1,0x1
+ffffffffc0202a84:	c89fe0ef          	jal	ra,ffffffffc020170c <get_pte>
      assert(temp_ptep!= NULL);
-ffffffffc0202af8:	40050b63          	beqz	a0,ffffffffc0202f0e <swap_init+0x532>
+ffffffffc0202a88:	3c050e63          	beqz	a0,ffffffffc0202e64 <swap_init+0x50a>
      cprintf("setup Page Table vaddr 0~4MB OVER!\n");
-ffffffffc0202afc:	00003517          	auipc	a0,0x3
-ffffffffc0202b00:	e3450513          	addi	a0,a0,-460 # ffffffffc0205930 <etext+0x13e0>
-ffffffffc0202b04:	0000e917          	auipc	s2,0xe
-ffffffffc0202b08:	57490913          	addi	s2,s2,1396 # ffffffffc0211078 <check_rp>
-ffffffffc0202b0c:	daefd0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0202a8c:	00003517          	auipc	a0,0x3
+ffffffffc0202a90:	eb450513          	addi	a0,a0,-332 # ffffffffc0205940 <default_pmm_manager+0x790>
+ffffffffc0202a94:	0000e917          	auipc	s2,0xe
+ffffffffc0202a98:	5e490913          	addi	s2,s2,1508 # ffffffffc0211078 <check_rp>
+ffffffffc0202a9c:	e1efd0ef          	jal	ra,ffffffffc02000ba <cprintf>
      
      for (i=0;i<CHECK_VALID_PHY_PAGE_NUM;i++) {
-ffffffffc0202b10:	0000ea17          	auipc	s4,0xe
-ffffffffc0202b14:	588a0a13          	addi	s4,s4,1416 # ffffffffc0211098 <swap_out_seq_no>
+ffffffffc0202aa0:	0000ea17          	auipc	s4,0xe
+ffffffffc0202aa4:	5f8a0a13          	addi	s4,s4,1528 # ffffffffc0211098 <swap_in_seq_no>
      cprintf("setup Page Table vaddr 0~4MB OVER!\n");
-ffffffffc0202b18:	8c4a                	mv	s8,s2
+ffffffffc0202aa8:	8c4a                	mv	s8,s2
           check_rp[i] = alloc_page();
-ffffffffc0202b1a:	4505                	li	a0,1
-ffffffffc0202b1c:	ae7fe0ef          	jal	ffffffffc0201602 <alloc_pages>
-ffffffffc0202b20:	00ac3023          	sd	a0,0(s8)
+ffffffffc0202aaa:	4505                	li	a0,1
+ffffffffc0202aac:	b55fe0ef          	jal	ra,ffffffffc0201600 <alloc_pages>
+ffffffffc0202ab0:	00ac3023          	sd	a0,0(s8)
           assert(check_rp[i] != NULL );
-ffffffffc0202b24:	2a050d63          	beqz	a0,ffffffffc0202dde <swap_init+0x402>
-ffffffffc0202b28:	651c                	ld	a5,8(a0)
+ffffffffc0202ab4:	28050c63          	beqz	a0,ffffffffc0202d4c <swap_init+0x3f2>
+ffffffffc0202ab8:	651c                	ld	a5,8(a0)
           assert(!PageProperty(check_rp[i]));
-ffffffffc0202b2a:	8b89                	andi	a5,a5,2
-ffffffffc0202b2c:	28079963          	bnez	a5,ffffffffc0202dbe <swap_init+0x3e2>
+ffffffffc0202aba:	8b89                	andi	a5,a5,2
+ffffffffc0202abc:	26079863          	bnez	a5,ffffffffc0202d2c <swap_init+0x3d2>
      for (i=0;i<CHECK_VALID_PHY_PAGE_NUM;i++) {
-ffffffffc0202b30:	0c21                	addi	s8,s8,8
-ffffffffc0202b32:	ff4c14e3          	bne	s8,s4,ffffffffc0202b1a <swap_init+0x13e>
+ffffffffc0202ac0:	0c21                	addi	s8,s8,8
+ffffffffc0202ac2:	ff4c14e3          	bne	s8,s4,ffffffffc0202aaa <swap_init+0x150>
      }
      list_entry_t free_list_store = free_list;
-ffffffffc0202b36:	609c                	ld	a5,0(s1)
-ffffffffc0202b38:	0084bd83          	ld	s11,8(s1)
+ffffffffc0202ac6:	609c                	ld	a5,0(s1)
+ffffffffc0202ac8:	0084bd83          	ld	s11,8(s1)
     elm->prev = elm->next = elm;
-ffffffffc0202b3c:	e084                	sd	s1,0(s1)
-ffffffffc0202b3e:	f03e                	sd	a5,32(sp)
+ffffffffc0202acc:	e084                	sd	s1,0(s1)
+ffffffffc0202ace:	f03e                	sd	a5,32(sp)
      list_init(&free_list);
      assert(list_empty(&free_list));
      
      //assert(alloc_page() == NULL);
      
      unsigned int nr_free_store = nr_free;
-ffffffffc0202b40:	489c                	lw	a5,16(s1)
-ffffffffc0202b42:	e484                	sd	s1,8(s1)
+ffffffffc0202ad0:	489c                	lw	a5,16(s1)
+ffffffffc0202ad2:	e484                	sd	s1,8(s1)
      nr_free = 0;
-ffffffffc0202b44:	0000ec17          	auipc	s8,0xe
-ffffffffc0202b48:	534c0c13          	addi	s8,s8,1332 # ffffffffc0211078 <check_rp>
+ffffffffc0202ad4:	0000ec17          	auipc	s8,0xe
+ffffffffc0202ad8:	5a4c0c13          	addi	s8,s8,1444 # ffffffffc0211078 <check_rp>
      unsigned int nr_free_store = nr_free;
-ffffffffc0202b4c:	f43e                	sd	a5,40(sp)
+ffffffffc0202adc:	f43e                	sd	a5,40(sp)
      nr_free = 0;
-ffffffffc0202b4e:	0000e797          	auipc	a5,0xe
-ffffffffc0202b52:	5007a123          	sw	zero,1282(a5) # ffffffffc0211050 <free_area+0x10>
+ffffffffc0202ade:	0000e797          	auipc	a5,0xe
+ffffffffc0202ae2:	5607a923          	sw	zero,1394(a5) # ffffffffc0211050 <free_area+0x10>
      for (i=0;i<CHECK_VALID_PHY_PAGE_NUM;i++) {
         free_pages(check_rp[i],1);
-ffffffffc0202b56:	000c3503          	ld	a0,0(s8)
-ffffffffc0202b5a:	4585                	li	a1,1
+ffffffffc0202ae6:	000c3503          	ld	a0,0(s8)
+ffffffffc0202aea:	4585                	li	a1,1
      for (i=0;i<CHECK_VALID_PHY_PAGE_NUM;i++) {
-ffffffffc0202b5c:	0c21                	addi	s8,s8,8
+ffffffffc0202aec:	0c21                	addi	s8,s8,8
         free_pages(check_rp[i],1);
-ffffffffc0202b5e:	b35fe0ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0202aee:	ba5fe0ef          	jal	ra,ffffffffc0201692 <free_pages>
      for (i=0;i<CHECK_VALID_PHY_PAGE_NUM;i++) {
-ffffffffc0202b62:	ff4c1ae3          	bne	s8,s4,ffffffffc0202b56 <swap_init+0x17a>
+ffffffffc0202af2:	ff4c1ae3          	bne	s8,s4,ffffffffc0202ae6 <swap_init+0x18c>
      }
      assert(nr_free==CHECK_VALID_PHY_PAGE_NUM);
-ffffffffc0202b66:	0104ac03          	lw	s8,16(s1)
-ffffffffc0202b6a:	4791                	li	a5,4
-ffffffffc0202b6c:	4efc1163          	bne	s8,a5,ffffffffc020304e <swap_init+0x672>
+ffffffffc0202af6:	0104ac03          	lw	s8,16(s1)
+ffffffffc0202afa:	4791                	li	a5,4
+ffffffffc0202afc:	4afc1463          	bne	s8,a5,ffffffffc0202fa4 <swap_init+0x64a>
      
      cprintf("set up init env for check_swap begin!\n");
-ffffffffc0202b70:	00003517          	auipc	a0,0x3
-ffffffffc0202b74:	e4850513          	addi	a0,a0,-440 # ffffffffc02059b8 <etext+0x1468>
-ffffffffc0202b78:	d42fd0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0202b00:	00003517          	auipc	a0,0x3
+ffffffffc0202b04:	ec850513          	addi	a0,a0,-312 # ffffffffc02059c8 <default_pmm_manager+0x818>
+ffffffffc0202b08:	db2fd0ef          	jal	ra,ffffffffc02000ba <cprintf>
+     *(unsigned char *)0x1000 = 0x0a;
+ffffffffc0202b0c:	6605                	lui	a2,0x1
      //setup initial vir_page<->phy_page environment for page relpacement algorithm 
 
      
      pgfault_num=0;
-ffffffffc0202b7c:	0000f797          	auipc	a5,0xf
-ffffffffc0202b80:	9e07a623          	sw	zero,-1556(a5) # ffffffffc0211568 <pgfault_num>
+ffffffffc0202b0e:	0000f797          	auipc	a5,0xf
+ffffffffc0202b12:	a607a123          	sw	zero,-1438(a5) # ffffffffc0211570 <pgfault_num>
      *(unsigned char *)0x1000 = 0x0a;
-ffffffffc0202b84:	6785                	lui	a5,0x1
-ffffffffc0202b86:	4529                	li	a0,10
-ffffffffc0202b88:	00a78023          	sb	a0,0(a5) # 1000 <kern_entry-0xffffffffc01ff000>
+ffffffffc0202b16:	4529                	li	a0,10
+ffffffffc0202b18:	00a60023          	sb	a0,0(a2) # 1000 <kern_entry-0xffffffffc01ff000>
      assert(pgfault_num==1);
-ffffffffc0202b8c:	0000f597          	auipc	a1,0xf
-ffffffffc0202b90:	9dc5a583          	lw	a1,-1572(a1) # ffffffffc0211568 <pgfault_num>
-ffffffffc0202b94:	4605                	li	a2,1
-ffffffffc0202b96:	0000f797          	auipc	a5,0xf
-ffffffffc0202b9a:	9d278793          	addi	a5,a5,-1582 # ffffffffc0211568 <pgfault_num>
-ffffffffc0202b9e:	42c59863          	bne	a1,a2,ffffffffc0202fce <swap_init+0x5f2>
+ffffffffc0202b1c:	0000f597          	auipc	a1,0xf
+ffffffffc0202b20:	a545a583          	lw	a1,-1452(a1) # ffffffffc0211570 <pgfault_num>
+ffffffffc0202b24:	4805                	li	a6,1
+ffffffffc0202b26:	0000f797          	auipc	a5,0xf
+ffffffffc0202b2a:	a4a78793          	addi	a5,a5,-1462 # ffffffffc0211570 <pgfault_num>
+ffffffffc0202b2e:	3f059b63          	bne	a1,a6,ffffffffc0202f24 <swap_init+0x5ca>
      *(unsigned char *)0x1010 = 0x0a;
-ffffffffc0202ba2:	6605                	lui	a2,0x1
-ffffffffc0202ba4:	00a60823          	sb	a0,16(a2) # 1010 <kern_entry-0xffffffffc01feff0>
+ffffffffc0202b32:	00a60823          	sb	a0,16(a2)
      assert(pgfault_num==1);
-ffffffffc0202ba8:	4388                	lw	a0,0(a5)
-ffffffffc0202baa:	44b51263          	bne	a0,a1,ffffffffc0202fee <swap_init+0x612>
+ffffffffc0202b36:	4390                	lw	a2,0(a5)
+ffffffffc0202b38:	2601                	sext.w	a2,a2
+ffffffffc0202b3a:	40b61563          	bne	a2,a1,ffffffffc0202f44 <swap_init+0x5ea>
      *(unsigned char *)0x2000 = 0x0b;
-ffffffffc0202bae:	6609                	lui	a2,0x2
-ffffffffc0202bb0:	45ad                	li	a1,11
-ffffffffc0202bb2:	00b60023          	sb	a1,0(a2) # 2000 <kern_entry-0xffffffffc01fe000>
+ffffffffc0202b3e:	6589                	lui	a1,0x2
+ffffffffc0202b40:	452d                	li	a0,11
+ffffffffc0202b42:	00a58023          	sb	a0,0(a1) # 2000 <kern_entry-0xffffffffc01fe000>
      assert(pgfault_num==2);
-ffffffffc0202bb6:	4390                	lw	a2,0(a5)
-ffffffffc0202bb8:	4809                	li	a6,2
-ffffffffc0202bba:	0006051b          	sext.w	a0,a2
-ffffffffc0202bbe:	39061863          	bne	a2,a6,ffffffffc0202f4e <swap_init+0x572>
+ffffffffc0202b46:	4390                	lw	a2,0(a5)
+ffffffffc0202b48:	4809                	li	a6,2
+ffffffffc0202b4a:	2601                	sext.w	a2,a2
+ffffffffc0202b4c:	35061c63          	bne	a2,a6,ffffffffc0202ea4 <swap_init+0x54a>
      *(unsigned char *)0x2010 = 0x0b;
-ffffffffc0202bc2:	6609                	lui	a2,0x2
-ffffffffc0202bc4:	00b60823          	sb	a1,16(a2) # 2010 <kern_entry-0xffffffffc01fdff0>
+ffffffffc0202b50:	00a58823          	sb	a0,16(a1)
      assert(pgfault_num==2);
-ffffffffc0202bc8:	438c                	lw	a1,0(a5)
-ffffffffc0202bca:	3aa59263          	bne	a1,a0,ffffffffc0202f6e <swap_init+0x592>
+ffffffffc0202b54:	438c                	lw	a1,0(a5)
+ffffffffc0202b56:	2581                	sext.w	a1,a1
+ffffffffc0202b58:	36c59663          	bne	a1,a2,ffffffffc0202ec4 <swap_init+0x56a>
      *(unsigned char *)0x3000 = 0x0c;
-ffffffffc0202bce:	660d                	lui	a2,0x3
-ffffffffc0202bd0:	45b1                	li	a1,12
-ffffffffc0202bd2:	00b60023          	sb	a1,0(a2) # 3000 <kern_entry-0xffffffffc01fd000>
+ffffffffc0202b5c:	658d                	lui	a1,0x3
+ffffffffc0202b5e:	4531                	li	a0,12
+ffffffffc0202b60:	00a58023          	sb	a0,0(a1) # 3000 <kern_entry-0xffffffffc01fd000>
      assert(pgfault_num==3);
-ffffffffc0202bd6:	4390                	lw	a2,0(a5)
-ffffffffc0202bd8:	480d                	li	a6,3
-ffffffffc0202bda:	0006051b          	sext.w	a0,a2
-ffffffffc0202bde:	3b061863          	bne	a2,a6,ffffffffc0202f8e <swap_init+0x5b2>
+ffffffffc0202b64:	4390                	lw	a2,0(a5)
+ffffffffc0202b66:	480d                	li	a6,3
+ffffffffc0202b68:	2601                	sext.w	a2,a2
+ffffffffc0202b6a:	37061d63          	bne	a2,a6,ffffffffc0202ee4 <swap_init+0x58a>
      *(unsigned char *)0x3010 = 0x0c;
-ffffffffc0202be2:	660d                	lui	a2,0x3
-ffffffffc0202be4:	00b60823          	sb	a1,16(a2) # 3010 <kern_entry-0xffffffffc01fcff0>
+ffffffffc0202b6e:	00a58823          	sb	a0,16(a1)
      assert(pgfault_num==3);
-ffffffffc0202be8:	438c                	lw	a1,0(a5)
-ffffffffc0202bea:	3ca59263          	bne	a1,a0,ffffffffc0202fae <swap_init+0x5d2>
+ffffffffc0202b72:	438c                	lw	a1,0(a5)
+ffffffffc0202b74:	2581                	sext.w	a1,a1
+ffffffffc0202b76:	38c59763          	bne	a1,a2,ffffffffc0202f04 <swap_init+0x5aa>
      *(unsigned char *)0x4000 = 0x0d;
-ffffffffc0202bee:	6611                	lui	a2,0x4
-ffffffffc0202bf0:	45b5                	li	a1,13
-ffffffffc0202bf2:	00b60023          	sb	a1,0(a2) # 4000 <kern_entry-0xffffffffc01fc000>
+ffffffffc0202b7a:	6591                	lui	a1,0x4
+ffffffffc0202b7c:	4535                	li	a0,13
+ffffffffc0202b7e:	00a58023          	sb	a0,0(a1) # 4000 <kern_entry-0xffffffffc01fc000>
      assert(pgfault_num==4);
-ffffffffc0202bf6:	4390                	lw	a2,0(a5)
-ffffffffc0202bf8:	0006051b          	sext.w	a0,a2
-ffffffffc0202bfc:	25861963          	bne	a2,s8,ffffffffc0202e4e <swap_init+0x472>
+ffffffffc0202b82:	4390                	lw	a2,0(a5)
+ffffffffc0202b84:	2601                	sext.w	a2,a2
+ffffffffc0202b86:	21861f63          	bne	a2,s8,ffffffffc0202da4 <swap_init+0x44a>
      *(unsigned char *)0x4010 = 0x0d;
-ffffffffc0202c00:	6611                	lui	a2,0x4
-ffffffffc0202c02:	00b60823          	sb	a1,16(a2) # 4010 <kern_entry-0xffffffffc01fbff0>
+ffffffffc0202b8a:	00a58823          	sb	a0,16(a1)
      assert(pgfault_num==4);
-ffffffffc0202c06:	439c                	lw	a5,0(a5)
-ffffffffc0202c08:	26a79363          	bne	a5,a0,ffffffffc0202e6e <swap_init+0x492>
+ffffffffc0202b8e:	439c                	lw	a5,0(a5)
+ffffffffc0202b90:	2781                	sext.w	a5,a5
+ffffffffc0202b92:	22c79963          	bne	a5,a2,ffffffffc0202dc4 <swap_init+0x46a>
      
      check_content_set();
      assert( nr_free == 0);         
-ffffffffc0202c0c:	489c                	lw	a5,16(s1)
-ffffffffc0202c0e:	28079063          	bnez	a5,ffffffffc0202e8e <swap_init+0x4b2>
-ffffffffc0202c12:	0000e797          	auipc	a5,0xe
-ffffffffc0202c16:	4ae78793          	addi	a5,a5,1198 # ffffffffc02110c0 <swap_in_seq_no>
-ffffffffc0202c1a:	0000e617          	auipc	a2,0xe
-ffffffffc0202c1e:	47e60613          	addi	a2,a2,1150 # ffffffffc0211098 <swap_out_seq_no>
-ffffffffc0202c22:	0000e517          	auipc	a0,0xe
-ffffffffc0202c26:	4c650513          	addi	a0,a0,1222 # ffffffffc02110e8 <pra_list_head>
+ffffffffc0202b96:	489c                	lw	a5,16(s1)
+ffffffffc0202b98:	24079663          	bnez	a5,ffffffffc0202de4 <swap_init+0x48a>
+ffffffffc0202b9c:	0000e797          	auipc	a5,0xe
+ffffffffc0202ba0:	4fc78793          	addi	a5,a5,1276 # ffffffffc0211098 <swap_in_seq_no>
+ffffffffc0202ba4:	0000e617          	auipc	a2,0xe
+ffffffffc0202ba8:	51c60613          	addi	a2,a2,1308 # ffffffffc02110c0 <swap_out_seq_no>
+ffffffffc0202bac:	0000e517          	auipc	a0,0xe
+ffffffffc0202bb0:	51450513          	addi	a0,a0,1300 # ffffffffc02110c0 <swap_out_seq_no>
      for(i = 0; i<MAX_SEQ_NO ; i++) 
          swap_out_seq_no[i]=swap_in_seq_no[i]=-1;
-ffffffffc0202c2a:	55fd                	li	a1,-1
-ffffffffc0202c2c:	c38c                	sw	a1,0(a5)
-ffffffffc0202c2e:	c20c                	sw	a1,0(a2)
+ffffffffc0202bb4:	55fd                	li	a1,-1
+ffffffffc0202bb6:	c38c                	sw	a1,0(a5)
+ffffffffc0202bb8:	c20c                	sw	a1,0(a2)
      for(i = 0; i<MAX_SEQ_NO ; i++) 
-ffffffffc0202c30:	0791                	addi	a5,a5,4
-ffffffffc0202c32:	0611                	addi	a2,a2,4
-ffffffffc0202c34:	fea79ce3          	bne	a5,a0,ffffffffc0202c2c <swap_init+0x250>
-ffffffffc0202c38:	0000e817          	auipc	a6,0xe
-ffffffffc0202c3c:	42080813          	addi	a6,a6,1056 # ffffffffc0211058 <check_ptep>
-ffffffffc0202c40:	0000e897          	auipc	a7,0xe
-ffffffffc0202c44:	43888893          	addi	a7,a7,1080 # ffffffffc0211078 <check_rp>
-ffffffffc0202c48:	6a85                	lui	s5,0x1
-    if (PPN(pa) >= npage) {
-ffffffffc0202c4a:	0000fb97          	auipc	s7,0xf
-ffffffffc0202c4e:	8eeb8b93          	addi	s7,s7,-1810 # ffffffffc0211538 <npage>
+ffffffffc0202bba:	0791                	addi	a5,a5,4
+ffffffffc0202bbc:	0611                	addi	a2,a2,4
+ffffffffc0202bbe:	fef51ce3          	bne	a0,a5,ffffffffc0202bb6 <swap_init+0x25c>
+ffffffffc0202bc2:	0000e817          	auipc	a6,0xe
+ffffffffc0202bc6:	49680813          	addi	a6,a6,1174 # ffffffffc0211058 <check_ptep>
+ffffffffc0202bca:	0000e897          	auipc	a7,0xe
+ffffffffc0202bce:	4ae88893          	addi	a7,a7,1198 # ffffffffc0211078 <check_rp>
+ffffffffc0202bd2:	6585                	lui	a1,0x1
     return &pages[PPN(pa) - nbase];
-ffffffffc0202c52:	0000fc17          	auipc	s8,0xf
-ffffffffc0202c56:	8eec0c13          	addi	s8,s8,-1810 # ffffffffc0211540 <pages>
-ffffffffc0202c5a:	00003c97          	auipc	s9,0x3
-ffffffffc0202c5e:	746c8c93          	addi	s9,s9,1862 # ffffffffc02063a0 <nbase>
+ffffffffc0202bd4:	0000fc97          	auipc	s9,0xf
+ffffffffc0202bd8:	95cc8c93          	addi	s9,s9,-1700 # ffffffffc0211530 <pages>
+ffffffffc0202bdc:	00003c17          	auipc	s8,0x3
+ffffffffc0202be0:	6ecc0c13          	addi	s8,s8,1772 # ffffffffc02062c8 <nbase>
      
      for (i= 0;i<CHECK_VALID_PHY_PAGE_NUM;i++) {
          check_ptep[i]=0;
+ffffffffc0202be4:	00083023          	sd	zero,0(a6)
          check_ptep[i] = get_pte(pgdir, (i+1)*0x1000, 0);
-ffffffffc0202c62:	6542                	ld	a0,16(sp)
+ffffffffc0202be8:	4601                	li	a2,0
+ffffffffc0202bea:	855e                	mv	a0,s7
+ffffffffc0202bec:	ec46                	sd	a7,24(sp)
+ffffffffc0202bee:	e82e                	sd	a1,16(sp)
          check_ptep[i]=0;
-ffffffffc0202c64:	00083023          	sd	zero,0(a6)
+ffffffffc0202bf0:	e442                	sd	a6,8(sp)
          check_ptep[i] = get_pte(pgdir, (i+1)*0x1000, 0);
-ffffffffc0202c68:	4601                	li	a2,0
-ffffffffc0202c6a:	85d6                	mv	a1,s5
-ffffffffc0202c6c:	e446                	sd	a7,8(sp)
-         check_ptep[i]=0;
-ffffffffc0202c6e:	e042                	sd	a6,0(sp)
-         check_ptep[i] = get_pte(pgdir, (i+1)*0x1000, 0);
-ffffffffc0202c70:	a9dfe0ef          	jal	ffffffffc020170c <get_pte>
-ffffffffc0202c74:	6802                	ld	a6,0(sp)
+ffffffffc0202bf2:	b1bfe0ef          	jal	ra,ffffffffc020170c <get_pte>
+ffffffffc0202bf6:	6822                	ld	a6,8(sp)
          //cprintf("i %d, check_ptep addr %x, value %x\n", i, check_ptep[i], *check_ptep[i]);
          assert(check_ptep[i] != NULL);
-ffffffffc0202c76:	68a2                	ld	a7,8(sp)
+ffffffffc0202bf8:	65c2                	ld	a1,16(sp)
+ffffffffc0202bfa:	68e2                	ld	a7,24(sp)
          check_ptep[i] = get_pte(pgdir, (i+1)*0x1000, 0);
-ffffffffc0202c78:	00a83023          	sd	a0,0(a6)
+ffffffffc0202bfc:	00a83023          	sd	a0,0(a6)
          assert(check_ptep[i] != NULL);
-ffffffffc0202c7c:	1a050963          	beqz	a0,ffffffffc0202e2e <swap_init+0x452>
+ffffffffc0202c00:	0000f317          	auipc	t1,0xf
+ffffffffc0202c04:	92830313          	addi	t1,t1,-1752 # ffffffffc0211528 <npage>
+ffffffffc0202c08:	16050e63          	beqz	a0,ffffffffc0202d84 <swap_init+0x42a>
          assert(pte2page(*check_ptep[i]) == check_rp[i]);
-ffffffffc0202c80:	611c                	ld	a5,0(a0)
+ffffffffc0202c0c:	611c                	ld	a5,0(a0)
     if (!(pte & PTE_V)) {
-ffffffffc0202c82:	0017f613          	andi	a2,a5,1
-ffffffffc0202c86:	10060463          	beqz	a2,ffffffffc0202d8e <swap_init+0x3b2>
+ffffffffc0202c0e:	0017f613          	andi	a2,a5,1
+ffffffffc0202c12:	0e060563          	beqz	a2,ffffffffc0202cfc <swap_init+0x3a2>
     if (PPN(pa) >= npage) {
-ffffffffc0202c8a:	000bb603          	ld	a2,0(s7)
+ffffffffc0202c16:	00033603          	ld	a2,0(t1)
     return pa2page(PTE_ADDR(pte));
-ffffffffc0202c8e:	078a                	slli	a5,a5,0x2
-ffffffffc0202c90:	83b1                	srli	a5,a5,0xc
+ffffffffc0202c1a:	078a                	slli	a5,a5,0x2
+ffffffffc0202c1c:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc0202c92:	10c7fa63          	bgeu	a5,a2,ffffffffc0202da6 <swap_init+0x3ca>
+ffffffffc0202c1e:	0ec7fb63          	bgeu	a5,a2,ffffffffc0202d14 <swap_init+0x3ba>
     return &pages[PPN(pa) - nbase];
-ffffffffc0202c96:	000cb603          	ld	a2,0(s9)
-ffffffffc0202c9a:	000c3503          	ld	a0,0(s8)
-ffffffffc0202c9e:	0008bf03          	ld	t5,0(a7)
-ffffffffc0202ca2:	8f91                	sub	a5,a5,a2
-ffffffffc0202ca4:	00379613          	slli	a2,a5,0x3
-ffffffffc0202ca8:	97b2                	add	a5,a5,a2
-ffffffffc0202caa:	078e                	slli	a5,a5,0x3
-ffffffffc0202cac:	6705                	lui	a4,0x1
-ffffffffc0202cae:	97aa                	add	a5,a5,a0
-ffffffffc0202cb0:	08a1                	addi	a7,a7,8
-ffffffffc0202cb2:	0821                	addi	a6,a6,8
-ffffffffc0202cb4:	9aba                	add	s5,s5,a4
-ffffffffc0202cb6:	0aff1c63          	bne	t5,a5,ffffffffc0202d6e <swap_init+0x392>
+ffffffffc0202c22:	000c3603          	ld	a2,0(s8)
+ffffffffc0202c26:	000cb503          	ld	a0,0(s9)
+ffffffffc0202c2a:	0008bf03          	ld	t5,0(a7)
+ffffffffc0202c2e:	8f91                	sub	a5,a5,a2
+ffffffffc0202c30:	00379613          	slli	a2,a5,0x3
+ffffffffc0202c34:	97b2                	add	a5,a5,a2
+ffffffffc0202c36:	078e                	slli	a5,a5,0x3
+ffffffffc0202c38:	97aa                	add	a5,a5,a0
+ffffffffc0202c3a:	0aff1163          	bne	t5,a5,ffffffffc0202cdc <swap_init+0x382>
      for (i= 0;i<CHECK_VALID_PHY_PAGE_NUM;i++) {
-ffffffffc0202cba:	6795                	lui	a5,0x5
-ffffffffc0202cbc:	fafa93e3          	bne	s5,a5,ffffffffc0202c62 <swap_init+0x286>
+ffffffffc0202c3e:	6785                	lui	a5,0x1
+ffffffffc0202c40:	95be                	add	a1,a1,a5
+ffffffffc0202c42:	6795                	lui	a5,0x5
+ffffffffc0202c44:	0821                	addi	a6,a6,8
+ffffffffc0202c46:	08a1                	addi	a7,a7,8
+ffffffffc0202c48:	f8f59ee3          	bne	a1,a5,ffffffffc0202be4 <swap_init+0x28a>
          assert((*check_ptep[i] & PTE_V));          
      }
      cprintf("set up init env for check_swap over!\n");
-ffffffffc0202cc0:	00003517          	auipc	a0,0x3
-ffffffffc0202cc4:	da050513          	addi	a0,a0,-608 # ffffffffc0205a60 <etext+0x1510>
-ffffffffc0202cc8:	bf2fd0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0202c4c:	00003517          	auipc	a0,0x3
+ffffffffc0202c50:	e2450513          	addi	a0,a0,-476 # ffffffffc0205a70 <default_pmm_manager+0x8c0>
+ffffffffc0202c54:	c66fd0ef          	jal	ra,ffffffffc02000ba <cprintf>
     int ret = sm->check_swap();
-ffffffffc0202ccc:	000b3783          	ld	a5,0(s6)
-ffffffffc0202cd0:	7f9c                	ld	a5,56(a5)
-ffffffffc0202cd2:	9782                	jalr	a5
+ffffffffc0202c58:	000b3783          	ld	a5,0(s6)
+ffffffffc0202c5c:	7f9c                	ld	a5,56(a5)
+ffffffffc0202c5e:	9782                	jalr	a5
      // now access the virt pages to test  page relpacement algorithm 
      ret=check_content_access();
      assert(ret==0);
-ffffffffc0202cd4:	1c051d63          	bnez	a0,ffffffffc0202eae <swap_init+0x4d2>
+ffffffffc0202c60:	1a051263          	bnez	a0,ffffffffc0202e04 <swap_init+0x4aa>
      
      //restore kernel mem env
      for (i=0;i<CHECK_VALID_PHY_PAGE_NUM;i++) {
          free_pages(check_rp[i],1);
-ffffffffc0202cd8:	00093503          	ld	a0,0(s2)
-ffffffffc0202cdc:	4585                	li	a1,1
+ffffffffc0202c64:	00093503          	ld	a0,0(s2)
+ffffffffc0202c68:	4585                	li	a1,1
      for (i=0;i<CHECK_VALID_PHY_PAGE_NUM;i++) {
-ffffffffc0202cde:	0921                	addi	s2,s2,8
+ffffffffc0202c6a:	0921                	addi	s2,s2,8
          free_pages(check_rp[i],1);
-ffffffffc0202ce0:	9b3fe0ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc0202c6c:	a27fe0ef          	jal	ra,ffffffffc0201692 <free_pages>
      for (i=0;i<CHECK_VALID_PHY_PAGE_NUM;i++) {
-ffffffffc0202ce4:	ff491ae3          	bne	s2,s4,ffffffffc0202cd8 <swap_init+0x2fc>
+ffffffffc0202c70:	ff491ae3          	bne	s2,s4,ffffffffc0202c64 <swap_init+0x30a>
      } 
 
      //free_page(pte2page(*temp_ptep));
      
      mm_destroy(mm);
-ffffffffc0202ce8:	6562                	ld	a0,24(sp)
-ffffffffc0202cea:	265000ef          	jal	ffffffffc020374e <mm_destroy>
+ffffffffc0202c74:	8556                	mv	a0,s5
+ffffffffc0202c76:	23d000ef          	jal	ra,ffffffffc02036b2 <mm_destroy>
          
      nr_free = nr_free_store;
-ffffffffc0202cee:	77a2                	ld	a5,40(sp)
+ffffffffc0202c7a:	77a2                	ld	a5,40(sp)
      free_list = free_list_store;
-ffffffffc0202cf0:	01b4b423          	sd	s11,8(s1)
+ffffffffc0202c7c:	01b4b423          	sd	s11,8(s1)
      nr_free = nr_free_store;
-ffffffffc0202cf4:	c89c                	sw	a5,16(s1)
+ffffffffc0202c80:	c89c                	sw	a5,16(s1)
      free_list = free_list_store;
-ffffffffc0202cf6:	7782                	ld	a5,32(sp)
-ffffffffc0202cf8:	e09c                	sd	a5,0(s1)
+ffffffffc0202c82:	7782                	ld	a5,32(sp)
+ffffffffc0202c84:	e09c                	sd	a5,0(s1)
 
      
      le = &free_list;
      while ((le = list_next(le)) != &free_list) {
-ffffffffc0202cfa:	009d8a63          	beq	s11,s1,ffffffffc0202d0e <swap_init+0x332>
+ffffffffc0202c86:	009d8a63          	beq	s11,s1,ffffffffc0202c9a <swap_init+0x340>
          struct Page *p = le2page(le, page_link);
          count --, total -= p->property;
-ffffffffc0202cfe:	ff8da783          	lw	a5,-8(s11)
+ffffffffc0202c8a:	ff8da783          	lw	a5,-8(s11)
     return listelm->next;
-ffffffffc0202d02:	008dbd83          	ld	s11,8(s11)
-ffffffffc0202d06:	3d7d                	addiw	s10,s10,-1
-ffffffffc0202d08:	9c1d                	subw	s0,s0,a5
+ffffffffc0202c8e:	008dbd83          	ld	s11,8(s11)
+ffffffffc0202c92:	3d7d                	addiw	s10,s10,-1
+ffffffffc0202c94:	9c1d                	subw	s0,s0,a5
      while ((le = list_next(le)) != &free_list) {
-ffffffffc0202d0a:	fe9d9ae3          	bne	s11,s1,ffffffffc0202cfe <swap_init+0x322>
+ffffffffc0202c96:	fe9d9ae3          	bne	s11,s1,ffffffffc0202c8a <swap_init+0x330>
      }
      cprintf("count is %d, total is %d\n",count,total);
-ffffffffc0202d0e:	8622                	mv	a2,s0
-ffffffffc0202d10:	85ea                	mv	a1,s10
-ffffffffc0202d12:	00003517          	auipc	a0,0x3
-ffffffffc0202d16:	d7e50513          	addi	a0,a0,-642 # ffffffffc0205a90 <etext+0x1540>
-ffffffffc0202d1a:	ba0fd0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0202c9a:	8622                	mv	a2,s0
+ffffffffc0202c9c:	85ea                	mv	a1,s10
+ffffffffc0202c9e:	00003517          	auipc	a0,0x3
+ffffffffc0202ca2:	e0250513          	addi	a0,a0,-510 # ffffffffc0205aa0 <default_pmm_manager+0x8f0>
+ffffffffc0202ca6:	c14fd0ef          	jal	ra,ffffffffc02000ba <cprintf>
      //assert(count == 0);
      
      cprintf("check_swap() succeeded!\n");
-ffffffffc0202d1e:	00003517          	auipc	a0,0x3
-ffffffffc0202d22:	d9250513          	addi	a0,a0,-622 # ffffffffc0205ab0 <etext+0x1560>
-ffffffffc0202d26:	b94fd0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0202caa:	00003517          	auipc	a0,0x3
+ffffffffc0202cae:	e1650513          	addi	a0,a0,-490 # ffffffffc0205ac0 <default_pmm_manager+0x910>
+ffffffffc0202cb2:	c08fd0ef          	jal	ra,ffffffffc02000ba <cprintf>
 }
-ffffffffc0202d2a:	60ea                	ld	ra,152(sp)
-     cprintf("check_swap() succeeded!\n");
-ffffffffc0202d2c:	644a                	ld	s0,144(sp)
-ffffffffc0202d2e:	64aa                	ld	s1,136(sp)
-ffffffffc0202d30:	690a                	ld	s2,128(sp)
-ffffffffc0202d32:	7a46                	ld	s4,112(sp)
-ffffffffc0202d34:	7aa6                	ld	s5,104(sp)
-ffffffffc0202d36:	6be6                	ld	s7,88(sp)
-ffffffffc0202d38:	6c46                	ld	s8,80(sp)
-ffffffffc0202d3a:	6ca6                	ld	s9,72(sp)
-ffffffffc0202d3c:	6d06                	ld	s10,64(sp)
-ffffffffc0202d3e:	7de2                	ld	s11,56(sp)
-}
-ffffffffc0202d40:	7b06                	ld	s6,96(sp)
-ffffffffc0202d42:	854e                	mv	a0,s3
-ffffffffc0202d44:	79e6                	ld	s3,120(sp)
-ffffffffc0202d46:	610d                	addi	sp,sp,160
-ffffffffc0202d48:	8082                	ret
+ffffffffc0202cb6:	b9dd                	j	ffffffffc02029ac <swap_init+0x52>
      while ((le = list_next(le)) != &free_list) {
-ffffffffc0202d4a:	4901                	li	s2,0
-ffffffffc0202d4c:	bb1d                	j	ffffffffc0202a82 <swap_init+0xa6>
+ffffffffc0202cb8:	4901                	li	s2,0
+ffffffffc0202cba:	bba9                	j	ffffffffc0202a14 <swap_init+0xba>
         assert(PageProperty(p));
-ffffffffc0202d4e:	00002697          	auipc	a3,0x2
-ffffffffc0202d52:	0ca68693          	addi	a3,a3,202 # ffffffffc0204e18 <etext+0x8c8>
-ffffffffc0202d56:	00002617          	auipc	a2,0x2
-ffffffffc0202d5a:	0d260613          	addi	a2,a2,210 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202d5e:	0ba00593          	li	a1,186
-ffffffffc0202d62:	00003517          	auipc	a0,0x3
-ffffffffc0202d66:	ae650513          	addi	a0,a0,-1306 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202d6a:	df6fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202cbc:	00002697          	auipc	a3,0x2
+ffffffffc0202cc0:	13468693          	addi	a3,a3,308 # ffffffffc0204df0 <commands+0x728>
+ffffffffc0202cc4:	00002617          	auipc	a2,0x2
+ffffffffc0202cc8:	13c60613          	addi	a2,a2,316 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202ccc:	0ba00593          	li	a1,186
+ffffffffc0202cd0:	00003517          	auipc	a0,0x3
+ffffffffc0202cd4:	b8850513          	addi	a0,a0,-1144 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202cd8:	e9cfd0ef          	jal	ra,ffffffffc0200374 <__panic>
          assert(pte2page(*check_ptep[i]) == check_rp[i]);
-ffffffffc0202d6e:	00003697          	auipc	a3,0x3
-ffffffffc0202d72:	cca68693          	addi	a3,a3,-822 # ffffffffc0205a38 <etext+0x14e8>
-ffffffffc0202d76:	00002617          	auipc	a2,0x2
-ffffffffc0202d7a:	0b260613          	addi	a2,a2,178 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202d7e:	0fa00593          	li	a1,250
-ffffffffc0202d82:	00003517          	auipc	a0,0x3
-ffffffffc0202d86:	ac650513          	addi	a0,a0,-1338 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202d8a:	dd6fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202cdc:	00003697          	auipc	a3,0x3
+ffffffffc0202ce0:	d6c68693          	addi	a3,a3,-660 # ffffffffc0205a48 <default_pmm_manager+0x898>
+ffffffffc0202ce4:	00002617          	auipc	a2,0x2
+ffffffffc0202ce8:	11c60613          	addi	a2,a2,284 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202cec:	0fa00593          	li	a1,250
+ffffffffc0202cf0:	00003517          	auipc	a0,0x3
+ffffffffc0202cf4:	b6850513          	addi	a0,a0,-1176 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202cf8:	e7cfd0ef          	jal	ra,ffffffffc0200374 <__panic>
         panic("pte2page called with invalid pte");
-ffffffffc0202d8e:	00002617          	auipc	a2,0x2
-ffffffffc0202d92:	47a60613          	addi	a2,a2,1146 # ffffffffc0205208 <etext+0xcb8>
-ffffffffc0202d96:	07000593          	li	a1,112
-ffffffffc0202d9a:	00002517          	auipc	a0,0x2
-ffffffffc0202d9e:	45e50513          	addi	a0,a0,1118 # ffffffffc02051f8 <etext+0xca8>
-ffffffffc0202da2:	dbefd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202cfc:	00002617          	auipc	a2,0x2
+ffffffffc0202d00:	51c60613          	addi	a2,a2,1308 # ffffffffc0205218 <default_pmm_manager+0x68>
+ffffffffc0202d04:	07000593          	li	a1,112
+ffffffffc0202d08:	00002517          	auipc	a0,0x2
+ffffffffc0202d0c:	50050513          	addi	a0,a0,1280 # ffffffffc0205208 <default_pmm_manager+0x58>
+ffffffffc0202d10:	e64fd0ef          	jal	ra,ffffffffc0200374 <__panic>
         panic("pa2page called with invalid pa");
-ffffffffc0202da6:	00002617          	auipc	a2,0x2
-ffffffffc0202daa:	43260613          	addi	a2,a2,1074 # ffffffffc02051d8 <etext+0xc88>
-ffffffffc0202dae:	06500593          	li	a1,101
-ffffffffc0202db2:	00002517          	auipc	a0,0x2
-ffffffffc0202db6:	44650513          	addi	a0,a0,1094 # ffffffffc02051f8 <etext+0xca8>
-ffffffffc0202dba:	da6fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202d14:	00002617          	auipc	a2,0x2
+ffffffffc0202d18:	4d460613          	addi	a2,a2,1236 # ffffffffc02051e8 <default_pmm_manager+0x38>
+ffffffffc0202d1c:	06500593          	li	a1,101
+ffffffffc0202d20:	00002517          	auipc	a0,0x2
+ffffffffc0202d24:	4e850513          	addi	a0,a0,1256 # ffffffffc0205208 <default_pmm_manager+0x58>
+ffffffffc0202d28:	e4cfd0ef          	jal	ra,ffffffffc0200374 <__panic>
           assert(!PageProperty(check_rp[i]));
-ffffffffc0202dbe:	00003697          	auipc	a3,0x3
-ffffffffc0202dc2:	bb268693          	addi	a3,a3,-1102 # ffffffffc0205970 <etext+0x1420>
-ffffffffc0202dc6:	00002617          	auipc	a2,0x2
-ffffffffc0202dca:	06260613          	addi	a2,a2,98 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202dce:	0db00593          	li	a1,219
-ffffffffc0202dd2:	00003517          	auipc	a0,0x3
-ffffffffc0202dd6:	a7650513          	addi	a0,a0,-1418 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202dda:	d86fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202d2c:	00003697          	auipc	a3,0x3
+ffffffffc0202d30:	c5468693          	addi	a3,a3,-940 # ffffffffc0205980 <default_pmm_manager+0x7d0>
+ffffffffc0202d34:	00002617          	auipc	a2,0x2
+ffffffffc0202d38:	0cc60613          	addi	a2,a2,204 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202d3c:	0db00593          	li	a1,219
+ffffffffc0202d40:	00003517          	auipc	a0,0x3
+ffffffffc0202d44:	b1850513          	addi	a0,a0,-1256 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202d48:	e2cfd0ef          	jal	ra,ffffffffc0200374 <__panic>
           assert(check_rp[i] != NULL );
-ffffffffc0202dde:	00003697          	auipc	a3,0x3
-ffffffffc0202de2:	b7a68693          	addi	a3,a3,-1158 # ffffffffc0205958 <etext+0x1408>
-ffffffffc0202de6:	00002617          	auipc	a2,0x2
-ffffffffc0202dea:	04260613          	addi	a2,a2,66 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202dee:	0da00593          	li	a1,218
-ffffffffc0202df2:	00003517          	auipc	a0,0x3
-ffffffffc0202df6:	a5650513          	addi	a0,a0,-1450 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202dfa:	d66fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202d4c:	00003697          	auipc	a3,0x3
+ffffffffc0202d50:	c1c68693          	addi	a3,a3,-996 # ffffffffc0205968 <default_pmm_manager+0x7b8>
+ffffffffc0202d54:	00002617          	auipc	a2,0x2
+ffffffffc0202d58:	0ac60613          	addi	a2,a2,172 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202d5c:	0da00593          	li	a1,218
+ffffffffc0202d60:	00003517          	auipc	a0,0x3
+ffffffffc0202d64:	af850513          	addi	a0,a0,-1288 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202d68:	e0cfd0ef          	jal	ra,ffffffffc0200374 <__panic>
         panic("bad max_swap_offset %08x.\n", max_swap_offset);
-ffffffffc0202dfe:	00003617          	auipc	a2,0x3
-ffffffffc0202e02:	a2a60613          	addi	a2,a2,-1494 # ffffffffc0205828 <etext+0x12d8>
-ffffffffc0202e06:	02700593          	li	a1,39
-ffffffffc0202e0a:	00003517          	auipc	a0,0x3
-ffffffffc0202e0e:	a3e50513          	addi	a0,a0,-1474 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202e12:	e922                	sd	s0,144(sp)
-ffffffffc0202e14:	e526                	sd	s1,136(sp)
-ffffffffc0202e16:	e14a                	sd	s2,128(sp)
-ffffffffc0202e18:	fcce                	sd	s3,120(sp)
-ffffffffc0202e1a:	f8d2                	sd	s4,112(sp)
-ffffffffc0202e1c:	f4d6                	sd	s5,104(sp)
-ffffffffc0202e1e:	f0da                	sd	s6,96(sp)
-ffffffffc0202e20:	ecde                	sd	s7,88(sp)
-ffffffffc0202e22:	e8e2                	sd	s8,80(sp)
-ffffffffc0202e24:	e4e6                	sd	s9,72(sp)
-ffffffffc0202e26:	e0ea                	sd	s10,64(sp)
-ffffffffc0202e28:	fc6e                	sd	s11,56(sp)
-ffffffffc0202e2a:	d36fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202d6c:	00003617          	auipc	a2,0x3
+ffffffffc0202d70:	acc60613          	addi	a2,a2,-1332 # ffffffffc0205838 <default_pmm_manager+0x688>
+ffffffffc0202d74:	02700593          	li	a1,39
+ffffffffc0202d78:	00003517          	auipc	a0,0x3
+ffffffffc0202d7c:	ae050513          	addi	a0,a0,-1312 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202d80:	df4fd0ef          	jal	ra,ffffffffc0200374 <__panic>
          assert(check_ptep[i] != NULL);
-ffffffffc0202e2e:	00003697          	auipc	a3,0x3
-ffffffffc0202e32:	bf268693          	addi	a3,a3,-1038 # ffffffffc0205a20 <etext+0x14d0>
-ffffffffc0202e36:	00002617          	auipc	a2,0x2
-ffffffffc0202e3a:	ff260613          	addi	a2,a2,-14 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202e3e:	0f900593          	li	a1,249
-ffffffffc0202e42:	00003517          	auipc	a0,0x3
-ffffffffc0202e46:	a0650513          	addi	a0,a0,-1530 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202e4a:	d16fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202d84:	00003697          	auipc	a3,0x3
+ffffffffc0202d88:	cac68693          	addi	a3,a3,-852 # ffffffffc0205a30 <default_pmm_manager+0x880>
+ffffffffc0202d8c:	00002617          	auipc	a2,0x2
+ffffffffc0202d90:	07460613          	addi	a2,a2,116 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202d94:	0f900593          	li	a1,249
+ffffffffc0202d98:	00003517          	auipc	a0,0x3
+ffffffffc0202d9c:	ac050513          	addi	a0,a0,-1344 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202da0:	dd4fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(pgfault_num==4);
-ffffffffc0202e4e:	00003697          	auipc	a3,0x3
-ffffffffc0202e52:	bc268693          	addi	a3,a3,-1086 # ffffffffc0205a10 <etext+0x14c0>
-ffffffffc0202e56:	00002617          	auipc	a2,0x2
-ffffffffc0202e5a:	fd260613          	addi	a2,a2,-46 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202e5e:	09d00593          	li	a1,157
-ffffffffc0202e62:	00003517          	auipc	a0,0x3
-ffffffffc0202e66:	9e650513          	addi	a0,a0,-1562 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202e6a:	cf6fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202da4:	00003697          	auipc	a3,0x3
+ffffffffc0202da8:	c7c68693          	addi	a3,a3,-900 # ffffffffc0205a20 <default_pmm_manager+0x870>
+ffffffffc0202dac:	00002617          	auipc	a2,0x2
+ffffffffc0202db0:	05460613          	addi	a2,a2,84 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202db4:	09d00593          	li	a1,157
+ffffffffc0202db8:	00003517          	auipc	a0,0x3
+ffffffffc0202dbc:	aa050513          	addi	a0,a0,-1376 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202dc0:	db4fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(pgfault_num==4);
-ffffffffc0202e6e:	00003697          	auipc	a3,0x3
-ffffffffc0202e72:	ba268693          	addi	a3,a3,-1118 # ffffffffc0205a10 <etext+0x14c0>
-ffffffffc0202e76:	00002617          	auipc	a2,0x2
-ffffffffc0202e7a:	fb260613          	addi	a2,a2,-78 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202e7e:	09f00593          	li	a1,159
-ffffffffc0202e82:	00003517          	auipc	a0,0x3
-ffffffffc0202e86:	9c650513          	addi	a0,a0,-1594 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202e8a:	cd6fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202dc4:	00003697          	auipc	a3,0x3
+ffffffffc0202dc8:	c5c68693          	addi	a3,a3,-932 # ffffffffc0205a20 <default_pmm_manager+0x870>
+ffffffffc0202dcc:	00002617          	auipc	a2,0x2
+ffffffffc0202dd0:	03460613          	addi	a2,a2,52 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202dd4:	09f00593          	li	a1,159
+ffffffffc0202dd8:	00003517          	auipc	a0,0x3
+ffffffffc0202ddc:	a8050513          	addi	a0,a0,-1408 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202de0:	d94fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert( nr_free == 0);         
-ffffffffc0202e8e:	00002697          	auipc	a3,0x2
-ffffffffc0202e92:	17268693          	addi	a3,a3,370 # ffffffffc0205000 <etext+0xab0>
-ffffffffc0202e96:	00002617          	auipc	a2,0x2
-ffffffffc0202e9a:	f9260613          	addi	a2,a2,-110 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202e9e:	0f100593          	li	a1,241
-ffffffffc0202ea2:	00003517          	auipc	a0,0x3
-ffffffffc0202ea6:	9a650513          	addi	a0,a0,-1626 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202eaa:	cb6fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202de4:	00002697          	auipc	a3,0x2
+ffffffffc0202de8:	1f468693          	addi	a3,a3,500 # ffffffffc0204fd8 <commands+0x910>
+ffffffffc0202dec:	00002617          	auipc	a2,0x2
+ffffffffc0202df0:	01460613          	addi	a2,a2,20 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202df4:	0f100593          	li	a1,241
+ffffffffc0202df8:	00003517          	auipc	a0,0x3
+ffffffffc0202dfc:	a6050513          	addi	a0,a0,-1440 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202e00:	d74fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(ret==0);
-ffffffffc0202eae:	00003697          	auipc	a3,0x3
-ffffffffc0202eb2:	bda68693          	addi	a3,a3,-1062 # ffffffffc0205a88 <etext+0x1538>
-ffffffffc0202eb6:	00002617          	auipc	a2,0x2
-ffffffffc0202eba:	f7260613          	addi	a2,a2,-142 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202ebe:	10000593          	li	a1,256
-ffffffffc0202ec2:	00003517          	auipc	a0,0x3
-ffffffffc0202ec6:	98650513          	addi	a0,a0,-1658 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202eca:	c96fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202e04:	00003697          	auipc	a3,0x3
+ffffffffc0202e08:	c9468693          	addi	a3,a3,-876 # ffffffffc0205a98 <default_pmm_manager+0x8e8>
+ffffffffc0202e0c:	00002617          	auipc	a2,0x2
+ffffffffc0202e10:	ff460613          	addi	a2,a2,-12 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202e14:	10000593          	li	a1,256
+ffffffffc0202e18:	00003517          	auipc	a0,0x3
+ffffffffc0202e1c:	a4050513          	addi	a0,a0,-1472 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202e20:	d54fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(pgdir[0] == 0);
-ffffffffc0202ece:	00003697          	auipc	a3,0x3
-ffffffffc0202ed2:	9f268693          	addi	a3,a3,-1550 # ffffffffc02058c0 <etext+0x1370>
-ffffffffc0202ed6:	00002617          	auipc	a2,0x2
-ffffffffc0202eda:	f5260613          	addi	a2,a2,-174 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202ede:	0ca00593          	li	a1,202
-ffffffffc0202ee2:	00003517          	auipc	a0,0x3
-ffffffffc0202ee6:	96650513          	addi	a0,a0,-1690 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202eea:	c76fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202e24:	00003697          	auipc	a3,0x3
+ffffffffc0202e28:	aac68693          	addi	a3,a3,-1364 # ffffffffc02058d0 <default_pmm_manager+0x720>
+ffffffffc0202e2c:	00002617          	auipc	a2,0x2
+ffffffffc0202e30:	fd460613          	addi	a2,a2,-44 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202e34:	0ca00593          	li	a1,202
+ffffffffc0202e38:	00003517          	auipc	a0,0x3
+ffffffffc0202e3c:	a2050513          	addi	a0,a0,-1504 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202e40:	d34fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(vma != NULL);
-ffffffffc0202eee:	00003697          	auipc	a3,0x3
-ffffffffc0202ef2:	9e268693          	addi	a3,a3,-1566 # ffffffffc02058d0 <etext+0x1380>
-ffffffffc0202ef6:	00002617          	auipc	a2,0x2
-ffffffffc0202efa:	f3260613          	addi	a2,a2,-206 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202efe:	0cd00593          	li	a1,205
-ffffffffc0202f02:	00003517          	auipc	a0,0x3
-ffffffffc0202f06:	94650513          	addi	a0,a0,-1722 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202f0a:	c56fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202e44:	00003697          	auipc	a3,0x3
+ffffffffc0202e48:	a9c68693          	addi	a3,a3,-1380 # ffffffffc02058e0 <default_pmm_manager+0x730>
+ffffffffc0202e4c:	00002617          	auipc	a2,0x2
+ffffffffc0202e50:	fb460613          	addi	a2,a2,-76 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202e54:	0cd00593          	li	a1,205
+ffffffffc0202e58:	00003517          	auipc	a0,0x3
+ffffffffc0202e5c:	a0050513          	addi	a0,a0,-1536 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202e60:	d14fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(temp_ptep!= NULL);
-ffffffffc0202f0e:	00003697          	auipc	a3,0x3
-ffffffffc0202f12:	a0a68693          	addi	a3,a3,-1526 # ffffffffc0205918 <etext+0x13c8>
-ffffffffc0202f16:	00002617          	auipc	a2,0x2
-ffffffffc0202f1a:	f1260613          	addi	a2,a2,-238 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202f1e:	0d500593          	li	a1,213
-ffffffffc0202f22:	00003517          	auipc	a0,0x3
-ffffffffc0202f26:	92650513          	addi	a0,a0,-1754 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202f2a:	c36fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202e64:	00003697          	auipc	a3,0x3
+ffffffffc0202e68:	ac468693          	addi	a3,a3,-1340 # ffffffffc0205928 <default_pmm_manager+0x778>
+ffffffffc0202e6c:	00002617          	auipc	a2,0x2
+ffffffffc0202e70:	f9460613          	addi	a2,a2,-108 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202e74:	0d500593          	li	a1,213
+ffffffffc0202e78:	00003517          	auipc	a0,0x3
+ffffffffc0202e7c:	9e050513          	addi	a0,a0,-1568 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202e80:	cf4fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(total == nr_free_pages());
-ffffffffc0202f2e:	00002697          	auipc	a3,0x2
-ffffffffc0202f32:	f2a68693          	addi	a3,a3,-214 # ffffffffc0204e58 <etext+0x908>
-ffffffffc0202f36:	00002617          	auipc	a2,0x2
-ffffffffc0202f3a:	ef260613          	addi	a2,a2,-270 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202f3e:	0bd00593          	li	a1,189
-ffffffffc0202f42:	00003517          	auipc	a0,0x3
-ffffffffc0202f46:	90650513          	addi	a0,a0,-1786 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202f4a:	c16fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202e84:	00002697          	auipc	a3,0x2
+ffffffffc0202e88:	fac68693          	addi	a3,a3,-84 # ffffffffc0204e30 <commands+0x768>
+ffffffffc0202e8c:	00002617          	auipc	a2,0x2
+ffffffffc0202e90:	f7460613          	addi	a2,a2,-140 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202e94:	0bd00593          	li	a1,189
+ffffffffc0202e98:	00003517          	auipc	a0,0x3
+ffffffffc0202e9c:	9c050513          	addi	a0,a0,-1600 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202ea0:	cd4fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(pgfault_num==2);
-ffffffffc0202f4e:	00003697          	auipc	a3,0x3
-ffffffffc0202f52:	aa268693          	addi	a3,a3,-1374 # ffffffffc02059f0 <etext+0x14a0>
-ffffffffc0202f56:	00002617          	auipc	a2,0x2
-ffffffffc0202f5a:	ed260613          	addi	a2,a2,-302 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202f5e:	09500593          	li	a1,149
-ffffffffc0202f62:	00003517          	auipc	a0,0x3
-ffffffffc0202f66:	8e650513          	addi	a0,a0,-1818 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202f6a:	bf6fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202ea4:	00003697          	auipc	a3,0x3
+ffffffffc0202ea8:	b5c68693          	addi	a3,a3,-1188 # ffffffffc0205a00 <default_pmm_manager+0x850>
+ffffffffc0202eac:	00002617          	auipc	a2,0x2
+ffffffffc0202eb0:	f5460613          	addi	a2,a2,-172 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202eb4:	09500593          	li	a1,149
+ffffffffc0202eb8:	00003517          	auipc	a0,0x3
+ffffffffc0202ebc:	9a050513          	addi	a0,a0,-1632 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202ec0:	cb4fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(pgfault_num==2);
-ffffffffc0202f6e:	00003697          	auipc	a3,0x3
-ffffffffc0202f72:	a8268693          	addi	a3,a3,-1406 # ffffffffc02059f0 <etext+0x14a0>
-ffffffffc0202f76:	00002617          	auipc	a2,0x2
-ffffffffc0202f7a:	eb260613          	addi	a2,a2,-334 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202f7e:	09700593          	li	a1,151
-ffffffffc0202f82:	00003517          	auipc	a0,0x3
-ffffffffc0202f86:	8c650513          	addi	a0,a0,-1850 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202f8a:	bd6fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202ec4:	00003697          	auipc	a3,0x3
+ffffffffc0202ec8:	b3c68693          	addi	a3,a3,-1220 # ffffffffc0205a00 <default_pmm_manager+0x850>
+ffffffffc0202ecc:	00002617          	auipc	a2,0x2
+ffffffffc0202ed0:	f3460613          	addi	a2,a2,-204 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202ed4:	09700593          	li	a1,151
+ffffffffc0202ed8:	00003517          	auipc	a0,0x3
+ffffffffc0202edc:	98050513          	addi	a0,a0,-1664 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202ee0:	c94fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(pgfault_num==3);
-ffffffffc0202f8e:	00003697          	auipc	a3,0x3
-ffffffffc0202f92:	a7268693          	addi	a3,a3,-1422 # ffffffffc0205a00 <etext+0x14b0>
-ffffffffc0202f96:	00002617          	auipc	a2,0x2
-ffffffffc0202f9a:	e9260613          	addi	a2,a2,-366 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202f9e:	09900593          	li	a1,153
-ffffffffc0202fa2:	00003517          	auipc	a0,0x3
-ffffffffc0202fa6:	8a650513          	addi	a0,a0,-1882 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202faa:	bb6fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202ee4:	00003697          	auipc	a3,0x3
+ffffffffc0202ee8:	b2c68693          	addi	a3,a3,-1236 # ffffffffc0205a10 <default_pmm_manager+0x860>
+ffffffffc0202eec:	00002617          	auipc	a2,0x2
+ffffffffc0202ef0:	f1460613          	addi	a2,a2,-236 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202ef4:	09900593          	li	a1,153
+ffffffffc0202ef8:	00003517          	auipc	a0,0x3
+ffffffffc0202efc:	96050513          	addi	a0,a0,-1696 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202f00:	c74fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(pgfault_num==3);
-ffffffffc0202fae:	00003697          	auipc	a3,0x3
-ffffffffc0202fb2:	a5268693          	addi	a3,a3,-1454 # ffffffffc0205a00 <etext+0x14b0>
-ffffffffc0202fb6:	00002617          	auipc	a2,0x2
-ffffffffc0202fba:	e7260613          	addi	a2,a2,-398 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202fbe:	09b00593          	li	a1,155
-ffffffffc0202fc2:	00003517          	auipc	a0,0x3
-ffffffffc0202fc6:	88650513          	addi	a0,a0,-1914 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202fca:	b96fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202f04:	00003697          	auipc	a3,0x3
+ffffffffc0202f08:	b0c68693          	addi	a3,a3,-1268 # ffffffffc0205a10 <default_pmm_manager+0x860>
+ffffffffc0202f0c:	00002617          	auipc	a2,0x2
+ffffffffc0202f10:	ef460613          	addi	a2,a2,-268 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202f14:	09b00593          	li	a1,155
+ffffffffc0202f18:	00003517          	auipc	a0,0x3
+ffffffffc0202f1c:	94050513          	addi	a0,a0,-1728 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202f20:	c54fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(pgfault_num==1);
-ffffffffc0202fce:	00003697          	auipc	a3,0x3
-ffffffffc0202fd2:	a1268693          	addi	a3,a3,-1518 # ffffffffc02059e0 <etext+0x1490>
-ffffffffc0202fd6:	00002617          	auipc	a2,0x2
-ffffffffc0202fda:	e5260613          	addi	a2,a2,-430 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202fde:	09100593          	li	a1,145
-ffffffffc0202fe2:	00003517          	auipc	a0,0x3
-ffffffffc0202fe6:	86650513          	addi	a0,a0,-1946 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0202fea:	b76fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202f24:	00003697          	auipc	a3,0x3
+ffffffffc0202f28:	acc68693          	addi	a3,a3,-1332 # ffffffffc02059f0 <default_pmm_manager+0x840>
+ffffffffc0202f2c:	00002617          	auipc	a2,0x2
+ffffffffc0202f30:	ed460613          	addi	a2,a2,-300 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202f34:	09100593          	li	a1,145
+ffffffffc0202f38:	00003517          	auipc	a0,0x3
+ffffffffc0202f3c:	92050513          	addi	a0,a0,-1760 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202f40:	c34fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(pgfault_num==1);
-ffffffffc0202fee:	00003697          	auipc	a3,0x3
-ffffffffc0202ff2:	9f268693          	addi	a3,a3,-1550 # ffffffffc02059e0 <etext+0x1490>
-ffffffffc0202ff6:	00002617          	auipc	a2,0x2
-ffffffffc0202ffa:	e3260613          	addi	a2,a2,-462 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0202ffe:	09300593          	li	a1,147
-ffffffffc0203002:	00003517          	auipc	a0,0x3
-ffffffffc0203006:	84650513          	addi	a0,a0,-1978 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc020300a:	b56fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202f44:	00003697          	auipc	a3,0x3
+ffffffffc0202f48:	aac68693          	addi	a3,a3,-1364 # ffffffffc02059f0 <default_pmm_manager+0x840>
+ffffffffc0202f4c:	00002617          	auipc	a2,0x2
+ffffffffc0202f50:	eb460613          	addi	a2,a2,-332 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202f54:	09300593          	li	a1,147
+ffffffffc0202f58:	00003517          	auipc	a0,0x3
+ffffffffc0202f5c:	90050513          	addi	a0,a0,-1792 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202f60:	c14fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(mm != NULL);
-ffffffffc020300e:	00003697          	auipc	a3,0x3
-ffffffffc0203012:	88a68693          	addi	a3,a3,-1910 # ffffffffc0205898 <etext+0x1348>
-ffffffffc0203016:	00002617          	auipc	a2,0x2
-ffffffffc020301a:	e1260613          	addi	a2,a2,-494 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020301e:	0c200593          	li	a1,194
-ffffffffc0203022:	00003517          	auipc	a0,0x3
-ffffffffc0203026:	82650513          	addi	a0,a0,-2010 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc020302a:	b36fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202f64:	00003697          	auipc	a3,0x3
+ffffffffc0202f68:	94468693          	addi	a3,a3,-1724 # ffffffffc02058a8 <default_pmm_manager+0x6f8>
+ffffffffc0202f6c:	00002617          	auipc	a2,0x2
+ffffffffc0202f70:	e9460613          	addi	a2,a2,-364 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202f74:	0c200593          	li	a1,194
+ffffffffc0202f78:	00003517          	auipc	a0,0x3
+ffffffffc0202f7c:	8e050513          	addi	a0,a0,-1824 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202f80:	bf4fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(check_mm_struct == NULL);
-ffffffffc020302e:	00003697          	auipc	a3,0x3
-ffffffffc0203032:	87a68693          	addi	a3,a3,-1926 # ffffffffc02058a8 <etext+0x1358>
-ffffffffc0203036:	00002617          	auipc	a2,0x2
-ffffffffc020303a:	df260613          	addi	a2,a2,-526 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020303e:	0c500593          	li	a1,197
-ffffffffc0203042:	00003517          	auipc	a0,0x3
-ffffffffc0203046:	80650513          	addi	a0,a0,-2042 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc020304a:	b16fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202f84:	00003697          	auipc	a3,0x3
+ffffffffc0202f88:	93468693          	addi	a3,a3,-1740 # ffffffffc02058b8 <default_pmm_manager+0x708>
+ffffffffc0202f8c:	00002617          	auipc	a2,0x2
+ffffffffc0202f90:	e7460613          	addi	a2,a2,-396 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202f94:	0c500593          	li	a1,197
+ffffffffc0202f98:	00003517          	auipc	a0,0x3
+ffffffffc0202f9c:	8c050513          	addi	a0,a0,-1856 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202fa0:	bd4fd0ef          	jal	ra,ffffffffc0200374 <__panic>
      assert(nr_free==CHECK_VALID_PHY_PAGE_NUM);
-ffffffffc020304e:	00003697          	auipc	a3,0x3
-ffffffffc0203052:	94268693          	addi	a3,a3,-1726 # ffffffffc0205990 <etext+0x1440>
-ffffffffc0203056:	00002617          	auipc	a2,0x2
-ffffffffc020305a:	dd260613          	addi	a2,a2,-558 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020305e:	0e800593          	li	a1,232
-ffffffffc0203062:	00002517          	auipc	a0,0x2
-ffffffffc0203066:	7e650513          	addi	a0,a0,2022 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc020306a:	af6fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0202fa4:	00003697          	auipc	a3,0x3
+ffffffffc0202fa8:	9fc68693          	addi	a3,a3,-1540 # ffffffffc02059a0 <default_pmm_manager+0x7f0>
+ffffffffc0202fac:	00002617          	auipc	a2,0x2
+ffffffffc0202fb0:	e5460613          	addi	a2,a2,-428 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0202fb4:	0e800593          	li	a1,232
+ffffffffc0202fb8:	00003517          	auipc	a0,0x3
+ffffffffc0202fbc:	8a050513          	addi	a0,a0,-1888 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0202fc0:	bb4fd0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc020306e <swap_init_mm>:
+ffffffffc0202fc4 <swap_init_mm>:
      return sm->init_mm(mm);
-ffffffffc020306e:	0000e797          	auipc	a5,0xe
-ffffffffc0203072:	4ea7b783          	ld	a5,1258(a5) # ffffffffc0211558 <sm>
-ffffffffc0203076:	6b9c                	ld	a5,16(a5)
-ffffffffc0203078:	8782                	jr	a5
+ffffffffc0202fc4:	0000e797          	auipc	a5,0xe
+ffffffffc0202fc8:	58c7b783          	ld	a5,1420(a5) # ffffffffc0211550 <sm>
+ffffffffc0202fcc:	6b9c                	ld	a5,16(a5)
+ffffffffc0202fce:	8782                	jr	a5
 
-ffffffffc020307a <swap_map_swappable>:
+ffffffffc0202fd0 <swap_map_swappable>:
      return sm->map_swappable(mm, addr, page, swap_in);
-ffffffffc020307a:	0000e797          	auipc	a5,0xe
-ffffffffc020307e:	4de7b783          	ld	a5,1246(a5) # ffffffffc0211558 <sm>
-ffffffffc0203082:	739c                	ld	a5,32(a5)
-ffffffffc0203084:	8782                	jr	a5
+ffffffffc0202fd0:	0000e797          	auipc	a5,0xe
+ffffffffc0202fd4:	5807b783          	ld	a5,1408(a5) # ffffffffc0211550 <sm>
+ffffffffc0202fd8:	739c                	ld	a5,32(a5)
+ffffffffc0202fda:	8782                	jr	a5
 
-ffffffffc0203086 <swap_out>:
+ffffffffc0202fdc <swap_out>:
 {
-ffffffffc0203086:	711d                	addi	sp,sp,-96
-ffffffffc0203088:	ec86                	sd	ra,88(sp)
-ffffffffc020308a:	e8a2                	sd	s0,80(sp)
+ffffffffc0202fdc:	711d                	addi	sp,sp,-96
+ffffffffc0202fde:	ec86                	sd	ra,88(sp)
+ffffffffc0202fe0:	e8a2                	sd	s0,80(sp)
+ffffffffc0202fe2:	e4a6                	sd	s1,72(sp)
+ffffffffc0202fe4:	e0ca                	sd	s2,64(sp)
+ffffffffc0202fe6:	fc4e                	sd	s3,56(sp)
+ffffffffc0202fe8:	f852                	sd	s4,48(sp)
+ffffffffc0202fea:	f456                	sd	s5,40(sp)
+ffffffffc0202fec:	f05a                	sd	s6,32(sp)
+ffffffffc0202fee:	ec5e                	sd	s7,24(sp)
+ffffffffc0202ff0:	e862                	sd	s8,16(sp)
      for (i = 0; i != n; ++ i)
-ffffffffc020308c:	0e058663          	beqz	a1,ffffffffc0203178 <swap_out+0xf2>
-ffffffffc0203090:	e0ca                	sd	s2,64(sp)
-ffffffffc0203092:	fc4e                	sd	s3,56(sp)
-ffffffffc0203094:	f852                	sd	s4,48(sp)
-ffffffffc0203096:	f456                	sd	s5,40(sp)
-ffffffffc0203098:	f05a                	sd	s6,32(sp)
-ffffffffc020309a:	ec5e                	sd	s7,24(sp)
-ffffffffc020309c:	e4a6                	sd	s1,72(sp)
-ffffffffc020309e:	e862                	sd	s8,16(sp)
-ffffffffc02030a0:	8a2e                	mv	s4,a1
-ffffffffc02030a2:	892a                	mv	s2,a0
-ffffffffc02030a4:	8ab2                	mv	s5,a2
-ffffffffc02030a6:	4401                	li	s0,0
-ffffffffc02030a8:	0000e997          	auipc	s3,0xe
-ffffffffc02030ac:	4b098993          	addi	s3,s3,1200 # ffffffffc0211558 <sm>
+ffffffffc0202ff2:	cde9                	beqz	a1,ffffffffc02030cc <swap_out+0xf0>
+ffffffffc0202ff4:	8a2e                	mv	s4,a1
+ffffffffc0202ff6:	892a                	mv	s2,a0
+ffffffffc0202ff8:	8ab2                	mv	s5,a2
+ffffffffc0202ffa:	4401                	li	s0,0
+ffffffffc0202ffc:	0000e997          	auipc	s3,0xe
+ffffffffc0203000:	55498993          	addi	s3,s3,1364 # ffffffffc0211550 <sm>
                     cprintf("swap_out: i %d, store page in vaddr 0x%x to disk swap entry %d\n", i, v, page->pra_vaddr/PGSIZE+1);
-ffffffffc02030b0:	00003b17          	auipc	s6,0x3
-ffffffffc02030b4:	a80b0b13          	addi	s6,s6,-1408 # ffffffffc0205b30 <etext+0x15e0>
+ffffffffc0203004:	00003b17          	auipc	s6,0x3
+ffffffffc0203008:	b3cb0b13          	addi	s6,s6,-1220 # ffffffffc0205b40 <default_pmm_manager+0x990>
                     cprintf("SWAP: failed to save\n");
-ffffffffc02030b8:	00003b97          	auipc	s7,0x3
-ffffffffc02030bc:	a60b8b93          	addi	s7,s7,-1440 # ffffffffc0205b18 <etext+0x15c8>
-ffffffffc02030c0:	a825                	j	ffffffffc02030f8 <swap_out+0x72>
+ffffffffc020300c:	00003b97          	auipc	s7,0x3
+ffffffffc0203010:	b1cb8b93          	addi	s7,s7,-1252 # ffffffffc0205b28 <default_pmm_manager+0x978>
+ffffffffc0203014:	a825                	j	ffffffffc020304c <swap_out+0x70>
                     cprintf("swap_out: i %d, store page in vaddr 0x%x to disk swap entry %d\n", i, v, page->pra_vaddr/PGSIZE+1);
-ffffffffc02030c2:	67a2                	ld	a5,8(sp)
-ffffffffc02030c4:	8626                	mv	a2,s1
-ffffffffc02030c6:	85a2                	mv	a1,s0
-ffffffffc02030c8:	63b4                	ld	a3,64(a5)
-ffffffffc02030ca:	855a                	mv	a0,s6
+ffffffffc0203016:	67a2                	ld	a5,8(sp)
+ffffffffc0203018:	8626                	mv	a2,s1
+ffffffffc020301a:	85a2                	mv	a1,s0
+ffffffffc020301c:	63b4                	ld	a3,64(a5)
+ffffffffc020301e:	855a                	mv	a0,s6
      for (i = 0; i != n; ++ i)
-ffffffffc02030cc:	2405                	addiw	s0,s0,1
+ffffffffc0203020:	2405                	addiw	s0,s0,1
                     cprintf("swap_out: i %d, store page in vaddr 0x%x to disk swap entry %d\n", i, v, page->pra_vaddr/PGSIZE+1);
-ffffffffc02030ce:	82b1                	srli	a3,a3,0xc
-ffffffffc02030d0:	0685                	addi	a3,a3,1
-ffffffffc02030d2:	fe9fc0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0203022:	82b1                	srli	a3,a3,0xc
+ffffffffc0203024:	0685                	addi	a3,a3,1
+ffffffffc0203026:	894fd0ef          	jal	ra,ffffffffc02000ba <cprintf>
                     *ptep = (page->pra_vaddr/PGSIZE+1)<<8;
-ffffffffc02030d6:	6522                	ld	a0,8(sp)
+ffffffffc020302a:	6522                	ld	a0,8(sp)
                     free_page(page);
-ffffffffc02030d8:	4585                	li	a1,1
+ffffffffc020302c:	4585                	li	a1,1
                     *ptep = (page->pra_vaddr/PGSIZE+1)<<8;
-ffffffffc02030da:	613c                	ld	a5,64(a0)
-ffffffffc02030dc:	83b1                	srli	a5,a5,0xc
-ffffffffc02030de:	0785                	addi	a5,a5,1
-ffffffffc02030e0:	07a2                	slli	a5,a5,0x8
-ffffffffc02030e2:	00fc3023          	sd	a5,0(s8)
+ffffffffc020302e:	613c                	ld	a5,64(a0)
+ffffffffc0203030:	83b1                	srli	a5,a5,0xc
+ffffffffc0203032:	0785                	addi	a5,a5,1
+ffffffffc0203034:	07a2                	slli	a5,a5,0x8
+ffffffffc0203036:	00fc3023          	sd	a5,0(s8)
                     free_page(page);
-ffffffffc02030e6:	dacfe0ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc020303a:	e58fe0ef          	jal	ra,ffffffffc0201692 <free_pages>
           tlb_invalidate(mm->pgdir, v);
-ffffffffc02030ea:	01893503          	ld	a0,24(s2)
-ffffffffc02030ee:	85a6                	mv	a1,s1
-ffffffffc02030f0:	e7aff0ef          	jal	ffffffffc020276a <tlb_invalidate>
+ffffffffc020303e:	01893503          	ld	a0,24(s2)
+ffffffffc0203042:	85a6                	mv	a1,s1
+ffffffffc0203044:	eb6ff0ef          	jal	ra,ffffffffc02026fa <tlb_invalidate>
      for (i = 0; i != n; ++ i)
-ffffffffc02030f4:	048a0d63          	beq	s4,s0,ffffffffc020314e <swap_out+0xc8>
+ffffffffc0203048:	048a0d63          	beq	s4,s0,ffffffffc02030a2 <swap_out+0xc6>
           int r = sm->swap_out_victim(mm, &page, in_tick);
-ffffffffc02030f8:	0009b783          	ld	a5,0(s3)
-ffffffffc02030fc:	8656                	mv	a2,s5
-ffffffffc02030fe:	002c                	addi	a1,sp,8
-ffffffffc0203100:	7b9c                	ld	a5,48(a5)
-ffffffffc0203102:	854a                	mv	a0,s2
-ffffffffc0203104:	9782                	jalr	a5
+ffffffffc020304c:	0009b783          	ld	a5,0(s3)
+ffffffffc0203050:	8656                	mv	a2,s5
+ffffffffc0203052:	002c                	addi	a1,sp,8
+ffffffffc0203054:	7b9c                	ld	a5,48(a5)
+ffffffffc0203056:	854a                	mv	a0,s2
+ffffffffc0203058:	9782                	jalr	a5
           if (r != 0) {
-ffffffffc0203106:	e12d                	bnez	a0,ffffffffc0203168 <swap_out+0xe2>
+ffffffffc020305a:	e12d                	bnez	a0,ffffffffc02030bc <swap_out+0xe0>
           v=page->pra_vaddr; 
-ffffffffc0203108:	67a2                	ld	a5,8(sp)
+ffffffffc020305c:	67a2                	ld	a5,8(sp)
           pte_t *ptep = get_pte(mm->pgdir, v, 0);
-ffffffffc020310a:	01893503          	ld	a0,24(s2)
-ffffffffc020310e:	4601                	li	a2,0
+ffffffffc020305e:	01893503          	ld	a0,24(s2)
+ffffffffc0203062:	4601                	li	a2,0
           v=page->pra_vaddr; 
-ffffffffc0203110:	63a4                	ld	s1,64(a5)
+ffffffffc0203064:	63a4                	ld	s1,64(a5)
           pte_t *ptep = get_pte(mm->pgdir, v, 0);
-ffffffffc0203112:	85a6                	mv	a1,s1
-ffffffffc0203114:	df8fe0ef          	jal	ffffffffc020170c <get_pte>
+ffffffffc0203066:	85a6                	mv	a1,s1
+ffffffffc0203068:	ea4fe0ef          	jal	ra,ffffffffc020170c <get_pte>
           assert((*ptep & PTE_V) != 0);
-ffffffffc0203118:	611c                	ld	a5,0(a0)
+ffffffffc020306c:	611c                	ld	a5,0(a0)
           pte_t *ptep = get_pte(mm->pgdir, v, 0);
-ffffffffc020311a:	8c2a                	mv	s8,a0
+ffffffffc020306e:	8c2a                	mv	s8,a0
           assert((*ptep & PTE_V) != 0);
-ffffffffc020311c:	8b85                	andi	a5,a5,1
-ffffffffc020311e:	cfb9                	beqz	a5,ffffffffc020317c <swap_out+0xf6>
+ffffffffc0203070:	8b85                	andi	a5,a5,1
+ffffffffc0203072:	cfb9                	beqz	a5,ffffffffc02030d0 <swap_out+0xf4>
           if (swapfs_write( (page->pra_vaddr/PGSIZE+1)<<8, page) != 0) {
-ffffffffc0203120:	65a2                	ld	a1,8(sp)
-ffffffffc0203122:	61bc                	ld	a5,64(a1)
-ffffffffc0203124:	83b1                	srli	a5,a5,0xc
-ffffffffc0203126:	0785                	addi	a5,a5,1
-ffffffffc0203128:	00879513          	slli	a0,a5,0x8
-ffffffffc020312c:	61d000ef          	jal	ffffffffc0203f48 <swapfs_write>
-ffffffffc0203130:	d949                	beqz	a0,ffffffffc02030c2 <swap_out+0x3c>
+ffffffffc0203074:	65a2                	ld	a1,8(sp)
+ffffffffc0203076:	61bc                	ld	a5,64(a1)
+ffffffffc0203078:	83b1                	srli	a5,a5,0xc
+ffffffffc020307a:	0785                	addi	a5,a5,1
+ffffffffc020307c:	00879513          	slli	a0,a5,0x8
+ffffffffc0203080:	60d000ef          	jal	ra,ffffffffc0203e8c <swapfs_write>
+ffffffffc0203084:	d949                	beqz	a0,ffffffffc0203016 <swap_out+0x3a>
                     cprintf("SWAP: failed to save\n");
-ffffffffc0203132:	855e                	mv	a0,s7
-ffffffffc0203134:	f87fc0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0203086:	855e                	mv	a0,s7
+ffffffffc0203088:	832fd0ef          	jal	ra,ffffffffc02000ba <cprintf>
                     sm->map_swappable(mm, v, page, 0);
-ffffffffc0203138:	0009b783          	ld	a5,0(s3)
-ffffffffc020313c:	6622                	ld	a2,8(sp)
-ffffffffc020313e:	4681                	li	a3,0
-ffffffffc0203140:	739c                	ld	a5,32(a5)
-ffffffffc0203142:	85a6                	mv	a1,s1
-ffffffffc0203144:	854a                	mv	a0,s2
+ffffffffc020308c:	0009b783          	ld	a5,0(s3)
+ffffffffc0203090:	6622                	ld	a2,8(sp)
+ffffffffc0203092:	4681                	li	a3,0
+ffffffffc0203094:	739c                	ld	a5,32(a5)
+ffffffffc0203096:	85a6                	mv	a1,s1
+ffffffffc0203098:	854a                	mv	a0,s2
      for (i = 0; i != n; ++ i)
-ffffffffc0203146:	2405                	addiw	s0,s0,1
+ffffffffc020309a:	2405                	addiw	s0,s0,1
                     sm->map_swappable(mm, v, page, 0);
-ffffffffc0203148:	9782                	jalr	a5
+ffffffffc020309c:	9782                	jalr	a5
      for (i = 0; i != n; ++ i)
-ffffffffc020314a:	fa8a17e3          	bne	s4,s0,ffffffffc02030f8 <swap_out+0x72>
-ffffffffc020314e:	64a6                	ld	s1,72(sp)
-ffffffffc0203150:	6906                	ld	s2,64(sp)
-ffffffffc0203152:	79e2                	ld	s3,56(sp)
-ffffffffc0203154:	7a42                	ld	s4,48(sp)
-ffffffffc0203156:	7aa2                	ld	s5,40(sp)
-ffffffffc0203158:	7b02                	ld	s6,32(sp)
-ffffffffc020315a:	6be2                	ld	s7,24(sp)
-ffffffffc020315c:	6c42                	ld	s8,16(sp)
+ffffffffc020309e:	fa8a17e3          	bne	s4,s0,ffffffffc020304c <swap_out+0x70>
 }
-ffffffffc020315e:	60e6                	ld	ra,88(sp)
-ffffffffc0203160:	8522                	mv	a0,s0
-ffffffffc0203162:	6446                	ld	s0,80(sp)
-ffffffffc0203164:	6125                	addi	sp,sp,96
-ffffffffc0203166:	8082                	ret
+ffffffffc02030a2:	60e6                	ld	ra,88(sp)
+ffffffffc02030a4:	8522                	mv	a0,s0
+ffffffffc02030a6:	6446                	ld	s0,80(sp)
+ffffffffc02030a8:	64a6                	ld	s1,72(sp)
+ffffffffc02030aa:	6906                	ld	s2,64(sp)
+ffffffffc02030ac:	79e2                	ld	s3,56(sp)
+ffffffffc02030ae:	7a42                	ld	s4,48(sp)
+ffffffffc02030b0:	7aa2                	ld	s5,40(sp)
+ffffffffc02030b2:	7b02                	ld	s6,32(sp)
+ffffffffc02030b4:	6be2                	ld	s7,24(sp)
+ffffffffc02030b6:	6c42                	ld	s8,16(sp)
+ffffffffc02030b8:	6125                	addi	sp,sp,96
+ffffffffc02030ba:	8082                	ret
                     cprintf("i %d, swap_out: call swap_out_victim failed\n",i);
-ffffffffc0203168:	85a2                	mv	a1,s0
-ffffffffc020316a:	00003517          	auipc	a0,0x3
-ffffffffc020316e:	96650513          	addi	a0,a0,-1690 # ffffffffc0205ad0 <etext+0x1580>
-ffffffffc0203172:	f49fc0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02030bc:	85a2                	mv	a1,s0
+ffffffffc02030be:	00003517          	auipc	a0,0x3
+ffffffffc02030c2:	a2250513          	addi	a0,a0,-1502 # ffffffffc0205ae0 <default_pmm_manager+0x930>
+ffffffffc02030c6:	ff5fc0ef          	jal	ra,ffffffffc02000ba <cprintf>
                   break;
-ffffffffc0203176:	bfe1                	j	ffffffffc020314e <swap_out+0xc8>
+ffffffffc02030ca:	bfe1                	j	ffffffffc02030a2 <swap_out+0xc6>
      for (i = 0; i != n; ++ i)
-ffffffffc0203178:	4401                	li	s0,0
-ffffffffc020317a:	b7d5                	j	ffffffffc020315e <swap_out+0xd8>
+ffffffffc02030cc:	4401                	li	s0,0
+ffffffffc02030ce:	bfd1                	j	ffffffffc02030a2 <swap_out+0xc6>
           assert((*ptep & PTE_V) != 0);
-ffffffffc020317c:	00003697          	auipc	a3,0x3
-ffffffffc0203180:	98468693          	addi	a3,a3,-1660 # ffffffffc0205b00 <etext+0x15b0>
-ffffffffc0203184:	00002617          	auipc	a2,0x2
-ffffffffc0203188:	ca460613          	addi	a2,a2,-860 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020318c:	06600593          	li	a1,102
-ffffffffc0203190:	00002517          	auipc	a0,0x2
-ffffffffc0203194:	6b850513          	addi	a0,a0,1720 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0203198:	9c8fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02030d0:	00003697          	auipc	a3,0x3
+ffffffffc02030d4:	a4068693          	addi	a3,a3,-1472 # ffffffffc0205b10 <default_pmm_manager+0x960>
+ffffffffc02030d8:	00002617          	auipc	a2,0x2
+ffffffffc02030dc:	d2860613          	addi	a2,a2,-728 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02030e0:	06600593          	li	a1,102
+ffffffffc02030e4:	00002517          	auipc	a0,0x2
+ffffffffc02030e8:	77450513          	addi	a0,a0,1908 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc02030ec:	a88fd0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc020319c <swap_in>:
+ffffffffc02030f0 <swap_in>:
 {
-ffffffffc020319c:	7179                	addi	sp,sp,-48
-ffffffffc020319e:	e84a                	sd	s2,16(sp)
-ffffffffc02031a0:	892a                	mv	s2,a0
+ffffffffc02030f0:	7179                	addi	sp,sp,-48
+ffffffffc02030f2:	e84a                	sd	s2,16(sp)
+ffffffffc02030f4:	892a                	mv	s2,a0
      struct Page *result = alloc_page();
-ffffffffc02031a2:	4505                	li	a0,1
+ffffffffc02030f6:	4505                	li	a0,1
 {
-ffffffffc02031a4:	ec26                	sd	s1,24(sp)
-ffffffffc02031a6:	e44e                	sd	s3,8(sp)
-ffffffffc02031a8:	f406                	sd	ra,40(sp)
-ffffffffc02031aa:	f022                	sd	s0,32(sp)
-ffffffffc02031ac:	84ae                	mv	s1,a1
-ffffffffc02031ae:	89b2                	mv	s3,a2
+ffffffffc02030f8:	ec26                	sd	s1,24(sp)
+ffffffffc02030fa:	e44e                	sd	s3,8(sp)
+ffffffffc02030fc:	f406                	sd	ra,40(sp)
+ffffffffc02030fe:	f022                	sd	s0,32(sp)
+ffffffffc0203100:	84ae                	mv	s1,a1
+ffffffffc0203102:	89b2                	mv	s3,a2
      struct Page *result = alloc_page();
-ffffffffc02031b0:	c52fe0ef          	jal	ffffffffc0201602 <alloc_pages>
+ffffffffc0203104:	cfcfe0ef          	jal	ra,ffffffffc0201600 <alloc_pages>
      assert(result!=NULL);
-ffffffffc02031b4:	c129                	beqz	a0,ffffffffc02031f6 <swap_in+0x5a>
+ffffffffc0203108:	c129                	beqz	a0,ffffffffc020314a <swap_in+0x5a>
      pte_t *ptep = get_pte(mm->pgdir, addr, 0);
-ffffffffc02031b6:	842a                	mv	s0,a0
-ffffffffc02031b8:	01893503          	ld	a0,24(s2)
-ffffffffc02031bc:	4601                	li	a2,0
-ffffffffc02031be:	85a6                	mv	a1,s1
-ffffffffc02031c0:	d4cfe0ef          	jal	ffffffffc020170c <get_pte>
-ffffffffc02031c4:	892a                	mv	s2,a0
+ffffffffc020310a:	842a                	mv	s0,a0
+ffffffffc020310c:	01893503          	ld	a0,24(s2)
+ffffffffc0203110:	4601                	li	a2,0
+ffffffffc0203112:	85a6                	mv	a1,s1
+ffffffffc0203114:	df8fe0ef          	jal	ra,ffffffffc020170c <get_pte>
+ffffffffc0203118:	892a                	mv	s2,a0
      if ((r = swapfs_read((*ptep), result)) != 0)
-ffffffffc02031c6:	6108                	ld	a0,0(a0)
-ffffffffc02031c8:	85a2                	mv	a1,s0
-ffffffffc02031ca:	4d3000ef          	jal	ffffffffc0203e9c <swapfs_read>
+ffffffffc020311a:	6108                	ld	a0,0(a0)
+ffffffffc020311c:	85a2                	mv	a1,s0
+ffffffffc020311e:	4d5000ef          	jal	ra,ffffffffc0203df2 <swapfs_read>
      cprintf("swap_in: load disk swap entry %d with swap_page in vadr 0x%x\n", (*ptep)>>8, addr);
-ffffffffc02031ce:	00093583          	ld	a1,0(s2)
-ffffffffc02031d2:	8626                	mv	a2,s1
-ffffffffc02031d4:	00003517          	auipc	a0,0x3
-ffffffffc02031d8:	9ac50513          	addi	a0,a0,-1620 # ffffffffc0205b80 <etext+0x1630>
-ffffffffc02031dc:	81a1                	srli	a1,a1,0x8
-ffffffffc02031de:	eddfc0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0203122:	00093583          	ld	a1,0(s2)
+ffffffffc0203126:	8626                	mv	a2,s1
+ffffffffc0203128:	00003517          	auipc	a0,0x3
+ffffffffc020312c:	a6850513          	addi	a0,a0,-1432 # ffffffffc0205b90 <default_pmm_manager+0x9e0>
+ffffffffc0203130:	81a1                	srli	a1,a1,0x8
+ffffffffc0203132:	f89fc0ef          	jal	ra,ffffffffc02000ba <cprintf>
 }
-ffffffffc02031e2:	70a2                	ld	ra,40(sp)
+ffffffffc0203136:	70a2                	ld	ra,40(sp)
      *ptr_result=result;
-ffffffffc02031e4:	0089b023          	sd	s0,0(s3)
+ffffffffc0203138:	0089b023          	sd	s0,0(s3)
 }
-ffffffffc02031e8:	7402                	ld	s0,32(sp)
-ffffffffc02031ea:	64e2                	ld	s1,24(sp)
-ffffffffc02031ec:	6942                	ld	s2,16(sp)
-ffffffffc02031ee:	69a2                	ld	s3,8(sp)
-ffffffffc02031f0:	4501                	li	a0,0
-ffffffffc02031f2:	6145                	addi	sp,sp,48
-ffffffffc02031f4:	8082                	ret
+ffffffffc020313c:	7402                	ld	s0,32(sp)
+ffffffffc020313e:	64e2                	ld	s1,24(sp)
+ffffffffc0203140:	6942                	ld	s2,16(sp)
+ffffffffc0203142:	69a2                	ld	s3,8(sp)
+ffffffffc0203144:	4501                	li	a0,0
+ffffffffc0203146:	6145                	addi	sp,sp,48
+ffffffffc0203148:	8082                	ret
      assert(result!=NULL);
-ffffffffc02031f6:	00003697          	auipc	a3,0x3
-ffffffffc02031fa:	97a68693          	addi	a3,a3,-1670 # ffffffffc0205b70 <etext+0x1620>
-ffffffffc02031fe:	00002617          	auipc	a2,0x2
-ffffffffc0203202:	c2a60613          	addi	a2,a2,-982 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203206:	07c00593          	li	a1,124
-ffffffffc020320a:	00002517          	auipc	a0,0x2
-ffffffffc020320e:	63e50513          	addi	a0,a0,1598 # ffffffffc0205848 <etext+0x12f8>
-ffffffffc0203212:	94efd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc020314a:	00003697          	auipc	a3,0x3
+ffffffffc020314e:	a3668693          	addi	a3,a3,-1482 # ffffffffc0205b80 <default_pmm_manager+0x9d0>
+ffffffffc0203152:	00002617          	auipc	a2,0x2
+ffffffffc0203156:	cae60613          	addi	a2,a2,-850 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020315a:	07c00593          	li	a1,124
+ffffffffc020315e:	00002517          	auipc	a0,0x2
+ffffffffc0203162:	6fa50513          	addi	a0,a0,1786 # ffffffffc0205858 <default_pmm_manager+0x6a8>
+ffffffffc0203166:	a0efd0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc0203216 <_clock_init>:
+ffffffffc020316a <_clock_init>:
 
 static int
 _clock_init(void)
 {
     return 0;
 }
-ffffffffc0203216:	4501                	li	a0,0
-ffffffffc0203218:	8082                	ret
+ffffffffc020316a:	4501                	li	a0,0
+ffffffffc020316c:	8082                	ret
 
-ffffffffc020321a <_clock_set_unswappable>:
+ffffffffc020316e <_clock_set_unswappable>:
 
 static int
 _clock_set_unswappable(struct mm_struct *mm, uintptr_t addr)
 {
     return 0;
 }
-ffffffffc020321a:	4501                	li	a0,0
-ffffffffc020321c:	8082                	ret
+ffffffffc020316e:	4501                	li	a0,0
+ffffffffc0203170:	8082                	ret
 
-ffffffffc020321e <_clock_tick_event>:
+ffffffffc0203172 <_clock_tick_event>:
 
 static int
 _clock_tick_event(struct mm_struct *mm)
 { return 0; }
-ffffffffc020321e:	4501                	li	a0,0
-ffffffffc0203220:	8082                	ret
+ffffffffc0203172:	4501                	li	a0,0
+ffffffffc0203174:	8082                	ret
 
-ffffffffc0203222 <_clock_check_swap>:
+ffffffffc0203176 <_clock_check_swap>:
 _clock_check_swap(void) {
-ffffffffc0203222:	1141                	addi	sp,sp,-16
+ffffffffc0203176:	1141                	addi	sp,sp,-16
     *(unsigned char *)0x3000 = 0x0c;
-ffffffffc0203224:	4731                	li	a4,12
+ffffffffc0203178:	4731                	li	a4,12
 _clock_check_swap(void) {
-ffffffffc0203226:	e406                	sd	ra,8(sp)
+ffffffffc020317a:	e406                	sd	ra,8(sp)
     *(unsigned char *)0x3000 = 0x0c;
-ffffffffc0203228:	678d                	lui	a5,0x3
-ffffffffc020322a:	00e78023          	sb	a4,0(a5) # 3000 <kern_entry-0xffffffffc01fd000>
+ffffffffc020317c:	678d                	lui	a5,0x3
+ffffffffc020317e:	00e78023          	sb	a4,0(a5) # 3000 <kern_entry-0xffffffffc01fd000>
     assert(pgfault_num==4);
-ffffffffc020322e:	0000e717          	auipc	a4,0xe
-ffffffffc0203232:	33a72703          	lw	a4,826(a4) # ffffffffc0211568 <pgfault_num>
-ffffffffc0203236:	4691                	li	a3,4
-ffffffffc0203238:	0ad71663          	bne	a4,a3,ffffffffc02032e4 <_clock_check_swap+0xc2>
+ffffffffc0203182:	0000e697          	auipc	a3,0xe
+ffffffffc0203186:	3ee6a683          	lw	a3,1006(a3) # ffffffffc0211570 <pgfault_num>
+ffffffffc020318a:	4711                	li	a4,4
+ffffffffc020318c:	0ae69363          	bne	a3,a4,ffffffffc0203232 <_clock_check_swap+0xbc>
     *(unsigned char *)0x1000 = 0x0a;
-ffffffffc020323c:	6685                	lui	a3,0x1
-ffffffffc020323e:	4629                	li	a2,10
-ffffffffc0203240:	00c68023          	sb	a2,0(a3) # 1000 <kern_entry-0xffffffffc01ff000>
-ffffffffc0203244:	0000e797          	auipc	a5,0xe
-ffffffffc0203248:	32478793          	addi	a5,a5,804 # ffffffffc0211568 <pgfault_num>
+ffffffffc0203190:	6705                	lui	a4,0x1
+ffffffffc0203192:	4629                	li	a2,10
+ffffffffc0203194:	0000e797          	auipc	a5,0xe
+ffffffffc0203198:	3dc78793          	addi	a5,a5,988 # ffffffffc0211570 <pgfault_num>
+ffffffffc020319c:	00c70023          	sb	a2,0(a4) # 1000 <kern_entry-0xffffffffc01ff000>
     assert(pgfault_num==4);
-ffffffffc020324c:	4394                	lw	a3,0(a5)
-ffffffffc020324e:	0006861b          	sext.w	a2,a3
-ffffffffc0203252:	20e69963          	bne	a3,a4,ffffffffc0203464 <_clock_check_swap+0x242>
+ffffffffc02031a0:	4398                	lw	a4,0(a5)
+ffffffffc02031a2:	2701                	sext.w	a4,a4
+ffffffffc02031a4:	20d71763          	bne	a4,a3,ffffffffc02033b2 <_clock_check_swap+0x23c>
     *(unsigned char *)0x4000 = 0x0d;
-ffffffffc0203256:	6711                	lui	a4,0x4
-ffffffffc0203258:	46b5                	li	a3,13
-ffffffffc020325a:	00d70023          	sb	a3,0(a4) # 4000 <kern_entry-0xffffffffc01fc000>
+ffffffffc02031a8:	6691                	lui	a3,0x4
+ffffffffc02031aa:	4635                	li	a2,13
+ffffffffc02031ac:	00c68023          	sb	a2,0(a3) # 4000 <kern_entry-0xffffffffc01fc000>
     assert(pgfault_num==4);
-ffffffffc020325e:	4398                	lw	a4,0(a5)
-ffffffffc0203260:	0007069b          	sext.w	a3,a4
-ffffffffc0203264:	1ec71063          	bne	a4,a2,ffffffffc0203444 <_clock_check_swap+0x222>
+ffffffffc02031b0:	4394                	lw	a3,0(a5)
+ffffffffc02031b2:	2681                	sext.w	a3,a3
+ffffffffc02031b4:	1ce69f63          	bne	a3,a4,ffffffffc0203392 <_clock_check_swap+0x21c>
     *(unsigned char *)0x2000 = 0x0b;
-ffffffffc0203268:	6709                	lui	a4,0x2
-ffffffffc020326a:	462d                	li	a2,11
-ffffffffc020326c:	00c70023          	sb	a2,0(a4) # 2000 <kern_entry-0xffffffffc01fe000>
+ffffffffc02031b8:	6709                	lui	a4,0x2
+ffffffffc02031ba:	462d                	li	a2,11
+ffffffffc02031bc:	00c70023          	sb	a2,0(a4) # 2000 <kern_entry-0xffffffffc01fe000>
     assert(pgfault_num==4);
-ffffffffc0203270:	4398                	lw	a4,0(a5)
-ffffffffc0203272:	1ad71963          	bne	a4,a3,ffffffffc0203424 <_clock_check_swap+0x202>
+ffffffffc02031c0:	4398                	lw	a4,0(a5)
+ffffffffc02031c2:	2701                	sext.w	a4,a4
+ffffffffc02031c4:	1ad71763          	bne	a4,a3,ffffffffc0203372 <_clock_check_swap+0x1fc>
     *(unsigned char *)0x5000 = 0x0e;
-ffffffffc0203276:	6715                	lui	a4,0x5
-ffffffffc0203278:	46b9                	li	a3,14
-ffffffffc020327a:	00d70023          	sb	a3,0(a4) # 5000 <kern_entry-0xffffffffc01fb000>
+ffffffffc02031c8:	6715                	lui	a4,0x5
+ffffffffc02031ca:	46b9                	li	a3,14
+ffffffffc02031cc:	00d70023          	sb	a3,0(a4) # 5000 <kern_entry-0xffffffffc01fb000>
     assert(pgfault_num==5);
-ffffffffc020327e:	4398                	lw	a4,0(a5)
-ffffffffc0203280:	4615                	li	a2,5
-ffffffffc0203282:	0007069b          	sext.w	a3,a4
-ffffffffc0203286:	16c71f63          	bne	a4,a2,ffffffffc0203404 <_clock_check_swap+0x1e2>
+ffffffffc02031d0:	4398                	lw	a4,0(a5)
+ffffffffc02031d2:	4695                	li	a3,5
+ffffffffc02031d4:	2701                	sext.w	a4,a4
+ffffffffc02031d6:	16d71e63          	bne	a4,a3,ffffffffc0203352 <_clock_check_swap+0x1dc>
     assert(pgfault_num==5);
-ffffffffc020328a:	4398                	lw	a4,0(a5)
-ffffffffc020328c:	0007061b          	sext.w	a2,a4
-ffffffffc0203290:	14d71a63          	bne	a4,a3,ffffffffc02033e4 <_clock_check_swap+0x1c2>
+ffffffffc02031da:	4394                	lw	a3,0(a5)
+ffffffffc02031dc:	2681                	sext.w	a3,a3
+ffffffffc02031de:	14e69a63          	bne	a3,a4,ffffffffc0203332 <_clock_check_swap+0x1bc>
     assert(pgfault_num==5);
-ffffffffc0203294:	4398                	lw	a4,0(a5)
-ffffffffc0203296:	0007069b          	sext.w	a3,a4
-ffffffffc020329a:	12c71563          	bne	a4,a2,ffffffffc02033c4 <_clock_check_swap+0x1a2>
+ffffffffc02031e2:	4398                	lw	a4,0(a5)
+ffffffffc02031e4:	2701                	sext.w	a4,a4
+ffffffffc02031e6:	12d71663          	bne	a4,a3,ffffffffc0203312 <_clock_check_swap+0x19c>
     assert(pgfault_num==5);
-ffffffffc020329e:	4398                	lw	a4,0(a5)
-ffffffffc02032a0:	0007061b          	sext.w	a2,a4
-ffffffffc02032a4:	10d71063          	bne	a4,a3,ffffffffc02033a4 <_clock_check_swap+0x182>
+ffffffffc02031ea:	4394                	lw	a3,0(a5)
+ffffffffc02031ec:	2681                	sext.w	a3,a3
+ffffffffc02031ee:	10e69263          	bne	a3,a4,ffffffffc02032f2 <_clock_check_swap+0x17c>
     assert(pgfault_num==5);
-ffffffffc02032a8:	4398                	lw	a4,0(a5)
-ffffffffc02032aa:	0007069b          	sext.w	a3,a4
-ffffffffc02032ae:	0cc71b63          	bne	a4,a2,ffffffffc0203384 <_clock_check_swap+0x162>
+ffffffffc02031f2:	4398                	lw	a4,0(a5)
+ffffffffc02031f4:	2701                	sext.w	a4,a4
+ffffffffc02031f6:	0cd71e63          	bne	a4,a3,ffffffffc02032d2 <_clock_check_swap+0x15c>
     assert(pgfault_num==5);
-ffffffffc02032b2:	4398                	lw	a4,0(a5)
-ffffffffc02032b4:	0ad71863          	bne	a4,a3,ffffffffc0203364 <_clock_check_swap+0x142>
+ffffffffc02031fa:	4394                	lw	a3,0(a5)
+ffffffffc02031fc:	2681                	sext.w	a3,a3
+ffffffffc02031fe:	0ae69a63          	bne	a3,a4,ffffffffc02032b2 <_clock_check_swap+0x13c>
     *(unsigned char *)0x5000 = 0x0e;
-ffffffffc02032b8:	6715                	lui	a4,0x5
-ffffffffc02032ba:	46b9                	li	a3,14
-ffffffffc02032bc:	00d70023          	sb	a3,0(a4) # 5000 <kern_entry-0xffffffffc01fb000>
+ffffffffc0203202:	6715                	lui	a4,0x5
+ffffffffc0203204:	46b9                	li	a3,14
+ffffffffc0203206:	00d70023          	sb	a3,0(a4) # 5000 <kern_entry-0xffffffffc01fb000>
     assert(pgfault_num==5);
-ffffffffc02032c0:	4394                	lw	a3,0(a5)
-ffffffffc02032c2:	4715                	li	a4,5
-ffffffffc02032c4:	08e69063          	bne	a3,a4,ffffffffc0203344 <_clock_check_swap+0x122>
+ffffffffc020320a:	4398                	lw	a4,0(a5)
+ffffffffc020320c:	4695                	li	a3,5
+ffffffffc020320e:	2701                	sext.w	a4,a4
+ffffffffc0203210:	08d71163          	bne	a4,a3,ffffffffc0203292 <_clock_check_swap+0x11c>
     assert(*(unsigned char *)0x1000 == 0x0a);
-ffffffffc02032c8:	6705                	lui	a4,0x1
-ffffffffc02032ca:	00074683          	lbu	a3,0(a4) # 1000 <kern_entry-0xffffffffc01ff000>
-ffffffffc02032ce:	4729                	li	a4,10
-ffffffffc02032d0:	04e69a63          	bne	a3,a4,ffffffffc0203324 <_clock_check_swap+0x102>
+ffffffffc0203214:	6705                	lui	a4,0x1
+ffffffffc0203216:	00074683          	lbu	a3,0(a4) # 1000 <kern_entry-0xffffffffc01ff000>
+ffffffffc020321a:	4729                	li	a4,10
+ffffffffc020321c:	04e69b63          	bne	a3,a4,ffffffffc0203272 <_clock_check_swap+0xfc>
     assert(pgfault_num==6);
-ffffffffc02032d4:	4398                	lw	a4,0(a5)
-ffffffffc02032d6:	4799                	li	a5,6
-ffffffffc02032d8:	02f71663          	bne	a4,a5,ffffffffc0203304 <_clock_check_swap+0xe2>
+ffffffffc0203220:	439c                	lw	a5,0(a5)
+ffffffffc0203222:	4719                	li	a4,6
+ffffffffc0203224:	2781                	sext.w	a5,a5
+ffffffffc0203226:	02e79663          	bne	a5,a4,ffffffffc0203252 <_clock_check_swap+0xdc>
 }
-ffffffffc02032dc:	60a2                	ld	ra,8(sp)
-ffffffffc02032de:	4501                	li	a0,0
-ffffffffc02032e0:	0141                	addi	sp,sp,16
-ffffffffc02032e2:	8082                	ret
+ffffffffc020322a:	60a2                	ld	ra,8(sp)
+ffffffffc020322c:	4501                	li	a0,0
+ffffffffc020322e:	0141                	addi	sp,sp,16
+ffffffffc0203230:	8082                	ret
     assert(pgfault_num==4);
-ffffffffc02032e4:	00002697          	auipc	a3,0x2
-ffffffffc02032e8:	72c68693          	addi	a3,a3,1836 # ffffffffc0205a10 <etext+0x14c0>
-ffffffffc02032ec:	00002617          	auipc	a2,0x2
-ffffffffc02032f0:	b3c60613          	addi	a2,a2,-1220 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02032f4:	09800593          	li	a1,152
-ffffffffc02032f8:	00003517          	auipc	a0,0x3
-ffffffffc02032fc:	8c850513          	addi	a0,a0,-1848 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203300:	860fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203232:	00002697          	auipc	a3,0x2
+ffffffffc0203236:	7ee68693          	addi	a3,a3,2030 # ffffffffc0205a20 <default_pmm_manager+0x870>
+ffffffffc020323a:	00002617          	auipc	a2,0x2
+ffffffffc020323e:	bc660613          	addi	a2,a2,-1082 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203242:	09800593          	li	a1,152
+ffffffffc0203246:	00003517          	auipc	a0,0x3
+ffffffffc020324a:	98a50513          	addi	a0,a0,-1654 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc020324e:	926fd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgfault_num==6);
-ffffffffc0203304:	00003697          	auipc	a3,0x3
-ffffffffc0203308:	90c68693          	addi	a3,a3,-1780 # ffffffffc0205c10 <etext+0x16c0>
-ffffffffc020330c:	00002617          	auipc	a2,0x2
-ffffffffc0203310:	b1c60613          	addi	a2,a2,-1252 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203314:	0af00593          	li	a1,175
-ffffffffc0203318:	00003517          	auipc	a0,0x3
-ffffffffc020331c:	8a850513          	addi	a0,a0,-1880 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203320:	840fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203252:	00003697          	auipc	a3,0x3
+ffffffffc0203256:	9ce68693          	addi	a3,a3,-1586 # ffffffffc0205c20 <default_pmm_manager+0xa70>
+ffffffffc020325a:	00002617          	auipc	a2,0x2
+ffffffffc020325e:	ba660613          	addi	a2,a2,-1114 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203262:	0af00593          	li	a1,175
+ffffffffc0203266:	00003517          	auipc	a0,0x3
+ffffffffc020326a:	96a50513          	addi	a0,a0,-1686 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc020326e:	906fd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(*(unsigned char *)0x1000 == 0x0a);
-ffffffffc0203324:	00003697          	auipc	a3,0x3
-ffffffffc0203328:	8c468693          	addi	a3,a3,-1852 # ffffffffc0205be8 <etext+0x1698>
-ffffffffc020332c:	00002617          	auipc	a2,0x2
-ffffffffc0203330:	afc60613          	addi	a2,a2,-1284 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203334:	0ad00593          	li	a1,173
-ffffffffc0203338:	00003517          	auipc	a0,0x3
-ffffffffc020333c:	88850513          	addi	a0,a0,-1912 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203340:	820fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203272:	00003697          	auipc	a3,0x3
+ffffffffc0203276:	98668693          	addi	a3,a3,-1658 # ffffffffc0205bf8 <default_pmm_manager+0xa48>
+ffffffffc020327a:	00002617          	auipc	a2,0x2
+ffffffffc020327e:	b8660613          	addi	a2,a2,-1146 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203282:	0ad00593          	li	a1,173
+ffffffffc0203286:	00003517          	auipc	a0,0x3
+ffffffffc020328a:	94a50513          	addi	a0,a0,-1718 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc020328e:	8e6fd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgfault_num==5);
-ffffffffc0203344:	00003697          	auipc	a3,0x3
-ffffffffc0203348:	89468693          	addi	a3,a3,-1900 # ffffffffc0205bd8 <etext+0x1688>
-ffffffffc020334c:	00002617          	auipc	a2,0x2
-ffffffffc0203350:	adc60613          	addi	a2,a2,-1316 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203354:	0ac00593          	li	a1,172
-ffffffffc0203358:	00003517          	auipc	a0,0x3
-ffffffffc020335c:	86850513          	addi	a0,a0,-1944 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203360:	800fd0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203292:	00003697          	auipc	a3,0x3
+ffffffffc0203296:	95668693          	addi	a3,a3,-1706 # ffffffffc0205be8 <default_pmm_manager+0xa38>
+ffffffffc020329a:	00002617          	auipc	a2,0x2
+ffffffffc020329e:	b6660613          	addi	a2,a2,-1178 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02032a2:	0ac00593          	li	a1,172
+ffffffffc02032a6:	00003517          	auipc	a0,0x3
+ffffffffc02032aa:	92a50513          	addi	a0,a0,-1750 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc02032ae:	8c6fd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgfault_num==5);
-ffffffffc0203364:	00003697          	auipc	a3,0x3
-ffffffffc0203368:	87468693          	addi	a3,a3,-1932 # ffffffffc0205bd8 <etext+0x1688>
-ffffffffc020336c:	00002617          	auipc	a2,0x2
-ffffffffc0203370:	abc60613          	addi	a2,a2,-1348 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203374:	0aa00593          	li	a1,170
-ffffffffc0203378:	00003517          	auipc	a0,0x3
-ffffffffc020337c:	84850513          	addi	a0,a0,-1976 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203380:	fe1fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02032b2:	00003697          	auipc	a3,0x3
+ffffffffc02032b6:	93668693          	addi	a3,a3,-1738 # ffffffffc0205be8 <default_pmm_manager+0xa38>
+ffffffffc02032ba:	00002617          	auipc	a2,0x2
+ffffffffc02032be:	b4660613          	addi	a2,a2,-1210 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02032c2:	0aa00593          	li	a1,170
+ffffffffc02032c6:	00003517          	auipc	a0,0x3
+ffffffffc02032ca:	90a50513          	addi	a0,a0,-1782 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc02032ce:	8a6fd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgfault_num==5);
-ffffffffc0203384:	00003697          	auipc	a3,0x3
-ffffffffc0203388:	85468693          	addi	a3,a3,-1964 # ffffffffc0205bd8 <etext+0x1688>
-ffffffffc020338c:	00002617          	auipc	a2,0x2
-ffffffffc0203390:	a9c60613          	addi	a2,a2,-1380 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203394:	0a800593          	li	a1,168
-ffffffffc0203398:	00003517          	auipc	a0,0x3
-ffffffffc020339c:	82850513          	addi	a0,a0,-2008 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc02033a0:	fc1fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02032d2:	00003697          	auipc	a3,0x3
+ffffffffc02032d6:	91668693          	addi	a3,a3,-1770 # ffffffffc0205be8 <default_pmm_manager+0xa38>
+ffffffffc02032da:	00002617          	auipc	a2,0x2
+ffffffffc02032de:	b2660613          	addi	a2,a2,-1242 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02032e2:	0a800593          	li	a1,168
+ffffffffc02032e6:	00003517          	auipc	a0,0x3
+ffffffffc02032ea:	8ea50513          	addi	a0,a0,-1814 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc02032ee:	886fd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgfault_num==5);
-ffffffffc02033a4:	00003697          	auipc	a3,0x3
-ffffffffc02033a8:	83468693          	addi	a3,a3,-1996 # ffffffffc0205bd8 <etext+0x1688>
-ffffffffc02033ac:	00002617          	auipc	a2,0x2
-ffffffffc02033b0:	a7c60613          	addi	a2,a2,-1412 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02033b4:	0a600593          	li	a1,166
-ffffffffc02033b8:	00003517          	auipc	a0,0x3
-ffffffffc02033bc:	80850513          	addi	a0,a0,-2040 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc02033c0:	fa1fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02032f2:	00003697          	auipc	a3,0x3
+ffffffffc02032f6:	8f668693          	addi	a3,a3,-1802 # ffffffffc0205be8 <default_pmm_manager+0xa38>
+ffffffffc02032fa:	00002617          	auipc	a2,0x2
+ffffffffc02032fe:	b0660613          	addi	a2,a2,-1274 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203302:	0a600593          	li	a1,166
+ffffffffc0203306:	00003517          	auipc	a0,0x3
+ffffffffc020330a:	8ca50513          	addi	a0,a0,-1846 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc020330e:	866fd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgfault_num==5);
-ffffffffc02033c4:	00003697          	auipc	a3,0x3
-ffffffffc02033c8:	81468693          	addi	a3,a3,-2028 # ffffffffc0205bd8 <etext+0x1688>
-ffffffffc02033cc:	00002617          	auipc	a2,0x2
-ffffffffc02033d0:	a5c60613          	addi	a2,a2,-1444 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02033d4:	0a400593          	li	a1,164
-ffffffffc02033d8:	00002517          	auipc	a0,0x2
-ffffffffc02033dc:	7e850513          	addi	a0,a0,2024 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc02033e0:	f81fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203312:	00003697          	auipc	a3,0x3
+ffffffffc0203316:	8d668693          	addi	a3,a3,-1834 # ffffffffc0205be8 <default_pmm_manager+0xa38>
+ffffffffc020331a:	00002617          	auipc	a2,0x2
+ffffffffc020331e:	ae660613          	addi	a2,a2,-1306 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203322:	0a400593          	li	a1,164
+ffffffffc0203326:	00003517          	auipc	a0,0x3
+ffffffffc020332a:	8aa50513          	addi	a0,a0,-1878 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc020332e:	846fd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgfault_num==5);
-ffffffffc02033e4:	00002697          	auipc	a3,0x2
-ffffffffc02033e8:	7f468693          	addi	a3,a3,2036 # ffffffffc0205bd8 <etext+0x1688>
-ffffffffc02033ec:	00002617          	auipc	a2,0x2
-ffffffffc02033f0:	a3c60613          	addi	a2,a2,-1476 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02033f4:	0a200593          	li	a1,162
-ffffffffc02033f8:	00002517          	auipc	a0,0x2
-ffffffffc02033fc:	7c850513          	addi	a0,a0,1992 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203400:	f61fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203332:	00003697          	auipc	a3,0x3
+ffffffffc0203336:	8b668693          	addi	a3,a3,-1866 # ffffffffc0205be8 <default_pmm_manager+0xa38>
+ffffffffc020333a:	00002617          	auipc	a2,0x2
+ffffffffc020333e:	ac660613          	addi	a2,a2,-1338 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203342:	0a200593          	li	a1,162
+ffffffffc0203346:	00003517          	auipc	a0,0x3
+ffffffffc020334a:	88a50513          	addi	a0,a0,-1910 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc020334e:	826fd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgfault_num==5);
-ffffffffc0203404:	00002697          	auipc	a3,0x2
-ffffffffc0203408:	7d468693          	addi	a3,a3,2004 # ffffffffc0205bd8 <etext+0x1688>
-ffffffffc020340c:	00002617          	auipc	a2,0x2
-ffffffffc0203410:	a1c60613          	addi	a2,a2,-1508 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203414:	0a000593          	li	a1,160
-ffffffffc0203418:	00002517          	auipc	a0,0x2
-ffffffffc020341c:	7a850513          	addi	a0,a0,1960 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203420:	f41fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203352:	00003697          	auipc	a3,0x3
+ffffffffc0203356:	89668693          	addi	a3,a3,-1898 # ffffffffc0205be8 <default_pmm_manager+0xa38>
+ffffffffc020335a:	00002617          	auipc	a2,0x2
+ffffffffc020335e:	aa660613          	addi	a2,a2,-1370 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203362:	0a000593          	li	a1,160
+ffffffffc0203366:	00003517          	auipc	a0,0x3
+ffffffffc020336a:	86a50513          	addi	a0,a0,-1942 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc020336e:	806fd0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgfault_num==4);
-ffffffffc0203424:	00002697          	auipc	a3,0x2
-ffffffffc0203428:	5ec68693          	addi	a3,a3,1516 # ffffffffc0205a10 <etext+0x14c0>
-ffffffffc020342c:	00002617          	auipc	a2,0x2
-ffffffffc0203430:	9fc60613          	addi	a2,a2,-1540 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203434:	09e00593          	li	a1,158
-ffffffffc0203438:	00002517          	auipc	a0,0x2
-ffffffffc020343c:	78850513          	addi	a0,a0,1928 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203440:	f21fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203372:	00002697          	auipc	a3,0x2
+ffffffffc0203376:	6ae68693          	addi	a3,a3,1710 # ffffffffc0205a20 <default_pmm_manager+0x870>
+ffffffffc020337a:	00002617          	auipc	a2,0x2
+ffffffffc020337e:	a8660613          	addi	a2,a2,-1402 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203382:	09e00593          	li	a1,158
+ffffffffc0203386:	00003517          	auipc	a0,0x3
+ffffffffc020338a:	84a50513          	addi	a0,a0,-1974 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc020338e:	fe7fc0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgfault_num==4);
-ffffffffc0203444:	00002697          	auipc	a3,0x2
-ffffffffc0203448:	5cc68693          	addi	a3,a3,1484 # ffffffffc0205a10 <etext+0x14c0>
-ffffffffc020344c:	00002617          	auipc	a2,0x2
-ffffffffc0203450:	9dc60613          	addi	a2,a2,-1572 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203454:	09c00593          	li	a1,156
-ffffffffc0203458:	00002517          	auipc	a0,0x2
-ffffffffc020345c:	76850513          	addi	a0,a0,1896 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203460:	f01fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203392:	00002697          	auipc	a3,0x2
+ffffffffc0203396:	68e68693          	addi	a3,a3,1678 # ffffffffc0205a20 <default_pmm_manager+0x870>
+ffffffffc020339a:	00002617          	auipc	a2,0x2
+ffffffffc020339e:	a6660613          	addi	a2,a2,-1434 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02033a2:	09c00593          	li	a1,156
+ffffffffc02033a6:	00003517          	auipc	a0,0x3
+ffffffffc02033aa:	82a50513          	addi	a0,a0,-2006 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc02033ae:	fc7fc0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgfault_num==4);
-ffffffffc0203464:	00002697          	auipc	a3,0x2
-ffffffffc0203468:	5ac68693          	addi	a3,a3,1452 # ffffffffc0205a10 <etext+0x14c0>
-ffffffffc020346c:	00002617          	auipc	a2,0x2
-ffffffffc0203470:	9bc60613          	addi	a2,a2,-1604 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203474:	09a00593          	li	a1,154
-ffffffffc0203478:	00002517          	auipc	a0,0x2
-ffffffffc020347c:	74850513          	addi	a0,a0,1864 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203480:	ee1fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc02033b2:	00002697          	auipc	a3,0x2
+ffffffffc02033b6:	66e68693          	addi	a3,a3,1646 # ffffffffc0205a20 <default_pmm_manager+0x870>
+ffffffffc02033ba:	00002617          	auipc	a2,0x2
+ffffffffc02033be:	a4660613          	addi	a2,a2,-1466 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02033c2:	09a00593          	li	a1,154
+ffffffffc02033c6:	00003517          	auipc	a0,0x3
+ffffffffc02033ca:	80a50513          	addi	a0,a0,-2038 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc02033ce:	fa7fc0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc0203484 <_clock_swap_out_victim>:
+ffffffffc02033d2 <_clock_swap_out_victim>:
      list_entry_t *head=(list_entry_t*) mm->sm_priv;
-ffffffffc0203484:	7514                	ld	a3,40(a0)
+ffffffffc02033d2:	7514                	ld	a3,40(a0)
 {
-ffffffffc0203486:	1141                	addi	sp,sp,-16
-ffffffffc0203488:	e406                	sd	ra,8(sp)
+ffffffffc02033d4:	1141                	addi	sp,sp,-16
+ffffffffc02033d6:	e406                	sd	ra,8(sp)
          assert(head != NULL);
-ffffffffc020348a:	cebd                	beqz	a3,ffffffffc0203508 <_clock_swap_out_victim+0x84>
+ffffffffc02033d8:	cabd                	beqz	a3,ffffffffc020344e <_clock_swap_out_victim+0x7c>
      assert(in_tick==0);
-ffffffffc020348c:	ee31                	bnez	a2,ffffffffc02034e8 <_clock_swap_out_victim+0x64>
+ffffffffc02033da:	ea51                	bnez	a2,ffffffffc020346e <_clock_swap_out_victim+0x9c>
+ffffffffc02033dc:	0000e897          	auipc	a7,0xe
+ffffffffc02033e0:	18488893          	addi	a7,a7,388 # ffffffffc0211560 <curr_ptr>
+ffffffffc02033e4:	852e                	mv	a0,a1
+ffffffffc02033e6:	0008b583          	ld	a1,0(a7)
     return listelm->prev;
-ffffffffc020348e:	6298                	ld	a4,0(a3)
-ffffffffc0203490:	852e                	mv	a0,a1
+ffffffffc02033ea:	6298                	ld	a4,0(a3)
+ffffffffc02033ec:	4801                	li	a6,0
+ffffffffc02033ee:	832e                	mv	t1,a1
         if(page->visited == 1)
-ffffffffc0203492:	4605                	li	a2,1
+ffffffffc02033f0:	4605                	li	a2,1
         if (current == head) {
-ffffffffc0203494:	00e68f63          	beq	a3,a4,ffffffffc02034b2 <_clock_swap_out_victim+0x2e>
+ffffffffc02033f2:	00e68d63          	beq	a3,a4,ffffffffc020340c <_clock_swap_out_victim+0x3a>
         if(page->visited == 0)
-ffffffffc0203498:	fe073783          	ld	a5,-32(a4)
-ffffffffc020349c:	c38d                	beqz	a5,ffffffffc02034be <_clock_swap_out_victim+0x3a>
+ffffffffc02033f6:	fe073783          	ld	a5,-32(a4)
+ffffffffc02033fa:	c785                	beqz	a5,ffffffffc0203422 <_clock_swap_out_victim+0x50>
         if(page->visited == 1)
-ffffffffc020349e:	fec79be3          	bne	a5,a2,ffffffffc0203494 <_clock_swap_out_victim+0x10>
+ffffffffc02033fc:	fec79be3          	bne	a5,a2,ffffffffc02033f2 <_clock_swap_out_victim+0x20>
             page->visited = 0;
-ffffffffc02034a2:	fe073023          	sd	zero,-32(a4)
-            curr_ptr = current;
-ffffffffc02034a6:	0000e797          	auipc	a5,0xe
-ffffffffc02034aa:	0ae7bd23          	sd	a4,186(a5) # ffffffffc0211560 <curr_ptr>
+ffffffffc0203400:	fe073023          	sd	zero,-32(a4)
+ffffffffc0203404:	833a                	mv	t1,a4
+ffffffffc0203406:	4805                	li	a6,1
         if (current == head) {
-ffffffffc02034ae:	fee695e3          	bne	a3,a4,ffffffffc0203498 <_clock_swap_out_victim+0x14>
+ffffffffc0203408:	fee697e3          	bne	a3,a4,ffffffffc02033f6 <_clock_swap_out_victim+0x24>
+ffffffffc020340c:	00081863          	bnez	a6,ffffffffc020341c <_clock_swap_out_victim+0x4a>
 }
-ffffffffc02034b2:	60a2                	ld	ra,8(sp)
+ffffffffc0203410:	60a2                	ld	ra,8(sp)
             *ptr_page = NULL;
-ffffffffc02034b4:	00053023          	sd	zero,0(a0)
+ffffffffc0203412:	00053023          	sd	zero,0(a0)
 }
-ffffffffc02034b8:	4501                	li	a0,0
-ffffffffc02034ba:	0141                	addi	sp,sp,16
-ffffffffc02034bc:	8082                	ret
+ffffffffc0203416:	4501                	li	a0,0
+ffffffffc0203418:	0141                	addi	sp,sp,16
+ffffffffc020341a:	8082                	ret
+ffffffffc020341c:	0068b023          	sd	t1,0(a7)
+ffffffffc0203420:	bfc5                	j	ffffffffc0203410 <_clock_swap_out_victim+0x3e>
+ffffffffc0203422:	00080563          	beqz	a6,ffffffffc020342c <_clock_swap_out_victim+0x5a>
+ffffffffc0203426:	0068b023          	sd	t1,0(a7)
+        if(page->visited == 0)
+ffffffffc020342a:	859a                	mv	a1,t1
     __list_del(listelm->prev, listelm->next);
-ffffffffc02034be:	6314                	ld	a3,0(a4)
-ffffffffc02034c0:	671c                	ld	a5,8(a4)
-            cprintf("curr_ptr %p\n", curr_ptr);
-ffffffffc02034c2:	0000e597          	auipc	a1,0xe
-ffffffffc02034c6:	09e5b583          	ld	a1,158(a1) # ffffffffc0211560 <curr_ptr>
-            *ptr_page = le2page(current, pra_page_link); 
-ffffffffc02034ca:	fd070713          	addi	a4,a4,-48
+ffffffffc020342c:	6314                	ld	a3,0(a4)
+ffffffffc020342e:	671c                	ld	a5,8(a4)
+        struct Page *page = le2page(current, pra_page_link);
+ffffffffc0203430:	fd070713          	addi	a4,a4,-48
     prev->next = next;
-ffffffffc02034ce:	e69c                	sd	a5,8(a3)
+ffffffffc0203434:	e69c                	sd	a5,8(a3)
     next->prev = prev;
-ffffffffc02034d0:	e394                	sd	a3,0(a5)
-ffffffffc02034d2:	e118                	sd	a4,0(a0)
+ffffffffc0203436:	e394                	sd	a3,0(a5)
+            *ptr_page = le2page(current, pra_page_link); 
+ffffffffc0203438:	e118                	sd	a4,0(a0)
             cprintf("curr_ptr %p\n", curr_ptr);
-ffffffffc02034d4:	00002517          	auipc	a0,0x2
-ffffffffc02034d8:	76c50513          	addi	a0,a0,1900 # ffffffffc0205c40 <etext+0x16f0>
-ffffffffc02034dc:	bdffc0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020343a:	00003517          	auipc	a0,0x3
+ffffffffc020343e:	81650513          	addi	a0,a0,-2026 # ffffffffc0205c50 <default_pmm_manager+0xaa0>
+ffffffffc0203442:	c79fc0ef          	jal	ra,ffffffffc02000ba <cprintf>
 }
-ffffffffc02034e0:	60a2                	ld	ra,8(sp)
-ffffffffc02034e2:	4501                	li	a0,0
-ffffffffc02034e4:	0141                	addi	sp,sp,16
-ffffffffc02034e6:	8082                	ret
-     assert(in_tick==0);
-ffffffffc02034e8:	00002697          	auipc	a3,0x2
-ffffffffc02034ec:	74868693          	addi	a3,a3,1864 # ffffffffc0205c30 <etext+0x16e0>
-ffffffffc02034f0:	00002617          	auipc	a2,0x2
-ffffffffc02034f4:	93860613          	addi	a2,a2,-1736 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02034f8:	04f00593          	li	a1,79
-ffffffffc02034fc:	00002517          	auipc	a0,0x2
-ffffffffc0203500:	6c450513          	addi	a0,a0,1732 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203504:	e5dfc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203446:	60a2                	ld	ra,8(sp)
+ffffffffc0203448:	4501                	li	a0,0
+ffffffffc020344a:	0141                	addi	sp,sp,16
+ffffffffc020344c:	8082                	ret
          assert(head != NULL);
-ffffffffc0203508:	00002697          	auipc	a3,0x2
-ffffffffc020350c:	71868693          	addi	a3,a3,1816 # ffffffffc0205c20 <etext+0x16d0>
-ffffffffc0203510:	00002617          	auipc	a2,0x2
-ffffffffc0203514:	91860613          	addi	a2,a2,-1768 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203518:	04e00593          	li	a1,78
-ffffffffc020351c:	00002517          	auipc	a0,0x2
-ffffffffc0203520:	6a450513          	addi	a0,a0,1700 # ffffffffc0205bc0 <etext+0x1670>
-ffffffffc0203524:	e3dfc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc020344e:	00002697          	auipc	a3,0x2
+ffffffffc0203452:	7e268693          	addi	a3,a3,2018 # ffffffffc0205c30 <default_pmm_manager+0xa80>
+ffffffffc0203456:	00002617          	auipc	a2,0x2
+ffffffffc020345a:	9aa60613          	addi	a2,a2,-1622 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020345e:	04e00593          	li	a1,78
+ffffffffc0203462:	00002517          	auipc	a0,0x2
+ffffffffc0203466:	76e50513          	addi	a0,a0,1902 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc020346a:	f0bfc0ef          	jal	ra,ffffffffc0200374 <__panic>
+     assert(in_tick==0);
+ffffffffc020346e:	00002697          	auipc	a3,0x2
+ffffffffc0203472:	7d268693          	addi	a3,a3,2002 # ffffffffc0205c40 <default_pmm_manager+0xa90>
+ffffffffc0203476:	00002617          	auipc	a2,0x2
+ffffffffc020347a:	98a60613          	addi	a2,a2,-1654 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020347e:	04f00593          	li	a1,79
+ffffffffc0203482:	00002517          	auipc	a0,0x2
+ffffffffc0203486:	74e50513          	addi	a0,a0,1870 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
+ffffffffc020348a:	eebfc0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc0203528 <_clock_init_mm>:
+ffffffffc020348e <_clock_init_mm>:
 {     
-ffffffffc0203528:	1141                	addi	sp,sp,-16
-ffffffffc020352a:	e406                	sd	ra,8(sp)
+ffffffffc020348e:	1141                	addi	sp,sp,-16
+ffffffffc0203490:	e406                	sd	ra,8(sp)
     elm->prev = elm->next = elm;
-ffffffffc020352c:	0000e797          	auipc	a5,0xe
-ffffffffc0203530:	bbc78793          	addi	a5,a5,-1092 # ffffffffc02110e8 <pra_list_head>
+ffffffffc0203492:	0000e597          	auipc	a1,0xe
+ffffffffc0203496:	c5658593          	addi	a1,a1,-938 # ffffffffc02110e8 <pra_list_head>
      mm->sm_priv=&pra_list_head;
-ffffffffc0203534:	f51c                	sd	a5,40(a0)
+ffffffffc020349a:	f50c                	sd	a1,40(a0)
      cprintf(" mm->sm_priv %x in fifo_init_mm\n",mm->sm_priv);
-ffffffffc0203536:	85be                	mv	a1,a5
-ffffffffc0203538:	00002517          	auipc	a0,0x2
-ffffffffc020353c:	71850513          	addi	a0,a0,1816 # ffffffffc0205c50 <etext+0x1700>
-ffffffffc0203540:	e79c                	sd	a5,8(a5)
-ffffffffc0203542:	e39c                	sd	a5,0(a5)
+ffffffffc020349c:	00002517          	auipc	a0,0x2
+ffffffffc02034a0:	7c450513          	addi	a0,a0,1988 # ffffffffc0205c60 <default_pmm_manager+0xab0>
+ffffffffc02034a4:	e58c                	sd	a1,8(a1)
+ffffffffc02034a6:	e18c                	sd	a1,0(a1)
      curr_ptr=&pra_list_head;
-ffffffffc0203544:	0000e717          	auipc	a4,0xe
-ffffffffc0203548:	00f73e23          	sd	a5,28(a4) # ffffffffc0211560 <curr_ptr>
+ffffffffc02034a8:	0000e797          	auipc	a5,0xe
+ffffffffc02034ac:	0ab7bc23          	sd	a1,184(a5) # ffffffffc0211560 <curr_ptr>
      cprintf(" mm->sm_priv %x in fifo_init_mm\n",mm->sm_priv);
-ffffffffc020354c:	b6ffc0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02034b0:	c0bfc0ef          	jal	ra,ffffffffc02000ba <cprintf>
 }
-ffffffffc0203550:	60a2                	ld	ra,8(sp)
-ffffffffc0203552:	4501                	li	a0,0
-ffffffffc0203554:	0141                	addi	sp,sp,16
-ffffffffc0203556:	8082                	ret
+ffffffffc02034b4:	60a2                	ld	ra,8(sp)
+ffffffffc02034b6:	4501                	li	a0,0
+ffffffffc02034b8:	0141                	addi	sp,sp,16
+ffffffffc02034ba:	8082                	ret
 
-ffffffffc0203558 <_clock_map_swappable>:
+ffffffffc02034bc <_clock_map_swappable>:
     assert(entry != NULL && curr_ptr != NULL);
-ffffffffc0203558:	0000e797          	auipc	a5,0xe
-ffffffffc020355c:	0087b783          	ld	a5,8(a5) # ffffffffc0211560 <curr_ptr>
-ffffffffc0203560:	c385                	beqz	a5,ffffffffc0203580 <_clock_map_swappable+0x28>
+ffffffffc02034bc:	0000e797          	auipc	a5,0xe
+ffffffffc02034c0:	0a47b783          	ld	a5,164(a5) # ffffffffc0211560 <curr_ptr>
+ffffffffc02034c4:	c385                	beqz	a5,ffffffffc02034e4 <_clock_map_swappable+0x28>
     __list_add(elm, listelm, listelm->next);
-ffffffffc0203562:	0000e797          	auipc	a5,0xe
-ffffffffc0203566:	b8678793          	addi	a5,a5,-1146 # ffffffffc02110e8 <pra_list_head>
-ffffffffc020356a:	6794                	ld	a3,8(a5)
-ffffffffc020356c:	03060713          	addi	a4,a2,48
+ffffffffc02034c6:	0000e797          	auipc	a5,0xe
+ffffffffc02034ca:	c2278793          	addi	a5,a5,-990 # ffffffffc02110e8 <pra_list_head>
+ffffffffc02034ce:	6794                	ld	a3,8(a5)
+ffffffffc02034d0:	03060713          	addi	a4,a2,48
 }
-ffffffffc0203570:	4501                	li	a0,0
+ffffffffc02034d4:	4501                	li	a0,0
     prev->next = next->prev = elm;
-ffffffffc0203572:	e298                	sd	a4,0(a3)
-ffffffffc0203574:	e798                	sd	a4,8(a5)
+ffffffffc02034d6:	e298                	sd	a4,0(a3)
+ffffffffc02034d8:	e798                	sd	a4,8(a5)
     elm->prev = prev;
-ffffffffc0203576:	fa1c                	sd	a5,48(a2)
+ffffffffc02034da:	fa1c                	sd	a5,48(a2)
     page->visited =1;
-ffffffffc0203578:	4785                	li	a5,1
+ffffffffc02034dc:	4785                	li	a5,1
     elm->next = next;
-ffffffffc020357a:	fe14                	sd	a3,56(a2)
-ffffffffc020357c:	ea1c                	sd	a5,16(a2)
+ffffffffc02034de:	fe14                	sd	a3,56(a2)
+ffffffffc02034e0:	ea1c                	sd	a5,16(a2)
 }
-ffffffffc020357e:	8082                	ret
+ffffffffc02034e2:	8082                	ret
 {
-ffffffffc0203580:	1141                	addi	sp,sp,-16
+ffffffffc02034e4:	1141                	addi	sp,sp,-16
     assert(entry != NULL && curr_ptr != NULL);
-ffffffffc0203582:	00002697          	auipc	a3,0x2
-ffffffffc0203586:	6f668693          	addi	a3,a3,1782 # ffffffffc0205c78 <etext+0x1728>
-ffffffffc020358a:	00002617          	auipc	a2,0x2
-ffffffffc020358e:	89e60613          	addi	a2,a2,-1890 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203592:	03a00593          	li	a1,58
-ffffffffc0203596:	00002517          	auipc	a0,0x2
-ffffffffc020359a:	62a50513          	addi	a0,a0,1578 # ffffffffc0205bc0 <etext+0x1670>
+ffffffffc02034e6:	00002697          	auipc	a3,0x2
+ffffffffc02034ea:	7a268693          	addi	a3,a3,1954 # ffffffffc0205c88 <default_pmm_manager+0xad8>
+ffffffffc02034ee:	00002617          	auipc	a2,0x2
+ffffffffc02034f2:	91260613          	addi	a2,a2,-1774 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02034f6:	03a00593          	li	a1,58
+ffffffffc02034fa:	00002517          	auipc	a0,0x2
+ffffffffc02034fe:	6d650513          	addi	a0,a0,1750 # ffffffffc0205bd0 <default_pmm_manager+0xa20>
 {
-ffffffffc020359e:	e406                	sd	ra,8(sp)
+ffffffffc0203502:	e406                	sd	ra,8(sp)
     assert(entry != NULL && curr_ptr != NULL);
-ffffffffc02035a0:	dc1fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203504:	e71fc0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc02035a4 <check_vma_overlap.part.0>:
+ffffffffc0203508 <check_vma_overlap.part.0>:
 }
 
 
 // check_vma_overlap - check if vma1 overlaps vma2 ?
 static inline void
 check_vma_overlap(struct vma_struct *prev, struct vma_struct *next) {
-ffffffffc02035a4:	1141                	addi	sp,sp,-16
+ffffffffc0203508:	1141                	addi	sp,sp,-16
     assert(prev->vm_start < prev->vm_end);
     assert(prev->vm_end <= next->vm_start);
     assert(next->vm_start < next->vm_end);
-ffffffffc02035a6:	00002697          	auipc	a3,0x2
-ffffffffc02035aa:	71268693          	addi	a3,a3,1810 # ffffffffc0205cb8 <etext+0x1768>
-ffffffffc02035ae:	00002617          	auipc	a2,0x2
-ffffffffc02035b2:	87a60613          	addi	a2,a2,-1926 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02035b6:	07d00593          	li	a1,125
-ffffffffc02035ba:	00002517          	auipc	a0,0x2
-ffffffffc02035be:	71e50513          	addi	a0,a0,1822 # ffffffffc0205cd8 <etext+0x1788>
+ffffffffc020350a:	00002697          	auipc	a3,0x2
+ffffffffc020350e:	7be68693          	addi	a3,a3,1982 # ffffffffc0205cc8 <default_pmm_manager+0xb18>
+ffffffffc0203512:	00002617          	auipc	a2,0x2
+ffffffffc0203516:	8ee60613          	addi	a2,a2,-1810 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020351a:	07d00593          	li	a1,125
+ffffffffc020351e:	00002517          	auipc	a0,0x2
+ffffffffc0203522:	7ca50513          	addi	a0,a0,1994 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
 check_vma_overlap(struct vma_struct *prev, struct vma_struct *next) {
-ffffffffc02035c2:	e406                	sd	ra,8(sp)
+ffffffffc0203526:	e406                	sd	ra,8(sp)
     assert(next->vm_start < next->vm_end);
-ffffffffc02035c4:	d9dfc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203528:	e4dfc0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc02035c8 <mm_create>:
+ffffffffc020352c <mm_create>:
 mm_create(void) {
-ffffffffc02035c8:	1141                	addi	sp,sp,-16
+ffffffffc020352c:	1141                	addi	sp,sp,-16
     struct mm_struct *mm = kmalloc(sizeof(struct mm_struct));
-ffffffffc02035ca:	03000513          	li	a0,48
+ffffffffc020352e:	03000513          	li	a0,48
 mm_create(void) {
-ffffffffc02035ce:	e022                	sd	s0,0(sp)
-ffffffffc02035d0:	e406                	sd	ra,8(sp)
+ffffffffc0203532:	e022                	sd	s0,0(sp)
+ffffffffc0203534:	e406                	sd	ra,8(sp)
     struct mm_struct *mm = kmalloc(sizeof(struct mm_struct));
-ffffffffc02035d2:	a56ff0ef          	jal	ffffffffc0202828 <kmalloc>
-ffffffffc02035d6:	842a                	mv	s0,a0
+ffffffffc0203536:	a82ff0ef          	jal	ra,ffffffffc02027b8 <kmalloc>
+ffffffffc020353a:	842a                	mv	s0,a0
     if (mm != NULL) {
-ffffffffc02035d8:	c105                	beqz	a0,ffffffffc02035f8 <mm_create+0x30>
+ffffffffc020353c:	c105                	beqz	a0,ffffffffc020355c <mm_create+0x30>
     elm->prev = elm->next = elm;
-ffffffffc02035da:	e408                	sd	a0,8(s0)
-ffffffffc02035dc:	e008                	sd	a0,0(s0)
+ffffffffc020353e:	e408                	sd	a0,8(s0)
+ffffffffc0203540:	e008                	sd	a0,0(s0)
         mm->mmap_cache = NULL;
-ffffffffc02035de:	00053823          	sd	zero,16(a0)
+ffffffffc0203542:	00053823          	sd	zero,16(a0)
         mm->pgdir = NULL;
-ffffffffc02035e2:	00053c23          	sd	zero,24(a0)
+ffffffffc0203546:	00053c23          	sd	zero,24(a0)
         mm->map_count = 0;
-ffffffffc02035e6:	02052023          	sw	zero,32(a0)
+ffffffffc020354a:	02052023          	sw	zero,32(a0)
         if (swap_init_ok) swap_init_mm(mm);
-ffffffffc02035ea:	0000e797          	auipc	a5,0xe
-ffffffffc02035ee:	f5e7a783          	lw	a5,-162(a5) # ffffffffc0211548 <swap_init_ok>
-ffffffffc02035f2:	eb81                	bnez	a5,ffffffffc0203602 <mm_create+0x3a>
+ffffffffc020354e:	0000e797          	auipc	a5,0xe
+ffffffffc0203552:	00a7a783          	lw	a5,10(a5) # ffffffffc0211558 <swap_init_ok>
+ffffffffc0203556:	eb81                	bnez	a5,ffffffffc0203566 <mm_create+0x3a>
         else mm->sm_priv = NULL;
-ffffffffc02035f4:	02053423          	sd	zero,40(a0)
+ffffffffc0203558:	02053423          	sd	zero,40(a0)
 }
-ffffffffc02035f8:	60a2                	ld	ra,8(sp)
-ffffffffc02035fa:	8522                	mv	a0,s0
-ffffffffc02035fc:	6402                	ld	s0,0(sp)
-ffffffffc02035fe:	0141                	addi	sp,sp,16
-ffffffffc0203600:	8082                	ret
+ffffffffc020355c:	60a2                	ld	ra,8(sp)
+ffffffffc020355e:	8522                	mv	a0,s0
+ffffffffc0203560:	6402                	ld	s0,0(sp)
+ffffffffc0203562:	0141                	addi	sp,sp,16
+ffffffffc0203564:	8082                	ret
         if (swap_init_ok) swap_init_mm(mm);
-ffffffffc0203602:	a6dff0ef          	jal	ffffffffc020306e <swap_init_mm>
+ffffffffc0203566:	a5fff0ef          	jal	ra,ffffffffc0202fc4 <swap_init_mm>
 }
-ffffffffc0203606:	60a2                	ld	ra,8(sp)
-ffffffffc0203608:	8522                	mv	a0,s0
-ffffffffc020360a:	6402                	ld	s0,0(sp)
-ffffffffc020360c:	0141                	addi	sp,sp,16
-ffffffffc020360e:	8082                	ret
+ffffffffc020356a:	60a2                	ld	ra,8(sp)
+ffffffffc020356c:	8522                	mv	a0,s0
+ffffffffc020356e:	6402                	ld	s0,0(sp)
+ffffffffc0203570:	0141                	addi	sp,sp,16
+ffffffffc0203572:	8082                	ret
 
-ffffffffc0203610 <vma_create>:
+ffffffffc0203574 <vma_create>:
 vma_create(uintptr_t vm_start, uintptr_t vm_end, uint_t vm_flags) {
-ffffffffc0203610:	1101                	addi	sp,sp,-32
-ffffffffc0203612:	e04a                	sd	s2,0(sp)
-ffffffffc0203614:	892a                	mv	s2,a0
+ffffffffc0203574:	1101                	addi	sp,sp,-32
+ffffffffc0203576:	e04a                	sd	s2,0(sp)
+ffffffffc0203578:	892a                	mv	s2,a0
     struct vma_struct *vma = kmalloc(sizeof(struct vma_struct));
-ffffffffc0203616:	03000513          	li	a0,48
+ffffffffc020357a:	03000513          	li	a0,48
 vma_create(uintptr_t vm_start, uintptr_t vm_end, uint_t vm_flags) {
-ffffffffc020361a:	e822                	sd	s0,16(sp)
-ffffffffc020361c:	e426                	sd	s1,8(sp)
-ffffffffc020361e:	ec06                	sd	ra,24(sp)
-ffffffffc0203620:	84ae                	mv	s1,a1
-ffffffffc0203622:	8432                	mv	s0,a2
+ffffffffc020357e:	e822                	sd	s0,16(sp)
+ffffffffc0203580:	e426                	sd	s1,8(sp)
+ffffffffc0203582:	ec06                	sd	ra,24(sp)
+ffffffffc0203584:	84ae                	mv	s1,a1
+ffffffffc0203586:	8432                	mv	s0,a2
     struct vma_struct *vma = kmalloc(sizeof(struct vma_struct));
-ffffffffc0203624:	a04ff0ef          	jal	ffffffffc0202828 <kmalloc>
+ffffffffc0203588:	a30ff0ef          	jal	ra,ffffffffc02027b8 <kmalloc>
     if (vma != NULL) {
-ffffffffc0203628:	c509                	beqz	a0,ffffffffc0203632 <vma_create+0x22>
+ffffffffc020358c:	c509                	beqz	a0,ffffffffc0203596 <vma_create+0x22>
         vma->vm_start = vm_start;
-ffffffffc020362a:	01253423          	sd	s2,8(a0)
+ffffffffc020358e:	01253423          	sd	s2,8(a0)
         vma->vm_end = vm_end;
-ffffffffc020362e:	e904                	sd	s1,16(a0)
+ffffffffc0203592:	e904                	sd	s1,16(a0)
         vma->vm_flags = vm_flags;
-ffffffffc0203630:	ed00                	sd	s0,24(a0)
+ffffffffc0203594:	ed00                	sd	s0,24(a0)
 }
-ffffffffc0203632:	60e2                	ld	ra,24(sp)
-ffffffffc0203634:	6442                	ld	s0,16(sp)
-ffffffffc0203636:	64a2                	ld	s1,8(sp)
-ffffffffc0203638:	6902                	ld	s2,0(sp)
-ffffffffc020363a:	6105                	addi	sp,sp,32
-ffffffffc020363c:	8082                	ret
+ffffffffc0203596:	60e2                	ld	ra,24(sp)
+ffffffffc0203598:	6442                	ld	s0,16(sp)
+ffffffffc020359a:	64a2                	ld	s1,8(sp)
+ffffffffc020359c:	6902                	ld	s2,0(sp)
+ffffffffc020359e:	6105                	addi	sp,sp,32
+ffffffffc02035a0:	8082                	ret
 
-ffffffffc020363e <find_vma>:
+ffffffffc02035a2 <find_vma>:
 find_vma(struct mm_struct *mm, uintptr_t addr) {
-ffffffffc020363e:	86aa                	mv	a3,a0
+ffffffffc02035a2:	86aa                	mv	a3,a0
     if (mm != NULL) {
-ffffffffc0203640:	c505                	beqz	a0,ffffffffc0203668 <find_vma+0x2a>
+ffffffffc02035a4:	c505                	beqz	a0,ffffffffc02035cc <find_vma+0x2a>
         vma = mm->mmap_cache;
-ffffffffc0203642:	6908                	ld	a0,16(a0)
+ffffffffc02035a6:	6908                	ld	a0,16(a0)
         if (!(vma != NULL && vma->vm_start <= addr && vma->vm_end > addr)) {
-ffffffffc0203644:	c501                	beqz	a0,ffffffffc020364c <find_vma+0xe>
-ffffffffc0203646:	651c                	ld	a5,8(a0)
-ffffffffc0203648:	02f5f663          	bgeu	a1,a5,ffffffffc0203674 <find_vma+0x36>
+ffffffffc02035a8:	c501                	beqz	a0,ffffffffc02035b0 <find_vma+0xe>
+ffffffffc02035aa:	651c                	ld	a5,8(a0)
+ffffffffc02035ac:	02f5f263          	bgeu	a1,a5,ffffffffc02035d0 <find_vma+0x2e>
     return listelm->next;
-ffffffffc020364c:	669c                	ld	a5,8(a3)
+ffffffffc02035b0:	669c                	ld	a5,8(a3)
                 while ((le = list_next(le)) != list) {
-ffffffffc020364e:	00f68d63          	beq	a3,a5,ffffffffc0203668 <find_vma+0x2a>
+ffffffffc02035b2:	00f68d63          	beq	a3,a5,ffffffffc02035cc <find_vma+0x2a>
                     if (vma->vm_start<=addr && addr < vma->vm_end) {
-ffffffffc0203652:	fe87b703          	ld	a4,-24(a5)
-ffffffffc0203656:	00e5e663          	bltu	a1,a4,ffffffffc0203662 <find_vma+0x24>
-ffffffffc020365a:	ff07b703          	ld	a4,-16(a5)
-ffffffffc020365e:	00e5e763          	bltu	a1,a4,ffffffffc020366c <find_vma+0x2e>
-ffffffffc0203662:	679c                	ld	a5,8(a5)
+ffffffffc02035b6:	fe87b703          	ld	a4,-24(a5)
+ffffffffc02035ba:	00e5e663          	bltu	a1,a4,ffffffffc02035c6 <find_vma+0x24>
+ffffffffc02035be:	ff07b703          	ld	a4,-16(a5)
+ffffffffc02035c2:	00e5ec63          	bltu	a1,a4,ffffffffc02035da <find_vma+0x38>
+ffffffffc02035c6:	679c                	ld	a5,8(a5)
                 while ((le = list_next(le)) != list) {
-ffffffffc0203664:	fef697e3          	bne	a3,a5,ffffffffc0203652 <find_vma+0x14>
+ffffffffc02035c8:	fef697e3          	bne	a3,a5,ffffffffc02035b6 <find_vma+0x14>
     struct vma_struct *vma = NULL;
-ffffffffc0203668:	4501                	li	a0,0
+ffffffffc02035cc:	4501                	li	a0,0
 }
-ffffffffc020366a:	8082                	ret
-                    vma = le2vma(le, list_link);
-ffffffffc020366c:	fe078513          	addi	a0,a5,-32
-            mm->mmap_cache = vma;
-ffffffffc0203670:	ea88                	sd	a0,16(a3)
-ffffffffc0203672:	8082                	ret
+ffffffffc02035ce:	8082                	ret
         if (!(vma != NULL && vma->vm_start <= addr && vma->vm_end > addr)) {
-ffffffffc0203674:	691c                	ld	a5,16(a0)
-ffffffffc0203676:	fcf5fbe3          	bgeu	a1,a5,ffffffffc020364c <find_vma+0xe>
+ffffffffc02035d0:	691c                	ld	a5,16(a0)
+ffffffffc02035d2:	fcf5ffe3          	bgeu	a1,a5,ffffffffc02035b0 <find_vma+0xe>
             mm->mmap_cache = vma;
-ffffffffc020367a:	ea88                	sd	a0,16(a3)
-ffffffffc020367c:	8082                	ret
+ffffffffc02035d6:	ea88                	sd	a0,16(a3)
+ffffffffc02035d8:	8082                	ret
+                    vma = le2vma(le, list_link);
+ffffffffc02035da:	fe078513          	addi	a0,a5,-32
+            mm->mmap_cache = vma;
+ffffffffc02035de:	ea88                	sd	a0,16(a3)
+ffffffffc02035e0:	8082                	ret
 
-ffffffffc020367e <insert_vma_struct>:
+ffffffffc02035e2 <insert_vma_struct>:
 
 
 // insert_vma_struct -insert vma in mm's list link
 void
 insert_vma_struct(struct mm_struct *mm, struct vma_struct *vma) {
     assert(vma->vm_start < vma->vm_end);
-ffffffffc020367e:	6590                	ld	a2,8(a1)
-ffffffffc0203680:	0105b803          	ld	a6,16(a1)
+ffffffffc02035e2:	6590                	ld	a2,8(a1)
+ffffffffc02035e4:	0105b803          	ld	a6,16(a1)
 insert_vma_struct(struct mm_struct *mm, struct vma_struct *vma) {
-ffffffffc0203684:	1141                	addi	sp,sp,-16
-ffffffffc0203686:	e406                	sd	ra,8(sp)
-ffffffffc0203688:	87aa                	mv	a5,a0
+ffffffffc02035e8:	1141                	addi	sp,sp,-16
+ffffffffc02035ea:	e406                	sd	ra,8(sp)
+ffffffffc02035ec:	87aa                	mv	a5,a0
     assert(vma->vm_start < vma->vm_end);
-ffffffffc020368a:	01066763          	bltu	a2,a6,ffffffffc0203698 <insert_vma_struct+0x1a>
-ffffffffc020368e:	a085                	j	ffffffffc02036ee <insert_vma_struct+0x70>
+ffffffffc02035ee:	01066763          	bltu	a2,a6,ffffffffc02035fc <insert_vma_struct+0x1a>
+ffffffffc02035f2:	a085                	j	ffffffffc0203652 <insert_vma_struct+0x70>
     list_entry_t *le_prev = list, *le_next;
 
         list_entry_t *le = list;
         while ((le = list_next(le)) != list) {
             struct vma_struct *mmap_prev = le2vma(le, list_link);
             if (mmap_prev->vm_start > vma->vm_start) {
-ffffffffc0203690:	fe87b703          	ld	a4,-24(a5)
-ffffffffc0203694:	04e66863          	bltu	a2,a4,ffffffffc02036e4 <insert_vma_struct+0x66>
-ffffffffc0203698:	86be                	mv	a3,a5
-ffffffffc020369a:	679c                	ld	a5,8(a5)
+ffffffffc02035f4:	fe87b703          	ld	a4,-24(a5)
+ffffffffc02035f8:	04e66863          	bltu	a2,a4,ffffffffc0203648 <insert_vma_struct+0x66>
+ffffffffc02035fc:	86be                	mv	a3,a5
+ffffffffc02035fe:	679c                	ld	a5,8(a5)
         while ((le = list_next(le)) != list) {
-ffffffffc020369c:	fef51ae3          	bne	a0,a5,ffffffffc0203690 <insert_vma_struct+0x12>
+ffffffffc0203600:	fef51ae3          	bne	a0,a5,ffffffffc02035f4 <insert_vma_struct+0x12>
         }
 
     le_next = list_next(le_prev);
 
     /* check overlap */
     if (le_prev != list) {
-ffffffffc02036a0:	02a68463          	beq	a3,a0,ffffffffc02036c8 <insert_vma_struct+0x4a>
+ffffffffc0203604:	02a68463          	beq	a3,a0,ffffffffc020362c <insert_vma_struct+0x4a>
         check_vma_overlap(le2vma(le_prev, list_link), vma);
-ffffffffc02036a4:	ff06b703          	ld	a4,-16(a3)
+ffffffffc0203608:	ff06b703          	ld	a4,-16(a3)
     assert(prev->vm_start < prev->vm_end);
-ffffffffc02036a8:	fe86b883          	ld	a7,-24(a3)
-ffffffffc02036ac:	08e8f163          	bgeu	a7,a4,ffffffffc020372e <insert_vma_struct+0xb0>
+ffffffffc020360c:	fe86b883          	ld	a7,-24(a3)
+ffffffffc0203610:	08e8f163          	bgeu	a7,a4,ffffffffc0203692 <insert_vma_struct+0xb0>
     assert(prev->vm_end <= next->vm_start);
-ffffffffc02036b0:	04e66f63          	bltu	a2,a4,ffffffffc020370e <insert_vma_struct+0x90>
+ffffffffc0203614:	04e66f63          	bltu	a2,a4,ffffffffc0203672 <insert_vma_struct+0x90>
     }
     if (le_next != list) {
-ffffffffc02036b4:	00f50a63          	beq	a0,a5,ffffffffc02036c8 <insert_vma_struct+0x4a>
-ffffffffc02036b8:	fe87b703          	ld	a4,-24(a5)
+ffffffffc0203618:	00f50a63          	beq	a0,a5,ffffffffc020362c <insert_vma_struct+0x4a>
+            if (mmap_prev->vm_start > vma->vm_start) {
+ffffffffc020361c:	fe87b703          	ld	a4,-24(a5)
     assert(prev->vm_end <= next->vm_start);
-ffffffffc02036bc:	05076963          	bltu	a4,a6,ffffffffc020370e <insert_vma_struct+0x90>
+ffffffffc0203620:	05076963          	bltu	a4,a6,ffffffffc0203672 <insert_vma_struct+0x90>
     assert(next->vm_start < next->vm_end);
-ffffffffc02036c0:	ff07b603          	ld	a2,-16(a5)
-ffffffffc02036c4:	02c77363          	bgeu	a4,a2,ffffffffc02036ea <insert_vma_struct+0x6c>
+ffffffffc0203624:	ff07b603          	ld	a2,-16(a5)
+ffffffffc0203628:	02c77363          	bgeu	a4,a2,ffffffffc020364e <insert_vma_struct+0x6c>
     }
 
     vma->vm_mm = mm;
     list_add_after(le_prev, &(vma->list_link));
 
     mm->map_count ++;
-ffffffffc02036c8:	5118                	lw	a4,32(a0)
+ffffffffc020362c:	5118                	lw	a4,32(a0)
     vma->vm_mm = mm;
-ffffffffc02036ca:	e188                	sd	a0,0(a1)
+ffffffffc020362e:	e188                	sd	a0,0(a1)
     list_add_after(le_prev, &(vma->list_link));
-ffffffffc02036cc:	02058613          	addi	a2,a1,32
+ffffffffc0203630:	02058613          	addi	a2,a1,32
     prev->next = next->prev = elm;
-ffffffffc02036d0:	e390                	sd	a2,0(a5)
-ffffffffc02036d2:	e690                	sd	a2,8(a3)
+ffffffffc0203634:	e390                	sd	a2,0(a5)
+ffffffffc0203636:	e690                	sd	a2,8(a3)
 }
-ffffffffc02036d4:	60a2                	ld	ra,8(sp)
+ffffffffc0203638:	60a2                	ld	ra,8(sp)
     elm->next = next;
-ffffffffc02036d6:	f59c                	sd	a5,40(a1)
+ffffffffc020363a:	f59c                	sd	a5,40(a1)
     elm->prev = prev;
-ffffffffc02036d8:	f194                	sd	a3,32(a1)
+ffffffffc020363c:	f194                	sd	a3,32(a1)
     mm->map_count ++;
-ffffffffc02036da:	0017079b          	addiw	a5,a4,1
-ffffffffc02036de:	d11c                	sw	a5,32(a0)
+ffffffffc020363e:	0017079b          	addiw	a5,a4,1
+ffffffffc0203642:	d11c                	sw	a5,32(a0)
 }
-ffffffffc02036e0:	0141                	addi	sp,sp,16
-ffffffffc02036e2:	8082                	ret
+ffffffffc0203644:	0141                	addi	sp,sp,16
+ffffffffc0203646:	8082                	ret
     if (le_prev != list) {
-ffffffffc02036e4:	fca690e3          	bne	a3,a0,ffffffffc02036a4 <insert_vma_struct+0x26>
-ffffffffc02036e8:	bfd1                	j	ffffffffc02036bc <insert_vma_struct+0x3e>
-ffffffffc02036ea:	ebbff0ef          	jal	ffffffffc02035a4 <check_vma_overlap.part.0>
+ffffffffc0203648:	fca690e3          	bne	a3,a0,ffffffffc0203608 <insert_vma_struct+0x26>
+ffffffffc020364c:	bfd1                	j	ffffffffc0203620 <insert_vma_struct+0x3e>
+ffffffffc020364e:	ebbff0ef          	jal	ra,ffffffffc0203508 <check_vma_overlap.part.0>
     assert(vma->vm_start < vma->vm_end);
-ffffffffc02036ee:	00002697          	auipc	a3,0x2
-ffffffffc02036f2:	5fa68693          	addi	a3,a3,1530 # ffffffffc0205ce8 <etext+0x1798>
-ffffffffc02036f6:	00001617          	auipc	a2,0x1
-ffffffffc02036fa:	73260613          	addi	a2,a2,1842 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc02036fe:	08400593          	li	a1,132
-ffffffffc0203702:	00002517          	auipc	a0,0x2
-ffffffffc0203706:	5d650513          	addi	a0,a0,1494 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc020370a:	c57fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203652:	00002697          	auipc	a3,0x2
+ffffffffc0203656:	6a668693          	addi	a3,a3,1702 # ffffffffc0205cf8 <default_pmm_manager+0xb48>
+ffffffffc020365a:	00001617          	auipc	a2,0x1
+ffffffffc020365e:	7a660613          	addi	a2,a2,1958 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203662:	08400593          	li	a1,132
+ffffffffc0203666:	00002517          	auipc	a0,0x2
+ffffffffc020366a:	68250513          	addi	a0,a0,1666 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc020366e:	d07fc0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(prev->vm_end <= next->vm_start);
-ffffffffc020370e:	00002697          	auipc	a3,0x2
-ffffffffc0203712:	61a68693          	addi	a3,a3,1562 # ffffffffc0205d28 <etext+0x17d8>
-ffffffffc0203716:	00001617          	auipc	a2,0x1
-ffffffffc020371a:	71260613          	addi	a2,a2,1810 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020371e:	07c00593          	li	a1,124
-ffffffffc0203722:	00002517          	auipc	a0,0x2
-ffffffffc0203726:	5b650513          	addi	a0,a0,1462 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc020372a:	c37fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203672:	00002697          	auipc	a3,0x2
+ffffffffc0203676:	6c668693          	addi	a3,a3,1734 # ffffffffc0205d38 <default_pmm_manager+0xb88>
+ffffffffc020367a:	00001617          	auipc	a2,0x1
+ffffffffc020367e:	78660613          	addi	a2,a2,1926 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203682:	07c00593          	li	a1,124
+ffffffffc0203686:	00002517          	auipc	a0,0x2
+ffffffffc020368a:	66250513          	addi	a0,a0,1634 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc020368e:	ce7fc0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(prev->vm_start < prev->vm_end);
-ffffffffc020372e:	00002697          	auipc	a3,0x2
-ffffffffc0203732:	5da68693          	addi	a3,a3,1498 # ffffffffc0205d08 <etext+0x17b8>
-ffffffffc0203736:	00001617          	auipc	a2,0x1
-ffffffffc020373a:	6f260613          	addi	a2,a2,1778 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc020373e:	07b00593          	li	a1,123
-ffffffffc0203742:	00002517          	auipc	a0,0x2
-ffffffffc0203746:	59650513          	addi	a0,a0,1430 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc020374a:	c17fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203692:	00002697          	auipc	a3,0x2
+ffffffffc0203696:	68668693          	addi	a3,a3,1670 # ffffffffc0205d18 <default_pmm_manager+0xb68>
+ffffffffc020369a:	00001617          	auipc	a2,0x1
+ffffffffc020369e:	76660613          	addi	a2,a2,1894 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02036a2:	07b00593          	li	a1,123
+ffffffffc02036a6:	00002517          	auipc	a0,0x2
+ffffffffc02036aa:	64250513          	addi	a0,a0,1602 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc02036ae:	cc7fc0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc020374e <mm_destroy>:
+ffffffffc02036b2 <mm_destroy>:
 
 // mm_destroy - free mm and mm internal fields
 void
 mm_destroy(struct mm_struct *mm) {
-ffffffffc020374e:	1141                	addi	sp,sp,-16
-ffffffffc0203750:	e022                	sd	s0,0(sp)
-ffffffffc0203752:	842a                	mv	s0,a0
+ffffffffc02036b2:	1141                	addi	sp,sp,-16
+ffffffffc02036b4:	e022                	sd	s0,0(sp)
+ffffffffc02036b6:	842a                	mv	s0,a0
     return listelm->next;
-ffffffffc0203754:	6508                	ld	a0,8(a0)
-ffffffffc0203756:	e406                	sd	ra,8(sp)
+ffffffffc02036b8:	6508                	ld	a0,8(a0)
+ffffffffc02036ba:	e406                	sd	ra,8(sp)
 
     list_entry_t *list = &(mm->mmap_list), *le;
     while ((le = list_next(list)) != list) {
-ffffffffc0203758:	00a40e63          	beq	s0,a0,ffffffffc0203774 <mm_destroy+0x26>
+ffffffffc02036bc:	00a40e63          	beq	s0,a0,ffffffffc02036d8 <mm_destroy+0x26>
     __list_del(listelm->prev, listelm->next);
-ffffffffc020375c:	6118                	ld	a4,0(a0)
-ffffffffc020375e:	651c                	ld	a5,8(a0)
+ffffffffc02036c0:	6118                	ld	a4,0(a0)
+ffffffffc02036c2:	651c                	ld	a5,8(a0)
         list_del(le);
         kfree(le2vma(le, list_link),sizeof(struct vma_struct));  //kfree vma        
-ffffffffc0203760:	03000593          	li	a1,48
-ffffffffc0203764:	1501                	addi	a0,a0,-32
+ffffffffc02036c4:	03000593          	li	a1,48
+ffffffffc02036c8:	1501                	addi	a0,a0,-32
     prev->next = next;
-ffffffffc0203766:	e71c                	sd	a5,8(a4)
+ffffffffc02036ca:	e71c                	sd	a5,8(a4)
     next->prev = prev;
-ffffffffc0203768:	e398                	sd	a4,0(a5)
-ffffffffc020376a:	98aff0ef          	jal	ffffffffc02028f4 <kfree>
+ffffffffc02036cc:	e398                	sd	a4,0(a5)
+ffffffffc02036ce:	9a4ff0ef          	jal	ra,ffffffffc0202872 <kfree>
     return listelm->next;
-ffffffffc020376e:	6408                	ld	a0,8(s0)
+ffffffffc02036d2:	6408                	ld	a0,8(s0)
     while ((le = list_next(list)) != list) {
-ffffffffc0203770:	fea416e3          	bne	s0,a0,ffffffffc020375c <mm_destroy+0xe>
+ffffffffc02036d4:	fea416e3          	bne	s0,a0,ffffffffc02036c0 <mm_destroy+0xe>
     }
     kfree(mm, sizeof(struct mm_struct)); //kfree mm
-ffffffffc0203774:	8522                	mv	a0,s0
+ffffffffc02036d8:	8522                	mv	a0,s0
     mm=NULL;
 }
-ffffffffc0203776:	6402                	ld	s0,0(sp)
-ffffffffc0203778:	60a2                	ld	ra,8(sp)
+ffffffffc02036da:	6402                	ld	s0,0(sp)
+ffffffffc02036dc:	60a2                	ld	ra,8(sp)
     kfree(mm, sizeof(struct mm_struct)); //kfree mm
-ffffffffc020377a:	03000593          	li	a1,48
+ffffffffc02036de:	03000593          	li	a1,48
 }
-ffffffffc020377e:	0141                	addi	sp,sp,16
+ffffffffc02036e2:	0141                	addi	sp,sp,16
     kfree(mm, sizeof(struct mm_struct)); //kfree mm
-ffffffffc0203780:	974ff06f          	j	ffffffffc02028f4 <kfree>
+ffffffffc02036e4:	98eff06f          	j	ffffffffc0202872 <kfree>
 
-ffffffffc0203784 <vmm_init>:
+ffffffffc02036e8 <vmm_init>:
 
 // vmm_init - initialize virtual memory management
 //          - now just call check_vmm to check correctness of vmm
 void
 vmm_init(void) {
-ffffffffc0203784:	715d                	addi	sp,sp,-80
-ffffffffc0203786:	e486                	sd	ra,72(sp)
-ffffffffc0203788:	f44e                	sd	s3,40(sp)
-ffffffffc020378a:	f052                	sd	s4,32(sp)
-ffffffffc020378c:	e0a2                	sd	s0,64(sp)
-ffffffffc020378e:	fc26                	sd	s1,56(sp)
-ffffffffc0203790:	f84a                	sd	s2,48(sp)
-ffffffffc0203792:	ec56                	sd	s5,24(sp)
-ffffffffc0203794:	e85a                	sd	s6,16(sp)
-ffffffffc0203796:	e45e                	sd	s7,8(sp)
-ffffffffc0203798:	e062                	sd	s8,0(sp)
+ffffffffc02036e8:	715d                	addi	sp,sp,-80
+ffffffffc02036ea:	e486                	sd	ra,72(sp)
+ffffffffc02036ec:	f44e                	sd	s3,40(sp)
+ffffffffc02036ee:	f052                	sd	s4,32(sp)
+ffffffffc02036f0:	e0a2                	sd	s0,64(sp)
+ffffffffc02036f2:	fc26                	sd	s1,56(sp)
+ffffffffc02036f4:	f84a                	sd	s2,48(sp)
+ffffffffc02036f6:	ec56                	sd	s5,24(sp)
+ffffffffc02036f8:	e85a                	sd	s6,16(sp)
+ffffffffc02036fa:	e45e                	sd	s7,8(sp)
 }
 
 // check_vmm - check correctness of vmm
 static void
 check_vmm(void) {
     size_t nr_free_pages_store = nr_free_pages();
-ffffffffc020379a:	f39fd0ef          	jal	ffffffffc02016d2 <nr_free_pages>
-ffffffffc020379e:	89aa                	mv	s3,a0
+ffffffffc02036fc:	fd7fd0ef          	jal	ra,ffffffffc02016d2 <nr_free_pages>
+ffffffffc0203700:	89aa                	mv	s3,a0
     cprintf("check_vmm() succeeded.\n");
 }
 
 static void
 check_vma_struct(void) {
     size_t nr_free_pages_store = nr_free_pages();
-ffffffffc02037a0:	f33fd0ef          	jal	ffffffffc02016d2 <nr_free_pages>
-ffffffffc02037a4:	8a2a                	mv	s4,a0
+ffffffffc0203702:	fd1fd0ef          	jal	ra,ffffffffc02016d2 <nr_free_pages>
+ffffffffc0203706:	8a2a                	mv	s4,a0
     struct mm_struct *mm = kmalloc(sizeof(struct mm_struct));
-ffffffffc02037a6:	03000513          	li	a0,48
-ffffffffc02037aa:	87eff0ef          	jal	ffffffffc0202828 <kmalloc>
+ffffffffc0203708:	03000513          	li	a0,48
+ffffffffc020370c:	8acff0ef          	jal	ra,ffffffffc02027b8 <kmalloc>
     if (mm != NULL) {
-ffffffffc02037ae:	30050563          	beqz	a0,ffffffffc0203ab8 <vmm_init+0x334>
+ffffffffc0203710:	56050863          	beqz	a0,ffffffffc0203c80 <vmm_init+0x598>
     elm->prev = elm->next = elm;
-ffffffffc02037b2:	e508                	sd	a0,8(a0)
-ffffffffc02037b4:	e108                	sd	a0,0(a0)
+ffffffffc0203714:	e508                	sd	a0,8(a0)
+ffffffffc0203716:	e108                	sd	a0,0(a0)
         mm->mmap_cache = NULL;
-ffffffffc02037b6:	00053823          	sd	zero,16(a0)
+ffffffffc0203718:	00053823          	sd	zero,16(a0)
         mm->pgdir = NULL;
-ffffffffc02037ba:	00053c23          	sd	zero,24(a0)
+ffffffffc020371c:	00053c23          	sd	zero,24(a0)
         mm->map_count = 0;
-ffffffffc02037be:	02052023          	sw	zero,32(a0)
+ffffffffc0203720:	02052023          	sw	zero,32(a0)
         if (swap_init_ok) swap_init_mm(mm);
-ffffffffc02037c2:	0000e797          	auipc	a5,0xe
-ffffffffc02037c6:	d867a783          	lw	a5,-634(a5) # ffffffffc0211548 <swap_init_ok>
-ffffffffc02037ca:	842a                	mv	s0,a0
-ffffffffc02037cc:	2c079363          	bnez	a5,ffffffffc0203a92 <vmm_init+0x30e>
+ffffffffc0203724:	0000e797          	auipc	a5,0xe
+ffffffffc0203728:	e347a783          	lw	a5,-460(a5) # ffffffffc0211558 <swap_init_ok>
+ffffffffc020372c:	84aa                	mv	s1,a0
+ffffffffc020372e:	e7b9                	bnez	a5,ffffffffc020377c <vmm_init+0x94>
         else mm->sm_priv = NULL;
-ffffffffc02037d0:	02053423          	sd	zero,40(a0)
+ffffffffc0203730:	02053423          	sd	zero,40(a0)
 vmm_init(void) {
-ffffffffc02037d4:	03200493          	li	s1,50
-    struct vma_struct *vma = kmalloc(sizeof(struct vma_struct));
-ffffffffc02037d8:	03000513          	li	a0,48
-ffffffffc02037dc:	84cff0ef          	jal	ffffffffc0202828 <kmalloc>
-ffffffffc02037e0:	00248913          	addi	s2,s1,2
-ffffffffc02037e4:	85aa                	mv	a1,a0
-    if (vma != NULL) {
-ffffffffc02037e6:	2a050963          	beqz	a0,ffffffffc0203a98 <vmm_init+0x314>
+ffffffffc0203734:	03200413          	li	s0,50
+ffffffffc0203738:	a811                	j	ffffffffc020374c <vmm_init+0x64>
         vma->vm_start = vm_start;
-ffffffffc02037ea:	e504                	sd	s1,8(a0)
+ffffffffc020373a:	e500                	sd	s0,8(a0)
         vma->vm_end = vm_end;
-ffffffffc02037ec:	01253823          	sd	s2,16(a0)
+ffffffffc020373c:	e91c                	sd	a5,16(a0)
         vma->vm_flags = vm_flags;
-ffffffffc02037f0:	00053c23          	sd	zero,24(a0)
+ffffffffc020373e:	00053c23          	sd	zero,24(a0)
     assert(mm != NULL);
 
     int step1 = 10, step2 = step1 * 10;
 
     int i;
     for (i = step1; i >= 1; i --) {
-ffffffffc02037f4:	14ed                	addi	s1,s1,-5
+ffffffffc0203742:	146d                	addi	s0,s0,-5
         struct vma_struct *vma = vma_create(i * 5, i * 5 + 2, 0);
         assert(vma != NULL);
         insert_vma_struct(mm, vma);
-ffffffffc02037f6:	8522                	mv	a0,s0
-ffffffffc02037f8:	e87ff0ef          	jal	ffffffffc020367e <insert_vma_struct>
+ffffffffc0203744:	8526                	mv	a0,s1
+ffffffffc0203746:	e9dff0ef          	jal	ra,ffffffffc02035e2 <insert_vma_struct>
     for (i = step1; i >= 1; i --) {
-ffffffffc02037fc:	fcf1                	bnez	s1,ffffffffc02037d8 <vmm_init+0x54>
-ffffffffc02037fe:	03700493          	li	s1,55
+ffffffffc020374a:	cc05                	beqz	s0,ffffffffc0203782 <vmm_init+0x9a>
+    struct vma_struct *vma = kmalloc(sizeof(struct vma_struct));
+ffffffffc020374c:	03000513          	li	a0,48
+ffffffffc0203750:	868ff0ef          	jal	ra,ffffffffc02027b8 <kmalloc>
+ffffffffc0203754:	85aa                	mv	a1,a0
+ffffffffc0203756:	00240793          	addi	a5,s0,2
+    if (vma != NULL) {
+ffffffffc020375a:	f165                	bnez	a0,ffffffffc020373a <vmm_init+0x52>
+        assert(vma != NULL);
+ffffffffc020375c:	00002697          	auipc	a3,0x2
+ffffffffc0203760:	18468693          	addi	a3,a3,388 # ffffffffc02058e0 <default_pmm_manager+0x730>
+ffffffffc0203764:	00001617          	auipc	a2,0x1
+ffffffffc0203768:	69c60613          	addi	a2,a2,1692 # ffffffffc0204e00 <commands+0x738>
+ffffffffc020376c:	0ce00593          	li	a1,206
+ffffffffc0203770:	00002517          	auipc	a0,0x2
+ffffffffc0203774:	57850513          	addi	a0,a0,1400 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203778:	bfdfc0ef          	jal	ra,ffffffffc0200374 <__panic>
+        if (swap_init_ok) swap_init_mm(mm);
+ffffffffc020377c:	849ff0ef          	jal	ra,ffffffffc0202fc4 <swap_init_mm>
+ffffffffc0203780:	bf55                	j	ffffffffc0203734 <vmm_init+0x4c>
+ffffffffc0203782:	03700413          	li	s0,55
     }
 
     for (i = step1 + 1; i <= step2; i ++) {
-ffffffffc0203802:	1f900913          	li	s2,505
-    struct vma_struct *vma = kmalloc(sizeof(struct vma_struct));
-ffffffffc0203806:	03000513          	li	a0,48
-ffffffffc020380a:	81eff0ef          	jal	ffffffffc0202828 <kmalloc>
-ffffffffc020380e:	85aa                	mv	a1,a0
-    if (vma != NULL) {
-ffffffffc0203810:	2c050463          	beqz	a0,ffffffffc0203ad8 <vmm_init+0x354>
-        vma->vm_end = vm_end;
-ffffffffc0203814:	00248793          	addi	a5,s1,2
+ffffffffc0203786:	1f900913          	li	s2,505
+ffffffffc020378a:	a819                	j	ffffffffc02037a0 <vmm_init+0xb8>
         vma->vm_start = vm_start;
-ffffffffc0203818:	e504                	sd	s1,8(a0)
+ffffffffc020378c:	e500                	sd	s0,8(a0)
         vma->vm_end = vm_end;
-ffffffffc020381a:	e91c                	sd	a5,16(a0)
+ffffffffc020378e:	e91c                	sd	a5,16(a0)
         vma->vm_flags = vm_flags;
-ffffffffc020381c:	00053c23          	sd	zero,24(a0)
+ffffffffc0203790:	00053c23          	sd	zero,24(a0)
     for (i = step1 + 1; i <= step2; i ++) {
-ffffffffc0203820:	0495                	addi	s1,s1,5
+ffffffffc0203794:	0415                	addi	s0,s0,5
         struct vma_struct *vma = vma_create(i * 5, i * 5 + 2, 0);
         assert(vma != NULL);
         insert_vma_struct(mm, vma);
-ffffffffc0203822:	8522                	mv	a0,s0
-ffffffffc0203824:	e5bff0ef          	jal	ffffffffc020367e <insert_vma_struct>
+ffffffffc0203796:	8526                	mv	a0,s1
+ffffffffc0203798:	e4bff0ef          	jal	ra,ffffffffc02035e2 <insert_vma_struct>
     for (i = step1 + 1; i <= step2; i ++) {
-ffffffffc0203828:	fd249fe3          	bne	s1,s2,ffffffffc0203806 <vmm_init+0x82>
+ffffffffc020379c:	03240a63          	beq	s0,s2,ffffffffc02037d0 <vmm_init+0xe8>
+    struct vma_struct *vma = kmalloc(sizeof(struct vma_struct));
+ffffffffc02037a0:	03000513          	li	a0,48
+ffffffffc02037a4:	814ff0ef          	jal	ra,ffffffffc02027b8 <kmalloc>
+ffffffffc02037a8:	85aa                	mv	a1,a0
+ffffffffc02037aa:	00240793          	addi	a5,s0,2
+    if (vma != NULL) {
+ffffffffc02037ae:	fd79                	bnez	a0,ffffffffc020378c <vmm_init+0xa4>
+        assert(vma != NULL);
+ffffffffc02037b0:	00002697          	auipc	a3,0x2
+ffffffffc02037b4:	13068693          	addi	a3,a3,304 # ffffffffc02058e0 <default_pmm_manager+0x730>
+ffffffffc02037b8:	00001617          	auipc	a2,0x1
+ffffffffc02037bc:	64860613          	addi	a2,a2,1608 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02037c0:	0d400593          	li	a1,212
+ffffffffc02037c4:	00002517          	auipc	a0,0x2
+ffffffffc02037c8:	52450513          	addi	a0,a0,1316 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc02037cc:	ba9fc0ef          	jal	ra,ffffffffc0200374 <__panic>
     return listelm->next;
-ffffffffc020382c:	00843b03          	ld	s6,8(s0)
+ffffffffc02037d0:	649c                	ld	a5,8(s1)
+ffffffffc02037d2:	471d                	li	a4,7
     }
 
     list_entry_t *le = list_next(&(mm->mmap_list));
 
     for (i = 1; i <= step2; i ++) {
+ffffffffc02037d4:	1fb00593          	li	a1,507
         assert(le != &(mm->mmap_list));
-ffffffffc0203830:	3c8b0b63          	beq	s6,s0,ffffffffc0203c06 <vmm_init+0x482>
-    list_entry_t *le = list_next(&(mm->mmap_list));
-ffffffffc0203834:	87da                	mv	a5,s6
-        assert(le != &(mm->mmap_list));
-ffffffffc0203836:	4715                	li	a4,5
-    for (i = 1; i <= step2; i ++) {
-ffffffffc0203838:	1f400593          	li	a1,500
-ffffffffc020383c:	a021                	j	ffffffffc0203844 <vmm_init+0xc0>
-        assert(le != &(mm->mmap_list));
-ffffffffc020383e:	0715                	addi	a4,a4,5
-ffffffffc0203840:	3c878363          	beq	a5,s0,ffffffffc0203c06 <vmm_init+0x482>
+ffffffffc02037d8:	2ef48463          	beq	s1,a5,ffffffffc0203ac0 <vmm_init+0x3d8>
         struct vma_struct *mmap = le2vma(le, list_link);
         assert(mmap->vm_start == i * 5 && mmap->vm_end == i * 5 + 2);
-ffffffffc0203844:	fe87b683          	ld	a3,-24(a5)
-ffffffffc0203848:	32e69f63          	bne	a3,a4,ffffffffc0203b86 <vmm_init+0x402>
-ffffffffc020384c:	ff07b603          	ld	a2,-16(a5)
-ffffffffc0203850:	00270693          	addi	a3,a4,2
-ffffffffc0203854:	32d61963          	bne	a2,a3,ffffffffc0203b86 <vmm_init+0x402>
-ffffffffc0203858:	679c                	ld	a5,8(a5)
+ffffffffc02037dc:	fe87b603          	ld	a2,-24(a5)
+ffffffffc02037e0:	ffe70693          	addi	a3,a4,-2
+ffffffffc02037e4:	26d61e63          	bne	a2,a3,ffffffffc0203a60 <vmm_init+0x378>
+ffffffffc02037e8:	ff07b683          	ld	a3,-16(a5)
+ffffffffc02037ec:	26e69a63          	bne	a3,a4,ffffffffc0203a60 <vmm_init+0x378>
     for (i = 1; i <= step2; i ++) {
-ffffffffc020385a:	feb712e3          	bne	a4,a1,ffffffffc020383e <vmm_init+0xba>
-ffffffffc020385e:	4b9d                	li	s7,7
-ffffffffc0203860:	4495                	li	s1,5
+ffffffffc02037f0:	0715                	addi	a4,a4,5
+ffffffffc02037f2:	679c                	ld	a5,8(a5)
+ffffffffc02037f4:	feb712e3          	bne	a4,a1,ffffffffc02037d8 <vmm_init+0xf0>
+ffffffffc02037f8:	4b1d                	li	s6,7
+ffffffffc02037fa:	4415                	li	s0,5
         le = list_next(le);
     }
 
     for (i = 5; i <= 5 * step2; i +=5) {
-ffffffffc0203862:	1f900c13          	li	s8,505
+ffffffffc02037fc:	1f900b93          	li	s7,505
         struct vma_struct *vma1 = find_vma(mm, i);
-ffffffffc0203866:	85a6                	mv	a1,s1
-ffffffffc0203868:	8522                	mv	a0,s0
-ffffffffc020386a:	dd5ff0ef          	jal	ffffffffc020363e <find_vma>
-ffffffffc020386e:	8aaa                	mv	s5,a0
+ffffffffc0203800:	85a2                	mv	a1,s0
+ffffffffc0203802:	8526                	mv	a0,s1
+ffffffffc0203804:	d9fff0ef          	jal	ra,ffffffffc02035a2 <find_vma>
+ffffffffc0203808:	892a                	mv	s2,a0
         assert(vma1 != NULL);
-ffffffffc0203870:	3c050b63          	beqz	a0,ffffffffc0203c46 <vmm_init+0x4c2>
+ffffffffc020380a:	2c050b63          	beqz	a0,ffffffffc0203ae0 <vmm_init+0x3f8>
         struct vma_struct *vma2 = find_vma(mm, i+1);
-ffffffffc0203874:	00148593          	addi	a1,s1,1
-ffffffffc0203878:	8522                	mv	a0,s0
-ffffffffc020387a:	dc5ff0ef          	jal	ffffffffc020363e <find_vma>
-ffffffffc020387e:	892a                	mv	s2,a0
+ffffffffc020380e:	00140593          	addi	a1,s0,1
+ffffffffc0203812:	8526                	mv	a0,s1
+ffffffffc0203814:	d8fff0ef          	jal	ra,ffffffffc02035a2 <find_vma>
+ffffffffc0203818:	8aaa                	mv	s5,a0
         assert(vma2 != NULL);
-ffffffffc0203880:	3a050363          	beqz	a0,ffffffffc0203c26 <vmm_init+0x4a2>
+ffffffffc020381a:	2e050363          	beqz	a0,ffffffffc0203b00 <vmm_init+0x418>
         struct vma_struct *vma3 = find_vma(mm, i+2);
-ffffffffc0203884:	85de                	mv	a1,s7
-ffffffffc0203886:	8522                	mv	a0,s0
-ffffffffc0203888:	db7ff0ef          	jal	ffffffffc020363e <find_vma>
+ffffffffc020381e:	85da                	mv	a1,s6
+ffffffffc0203820:	8526                	mv	a0,s1
+ffffffffc0203822:	d81ff0ef          	jal	ra,ffffffffc02035a2 <find_vma>
         assert(vma3 == NULL);
-ffffffffc020388c:	32051d63          	bnez	a0,ffffffffc0203bc6 <vmm_init+0x442>
+ffffffffc0203826:	2e051d63          	bnez	a0,ffffffffc0203b20 <vmm_init+0x438>
         struct vma_struct *vma4 = find_vma(mm, i+3);
-ffffffffc0203890:	00348593          	addi	a1,s1,3
-ffffffffc0203894:	8522                	mv	a0,s0
-ffffffffc0203896:	da9ff0ef          	jal	ffffffffc020363e <find_vma>
+ffffffffc020382a:	00340593          	addi	a1,s0,3
+ffffffffc020382e:	8526                	mv	a0,s1
+ffffffffc0203830:	d73ff0ef          	jal	ra,ffffffffc02035a2 <find_vma>
         assert(vma4 == NULL);
-ffffffffc020389a:	30051663          	bnez	a0,ffffffffc0203ba6 <vmm_init+0x422>
+ffffffffc0203834:	30051663          	bnez	a0,ffffffffc0203b40 <vmm_init+0x458>
         struct vma_struct *vma5 = find_vma(mm, i+4);
-ffffffffc020389e:	00448593          	addi	a1,s1,4
-ffffffffc02038a2:	8522                	mv	a0,s0
-ffffffffc02038a4:	d9bff0ef          	jal	ffffffffc020363e <find_vma>
+ffffffffc0203838:	00440593          	addi	a1,s0,4
+ffffffffc020383c:	8526                	mv	a0,s1
+ffffffffc020383e:	d65ff0ef          	jal	ra,ffffffffc02035a2 <find_vma>
         assert(vma5 == NULL);
-ffffffffc02038a8:	32051f63          	bnez	a0,ffffffffc0203be6 <vmm_init+0x462>
+ffffffffc0203842:	30051f63          	bnez	a0,ffffffffc0203b60 <vmm_init+0x478>
 
         assert(vma1->vm_start == i  && vma1->vm_end == i  + 2);
-ffffffffc02038ac:	008ab783          	ld	a5,8(s5) # 1008 <kern_entry-0xffffffffc01feff8>
-ffffffffc02038b0:	2a979b63          	bne	a5,s1,ffffffffc0203b66 <vmm_init+0x3e2>
-ffffffffc02038b4:	010ab783          	ld	a5,16(s5)
-ffffffffc02038b8:	2afb9763          	bne	s7,a5,ffffffffc0203b66 <vmm_init+0x3e2>
+ffffffffc0203846:	00893783          	ld	a5,8(s2)
+ffffffffc020384a:	24879b63          	bne	a5,s0,ffffffffc0203aa0 <vmm_init+0x3b8>
+ffffffffc020384e:	01093783          	ld	a5,16(s2)
+ffffffffc0203852:	25679763          	bne	a5,s6,ffffffffc0203aa0 <vmm_init+0x3b8>
         assert(vma2->vm_start == i  && vma2->vm_end == i  + 2);
-ffffffffc02038bc:	00893783          	ld	a5,8(s2)
-ffffffffc02038c0:	28979363          	bne	a5,s1,ffffffffc0203b46 <vmm_init+0x3c2>
-ffffffffc02038c4:	01093783          	ld	a5,16(s2)
-ffffffffc02038c8:	26fb9f63          	bne	s7,a5,ffffffffc0203b46 <vmm_init+0x3c2>
+ffffffffc0203856:	008ab783          	ld	a5,8(s5)
+ffffffffc020385a:	22879363          	bne	a5,s0,ffffffffc0203a80 <vmm_init+0x398>
+ffffffffc020385e:	010ab783          	ld	a5,16(s5)
+ffffffffc0203862:	21679f63          	bne	a5,s6,ffffffffc0203a80 <vmm_init+0x398>
     for (i = 5; i <= 5 * step2; i +=5) {
-ffffffffc02038cc:	0495                	addi	s1,s1,5
-ffffffffc02038ce:	0b95                	addi	s7,s7,5
-ffffffffc02038d0:	f9849be3          	bne	s1,s8,ffffffffc0203866 <vmm_init+0xe2>
-ffffffffc02038d4:	4491                	li	s1,4
+ffffffffc0203866:	0415                	addi	s0,s0,5
+ffffffffc0203868:	0b15                	addi	s6,s6,5
+ffffffffc020386a:	f9741be3          	bne	s0,s7,ffffffffc0203800 <vmm_init+0x118>
+ffffffffc020386e:	4411                	li	s0,4
     }
 
     for (i =4; i>=0; i--) {
-ffffffffc02038d6:	597d                	li	s2,-1
+ffffffffc0203870:	597d                	li	s2,-1
         struct vma_struct *vma_below_5= find_vma(mm,i);
-ffffffffc02038d8:	85a6                	mv	a1,s1
-ffffffffc02038da:	8522                	mv	a0,s0
-ffffffffc02038dc:	d63ff0ef          	jal	ffffffffc020363e <find_vma>
+ffffffffc0203872:	85a2                	mv	a1,s0
+ffffffffc0203874:	8526                	mv	a0,s1
+ffffffffc0203876:	d2dff0ef          	jal	ra,ffffffffc02035a2 <find_vma>
+ffffffffc020387a:	0004059b          	sext.w	a1,s0
         if (vma_below_5 != NULL ) {
-ffffffffc02038e0:	3a051363          	bnez	a0,ffffffffc0203c86 <vmm_init+0x502>
-    for (i =4; i>=0; i--) {
-ffffffffc02038e4:	14fd                	addi	s1,s1,-1
-ffffffffc02038e6:	ff2499e3          	bne	s1,s2,ffffffffc02038d8 <vmm_init+0x154>
-    __list_del(listelm->prev, listelm->next);
-ffffffffc02038ea:	000b3703          	ld	a4,0(s6)
-ffffffffc02038ee:	008b3783          	ld	a5,8(s6)
-        kfree(le2vma(le, list_link),sizeof(struct vma_struct));  //kfree vma        
-ffffffffc02038f2:	fe0b0513          	addi	a0,s6,-32
-ffffffffc02038f6:	03000593          	li	a1,48
-    prev->next = next;
-ffffffffc02038fa:	e71c                	sd	a5,8(a4)
-    next->prev = prev;
-ffffffffc02038fc:	e398                	sd	a4,0(a5)
-ffffffffc02038fe:	ff7fe0ef          	jal	ffffffffc02028f4 <kfree>
-    return listelm->next;
-ffffffffc0203902:	00843b03          	ld	s6,8(s0)
-    while ((le = list_next(list)) != list) {
-ffffffffc0203906:	ff6412e3          	bne	s0,s6,ffffffffc02038ea <vmm_init+0x166>
-    kfree(mm, sizeof(struct mm_struct)); //kfree mm
-ffffffffc020390a:	03000593          	li	a1,48
-ffffffffc020390e:	8522                	mv	a0,s0
-ffffffffc0203910:	fe5fe0ef          	jal	ffffffffc02028f4 <kfree>
+ffffffffc020387e:	c90d                	beqz	a0,ffffffffc02038b0 <vmm_init+0x1c8>
+           cprintf("vma_below_5: i %x, start %x, end %x\n",i, vma_below_5->vm_start, vma_below_5->vm_end); 
+ffffffffc0203880:	6914                	ld	a3,16(a0)
+ffffffffc0203882:	6510                	ld	a2,8(a0)
+ffffffffc0203884:	00002517          	auipc	a0,0x2
+ffffffffc0203888:	5d450513          	addi	a0,a0,1492 # ffffffffc0205e58 <default_pmm_manager+0xca8>
+ffffffffc020388c:	82ffc0ef          	jal	ra,ffffffffc02000ba <cprintf>
+        }
         assert(vma_below_5 == NULL);
+ffffffffc0203890:	00002697          	auipc	a3,0x2
+ffffffffc0203894:	5f068693          	addi	a3,a3,1520 # ffffffffc0205e80 <default_pmm_manager+0xcd0>
+ffffffffc0203898:	00001617          	auipc	a2,0x1
+ffffffffc020389c:	56860613          	addi	a2,a2,1384 # ffffffffc0204e00 <commands+0x738>
+ffffffffc02038a0:	0f600593          	li	a1,246
+ffffffffc02038a4:	00002517          	auipc	a0,0x2
+ffffffffc02038a8:	44450513          	addi	a0,a0,1092 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc02038ac:	ac9fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+    for (i =4; i>=0; i--) {
+ffffffffc02038b0:	147d                	addi	s0,s0,-1
+ffffffffc02038b2:	fd2410e3          	bne	s0,s2,ffffffffc0203872 <vmm_init+0x18a>
+ffffffffc02038b6:	a811                	j	ffffffffc02038ca <vmm_init+0x1e2>
+    __list_del(listelm->prev, listelm->next);
+ffffffffc02038b8:	6118                	ld	a4,0(a0)
+ffffffffc02038ba:	651c                	ld	a5,8(a0)
+        kfree(le2vma(le, list_link),sizeof(struct vma_struct));  //kfree vma        
+ffffffffc02038bc:	03000593          	li	a1,48
+ffffffffc02038c0:	1501                	addi	a0,a0,-32
+    prev->next = next;
+ffffffffc02038c2:	e71c                	sd	a5,8(a4)
+    next->prev = prev;
+ffffffffc02038c4:	e398                	sd	a4,0(a5)
+ffffffffc02038c6:	fadfe0ef          	jal	ra,ffffffffc0202872 <kfree>
+    return listelm->next;
+ffffffffc02038ca:	6488                	ld	a0,8(s1)
+    while ((le = list_next(list)) != list) {
+ffffffffc02038cc:	fea496e3          	bne	s1,a0,ffffffffc02038b8 <vmm_init+0x1d0>
+    kfree(mm, sizeof(struct mm_struct)); //kfree mm
+ffffffffc02038d0:	03000593          	li	a1,48
+ffffffffc02038d4:	8526                	mv	a0,s1
+ffffffffc02038d6:	f9dfe0ef          	jal	ra,ffffffffc0202872 <kfree>
     }
 
     mm_destroy(mm);
 
     assert(nr_free_pages_store == nr_free_pages());
-ffffffffc0203914:	dbffd0ef          	jal	ffffffffc02016d2 <nr_free_pages>
-ffffffffc0203918:	3caa1163          	bne	s4,a0,ffffffffc0203cda <vmm_init+0x556>
+ffffffffc02038da:	df9fd0ef          	jal	ra,ffffffffc02016d2 <nr_free_pages>
+ffffffffc02038de:	3caa1163          	bne	s4,a0,ffffffffc0203ca0 <vmm_init+0x5b8>
 
     cprintf("check_vma_struct() succeeded!\n");
-ffffffffc020391c:	00002517          	auipc	a0,0x2
-ffffffffc0203920:	59450513          	addi	a0,a0,1428 # ffffffffc0205eb0 <etext+0x1960>
-ffffffffc0203924:	f96fc0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc02038e2:	00002517          	auipc	a0,0x2
+ffffffffc02038e6:	5de50513          	addi	a0,a0,1502 # ffffffffc0205ec0 <default_pmm_manager+0xd10>
+ffffffffc02038ea:	fd0fc0ef          	jal	ra,ffffffffc02000ba <cprintf>
 
 // check_pgfault - check correctness of pgfault handler
 static void
 check_pgfault(void) {
 	// char *name = "check_pgfault";
     size_t nr_free_pages_store = nr_free_pages();
-ffffffffc0203928:	dabfd0ef          	jal	ffffffffc02016d2 <nr_free_pages>
-ffffffffc020392c:	84aa                	mv	s1,a0
+ffffffffc02038ee:	de5fd0ef          	jal	ra,ffffffffc02016d2 <nr_free_pages>
+ffffffffc02038f2:	84aa                	mv	s1,a0
     struct mm_struct *mm = kmalloc(sizeof(struct mm_struct));
-ffffffffc020392e:	03000513          	li	a0,48
-ffffffffc0203932:	ef7fe0ef          	jal	ffffffffc0202828 <kmalloc>
-ffffffffc0203936:	842a                	mv	s0,a0
+ffffffffc02038f4:	03000513          	li	a0,48
+ffffffffc02038f8:	ec1fe0ef          	jal	ra,ffffffffc02027b8 <kmalloc>
+ffffffffc02038fc:	842a                	mv	s0,a0
     if (mm != NULL) {
-ffffffffc0203938:	1e050063          	beqz	a0,ffffffffc0203b18 <vmm_init+0x394>
+ffffffffc02038fe:	2a050163          	beqz	a0,ffffffffc0203ba0 <vmm_init+0x4b8>
         if (swap_init_ok) swap_init_mm(mm);
-ffffffffc020393c:	0000e797          	auipc	a5,0xe
-ffffffffc0203940:	c0c7a783          	lw	a5,-1012(a5) # ffffffffc0211548 <swap_init_ok>
+ffffffffc0203902:	0000e797          	auipc	a5,0xe
+ffffffffc0203906:	c567a783          	lw	a5,-938(a5) # ffffffffc0211558 <swap_init_ok>
     elm->prev = elm->next = elm;
-ffffffffc0203944:	e508                	sd	a0,8(a0)
-ffffffffc0203946:	e108                	sd	a0,0(a0)
+ffffffffc020390a:	e508                	sd	a0,8(a0)
+ffffffffc020390c:	e108                	sd	a0,0(a0)
         mm->mmap_cache = NULL;
-ffffffffc0203948:	00053823          	sd	zero,16(a0)
+ffffffffc020390e:	00053823          	sd	zero,16(a0)
         mm->pgdir = NULL;
-ffffffffc020394c:	00053c23          	sd	zero,24(a0)
+ffffffffc0203912:	00053c23          	sd	zero,24(a0)
         mm->map_count = 0;
-ffffffffc0203950:	02052023          	sw	zero,32(a0)
+ffffffffc0203916:	02052023          	sw	zero,32(a0)
         if (swap_init_ok) swap_init_mm(mm);
-ffffffffc0203954:	1e079663          	bnez	a5,ffffffffc0203b40 <vmm_init+0x3bc>
+ffffffffc020391a:	14079063          	bnez	a5,ffffffffc0203a5a <vmm_init+0x372>
         else mm->sm_priv = NULL;
-ffffffffc0203958:	02053423          	sd	zero,40(a0)
+ffffffffc020391e:	02053423          	sd	zero,40(a0)
 
     check_mm_struct = mm_create();
 
     assert(check_mm_struct != NULL);
     struct mm_struct *mm = check_mm_struct;
     pde_t *pgdir = mm->pgdir = boot_pgdir;
-ffffffffc020395c:	0000ea17          	auipc	s4,0xe
-ffffffffc0203960:	bcca3a03          	ld	s4,-1076(s4) # ffffffffc0211528 <boot_pgdir>
+ffffffffc0203922:	0000e917          	auipc	s2,0xe
+ffffffffc0203926:	bfe93903          	ld	s2,-1026(s2) # ffffffffc0211520 <boot_pgdir>
     assert(pgdir[0] == 0);
-ffffffffc0203964:	000a3783          	ld	a5,0(s4)
+ffffffffc020392a:	00093783          	ld	a5,0(s2)
     check_mm_struct = mm_create();
-ffffffffc0203968:	0000e717          	auipc	a4,0xe
-ffffffffc020396c:	c0873423          	sd	s0,-1016(a4) # ffffffffc0211570 <check_mm_struct>
+ffffffffc020392e:	0000e717          	auipc	a4,0xe
+ffffffffc0203932:	c2873d23          	sd	s0,-966(a4) # ffffffffc0211568 <check_mm_struct>
     pde_t *pgdir = mm->pgdir = boot_pgdir;
-ffffffffc0203970:	01443c23          	sd	s4,24(s0)
+ffffffffc0203936:	01243c23          	sd	s2,24(s0)
     assert(pgdir[0] == 0);
-ffffffffc0203974:	2e079963          	bnez	a5,ffffffffc0203c66 <vmm_init+0x4e2>
+ffffffffc020393a:	24079363          	bnez	a5,ffffffffc0203b80 <vmm_init+0x498>
     struct vma_struct *vma = kmalloc(sizeof(struct vma_struct));
-ffffffffc0203978:	03000513          	li	a0,48
-ffffffffc020397c:	eadfe0ef          	jal	ffffffffc0202828 <kmalloc>
-ffffffffc0203980:	892a                	mv	s2,a0
+ffffffffc020393e:	03000513          	li	a0,48
+ffffffffc0203942:	e77fe0ef          	jal	ra,ffffffffc02027b8 <kmalloc>
+ffffffffc0203946:	8a2a                	mv	s4,a0
     if (vma != NULL) {
-ffffffffc0203982:	16050b63          	beqz	a0,ffffffffc0203af8 <vmm_init+0x374>
+ffffffffc0203948:	28050063          	beqz	a0,ffffffffc0203bc8 <vmm_init+0x4e0>
         vma->vm_end = vm_end;
-ffffffffc0203986:	002007b7          	lui	a5,0x200
-ffffffffc020398a:	e91c                	sd	a5,16(a0)
+ffffffffc020394c:	002007b7          	lui	a5,0x200
+ffffffffc0203950:	00fa3823          	sd	a5,16(s4)
         vma->vm_flags = vm_flags;
-ffffffffc020398c:	4789                	li	a5,2
-ffffffffc020398e:	ed1c                	sd	a5,24(a0)
+ffffffffc0203954:	4789                	li	a5,2
 
     struct vma_struct *vma = vma_create(0, PTSIZE, VM_WRITE);
 
     assert(vma != NULL);
 
     insert_vma_struct(mm, vma);
-ffffffffc0203990:	85aa                	mv	a1,a0
-        vma->vm_start = vm_start;
-ffffffffc0203992:	00053423          	sd	zero,8(a0)
+ffffffffc0203956:	85aa                	mv	a1,a0
+        vma->vm_flags = vm_flags;
+ffffffffc0203958:	00fa3c23          	sd	a5,24(s4)
     insert_vma_struct(mm, vma);
-ffffffffc0203996:	8522                	mv	a0,s0
-ffffffffc0203998:	ce7ff0ef          	jal	ffffffffc020367e <insert_vma_struct>
+ffffffffc020395c:	8522                	mv	a0,s0
+        vma->vm_start = vm_start;
+ffffffffc020395e:	000a3423          	sd	zero,8(s4)
+    insert_vma_struct(mm, vma);
+ffffffffc0203962:	c81ff0ef          	jal	ra,ffffffffc02035e2 <insert_vma_struct>
 
     uintptr_t addr = 0x100;
     assert(find_vma(mm, addr) == vma);
-ffffffffc020399c:	10000593          	li	a1,256
-ffffffffc02039a0:	8522                	mv	a0,s0
-ffffffffc02039a2:	c9dff0ef          	jal	ffffffffc020363e <find_vma>
-ffffffffc02039a6:	10000793          	li	a5,256
+ffffffffc0203966:	10000593          	li	a1,256
+ffffffffc020396a:	8522                	mv	a0,s0
+ffffffffc020396c:	c37ff0ef          	jal	ra,ffffffffc02035a2 <find_vma>
+ffffffffc0203970:	10000793          	li	a5,256
 
     int i, sum = 0;
     for (i = 0; i < 100; i ++) {
-ffffffffc02039aa:	16400713          	li	a4,356
+ffffffffc0203974:	16400713          	li	a4,356
     assert(find_vma(mm, addr) == vma);
-ffffffffc02039ae:	30a91663          	bne	s2,a0,ffffffffc0203cba <vmm_init+0x536>
+ffffffffc0203978:	26aa1863          	bne	s4,a0,ffffffffc0203be8 <vmm_init+0x500>
         *(char *)(addr + i) = i;
-ffffffffc02039b2:	00f78023          	sb	a5,0(a5) # 200000 <kern_entry-0xffffffffc0000000>
+ffffffffc020397c:	00f78023          	sb	a5,0(a5) # 200000 <kern_entry-0xffffffffc0000000>
     for (i = 0; i < 100; i ++) {
-ffffffffc02039b6:	0785                	addi	a5,a5,1
-ffffffffc02039b8:	fee79de3          	bne	a5,a4,ffffffffc02039b2 <vmm_init+0x22e>
-ffffffffc02039bc:	6705                	lui	a4,0x1
-ffffffffc02039be:	10000793          	li	a5,256
-ffffffffc02039c2:	35670713          	addi	a4,a4,854 # 1356 <kern_entry-0xffffffffc01fecaa>
+ffffffffc0203980:	0785                	addi	a5,a5,1
+ffffffffc0203982:	fee79de3          	bne	a5,a4,ffffffffc020397c <vmm_init+0x294>
         sum += i;
+ffffffffc0203986:	6705                	lui	a4,0x1
+ffffffffc0203988:	10000793          	li	a5,256
+ffffffffc020398c:	35670713          	addi	a4,a4,854 # 1356 <kern_entry-0xffffffffc01fecaa>
     }
     for (i = 0; i < 100; i ++) {
-ffffffffc02039c6:	16400613          	li	a2,356
+ffffffffc0203990:	16400613          	li	a2,356
         sum -= *(char *)(addr + i);
-ffffffffc02039ca:	0007c683          	lbu	a3,0(a5)
+ffffffffc0203994:	0007c683          	lbu	a3,0(a5)
     for (i = 0; i < 100; i ++) {
-ffffffffc02039ce:	0785                	addi	a5,a5,1
+ffffffffc0203998:	0785                	addi	a5,a5,1
         sum -= *(char *)(addr + i);
-ffffffffc02039d0:	9f15                	subw	a4,a4,a3
+ffffffffc020399a:	9f15                	subw	a4,a4,a3
     for (i = 0; i < 100; i ++) {
-ffffffffc02039d2:	fec79ce3          	bne	a5,a2,ffffffffc02039ca <vmm_init+0x246>
+ffffffffc020399c:	fec79ce3          	bne	a5,a2,ffffffffc0203994 <vmm_init+0x2ac>
     }
     assert(sum == 0);
-ffffffffc02039d6:	32071e63          	bnez	a4,ffffffffc0203d12 <vmm_init+0x58e>
+ffffffffc02039a0:	26071463          	bnez	a4,ffffffffc0203c08 <vmm_init+0x520>
 
     page_remove(pgdir, ROUNDDOWN(addr, PGSIZE));
-ffffffffc02039da:	4581                	li	a1,0
-ffffffffc02039dc:	8552                	mv	a0,s4
-ffffffffc02039de:	fb7fd0ef          	jal	ffffffffc0201994 <page_remove>
+ffffffffc02039a4:	4581                	li	a1,0
+ffffffffc02039a6:	854a                	mv	a0,s2
+ffffffffc02039a8:	fb5fd0ef          	jal	ra,ffffffffc020195c <page_remove>
     return pa2page(PDE_ADDR(pde));
-ffffffffc02039e2:	000a3783          	ld	a5,0(s4)
+ffffffffc02039ac:	00093783          	ld	a5,0(s2)
     if (PPN(pa) >= npage) {
-ffffffffc02039e6:	0000e717          	auipc	a4,0xe
-ffffffffc02039ea:	b5273703          	ld	a4,-1198(a4) # ffffffffc0211538 <npage>
+ffffffffc02039b0:	0000e717          	auipc	a4,0xe
+ffffffffc02039b4:	b7873703          	ld	a4,-1160(a4) # ffffffffc0211528 <npage>
     return pa2page(PDE_ADDR(pde));
-ffffffffc02039ee:	078a                	slli	a5,a5,0x2
-ffffffffc02039f0:	83b1                	srli	a5,a5,0xc
+ffffffffc02039b8:	078a                	slli	a5,a5,0x2
+ffffffffc02039ba:	83b1                	srli	a5,a5,0xc
     if (PPN(pa) >= npage) {
-ffffffffc02039f2:	30e7f463          	bgeu	a5,a4,ffffffffc0203cfa <vmm_init+0x576>
+ffffffffc02039bc:	26e7f663          	bgeu	a5,a4,ffffffffc0203c28 <vmm_init+0x540>
     return &pages[PPN(pa) - nbase];
-ffffffffc02039f6:	00003717          	auipc	a4,0x3
-ffffffffc02039fa:	9aa73703          	ld	a4,-1622(a4) # ffffffffc02063a0 <nbase>
-ffffffffc02039fe:	8f99                	sub	a5,a5,a4
-ffffffffc0203a00:	00379713          	slli	a4,a5,0x3
-ffffffffc0203a04:	97ba                	add	a5,a5,a4
-ffffffffc0203a06:	078e                	slli	a5,a5,0x3
+ffffffffc02039c0:	00003717          	auipc	a4,0x3
+ffffffffc02039c4:	90873703          	ld	a4,-1784(a4) # ffffffffc02062c8 <nbase>
+ffffffffc02039c8:	8f99                	sub	a5,a5,a4
+ffffffffc02039ca:	00379713          	slli	a4,a5,0x3
+ffffffffc02039ce:	97ba                	add	a5,a5,a4
+ffffffffc02039d0:	078e                	slli	a5,a5,0x3
 
     free_page(pde2page(pgdir[0]));
-ffffffffc0203a08:	0000e517          	auipc	a0,0xe
-ffffffffc0203a0c:	b3853503          	ld	a0,-1224(a0) # ffffffffc0211540 <pages>
-ffffffffc0203a10:	953e                	add	a0,a0,a5
-ffffffffc0203a12:	4585                	li	a1,1
-ffffffffc0203a14:	c7ffd0ef          	jal	ffffffffc0201692 <free_pages>
+ffffffffc02039d2:	0000e517          	auipc	a0,0xe
+ffffffffc02039d6:	b5e53503          	ld	a0,-1186(a0) # ffffffffc0211530 <pages>
+ffffffffc02039da:	953e                	add	a0,a0,a5
+ffffffffc02039dc:	4585                	li	a1,1
+ffffffffc02039de:	cb5fd0ef          	jal	ra,ffffffffc0201692 <free_pages>
     return listelm->next;
-ffffffffc0203a18:	6408                	ld	a0,8(s0)
+ffffffffc02039e2:	6408                	ld	a0,8(s0)
 
     pgdir[0] = 0;
-ffffffffc0203a1a:	000a3023          	sd	zero,0(s4)
+ffffffffc02039e4:	00093023          	sd	zero,0(s2)
 
     mm->pgdir = NULL;
-ffffffffc0203a1e:	00043c23          	sd	zero,24(s0)
+ffffffffc02039e8:	00043c23          	sd	zero,24(s0)
     while ((le = list_next(list)) != list) {
-ffffffffc0203a22:	00850e63          	beq	a0,s0,ffffffffc0203a3e <vmm_init+0x2ba>
+ffffffffc02039ec:	00a40e63          	beq	s0,a0,ffffffffc0203a08 <vmm_init+0x320>
     __list_del(listelm->prev, listelm->next);
-ffffffffc0203a26:	6118                	ld	a4,0(a0)
-ffffffffc0203a28:	651c                	ld	a5,8(a0)
+ffffffffc02039f0:	6118                	ld	a4,0(a0)
+ffffffffc02039f2:	651c                	ld	a5,8(a0)
         kfree(le2vma(le, list_link),sizeof(struct vma_struct));  //kfree vma        
-ffffffffc0203a2a:	03000593          	li	a1,48
-ffffffffc0203a2e:	1501                	addi	a0,a0,-32
+ffffffffc02039f4:	03000593          	li	a1,48
+ffffffffc02039f8:	1501                	addi	a0,a0,-32
     prev->next = next;
-ffffffffc0203a30:	e71c                	sd	a5,8(a4)
+ffffffffc02039fa:	e71c                	sd	a5,8(a4)
     next->prev = prev;
-ffffffffc0203a32:	e398                	sd	a4,0(a5)
-ffffffffc0203a34:	ec1fe0ef          	jal	ffffffffc02028f4 <kfree>
+ffffffffc02039fc:	e398                	sd	a4,0(a5)
+ffffffffc02039fe:	e75fe0ef          	jal	ra,ffffffffc0202872 <kfree>
     return listelm->next;
-ffffffffc0203a38:	6408                	ld	a0,8(s0)
+ffffffffc0203a02:	6408                	ld	a0,8(s0)
     while ((le = list_next(list)) != list) {
-ffffffffc0203a3a:	fea416e3          	bne	s0,a0,ffffffffc0203a26 <vmm_init+0x2a2>
+ffffffffc0203a04:	fea416e3          	bne	s0,a0,ffffffffc02039f0 <vmm_init+0x308>
     kfree(mm, sizeof(struct mm_struct)); //kfree mm
-ffffffffc0203a3e:	03000593          	li	a1,48
-ffffffffc0203a42:	8522                	mv	a0,s0
-ffffffffc0203a44:	eb1fe0ef          	jal	ffffffffc02028f4 <kfree>
+ffffffffc0203a08:	03000593          	li	a1,48
+ffffffffc0203a0c:	8522                	mv	a0,s0
+ffffffffc0203a0e:	e65fe0ef          	jal	ra,ffffffffc0202872 <kfree>
     mm_destroy(mm);
 
     check_mm_struct = NULL;
     nr_free_pages_store--;	// szx : Sv39第二级页表多占了一个内存页，所以执行此操作
-ffffffffc0203a48:	14fd                	addi	s1,s1,-1
+ffffffffc0203a12:	14fd                	addi	s1,s1,-1
     check_mm_struct = NULL;
-ffffffffc0203a4a:	0000e797          	auipc	a5,0xe
-ffffffffc0203a4e:	b207b323          	sd	zero,-1242(a5) # ffffffffc0211570 <check_mm_struct>
+ffffffffc0203a14:	0000e797          	auipc	a5,0xe
+ffffffffc0203a18:	b407ba23          	sd	zero,-1196(a5) # ffffffffc0211568 <check_mm_struct>
 
     assert(nr_free_pages_store == nr_free_pages());
-ffffffffc0203a52:	c81fd0ef          	jal	ffffffffc02016d2 <nr_free_pages>
-ffffffffc0203a56:	2ea49e63          	bne	s1,a0,ffffffffc0203d52 <vmm_init+0x5ce>
+ffffffffc0203a1c:	cb7fd0ef          	jal	ra,ffffffffc02016d2 <nr_free_pages>
+ffffffffc0203a20:	22a49063          	bne	s1,a0,ffffffffc0203c40 <vmm_init+0x558>
 
     cprintf("check_pgfault() succeeded!\n");
-ffffffffc0203a5a:	00002517          	auipc	a0,0x2
-ffffffffc0203a5e:	4be50513          	addi	a0,a0,1214 # ffffffffc0205f18 <etext+0x19c8>
-ffffffffc0203a62:	e58fc0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0203a24:	00002517          	auipc	a0,0x2
+ffffffffc0203a28:	4ec50513          	addi	a0,a0,1260 # ffffffffc0205f10 <default_pmm_manager+0xd60>
+ffffffffc0203a2c:	e8efc0ef          	jal	ra,ffffffffc02000ba <cprintf>
     assert(nr_free_pages_store == nr_free_pages());
-ffffffffc0203a66:	c6dfd0ef          	jal	ffffffffc02016d2 <nr_free_pages>
+ffffffffc0203a30:	ca3fd0ef          	jal	ra,ffffffffc02016d2 <nr_free_pages>
     nr_free_pages_store--;	// szx : Sv39三级页表多占一个内存页，所以执行此操作
-ffffffffc0203a6a:	19fd                	addi	s3,s3,-1
+ffffffffc0203a34:	19fd                	addi	s3,s3,-1
     assert(nr_free_pages_store == nr_free_pages());
-ffffffffc0203a6c:	2ca99363          	bne	s3,a0,ffffffffc0203d32 <vmm_init+0x5ae>
+ffffffffc0203a36:	22a99563          	bne	s3,a0,ffffffffc0203c60 <vmm_init+0x578>
 }
-ffffffffc0203a70:	6406                	ld	s0,64(sp)
-ffffffffc0203a72:	60a6                	ld	ra,72(sp)
-ffffffffc0203a74:	74e2                	ld	s1,56(sp)
-ffffffffc0203a76:	7942                	ld	s2,48(sp)
-ffffffffc0203a78:	79a2                	ld	s3,40(sp)
-ffffffffc0203a7a:	7a02                	ld	s4,32(sp)
-ffffffffc0203a7c:	6ae2                	ld	s5,24(sp)
-ffffffffc0203a7e:	6b42                	ld	s6,16(sp)
-ffffffffc0203a80:	6ba2                	ld	s7,8(sp)
-ffffffffc0203a82:	6c02                	ld	s8,0(sp)
+ffffffffc0203a3a:	6406                	ld	s0,64(sp)
+ffffffffc0203a3c:	60a6                	ld	ra,72(sp)
+ffffffffc0203a3e:	74e2                	ld	s1,56(sp)
+ffffffffc0203a40:	7942                	ld	s2,48(sp)
+ffffffffc0203a42:	79a2                	ld	s3,40(sp)
+ffffffffc0203a44:	7a02                	ld	s4,32(sp)
+ffffffffc0203a46:	6ae2                	ld	s5,24(sp)
+ffffffffc0203a48:	6b42                	ld	s6,16(sp)
+ffffffffc0203a4a:	6ba2                	ld	s7,8(sp)
     cprintf("check_vmm() succeeded.\n");
-ffffffffc0203a84:	00002517          	auipc	a0,0x2
-ffffffffc0203a88:	4b450513          	addi	a0,a0,1204 # ffffffffc0205f38 <etext+0x19e8>
+ffffffffc0203a4c:	00002517          	auipc	a0,0x2
+ffffffffc0203a50:	4e450513          	addi	a0,a0,1252 # ffffffffc0205f30 <default_pmm_manager+0xd80>
 }
-ffffffffc0203a8c:	6161                	addi	sp,sp,80
+ffffffffc0203a54:	6161                	addi	sp,sp,80
     cprintf("check_vmm() succeeded.\n");
-ffffffffc0203a8e:	e2cfc06f          	j	ffffffffc02000ba <cprintf>
+ffffffffc0203a56:	e64fc06f          	j	ffffffffc02000ba <cprintf>
         if (swap_init_ok) swap_init_mm(mm);
-ffffffffc0203a92:	ddcff0ef          	jal	ffffffffc020306e <swap_init_mm>
-    for (i = step1; i >= 1; i --) {
-ffffffffc0203a96:	bb3d                	j	ffffffffc02037d4 <vmm_init+0x50>
-        assert(vma != NULL);
-ffffffffc0203a98:	00002697          	auipc	a3,0x2
-ffffffffc0203a9c:	e3868693          	addi	a3,a3,-456 # ffffffffc02058d0 <etext+0x1380>
-ffffffffc0203aa0:	00001617          	auipc	a2,0x1
-ffffffffc0203aa4:	38860613          	addi	a2,a2,904 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203aa8:	0ce00593          	li	a1,206
-ffffffffc0203aac:	00002517          	auipc	a0,0x2
-ffffffffc0203ab0:	22c50513          	addi	a0,a0,556 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203ab4:	8adfc0ef          	jal	ffffffffc0200360 <__panic>
-    assert(mm != NULL);
-ffffffffc0203ab8:	00002697          	auipc	a3,0x2
-ffffffffc0203abc:	de068693          	addi	a3,a3,-544 # ffffffffc0205898 <etext+0x1348>
-ffffffffc0203ac0:	00001617          	auipc	a2,0x1
-ffffffffc0203ac4:	36860613          	addi	a2,a2,872 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203ac8:	0c700593          	li	a1,199
-ffffffffc0203acc:	00002517          	auipc	a0,0x2
-ffffffffc0203ad0:	20c50513          	addi	a0,a0,524 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203ad4:	88dfc0ef          	jal	ffffffffc0200360 <__panic>
-        assert(vma != NULL);
-ffffffffc0203ad8:	00002697          	auipc	a3,0x2
-ffffffffc0203adc:	df868693          	addi	a3,a3,-520 # ffffffffc02058d0 <etext+0x1380>
-ffffffffc0203ae0:	00001617          	auipc	a2,0x1
-ffffffffc0203ae4:	34860613          	addi	a2,a2,840 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203ae8:	0d400593          	li	a1,212
-ffffffffc0203aec:	00002517          	auipc	a0,0x2
-ffffffffc0203af0:	1ec50513          	addi	a0,a0,492 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203af4:	86dfc0ef          	jal	ffffffffc0200360 <__panic>
-    assert(vma != NULL);
-ffffffffc0203af8:	00002697          	auipc	a3,0x2
-ffffffffc0203afc:	dd868693          	addi	a3,a3,-552 # ffffffffc02058d0 <etext+0x1380>
-ffffffffc0203b00:	00001617          	auipc	a2,0x1
-ffffffffc0203b04:	32860613          	addi	a2,a2,808 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203b08:	11100593          	li	a1,273
-ffffffffc0203b0c:	00002517          	auipc	a0,0x2
-ffffffffc0203b10:	1cc50513          	addi	a0,a0,460 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203b14:	84dfc0ef          	jal	ffffffffc0200360 <__panic>
-    assert(check_mm_struct != NULL);
-ffffffffc0203b18:	00002697          	auipc	a3,0x2
-ffffffffc0203b1c:	3b868693          	addi	a3,a3,952 # ffffffffc0205ed0 <etext+0x1980>
-ffffffffc0203b20:	00001617          	auipc	a2,0x1
-ffffffffc0203b24:	30860613          	addi	a2,a2,776 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203b28:	10a00593          	li	a1,266
-ffffffffc0203b2c:	00002517          	auipc	a0,0x2
-ffffffffc0203b30:	1ac50513          	addi	a0,a0,428 # ffffffffc0205cd8 <etext+0x1788>
-    check_mm_struct = mm_create();
-ffffffffc0203b34:	0000e797          	auipc	a5,0xe
-ffffffffc0203b38:	a207be23          	sd	zero,-1476(a5) # ffffffffc0211570 <check_mm_struct>
-    assert(check_mm_struct != NULL);
-ffffffffc0203b3c:	825fc0ef          	jal	ffffffffc0200360 <__panic>
-        if (swap_init_ok) swap_init_mm(mm);
-ffffffffc0203b40:	d2eff0ef          	jal	ffffffffc020306e <swap_init_mm>
-    assert(check_mm_struct != NULL);
-ffffffffc0203b44:	bd21                	j	ffffffffc020395c <vmm_init+0x1d8>
-        assert(vma2->vm_start == i  && vma2->vm_end == i  + 2);
-ffffffffc0203b46:	00002697          	auipc	a3,0x2
-ffffffffc0203b4a:	2d268693          	addi	a3,a3,722 # ffffffffc0205e18 <etext+0x18c8>
-ffffffffc0203b4e:	00001617          	auipc	a2,0x1
-ffffffffc0203b52:	2da60613          	addi	a2,a2,730 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203b56:	0ee00593          	li	a1,238
-ffffffffc0203b5a:	00002517          	auipc	a0,0x2
-ffffffffc0203b5e:	17e50513          	addi	a0,a0,382 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203b62:	ffefc0ef          	jal	ffffffffc0200360 <__panic>
-        assert(vma1->vm_start == i  && vma1->vm_end == i  + 2);
-ffffffffc0203b66:	00002697          	auipc	a3,0x2
-ffffffffc0203b6a:	28268693          	addi	a3,a3,642 # ffffffffc0205de8 <etext+0x1898>
-ffffffffc0203b6e:	00001617          	auipc	a2,0x1
-ffffffffc0203b72:	2ba60613          	addi	a2,a2,698 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203b76:	0ed00593          	li	a1,237
-ffffffffc0203b7a:	00002517          	auipc	a0,0x2
-ffffffffc0203b7e:	15e50513          	addi	a0,a0,350 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203b82:	fdefc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203a5a:	d6aff0ef          	jal	ra,ffffffffc0202fc4 <swap_init_mm>
+ffffffffc0203a5e:	b5d1                	j	ffffffffc0203922 <vmm_init+0x23a>
         assert(mmap->vm_start == i * 5 && mmap->vm_end == i * 5 + 2);
-ffffffffc0203b86:	00002697          	auipc	a3,0x2
-ffffffffc0203b8a:	1da68693          	addi	a3,a3,474 # ffffffffc0205d60 <etext+0x1810>
-ffffffffc0203b8e:	00001617          	auipc	a2,0x1
-ffffffffc0203b92:	29a60613          	addi	a2,a2,666 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203b96:	0dd00593          	li	a1,221
-ffffffffc0203b9a:	00002517          	auipc	a0,0x2
-ffffffffc0203b9e:	13e50513          	addi	a0,a0,318 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203ba2:	fbefc0ef          	jal	ffffffffc0200360 <__panic>
-        assert(vma4 == NULL);
-ffffffffc0203ba6:	00002697          	auipc	a3,0x2
-ffffffffc0203baa:	22268693          	addi	a3,a3,546 # ffffffffc0205dc8 <etext+0x1878>
-ffffffffc0203bae:	00001617          	auipc	a2,0x1
-ffffffffc0203bb2:	27a60613          	addi	a2,a2,634 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203bb6:	0e900593          	li	a1,233
-ffffffffc0203bba:	00002517          	auipc	a0,0x2
-ffffffffc0203bbe:	11e50513          	addi	a0,a0,286 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203bc2:	f9efc0ef          	jal	ffffffffc0200360 <__panic>
-        assert(vma3 == NULL);
-ffffffffc0203bc6:	00002697          	auipc	a3,0x2
-ffffffffc0203bca:	1f268693          	addi	a3,a3,498 # ffffffffc0205db8 <etext+0x1868>
-ffffffffc0203bce:	00001617          	auipc	a2,0x1
-ffffffffc0203bd2:	25a60613          	addi	a2,a2,602 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203bd6:	0e700593          	li	a1,231
-ffffffffc0203bda:	00002517          	auipc	a0,0x2
-ffffffffc0203bde:	0fe50513          	addi	a0,a0,254 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203be2:	f7efc0ef          	jal	ffffffffc0200360 <__panic>
-        assert(vma5 == NULL);
-ffffffffc0203be6:	00002697          	auipc	a3,0x2
-ffffffffc0203bea:	1f268693          	addi	a3,a3,498 # ffffffffc0205dd8 <etext+0x1888>
-ffffffffc0203bee:	00001617          	auipc	a2,0x1
-ffffffffc0203bf2:	23a60613          	addi	a2,a2,570 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203bf6:	0eb00593          	li	a1,235
-ffffffffc0203bfa:	00002517          	auipc	a0,0x2
-ffffffffc0203bfe:	0de50513          	addi	a0,a0,222 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203c02:	f5efc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203a60:	00002697          	auipc	a3,0x2
+ffffffffc0203a64:	31068693          	addi	a3,a3,784 # ffffffffc0205d70 <default_pmm_manager+0xbc0>
+ffffffffc0203a68:	00001617          	auipc	a2,0x1
+ffffffffc0203a6c:	39860613          	addi	a2,a2,920 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203a70:	0dd00593          	li	a1,221
+ffffffffc0203a74:	00002517          	auipc	a0,0x2
+ffffffffc0203a78:	27450513          	addi	a0,a0,628 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203a7c:	8f9fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+        assert(vma2->vm_start == i  && vma2->vm_end == i  + 2);
+ffffffffc0203a80:	00002697          	auipc	a3,0x2
+ffffffffc0203a84:	3a868693          	addi	a3,a3,936 # ffffffffc0205e28 <default_pmm_manager+0xc78>
+ffffffffc0203a88:	00001617          	auipc	a2,0x1
+ffffffffc0203a8c:	37860613          	addi	a2,a2,888 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203a90:	0ee00593          	li	a1,238
+ffffffffc0203a94:	00002517          	auipc	a0,0x2
+ffffffffc0203a98:	25450513          	addi	a0,a0,596 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203a9c:	8d9fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+        assert(vma1->vm_start == i  && vma1->vm_end == i  + 2);
+ffffffffc0203aa0:	00002697          	auipc	a3,0x2
+ffffffffc0203aa4:	35868693          	addi	a3,a3,856 # ffffffffc0205df8 <default_pmm_manager+0xc48>
+ffffffffc0203aa8:	00001617          	auipc	a2,0x1
+ffffffffc0203aac:	35860613          	addi	a2,a2,856 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203ab0:	0ed00593          	li	a1,237
+ffffffffc0203ab4:	00002517          	auipc	a0,0x2
+ffffffffc0203ab8:	23450513          	addi	a0,a0,564 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203abc:	8b9fc0ef          	jal	ra,ffffffffc0200374 <__panic>
         assert(le != &(mm->mmap_list));
-ffffffffc0203c06:	00002697          	auipc	a3,0x2
-ffffffffc0203c0a:	14268693          	addi	a3,a3,322 # ffffffffc0205d48 <etext+0x17f8>
-ffffffffc0203c0e:	00001617          	auipc	a2,0x1
-ffffffffc0203c12:	21a60613          	addi	a2,a2,538 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203c16:	0db00593          	li	a1,219
-ffffffffc0203c1a:	00002517          	auipc	a0,0x2
-ffffffffc0203c1e:	0be50513          	addi	a0,a0,190 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203c22:	f3efc0ef          	jal	ffffffffc0200360 <__panic>
-        assert(vma2 != NULL);
-ffffffffc0203c26:	00002697          	auipc	a3,0x2
-ffffffffc0203c2a:	18268693          	addi	a3,a3,386 # ffffffffc0205da8 <etext+0x1858>
-ffffffffc0203c2e:	00001617          	auipc	a2,0x1
-ffffffffc0203c32:	1fa60613          	addi	a2,a2,506 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203c36:	0e500593          	li	a1,229
-ffffffffc0203c3a:	00002517          	auipc	a0,0x2
-ffffffffc0203c3e:	09e50513          	addi	a0,a0,158 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203c42:	f1efc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203ac0:	00002697          	auipc	a3,0x2
+ffffffffc0203ac4:	29868693          	addi	a3,a3,664 # ffffffffc0205d58 <default_pmm_manager+0xba8>
+ffffffffc0203ac8:	00001617          	auipc	a2,0x1
+ffffffffc0203acc:	33860613          	addi	a2,a2,824 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203ad0:	0db00593          	li	a1,219
+ffffffffc0203ad4:	00002517          	auipc	a0,0x2
+ffffffffc0203ad8:	21450513          	addi	a0,a0,532 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203adc:	899fc0ef          	jal	ra,ffffffffc0200374 <__panic>
         assert(vma1 != NULL);
-ffffffffc0203c46:	00002697          	auipc	a3,0x2
-ffffffffc0203c4a:	15268693          	addi	a3,a3,338 # ffffffffc0205d98 <etext+0x1848>
-ffffffffc0203c4e:	00001617          	auipc	a2,0x1
-ffffffffc0203c52:	1da60613          	addi	a2,a2,474 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203c56:	0e300593          	li	a1,227
-ffffffffc0203c5a:	00002517          	auipc	a0,0x2
-ffffffffc0203c5e:	07e50513          	addi	a0,a0,126 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203c62:	efefc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203ae0:	00002697          	auipc	a3,0x2
+ffffffffc0203ae4:	2c868693          	addi	a3,a3,712 # ffffffffc0205da8 <default_pmm_manager+0xbf8>
+ffffffffc0203ae8:	00001617          	auipc	a2,0x1
+ffffffffc0203aec:	31860613          	addi	a2,a2,792 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203af0:	0e300593          	li	a1,227
+ffffffffc0203af4:	00002517          	auipc	a0,0x2
+ffffffffc0203af8:	1f450513          	addi	a0,a0,500 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203afc:	879fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+        assert(vma2 != NULL);
+ffffffffc0203b00:	00002697          	auipc	a3,0x2
+ffffffffc0203b04:	2b868693          	addi	a3,a3,696 # ffffffffc0205db8 <default_pmm_manager+0xc08>
+ffffffffc0203b08:	00001617          	auipc	a2,0x1
+ffffffffc0203b0c:	2f860613          	addi	a2,a2,760 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203b10:	0e500593          	li	a1,229
+ffffffffc0203b14:	00002517          	auipc	a0,0x2
+ffffffffc0203b18:	1d450513          	addi	a0,a0,468 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203b1c:	859fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+        assert(vma3 == NULL);
+ffffffffc0203b20:	00002697          	auipc	a3,0x2
+ffffffffc0203b24:	2a868693          	addi	a3,a3,680 # ffffffffc0205dc8 <default_pmm_manager+0xc18>
+ffffffffc0203b28:	00001617          	auipc	a2,0x1
+ffffffffc0203b2c:	2d860613          	addi	a2,a2,728 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203b30:	0e700593          	li	a1,231
+ffffffffc0203b34:	00002517          	auipc	a0,0x2
+ffffffffc0203b38:	1b450513          	addi	a0,a0,436 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203b3c:	839fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+        assert(vma4 == NULL);
+ffffffffc0203b40:	00002697          	auipc	a3,0x2
+ffffffffc0203b44:	29868693          	addi	a3,a3,664 # ffffffffc0205dd8 <default_pmm_manager+0xc28>
+ffffffffc0203b48:	00001617          	auipc	a2,0x1
+ffffffffc0203b4c:	2b860613          	addi	a2,a2,696 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203b50:	0e900593          	li	a1,233
+ffffffffc0203b54:	00002517          	auipc	a0,0x2
+ffffffffc0203b58:	19450513          	addi	a0,a0,404 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203b5c:	819fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+        assert(vma5 == NULL);
+ffffffffc0203b60:	00002697          	auipc	a3,0x2
+ffffffffc0203b64:	28868693          	addi	a3,a3,648 # ffffffffc0205de8 <default_pmm_manager+0xc38>
+ffffffffc0203b68:	00001617          	auipc	a2,0x1
+ffffffffc0203b6c:	29860613          	addi	a2,a2,664 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203b70:	0eb00593          	li	a1,235
+ffffffffc0203b74:	00002517          	auipc	a0,0x2
+ffffffffc0203b78:	17450513          	addi	a0,a0,372 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203b7c:	ff8fc0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(pgdir[0] == 0);
-ffffffffc0203c66:	00002697          	auipc	a3,0x2
-ffffffffc0203c6a:	c5a68693          	addi	a3,a3,-934 # ffffffffc02058c0 <etext+0x1370>
-ffffffffc0203c6e:	00001617          	auipc	a2,0x1
-ffffffffc0203c72:	1ba60613          	addi	a2,a2,442 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203c76:	10d00593          	li	a1,269
-ffffffffc0203c7a:	00002517          	auipc	a0,0x2
-ffffffffc0203c7e:	05e50513          	addi	a0,a0,94 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203c82:	edefc0ef          	jal	ffffffffc0200360 <__panic>
-           cprintf("vma_below_5: i %x, start %x, end %x\n",i, vma_below_5->vm_start, vma_below_5->vm_end); 
-ffffffffc0203c86:	6914                	ld	a3,16(a0)
-ffffffffc0203c88:	6510                	ld	a2,8(a0)
-ffffffffc0203c8a:	0004859b          	sext.w	a1,s1
-ffffffffc0203c8e:	00002517          	auipc	a0,0x2
-ffffffffc0203c92:	1ba50513          	addi	a0,a0,442 # ffffffffc0205e48 <etext+0x18f8>
-ffffffffc0203c96:	c24fc0ef          	jal	ffffffffc02000ba <cprintf>
-        assert(vma_below_5 == NULL);
-ffffffffc0203c9a:	00002697          	auipc	a3,0x2
-ffffffffc0203c9e:	1d668693          	addi	a3,a3,470 # ffffffffc0205e70 <etext+0x1920>
-ffffffffc0203ca2:	00001617          	auipc	a2,0x1
-ffffffffc0203ca6:	18660613          	addi	a2,a2,390 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203caa:	0f600593          	li	a1,246
-ffffffffc0203cae:	00002517          	auipc	a0,0x2
-ffffffffc0203cb2:	02a50513          	addi	a0,a0,42 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203cb6:	eaafc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203b80:	00002697          	auipc	a3,0x2
+ffffffffc0203b84:	d5068693          	addi	a3,a3,-688 # ffffffffc02058d0 <default_pmm_manager+0x720>
+ffffffffc0203b88:	00001617          	auipc	a2,0x1
+ffffffffc0203b8c:	27860613          	addi	a2,a2,632 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203b90:	10d00593          	li	a1,269
+ffffffffc0203b94:	00002517          	auipc	a0,0x2
+ffffffffc0203b98:	15450513          	addi	a0,a0,340 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203b9c:	fd8fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(check_mm_struct != NULL);
+ffffffffc0203ba0:	00002697          	auipc	a3,0x2
+ffffffffc0203ba4:	3a868693          	addi	a3,a3,936 # ffffffffc0205f48 <default_pmm_manager+0xd98>
+ffffffffc0203ba8:	00001617          	auipc	a2,0x1
+ffffffffc0203bac:	25860613          	addi	a2,a2,600 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203bb0:	10a00593          	li	a1,266
+ffffffffc0203bb4:	00002517          	auipc	a0,0x2
+ffffffffc0203bb8:	13450513          	addi	a0,a0,308 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+    check_mm_struct = mm_create();
+ffffffffc0203bbc:	0000e797          	auipc	a5,0xe
+ffffffffc0203bc0:	9a07b623          	sd	zero,-1620(a5) # ffffffffc0211568 <check_mm_struct>
+    assert(check_mm_struct != NULL);
+ffffffffc0203bc4:	fb0fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(vma != NULL);
+ffffffffc0203bc8:	00002697          	auipc	a3,0x2
+ffffffffc0203bcc:	d1868693          	addi	a3,a3,-744 # ffffffffc02058e0 <default_pmm_manager+0x730>
+ffffffffc0203bd0:	00001617          	auipc	a2,0x1
+ffffffffc0203bd4:	23060613          	addi	a2,a2,560 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203bd8:	11100593          	li	a1,273
+ffffffffc0203bdc:	00002517          	auipc	a0,0x2
+ffffffffc0203be0:	10c50513          	addi	a0,a0,268 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203be4:	f90fc0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(find_vma(mm, addr) == vma);
-ffffffffc0203cba:	00002697          	auipc	a3,0x2
-ffffffffc0203cbe:	22e68693          	addi	a3,a3,558 # ffffffffc0205ee8 <etext+0x1998>
-ffffffffc0203cc2:	00001617          	auipc	a2,0x1
-ffffffffc0203cc6:	16660613          	addi	a2,a2,358 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203cca:	11600593          	li	a1,278
-ffffffffc0203cce:	00002517          	auipc	a0,0x2
-ffffffffc0203cd2:	00a50513          	addi	a0,a0,10 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203cd6:	e8afc0ef          	jal	ffffffffc0200360 <__panic>
-    assert(nr_free_pages_store == nr_free_pages());
-ffffffffc0203cda:	00002697          	auipc	a3,0x2
-ffffffffc0203cde:	1ae68693          	addi	a3,a3,430 # ffffffffc0205e88 <etext+0x1938>
-ffffffffc0203ce2:	00001617          	auipc	a2,0x1
-ffffffffc0203ce6:	14660613          	addi	a2,a2,326 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203cea:	0fb00593          	li	a1,251
-ffffffffc0203cee:	00002517          	auipc	a0,0x2
-ffffffffc0203cf2:	fea50513          	addi	a0,a0,-22 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203cf6:	e6afc0ef          	jal	ffffffffc0200360 <__panic>
-        panic("pa2page called with invalid pa");
-ffffffffc0203cfa:	00001617          	auipc	a2,0x1
-ffffffffc0203cfe:	4de60613          	addi	a2,a2,1246 # ffffffffc02051d8 <etext+0xc88>
-ffffffffc0203d02:	06500593          	li	a1,101
-ffffffffc0203d06:	00001517          	auipc	a0,0x1
-ffffffffc0203d0a:	4f250513          	addi	a0,a0,1266 # ffffffffc02051f8 <etext+0xca8>
-ffffffffc0203d0e:	e52fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203be8:	00002697          	auipc	a3,0x2
+ffffffffc0203bec:	2f868693          	addi	a3,a3,760 # ffffffffc0205ee0 <default_pmm_manager+0xd30>
+ffffffffc0203bf0:	00001617          	auipc	a2,0x1
+ffffffffc0203bf4:	21060613          	addi	a2,a2,528 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203bf8:	11600593          	li	a1,278
+ffffffffc0203bfc:	00002517          	auipc	a0,0x2
+ffffffffc0203c00:	0ec50513          	addi	a0,a0,236 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203c04:	f70fc0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(sum == 0);
-ffffffffc0203d12:	00002697          	auipc	a3,0x2
-ffffffffc0203d16:	1f668693          	addi	a3,a3,502 # ffffffffc0205f08 <etext+0x19b8>
-ffffffffc0203d1a:	00001617          	auipc	a2,0x1
-ffffffffc0203d1e:	10e60613          	addi	a2,a2,270 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203d22:	12000593          	li	a1,288
-ffffffffc0203d26:	00002517          	auipc	a0,0x2
-ffffffffc0203d2a:	fb250513          	addi	a0,a0,-78 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203d2e:	e32fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203c08:	00002697          	auipc	a3,0x2
+ffffffffc0203c0c:	2f868693          	addi	a3,a3,760 # ffffffffc0205f00 <default_pmm_manager+0xd50>
+ffffffffc0203c10:	00001617          	auipc	a2,0x1
+ffffffffc0203c14:	1f060613          	addi	a2,a2,496 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203c18:	12000593          	li	a1,288
+ffffffffc0203c1c:	00002517          	auipc	a0,0x2
+ffffffffc0203c20:	0cc50513          	addi	a0,a0,204 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203c24:	f50fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+        panic("pa2page called with invalid pa");
+ffffffffc0203c28:	00001617          	auipc	a2,0x1
+ffffffffc0203c2c:	5c060613          	addi	a2,a2,1472 # ffffffffc02051e8 <default_pmm_manager+0x38>
+ffffffffc0203c30:	06500593          	li	a1,101
+ffffffffc0203c34:	00001517          	auipc	a0,0x1
+ffffffffc0203c38:	5d450513          	addi	a0,a0,1492 # ffffffffc0205208 <default_pmm_manager+0x58>
+ffffffffc0203c3c:	f38fc0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(nr_free_pages_store == nr_free_pages());
-ffffffffc0203d32:	00002697          	auipc	a3,0x2
-ffffffffc0203d36:	15668693          	addi	a3,a3,342 # ffffffffc0205e88 <etext+0x1938>
-ffffffffc0203d3a:	00001617          	auipc	a2,0x1
-ffffffffc0203d3e:	0ee60613          	addi	a2,a2,238 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203d42:	0bd00593          	li	a1,189
-ffffffffc0203d46:	00002517          	auipc	a0,0x2
-ffffffffc0203d4a:	f9250513          	addi	a0,a0,-110 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203d4e:	e12fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203c40:	00002697          	auipc	a3,0x2
+ffffffffc0203c44:	25868693          	addi	a3,a3,600 # ffffffffc0205e98 <default_pmm_manager+0xce8>
+ffffffffc0203c48:	00001617          	auipc	a2,0x1
+ffffffffc0203c4c:	1b860613          	addi	a2,a2,440 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203c50:	12e00593          	li	a1,302
+ffffffffc0203c54:	00002517          	auipc	a0,0x2
+ffffffffc0203c58:	09450513          	addi	a0,a0,148 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203c5c:	f18fc0ef          	jal	ra,ffffffffc0200374 <__panic>
     assert(nr_free_pages_store == nr_free_pages());
-ffffffffc0203d52:	00002697          	auipc	a3,0x2
-ffffffffc0203d56:	13668693          	addi	a3,a3,310 # ffffffffc0205e88 <etext+0x1938>
-ffffffffc0203d5a:	00001617          	auipc	a2,0x1
-ffffffffc0203d5e:	0ce60613          	addi	a2,a2,206 # ffffffffc0204e28 <etext+0x8d8>
-ffffffffc0203d62:	12e00593          	li	a1,302
-ffffffffc0203d66:	00002517          	auipc	a0,0x2
-ffffffffc0203d6a:	f7250513          	addi	a0,a0,-142 # ffffffffc0205cd8 <etext+0x1788>
-ffffffffc0203d6e:	df2fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203c60:	00002697          	auipc	a3,0x2
+ffffffffc0203c64:	23868693          	addi	a3,a3,568 # ffffffffc0205e98 <default_pmm_manager+0xce8>
+ffffffffc0203c68:	00001617          	auipc	a2,0x1
+ffffffffc0203c6c:	19860613          	addi	a2,a2,408 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203c70:	0bd00593          	li	a1,189
+ffffffffc0203c74:	00002517          	auipc	a0,0x2
+ffffffffc0203c78:	07450513          	addi	a0,a0,116 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203c7c:	ef8fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(mm != NULL);
+ffffffffc0203c80:	00002697          	auipc	a3,0x2
+ffffffffc0203c84:	c2868693          	addi	a3,a3,-984 # ffffffffc02058a8 <default_pmm_manager+0x6f8>
+ffffffffc0203c88:	00001617          	auipc	a2,0x1
+ffffffffc0203c8c:	17860613          	addi	a2,a2,376 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203c90:	0c700593          	li	a1,199
+ffffffffc0203c94:	00002517          	auipc	a0,0x2
+ffffffffc0203c98:	05450513          	addi	a0,a0,84 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203c9c:	ed8fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+    assert(nr_free_pages_store == nr_free_pages());
+ffffffffc0203ca0:	00002697          	auipc	a3,0x2
+ffffffffc0203ca4:	1f868693          	addi	a3,a3,504 # ffffffffc0205e98 <default_pmm_manager+0xce8>
+ffffffffc0203ca8:	00001617          	auipc	a2,0x1
+ffffffffc0203cac:	15860613          	addi	a2,a2,344 # ffffffffc0204e00 <commands+0x738>
+ffffffffc0203cb0:	0fb00593          	li	a1,251
+ffffffffc0203cb4:	00002517          	auipc	a0,0x2
+ffffffffc0203cb8:	03450513          	addi	a0,a0,52 # ffffffffc0205ce8 <default_pmm_manager+0xb38>
+ffffffffc0203cbc:	eb8fc0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc0203d72 <do_pgfault>:
+ffffffffc0203cc0 <do_pgfault>:
  *            was a read (0) or write (1).
  *         -- The U/S flag (bit 2) indicates whether the processor was executing at user mode (1)
  *            or supervisor mode (0) at the time of the exception.
  */
 int
 do_pgfault(struct mm_struct *mm, uint_t error_code, uintptr_t addr) {
-ffffffffc0203d72:	7179                	addi	sp,sp,-48
+ffffffffc0203cc0:	7179                	addi	sp,sp,-48
     int ret = -E_INVAL;
     //try to find a vma which include addr
     struct vma_struct *vma = find_vma(mm, addr);
-ffffffffc0203d74:	85b2                	mv	a1,a2
+ffffffffc0203cc2:	85b2                	mv	a1,a2
 do_pgfault(struct mm_struct *mm, uint_t error_code, uintptr_t addr) {
-ffffffffc0203d76:	f022                	sd	s0,32(sp)
-ffffffffc0203d78:	ec26                	sd	s1,24(sp)
-ffffffffc0203d7a:	f406                	sd	ra,40(sp)
-ffffffffc0203d7c:	8432                	mv	s0,a2
-ffffffffc0203d7e:	84aa                	mv	s1,a0
+ffffffffc0203cc4:	f022                	sd	s0,32(sp)
+ffffffffc0203cc6:	ec26                	sd	s1,24(sp)
+ffffffffc0203cc8:	f406                	sd	ra,40(sp)
+ffffffffc0203cca:	e84a                	sd	s2,16(sp)
+ffffffffc0203ccc:	8432                	mv	s0,a2
+ffffffffc0203cce:	84aa                	mv	s1,a0
     struct vma_struct *vma = find_vma(mm, addr);
-ffffffffc0203d80:	8bfff0ef          	jal	ffffffffc020363e <find_vma>
+ffffffffc0203cd0:	8d3ff0ef          	jal	ra,ffffffffc02035a2 <find_vma>
 
     pgfault_num++;
-ffffffffc0203d84:	0000d797          	auipc	a5,0xd
-ffffffffc0203d88:	7e47a783          	lw	a5,2020(a5) # ffffffffc0211568 <pgfault_num>
-ffffffffc0203d8c:	2785                	addiw	a5,a5,1
-ffffffffc0203d8e:	0000d717          	auipc	a4,0xd
-ffffffffc0203d92:	7cf72d23          	sw	a5,2010(a4) # ffffffffc0211568 <pgfault_num>
+ffffffffc0203cd4:	0000e797          	auipc	a5,0xe
+ffffffffc0203cd8:	89c7a783          	lw	a5,-1892(a5) # ffffffffc0211570 <pgfault_num>
+ffffffffc0203cdc:	2785                	addiw	a5,a5,1
+ffffffffc0203cde:	0000e717          	auipc	a4,0xe
+ffffffffc0203ce2:	88f72923          	sw	a5,-1902(a4) # ffffffffc0211570 <pgfault_num>
     //If the addr is in the range of a mm's vma?
     if (vma == NULL || vma->vm_start > addr) {
-ffffffffc0203d96:	c549                	beqz	a0,ffffffffc0203e20 <do_pgfault+0xae>
-ffffffffc0203d98:	651c                	ld	a5,8(a0)
-ffffffffc0203d9a:	08f46363          	bltu	s0,a5,ffffffffc0203e20 <do_pgfault+0xae>
+ffffffffc0203ce6:	c549                	beqz	a0,ffffffffc0203d70 <do_pgfault+0xb0>
+ffffffffc0203ce8:	651c                	ld	a5,8(a0)
+ffffffffc0203cea:	08f46363          	bltu	s0,a5,ffffffffc0203d70 <do_pgfault+0xb0>
      *    (read  an non_existed addr && addr is readable)
      * THEN
      *    continue process
      */
     uint32_t perm = PTE_U;
     if (vma->vm_flags & VM_WRITE) {
-ffffffffc0203d9e:	6d1c                	ld	a5,24(a0)
-ffffffffc0203da0:	e84a                	sd	s2,16(sp)
-        perm |= (PTE_R | PTE_W);
-ffffffffc0203da2:	4959                	li	s2,22
+ffffffffc0203cee:	6d1c                	ld	a5,24(a0)
+    uint32_t perm = PTE_U;
+ffffffffc0203cf0:	4941                	li	s2,16
     if (vma->vm_flags & VM_WRITE) {
-ffffffffc0203da4:	8b89                	andi	a5,a5,2
-ffffffffc0203da6:	cfa1                	beqz	a5,ffffffffc0203dfe <do_pgfault+0x8c>
+ffffffffc0203cf2:	8b89                	andi	a5,a5,2
+ffffffffc0203cf4:	efa9                	bnez	a5,ffffffffc0203d4e <do_pgfault+0x8e>
+        perm |= (PTE_R | PTE_W);
     }
     addr = ROUNDDOWN(addr, PGSIZE);
-ffffffffc0203da8:	77fd                	lui	a5,0xfffff
+ffffffffc0203cf6:	75fd                	lui	a1,0xfffff
     *   mm->pgdir : the PDT of these vma
     *
     */
 
 
     ptep = get_pte(mm->pgdir, addr, 1);  //(1) try to find a pte, if pte's
-ffffffffc0203daa:	6c88                	ld	a0,24(s1)
+ffffffffc0203cf8:	6c88                	ld	a0,24(s1)
     addr = ROUNDDOWN(addr, PGSIZE);
-ffffffffc0203dac:	8c7d                	and	s0,s0,a5
+ffffffffc0203cfa:	8c6d                	and	s0,s0,a1
     ptep = get_pte(mm->pgdir, addr, 1);  //(1) try to find a pte, if pte's
-ffffffffc0203dae:	85a2                	mv	a1,s0
-ffffffffc0203db0:	4605                	li	a2,1
-ffffffffc0203db2:	95bfd0ef          	jal	ffffffffc020170c <get_pte>
+ffffffffc0203cfc:	85a2                	mv	a1,s0
+ffffffffc0203cfe:	4605                	li	a2,1
+ffffffffc0203d00:	a0dfd0ef          	jal	ra,ffffffffc020170c <get_pte>
                                          //PT(Page Table) isn't existed, then
                                          //create a PT.
     if (*ptep == 0) {
-ffffffffc0203db6:	610c                	ld	a1,0(a0)
-ffffffffc0203db8:	c5a9                	beqz	a1,ffffffffc0203e02 <do_pgfault+0x90>
+ffffffffc0203d04:	610c                	ld	a1,0(a0)
+ffffffffc0203d06:	c5b1                	beqz	a1,ffffffffc0203d52 <do_pgfault+0x92>
         *    swap_in(mm, addr, &page) : 分配一个内存页，然后根据
         *    PTE中的swap条目的addr，找到磁盘页的地址，将磁盘页的内容读入这个内存页
         *    page_insert ： 建立一个Page的phy addr与线性addr la的映射
         *    swap_map_swappable ： 设置页面可交换
         */
         if (swap_init_ok) {
-ffffffffc0203dba:	0000d797          	auipc	a5,0xd
-ffffffffc0203dbe:	78e7a783          	lw	a5,1934(a5) # ffffffffc0211548 <swap_init_ok>
-ffffffffc0203dc2:	cba5                	beqz	a5,ffffffffc0203e32 <do_pgfault+0xc0>
+ffffffffc0203d08:	0000e797          	auipc	a5,0xe
+ffffffffc0203d0c:	8507a783          	lw	a5,-1968(a5) # ffffffffc0211558 <swap_init_ok>
+ffffffffc0203d10:	cbad                	beqz	a5,ffffffffc0203d82 <do_pgfault+0xc2>
             //map of phy addr <--->
             //logical addr
             //(3) make the page swappable.
             //begin
             // 从交换区加载页面
             if (swap_in(mm, addr, &page) != 0) {
-ffffffffc0203dc4:	0030                	addi	a2,sp,8
-ffffffffc0203dc6:	85a2                	mv	a1,s0
-ffffffffc0203dc8:	8526                	mv	a0,s1
+ffffffffc0203d12:	0030                	addi	a2,sp,8
+ffffffffc0203d14:	85a2                	mv	a1,s0
+ffffffffc0203d16:	8526                	mv	a0,s1
             struct Page *page = NULL;
-ffffffffc0203dca:	e402                	sd	zero,8(sp)
+ffffffffc0203d18:	e402                	sd	zero,8(sp)
             if (swap_in(mm, addr, &page) != 0) {
-ffffffffc0203dcc:	bd0ff0ef          	jal	ffffffffc020319c <swap_in>
-ffffffffc0203dd0:	e925                	bnez	a0,ffffffffc0203e40 <do_pgfault+0xce>
+ffffffffc0203d1a:	bd6ff0ef          	jal	ra,ffffffffc02030f0 <swap_in>
+ffffffffc0203d1e:	e935                	bnez	a0,ffffffffc0203d92 <do_pgfault+0xd2>
                 cprintf("swap_in() failed\n");
                 goto failed;
             }
 
             // 重新映射页面
             if (page_insert(mm->pgdir, page, addr, perm) != 0) {
-ffffffffc0203dd2:	65a2                	ld	a1,8(sp)
-ffffffffc0203dd4:	6c88                	ld	a0,24(s1)
-ffffffffc0203dd6:	86ca                	mv	a3,s2
-ffffffffc0203dd8:	8622                	mv	a2,s0
-ffffffffc0203dda:	c55fd0ef          	jal	ffffffffc0201a2e <page_insert>
-ffffffffc0203dde:	e925                	bnez	a0,ffffffffc0203e4e <do_pgfault+0xdc>
+ffffffffc0203d20:	65a2                	ld	a1,8(sp)
+ffffffffc0203d22:	6c88                	ld	a0,24(s1)
+ffffffffc0203d24:	86ca                	mv	a3,s2
+ffffffffc0203d26:	8622                	mv	a2,s0
+ffffffffc0203d28:	ccffd0ef          	jal	ra,ffffffffc02019f6 <page_insert>
+ffffffffc0203d2c:	892a                	mv	s2,a0
+ffffffffc0203d2e:	e935                	bnez	a0,ffffffffc0203da2 <do_pgfault+0xe2>
                 free_page(page);
                 goto failed;
             }
 
             // 设置页面为可交换
             swap_map_swappable(mm, addr, page, 0);
-ffffffffc0203de0:	6622                	ld	a2,8(sp)
-ffffffffc0203de2:	4681                	li	a3,0
-ffffffffc0203de4:	85a2                	mv	a1,s0
-ffffffffc0203de6:	8526                	mv	a0,s1
-ffffffffc0203de8:	a92ff0ef          	jal	ffffffffc020307a <swap_map_swappable>
+ffffffffc0203d30:	6622                	ld	a2,8(sp)
+ffffffffc0203d32:	4681                	li	a3,0
+ffffffffc0203d34:	85a2                	mv	a1,s0
+ffffffffc0203d36:	8526                	mv	a0,s1
+ffffffffc0203d38:	a98ff0ef          	jal	ra,ffffffffc0202fd0 <swap_map_swappable>
             //end
             page->pra_vaddr = addr;
-ffffffffc0203dec:	67a2                	ld	a5,8(sp)
-ffffffffc0203dee:	e3a0                	sd	s0,64(a5)
-ffffffffc0203df0:	6942                	ld	s2,16(sp)
-            cprintf("no swap_init_ok but ptep is %x, failed\n", *ptep);
-            goto failed;
-        }
+ffffffffc0203d3c:	67a2                	ld	a5,8(sp)
+ffffffffc0203d3e:	e3a0                	sd	s0,64(a5)
    }
 
    ret = 0;
-ffffffffc0203df2:	4501                	li	a0,0
 failed:
     return ret;
 }
-ffffffffc0203df4:	70a2                	ld	ra,40(sp)
-ffffffffc0203df6:	7402                	ld	s0,32(sp)
-ffffffffc0203df8:	64e2                	ld	s1,24(sp)
-ffffffffc0203dfa:	6145                	addi	sp,sp,48
-ffffffffc0203dfc:	8082                	ret
-    uint32_t perm = PTE_U;
-ffffffffc0203dfe:	4941                	li	s2,16
-ffffffffc0203e00:	b765                	j	ffffffffc0203da8 <do_pgfault+0x36>
+ffffffffc0203d40:	70a2                	ld	ra,40(sp)
+ffffffffc0203d42:	7402                	ld	s0,32(sp)
+ffffffffc0203d44:	64e2                	ld	s1,24(sp)
+ffffffffc0203d46:	854a                	mv	a0,s2
+ffffffffc0203d48:	6942                	ld	s2,16(sp)
+ffffffffc0203d4a:	6145                	addi	sp,sp,48
+ffffffffc0203d4c:	8082                	ret
+        perm |= (PTE_R | PTE_W);
+ffffffffc0203d4e:	4959                	li	s2,22
+ffffffffc0203d50:	b75d                	j	ffffffffc0203cf6 <do_pgfault+0x36>
         if (pgdir_alloc_page(mm->pgdir, addr, perm) == NULL) {
-ffffffffc0203e02:	6c88                	ld	a0,24(s1)
-ffffffffc0203e04:	864a                	mv	a2,s2
-ffffffffc0203e06:	85a2                	mv	a1,s0
-ffffffffc0203e08:	969fe0ef          	jal	ffffffffc0202770 <pgdir_alloc_page>
-ffffffffc0203e0c:	f175                	bnez	a0,ffffffffc0203df0 <do_pgfault+0x7e>
+ffffffffc0203d52:	6c88                	ld	a0,24(s1)
+ffffffffc0203d54:	864a                	mv	a2,s2
+ffffffffc0203d56:	85a2                	mv	a1,s0
+ffffffffc0203d58:	9a9fe0ef          	jal	ra,ffffffffc0202700 <pgdir_alloc_page>
+   ret = 0;
+ffffffffc0203d5c:	4901                	li	s2,0
+        if (pgdir_alloc_page(mm->pgdir, addr, perm) == NULL) {
+ffffffffc0203d5e:	f16d                	bnez	a0,ffffffffc0203d40 <do_pgfault+0x80>
             cprintf("pgdir_alloc_page in do_pgfault failed\n");
-ffffffffc0203e0e:	00002517          	auipc	a0,0x2
-ffffffffc0203e12:	17250513          	addi	a0,a0,370 # ffffffffc0205f80 <etext+0x1a30>
-ffffffffc0203e16:	aa4fc0ef          	jal	ffffffffc02000ba <cprintf>
-            goto failed;
-ffffffffc0203e1a:	6942                	ld	s2,16(sp)
+ffffffffc0203d60:	00002517          	auipc	a0,0x2
+ffffffffc0203d64:	23050513          	addi	a0,a0,560 # ffffffffc0205f90 <default_pmm_manager+0xde0>
+ffffffffc0203d68:	b52fc0ef          	jal	ra,ffffffffc02000ba <cprintf>
     ret = -E_NO_MEM;
-ffffffffc0203e1c:	5571                	li	a0,-4
-ffffffffc0203e1e:	bfd9                	j	ffffffffc0203df4 <do_pgfault+0x82>
-        cprintf("not valid addr %x, and  can not find it in vma\n", addr);
-ffffffffc0203e20:	85a2                	mv	a1,s0
-ffffffffc0203e22:	00002517          	auipc	a0,0x2
-ffffffffc0203e26:	12e50513          	addi	a0,a0,302 # ffffffffc0205f50 <etext+0x1a00>
-ffffffffc0203e2a:	a90fc0ef          	jal	ffffffffc02000ba <cprintf>
-    int ret = -E_INVAL;
-ffffffffc0203e2e:	5575                	li	a0,-3
-        goto failed;
-ffffffffc0203e30:	b7d1                	j	ffffffffc0203df4 <do_pgfault+0x82>
-            cprintf("no swap_init_ok but ptep is %x, failed\n", *ptep);
-ffffffffc0203e32:	00002517          	auipc	a0,0x2
-ffffffffc0203e36:	1b650513          	addi	a0,a0,438 # ffffffffc0205fe8 <etext+0x1a98>
-ffffffffc0203e3a:	a80fc0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0203d6c:	5971                	li	s2,-4
             goto failed;
-ffffffffc0203e3e:	bff1                	j	ffffffffc0203e1a <do_pgfault+0xa8>
+ffffffffc0203d6e:	bfc9                	j	ffffffffc0203d40 <do_pgfault+0x80>
+        cprintf("not valid addr %x, and  can not find it in vma\n", addr);
+ffffffffc0203d70:	85a2                	mv	a1,s0
+ffffffffc0203d72:	00002517          	auipc	a0,0x2
+ffffffffc0203d76:	1ee50513          	addi	a0,a0,494 # ffffffffc0205f60 <default_pmm_manager+0xdb0>
+ffffffffc0203d7a:	b40fc0ef          	jal	ra,ffffffffc02000ba <cprintf>
+    int ret = -E_INVAL;
+ffffffffc0203d7e:	5975                	li	s2,-3
+        goto failed;
+ffffffffc0203d80:	b7c1                	j	ffffffffc0203d40 <do_pgfault+0x80>
+            cprintf("no swap_init_ok but ptep is %x, failed\n", *ptep);
+ffffffffc0203d82:	00002517          	auipc	a0,0x2
+ffffffffc0203d86:	27650513          	addi	a0,a0,630 # ffffffffc0205ff8 <default_pmm_manager+0xe48>
+ffffffffc0203d8a:	b30fc0ef          	jal	ra,ffffffffc02000ba <cprintf>
+    ret = -E_NO_MEM;
+ffffffffc0203d8e:	5971                	li	s2,-4
+            goto failed;
+ffffffffc0203d90:	bf45                	j	ffffffffc0203d40 <do_pgfault+0x80>
                 cprintf("swap_in() failed\n");
-ffffffffc0203e40:	00002517          	auipc	a0,0x2
-ffffffffc0203e44:	16850513          	addi	a0,a0,360 # ffffffffc0205fa8 <etext+0x1a58>
-ffffffffc0203e48:	a72fc0ef          	jal	ffffffffc02000ba <cprintf>
-                goto failed;
-ffffffffc0203e4c:	b7f9                	j	ffffffffc0203e1a <do_pgfault+0xa8>
+ffffffffc0203d92:	00002517          	auipc	a0,0x2
+ffffffffc0203d96:	22650513          	addi	a0,a0,550 # ffffffffc0205fb8 <default_pmm_manager+0xe08>
+ffffffffc0203d9a:	b20fc0ef          	jal	ra,ffffffffc02000ba <cprintf>
+    ret = -E_NO_MEM;
+ffffffffc0203d9e:	5971                	li	s2,-4
+ffffffffc0203da0:	b745                	j	ffffffffc0203d40 <do_pgfault+0x80>
                 cprintf("page_insert() after swap_in() failed\n");
-ffffffffc0203e4e:	00002517          	auipc	a0,0x2
-ffffffffc0203e52:	17250513          	addi	a0,a0,370 # ffffffffc0205fc0 <etext+0x1a70>
-ffffffffc0203e56:	a64fc0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc0203da2:	00002517          	auipc	a0,0x2
+ffffffffc0203da6:	22e50513          	addi	a0,a0,558 # ffffffffc0205fd0 <default_pmm_manager+0xe20>
+ffffffffc0203daa:	b10fc0ef          	jal	ra,ffffffffc02000ba <cprintf>
                 free_page(page);
-ffffffffc0203e5a:	6522                	ld	a0,8(sp)
-ffffffffc0203e5c:	4585                	li	a1,1
-ffffffffc0203e5e:	835fd0ef          	jal	ffffffffc0201692 <free_pages>
-                goto failed;
-ffffffffc0203e62:	bf65                	j	ffffffffc0203e1a <do_pgfault+0xa8>
+ffffffffc0203dae:	6522                	ld	a0,8(sp)
+ffffffffc0203db0:	4585                	li	a1,1
+    ret = -E_NO_MEM;
+ffffffffc0203db2:	5971                	li	s2,-4
+                free_page(page);
+ffffffffc0203db4:	8dffd0ef          	jal	ra,ffffffffc0201692 <free_pages>
+            goto failed;
+ffffffffc0203db8:	b761                	j	ffffffffc0203d40 <do_pgfault+0x80>
 
-ffffffffc0203e64 <swapfs_init>:
+ffffffffc0203dba <swapfs_init>:
 #include <ide.h>
 #include <pmm.h>
 #include <assert.h>
 
 void
 swapfs_init(void) {
-ffffffffc0203e64:	1141                	addi	sp,sp,-16
+ffffffffc0203dba:	1141                	addi	sp,sp,-16
     static_assert((PGSIZE % SECTSIZE) == 0);
     if (!ide_device_valid(SWAP_DEV_NO)) {
-ffffffffc0203e66:	4505                	li	a0,1
+ffffffffc0203dbc:	4505                	li	a0,1
 swapfs_init(void) {
-ffffffffc0203e68:	e406                	sd	ra,8(sp)
+ffffffffc0203dbe:	e406                	sd	ra,8(sp)
     if (!ide_device_valid(SWAP_DEV_NO)) {
-ffffffffc0203e6a:	e18fc0ef          	jal	ffffffffc0200482 <ide_device_valid>
-ffffffffc0203e6e:	cd01                	beqz	a0,ffffffffc0203e86 <swapfs_init+0x22>
+ffffffffc0203dc0:	ed4fc0ef          	jal	ra,ffffffffc0200494 <ide_device_valid>
+ffffffffc0203dc4:	cd01                	beqz	a0,ffffffffc0203ddc <swapfs_init+0x22>
         panic("swap fs isn't available.\n");
     }
     max_swap_offset = ide_device_size(SWAP_DEV_NO) / (PGSIZE / SECTSIZE);
-ffffffffc0203e70:	4505                	li	a0,1
-ffffffffc0203e72:	e16fc0ef          	jal	ffffffffc0200488 <ide_device_size>
+ffffffffc0203dc6:	4505                	li	a0,1
+ffffffffc0203dc8:	ed2fc0ef          	jal	ra,ffffffffc020049a <ide_device_size>
 }
-ffffffffc0203e76:	60a2                	ld	ra,8(sp)
+ffffffffc0203dcc:	60a2                	ld	ra,8(sp)
     max_swap_offset = ide_device_size(SWAP_DEV_NO) / (PGSIZE / SECTSIZE);
-ffffffffc0203e78:	810d                	srli	a0,a0,0x3
-ffffffffc0203e7a:	0000d797          	auipc	a5,0xd
-ffffffffc0203e7e:	6ca7bb23          	sd	a0,1750(a5) # ffffffffc0211550 <max_swap_offset>
+ffffffffc0203dce:	810d                	srli	a0,a0,0x3
+ffffffffc0203dd0:	0000d797          	auipc	a5,0xd
+ffffffffc0203dd4:	76a7bc23          	sd	a0,1912(a5) # ffffffffc0211548 <max_swap_offset>
 }
-ffffffffc0203e82:	0141                	addi	sp,sp,16
-ffffffffc0203e84:	8082                	ret
+ffffffffc0203dd8:	0141                	addi	sp,sp,16
+ffffffffc0203dda:	8082                	ret
         panic("swap fs isn't available.\n");
-ffffffffc0203e86:	00002617          	auipc	a2,0x2
-ffffffffc0203e8a:	18a60613          	addi	a2,a2,394 # ffffffffc0206010 <etext+0x1ac0>
-ffffffffc0203e8e:	45b5                	li	a1,13
-ffffffffc0203e90:	00002517          	auipc	a0,0x2
-ffffffffc0203e94:	1a050513          	addi	a0,a0,416 # ffffffffc0206030 <etext+0x1ae0>
-ffffffffc0203e98:	cc8fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203ddc:	00002617          	auipc	a2,0x2
+ffffffffc0203de0:	24460613          	addi	a2,a2,580 # ffffffffc0206020 <default_pmm_manager+0xe70>
+ffffffffc0203de4:	45b5                	li	a1,13
+ffffffffc0203de6:	00002517          	auipc	a0,0x2
+ffffffffc0203dea:	25a50513          	addi	a0,a0,602 # ffffffffc0206040 <default_pmm_manager+0xe90>
+ffffffffc0203dee:	d86fc0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc0203e9c <swapfs_read>:
+ffffffffc0203df2 <swapfs_read>:
 
 int
 swapfs_read(swap_entry_t entry, struct Page *page) {
-ffffffffc0203e9c:	1141                	addi	sp,sp,-16
-ffffffffc0203e9e:	e406                	sd	ra,8(sp)
+ffffffffc0203df2:	1141                	addi	sp,sp,-16
+ffffffffc0203df4:	e406                	sd	ra,8(sp)
     return ide_read_secs(SWAP_DEV_NO, swap_offset(entry) * PAGE_NSECT, page2kva(page), PAGE_NSECT);
-ffffffffc0203ea0:	00855713          	srli	a4,a0,0x8
-ffffffffc0203ea4:	cb2d                	beqz	a4,ffffffffc0203f16 <swapfs_read+0x7a>
-ffffffffc0203ea6:	0000d797          	auipc	a5,0xd
-ffffffffc0203eaa:	6aa7b783          	ld	a5,1706(a5) # ffffffffc0211550 <max_swap_offset>
-ffffffffc0203eae:	06f77463          	bgeu	a4,a5,ffffffffc0203f16 <swapfs_read+0x7a>
+ffffffffc0203df6:	00855793          	srli	a5,a0,0x8
+ffffffffc0203dfa:	c3a5                	beqz	a5,ffffffffc0203e5a <swapfs_read+0x68>
+ffffffffc0203dfc:	0000d717          	auipc	a4,0xd
+ffffffffc0203e00:	74c73703          	ld	a4,1868(a4) # ffffffffc0211548 <max_swap_offset>
+ffffffffc0203e04:	04e7fb63          	bgeu	a5,a4,ffffffffc0203e5a <swapfs_read+0x68>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0203eb2:	f8e397b7          	lui	a5,0xf8e39
-ffffffffc0203eb6:	e3978793          	addi	a5,a5,-455 # fffffffff8e38e39 <end+0x38c278c1>
-ffffffffc0203eba:	07b2                	slli	a5,a5,0xc
-ffffffffc0203ebc:	e3978793          	addi	a5,a5,-455
-ffffffffc0203ec0:	07b2                	slli	a5,a5,0xc
-ffffffffc0203ec2:	0000d697          	auipc	a3,0xd
-ffffffffc0203ec6:	67e6b683          	ld	a3,1662(a3) # ffffffffc0211540 <pages>
-ffffffffc0203eca:	e3978793          	addi	a5,a5,-455
-ffffffffc0203ece:	8d95                	sub	a1,a1,a3
-ffffffffc0203ed0:	07b2                	slli	a5,a5,0xc
-ffffffffc0203ed2:	4035d613          	srai	a2,a1,0x3
-ffffffffc0203ed6:	e3978793          	addi	a5,a5,-455
-ffffffffc0203eda:	02f60633          	mul	a2,a2,a5
-ffffffffc0203ede:	00002797          	auipc	a5,0x2
-ffffffffc0203ee2:	4c27b783          	ld	a5,1218(a5) # ffffffffc02063a0 <nbase>
+ffffffffc0203e08:	0000d617          	auipc	a2,0xd
+ffffffffc0203e0c:	72863603          	ld	a2,1832(a2) # ffffffffc0211530 <pages>
+ffffffffc0203e10:	8d91                	sub	a1,a1,a2
+ffffffffc0203e12:	4035d613          	srai	a2,a1,0x3
+ffffffffc0203e16:	00002597          	auipc	a1,0x2
+ffffffffc0203e1a:	4aa5b583          	ld	a1,1194(a1) # ffffffffc02062c0 <error_string+0x38>
+ffffffffc0203e1e:	02b60633          	mul	a2,a2,a1
+ffffffffc0203e22:	0037959b          	slliw	a1,a5,0x3
+ffffffffc0203e26:	00002797          	auipc	a5,0x2
+ffffffffc0203e2a:	4a27b783          	ld	a5,1186(a5) # ffffffffc02062c8 <nbase>
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc0203ee6:	0000d697          	auipc	a3,0xd
-ffffffffc0203eea:	6526b683          	ld	a3,1618(a3) # ffffffffc0211538 <npage>
-ffffffffc0203eee:	0037159b          	slliw	a1,a4,0x3
+ffffffffc0203e2e:	0000d717          	auipc	a4,0xd
+ffffffffc0203e32:	6fa73703          	ld	a4,1786(a4) # ffffffffc0211528 <npage>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0203ef2:	963e                	add	a2,a2,a5
+ffffffffc0203e36:	963e                	add	a2,a2,a5
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc0203ef4:	00c61793          	slli	a5,a2,0xc
-ffffffffc0203ef8:	83b1                	srli	a5,a5,0xc
+ffffffffc0203e38:	00c61793          	slli	a5,a2,0xc
+ffffffffc0203e3c:	83b1                	srli	a5,a5,0xc
     return page2ppn(page) << PGSHIFT;
-ffffffffc0203efa:	0632                	slli	a2,a2,0xc
+ffffffffc0203e3e:	0632                	slli	a2,a2,0xc
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc0203efc:	02d7f963          	bgeu	a5,a3,ffffffffc0203f2e <swapfs_read+0x92>
+ffffffffc0203e40:	02e7f963          	bgeu	a5,a4,ffffffffc0203e72 <swapfs_read+0x80>
 }
-ffffffffc0203f00:	60a2                	ld	ra,8(sp)
+ffffffffc0203e44:	60a2                	ld	ra,8(sp)
     return ide_read_secs(SWAP_DEV_NO, swap_offset(entry) * PAGE_NSECT, page2kva(page), PAGE_NSECT);
-ffffffffc0203f02:	0000d797          	auipc	a5,0xd
-ffffffffc0203f06:	62e7b783          	ld	a5,1582(a5) # ffffffffc0211530 <va_pa_offset>
-ffffffffc0203f0a:	46a1                	li	a3,8
-ffffffffc0203f0c:	963e                	add	a2,a2,a5
-ffffffffc0203f0e:	4505                	li	a0,1
+ffffffffc0203e46:	0000d797          	auipc	a5,0xd
+ffffffffc0203e4a:	6fa7b783          	ld	a5,1786(a5) # ffffffffc0211540 <va_pa_offset>
+ffffffffc0203e4e:	46a1                	li	a3,8
+ffffffffc0203e50:	963e                	add	a2,a2,a5
+ffffffffc0203e52:	4505                	li	a0,1
 }
-ffffffffc0203f10:	0141                	addi	sp,sp,16
+ffffffffc0203e54:	0141                	addi	sp,sp,16
     return ide_read_secs(SWAP_DEV_NO, swap_offset(entry) * PAGE_NSECT, page2kva(page), PAGE_NSECT);
-ffffffffc0203f12:	d7cfc06f          	j	ffffffffc020048e <ide_read_secs>
-ffffffffc0203f16:	86aa                	mv	a3,a0
-ffffffffc0203f18:	00002617          	auipc	a2,0x2
-ffffffffc0203f1c:	13060613          	addi	a2,a2,304 # ffffffffc0206048 <etext+0x1af8>
-ffffffffc0203f20:	45d1                	li	a1,20
-ffffffffc0203f22:	00002517          	auipc	a0,0x2
-ffffffffc0203f26:	10e50513          	addi	a0,a0,270 # ffffffffc0206030 <etext+0x1ae0>
-ffffffffc0203f2a:	c36fc0ef          	jal	ffffffffc0200360 <__panic>
-ffffffffc0203f2e:	86b2                	mv	a3,a2
-ffffffffc0203f30:	06a00593          	li	a1,106
-ffffffffc0203f34:	00001617          	auipc	a2,0x1
-ffffffffc0203f38:	2fc60613          	addi	a2,a2,764 # ffffffffc0205230 <etext+0xce0>
-ffffffffc0203f3c:	00001517          	auipc	a0,0x1
-ffffffffc0203f40:	2bc50513          	addi	a0,a0,700 # ffffffffc02051f8 <etext+0xca8>
-ffffffffc0203f44:	c1cfc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203e56:	e4afc06f          	j	ffffffffc02004a0 <ide_read_secs>
+ffffffffc0203e5a:	86aa                	mv	a3,a0
+ffffffffc0203e5c:	00002617          	auipc	a2,0x2
+ffffffffc0203e60:	1fc60613          	addi	a2,a2,508 # ffffffffc0206058 <default_pmm_manager+0xea8>
+ffffffffc0203e64:	45d1                	li	a1,20
+ffffffffc0203e66:	00002517          	auipc	a0,0x2
+ffffffffc0203e6a:	1da50513          	addi	a0,a0,474 # ffffffffc0206040 <default_pmm_manager+0xe90>
+ffffffffc0203e6e:	d06fc0ef          	jal	ra,ffffffffc0200374 <__panic>
+ffffffffc0203e72:	86b2                	mv	a3,a2
+ffffffffc0203e74:	06a00593          	li	a1,106
+ffffffffc0203e78:	00001617          	auipc	a2,0x1
+ffffffffc0203e7c:	3c860613          	addi	a2,a2,968 # ffffffffc0205240 <default_pmm_manager+0x90>
+ffffffffc0203e80:	00001517          	auipc	a0,0x1
+ffffffffc0203e84:	38850513          	addi	a0,a0,904 # ffffffffc0205208 <default_pmm_manager+0x58>
+ffffffffc0203e88:	cecfc0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc0203f48 <swapfs_write>:
+ffffffffc0203e8c <swapfs_write>:
 
 int
 swapfs_write(swap_entry_t entry, struct Page *page) {
-ffffffffc0203f48:	1141                	addi	sp,sp,-16
-ffffffffc0203f4a:	e406                	sd	ra,8(sp)
+ffffffffc0203e8c:	1141                	addi	sp,sp,-16
+ffffffffc0203e8e:	e406                	sd	ra,8(sp)
     return ide_write_secs(SWAP_DEV_NO, swap_offset(entry) * PAGE_NSECT, page2kva(page), PAGE_NSECT);
-ffffffffc0203f4c:	00855713          	srli	a4,a0,0x8
-ffffffffc0203f50:	cb2d                	beqz	a4,ffffffffc0203fc2 <swapfs_write+0x7a>
-ffffffffc0203f52:	0000d797          	auipc	a5,0xd
-ffffffffc0203f56:	5fe7b783          	ld	a5,1534(a5) # ffffffffc0211550 <max_swap_offset>
-ffffffffc0203f5a:	06f77463          	bgeu	a4,a5,ffffffffc0203fc2 <swapfs_write+0x7a>
+ffffffffc0203e90:	00855793          	srli	a5,a0,0x8
+ffffffffc0203e94:	c3a5                	beqz	a5,ffffffffc0203ef4 <swapfs_write+0x68>
+ffffffffc0203e96:	0000d717          	auipc	a4,0xd
+ffffffffc0203e9a:	6b273703          	ld	a4,1714(a4) # ffffffffc0211548 <max_swap_offset>
+ffffffffc0203e9e:	04e7fb63          	bgeu	a5,a4,ffffffffc0203ef4 <swapfs_write+0x68>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0203f5e:	f8e397b7          	lui	a5,0xf8e39
-ffffffffc0203f62:	e3978793          	addi	a5,a5,-455 # fffffffff8e38e39 <end+0x38c278c1>
-ffffffffc0203f66:	07b2                	slli	a5,a5,0xc
-ffffffffc0203f68:	e3978793          	addi	a5,a5,-455
-ffffffffc0203f6c:	07b2                	slli	a5,a5,0xc
-ffffffffc0203f6e:	0000d697          	auipc	a3,0xd
-ffffffffc0203f72:	5d26b683          	ld	a3,1490(a3) # ffffffffc0211540 <pages>
-ffffffffc0203f76:	e3978793          	addi	a5,a5,-455
-ffffffffc0203f7a:	8d95                	sub	a1,a1,a3
-ffffffffc0203f7c:	07b2                	slli	a5,a5,0xc
-ffffffffc0203f7e:	4035d613          	srai	a2,a1,0x3
-ffffffffc0203f82:	e3978793          	addi	a5,a5,-455
-ffffffffc0203f86:	02f60633          	mul	a2,a2,a5
-ffffffffc0203f8a:	00002797          	auipc	a5,0x2
-ffffffffc0203f8e:	4167b783          	ld	a5,1046(a5) # ffffffffc02063a0 <nbase>
+ffffffffc0203ea2:	0000d617          	auipc	a2,0xd
+ffffffffc0203ea6:	68e63603          	ld	a2,1678(a2) # ffffffffc0211530 <pages>
+ffffffffc0203eaa:	8d91                	sub	a1,a1,a2
+ffffffffc0203eac:	4035d613          	srai	a2,a1,0x3
+ffffffffc0203eb0:	00002597          	auipc	a1,0x2
+ffffffffc0203eb4:	4105b583          	ld	a1,1040(a1) # ffffffffc02062c0 <error_string+0x38>
+ffffffffc0203eb8:	02b60633          	mul	a2,a2,a1
+ffffffffc0203ebc:	0037959b          	slliw	a1,a5,0x3
+ffffffffc0203ec0:	00002797          	auipc	a5,0x2
+ffffffffc0203ec4:	4087b783          	ld	a5,1032(a5) # ffffffffc02062c8 <nbase>
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc0203f92:	0000d697          	auipc	a3,0xd
-ffffffffc0203f96:	5a66b683          	ld	a3,1446(a3) # ffffffffc0211538 <npage>
-ffffffffc0203f9a:	0037159b          	slliw	a1,a4,0x3
+ffffffffc0203ec8:	0000d717          	auipc	a4,0xd
+ffffffffc0203ecc:	66073703          	ld	a4,1632(a4) # ffffffffc0211528 <npage>
 static inline ppn_t page2ppn(struct Page *page) { return page - pages + nbase; }
-ffffffffc0203f9e:	963e                	add	a2,a2,a5
+ffffffffc0203ed0:	963e                	add	a2,a2,a5
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc0203fa0:	00c61793          	slli	a5,a2,0xc
-ffffffffc0203fa4:	83b1                	srli	a5,a5,0xc
+ffffffffc0203ed2:	00c61793          	slli	a5,a2,0xc
+ffffffffc0203ed6:	83b1                	srli	a5,a5,0xc
     return page2ppn(page) << PGSHIFT;
-ffffffffc0203fa6:	0632                	slli	a2,a2,0xc
+ffffffffc0203ed8:	0632                	slli	a2,a2,0xc
 static inline void *page2kva(struct Page *page) { return KADDR(page2pa(page)); }
-ffffffffc0203fa8:	02d7f963          	bgeu	a5,a3,ffffffffc0203fda <swapfs_write+0x92>
+ffffffffc0203eda:	02e7f963          	bgeu	a5,a4,ffffffffc0203f0c <swapfs_write+0x80>
 }
-ffffffffc0203fac:	60a2                	ld	ra,8(sp)
+ffffffffc0203ede:	60a2                	ld	ra,8(sp)
     return ide_write_secs(SWAP_DEV_NO, swap_offset(entry) * PAGE_NSECT, page2kva(page), PAGE_NSECT);
-ffffffffc0203fae:	0000d797          	auipc	a5,0xd
-ffffffffc0203fb2:	5827b783          	ld	a5,1410(a5) # ffffffffc0211530 <va_pa_offset>
-ffffffffc0203fb6:	46a1                	li	a3,8
-ffffffffc0203fb8:	963e                	add	a2,a2,a5
-ffffffffc0203fba:	4505                	li	a0,1
+ffffffffc0203ee0:	0000d797          	auipc	a5,0xd
+ffffffffc0203ee4:	6607b783          	ld	a5,1632(a5) # ffffffffc0211540 <va_pa_offset>
+ffffffffc0203ee8:	46a1                	li	a3,8
+ffffffffc0203eea:	963e                	add	a2,a2,a5
+ffffffffc0203eec:	4505                	li	a0,1
 }
-ffffffffc0203fbc:	0141                	addi	sp,sp,16
+ffffffffc0203eee:	0141                	addi	sp,sp,16
     return ide_write_secs(SWAP_DEV_NO, swap_offset(entry) * PAGE_NSECT, page2kva(page), PAGE_NSECT);
-ffffffffc0203fbe:	cf4fc06f          	j	ffffffffc02004b2 <ide_write_secs>
-ffffffffc0203fc2:	86aa                	mv	a3,a0
-ffffffffc0203fc4:	00002617          	auipc	a2,0x2
-ffffffffc0203fc8:	08460613          	addi	a2,a2,132 # ffffffffc0206048 <etext+0x1af8>
-ffffffffc0203fcc:	45e5                	li	a1,25
-ffffffffc0203fce:	00002517          	auipc	a0,0x2
-ffffffffc0203fd2:	06250513          	addi	a0,a0,98 # ffffffffc0206030 <etext+0x1ae0>
-ffffffffc0203fd6:	b8afc0ef          	jal	ffffffffc0200360 <__panic>
-ffffffffc0203fda:	86b2                	mv	a3,a2
-ffffffffc0203fdc:	06a00593          	li	a1,106
-ffffffffc0203fe0:	00001617          	auipc	a2,0x1
-ffffffffc0203fe4:	25060613          	addi	a2,a2,592 # ffffffffc0205230 <etext+0xce0>
-ffffffffc0203fe8:	00001517          	auipc	a0,0x1
-ffffffffc0203fec:	21050513          	addi	a0,a0,528 # ffffffffc02051f8 <etext+0xca8>
-ffffffffc0203ff0:	b70fc0ef          	jal	ffffffffc0200360 <__panic>
+ffffffffc0203ef0:	dd4fc06f          	j	ffffffffc02004c4 <ide_write_secs>
+ffffffffc0203ef4:	86aa                	mv	a3,a0
+ffffffffc0203ef6:	00002617          	auipc	a2,0x2
+ffffffffc0203efa:	16260613          	addi	a2,a2,354 # ffffffffc0206058 <default_pmm_manager+0xea8>
+ffffffffc0203efe:	45e5                	li	a1,25
+ffffffffc0203f00:	00002517          	auipc	a0,0x2
+ffffffffc0203f04:	14050513          	addi	a0,a0,320 # ffffffffc0206040 <default_pmm_manager+0xe90>
+ffffffffc0203f08:	c6cfc0ef          	jal	ra,ffffffffc0200374 <__panic>
+ffffffffc0203f0c:	86b2                	mv	a3,a2
+ffffffffc0203f0e:	06a00593          	li	a1,106
+ffffffffc0203f12:	00001617          	auipc	a2,0x1
+ffffffffc0203f16:	32e60613          	addi	a2,a2,814 # ffffffffc0205240 <default_pmm_manager+0x90>
+ffffffffc0203f1a:	00001517          	auipc	a0,0x1
+ffffffffc0203f1e:	2ee50513          	addi	a0,a0,750 # ffffffffc0205208 <default_pmm_manager+0x58>
+ffffffffc0203f22:	c52fc0ef          	jal	ra,ffffffffc0200374 <__panic>
 
-ffffffffc0203ff4 <printnum>:
+ffffffffc0203f26 <printnum>:
  * */
 static void
 printnum(void (*putch)(int, void*), void *putdat,
         unsigned long long num, unsigned base, int width, int padc) {
     unsigned long long result = num;
     unsigned mod = do_div(result, base);
-ffffffffc0203ff4:	02069813          	slli	a6,a3,0x20
+ffffffffc0203f26:	02069813          	slli	a6,a3,0x20
         unsigned long long num, unsigned base, int width, int padc) {
-ffffffffc0203ff8:	7179                	addi	sp,sp,-48
+ffffffffc0203f2a:	7179                	addi	sp,sp,-48
     unsigned mod = do_div(result, base);
-ffffffffc0203ffa:	02085813          	srli	a6,a6,0x20
+ffffffffc0203f2c:	02085813          	srli	a6,a6,0x20
         unsigned long long num, unsigned base, int width, int padc) {
-ffffffffc0203ffe:	e052                	sd	s4,0(sp)
+ffffffffc0203f30:	e052                	sd	s4,0(sp)
     unsigned mod = do_div(result, base);
-ffffffffc0204000:	03067a33          	remu	s4,a2,a6
+ffffffffc0203f32:	03067a33          	remu	s4,a2,a6
         unsigned long long num, unsigned base, int width, int padc) {
-ffffffffc0204004:	f022                	sd	s0,32(sp)
-ffffffffc0204006:	ec26                	sd	s1,24(sp)
-ffffffffc0204008:	e84a                	sd	s2,16(sp)
-ffffffffc020400a:	f406                	sd	ra,40(sp)
-ffffffffc020400c:	84aa                	mv	s1,a0
-ffffffffc020400e:	892e                	mv	s2,a1
+ffffffffc0203f36:	f022                	sd	s0,32(sp)
+ffffffffc0203f38:	ec26                	sd	s1,24(sp)
+ffffffffc0203f3a:	e84a                	sd	s2,16(sp)
+ffffffffc0203f3c:	f406                	sd	ra,40(sp)
+ffffffffc0203f3e:	e44e                	sd	s3,8(sp)
+ffffffffc0203f40:	84aa                	mv	s1,a0
+ffffffffc0203f42:	892e                	mv	s2,a1
     // first recursively print all preceding (more significant) digits
     if (num >= base) {
         printnum(putch, putdat, result, base, width - 1, padc);
     } else {
         // print any needed pad characters before first digit
         while (-- width > 0)
-ffffffffc0204010:	fff7041b          	addiw	s0,a4,-1
+ffffffffc0203f44:	fff7041b          	addiw	s0,a4,-1
     unsigned mod = do_div(result, base);
-ffffffffc0204014:	2a01                	sext.w	s4,s4
+ffffffffc0203f48:	2a01                	sext.w	s4,s4
     if (num >= base) {
-ffffffffc0204016:	05067063          	bgeu	a2,a6,ffffffffc0204056 <printnum+0x62>
-ffffffffc020401a:	e44e                	sd	s3,8(sp)
-ffffffffc020401c:	89be                	mv	s3,a5
+ffffffffc0203f4a:	03067e63          	bgeu	a2,a6,ffffffffc0203f86 <printnum+0x60>
+ffffffffc0203f4e:	89be                	mv	s3,a5
         while (-- width > 0)
-ffffffffc020401e:	4785                	li	a5,1
-ffffffffc0204020:	00e7d763          	bge	a5,a4,ffffffffc020402e <printnum+0x3a>
+ffffffffc0203f50:	00805763          	blez	s0,ffffffffc0203f5e <printnum+0x38>
+ffffffffc0203f54:	347d                	addiw	s0,s0,-1
             putch(padc, putdat);
-ffffffffc0204024:	85ca                	mv	a1,s2
-ffffffffc0204026:	854e                	mv	a0,s3
+ffffffffc0203f56:	85ca                	mv	a1,s2
+ffffffffc0203f58:	854e                	mv	a0,s3
+ffffffffc0203f5a:	9482                	jalr	s1
         while (-- width > 0)
-ffffffffc0204028:	347d                	addiw	s0,s0,-1
-            putch(padc, putdat);
-ffffffffc020402a:	9482                	jalr	s1
-        while (-- width > 0)
-ffffffffc020402c:	fc65                	bnez	s0,ffffffffc0204024 <printnum+0x30>
-ffffffffc020402e:	69a2                	ld	s3,8(sp)
+ffffffffc0203f5c:	fc65                	bnez	s0,ffffffffc0203f54 <printnum+0x2e>
     }
     // then print this (the least significant) digit
     putch("0123456789abcdef"[mod], putdat);
-ffffffffc0204030:	1a02                	slli	s4,s4,0x20
-ffffffffc0204032:	020a5a13          	srli	s4,s4,0x20
-ffffffffc0204036:	00002797          	auipc	a5,0x2
-ffffffffc020403a:	03278793          	addi	a5,a5,50 # ffffffffc0206068 <etext+0x1b18>
-ffffffffc020403e:	97d2                	add	a5,a5,s4
+ffffffffc0203f5e:	1a02                	slli	s4,s4,0x20
+ffffffffc0203f60:	00002797          	auipc	a5,0x2
+ffffffffc0203f64:	11878793          	addi	a5,a5,280 # ffffffffc0206078 <default_pmm_manager+0xec8>
+ffffffffc0203f68:	020a5a13          	srli	s4,s4,0x20
+ffffffffc0203f6c:	9a3e                	add	s4,s4,a5
 }
-ffffffffc0204040:	7402                	ld	s0,32(sp)
+ffffffffc0203f6e:	7402                	ld	s0,32(sp)
     putch("0123456789abcdef"[mod], putdat);
-ffffffffc0204042:	0007c503          	lbu	a0,0(a5)
+ffffffffc0203f70:	000a4503          	lbu	a0,0(s4)
 }
-ffffffffc0204046:	70a2                	ld	ra,40(sp)
-ffffffffc0204048:	6a02                	ld	s4,0(sp)
+ffffffffc0203f74:	70a2                	ld	ra,40(sp)
+ffffffffc0203f76:	69a2                	ld	s3,8(sp)
+ffffffffc0203f78:	6a02                	ld	s4,0(sp)
     putch("0123456789abcdef"[mod], putdat);
-ffffffffc020404a:	85ca                	mv	a1,s2
-ffffffffc020404c:	87a6                	mv	a5,s1
+ffffffffc0203f7a:	85ca                	mv	a1,s2
+ffffffffc0203f7c:	87a6                	mv	a5,s1
 }
-ffffffffc020404e:	6942                	ld	s2,16(sp)
-ffffffffc0204050:	64e2                	ld	s1,24(sp)
-ffffffffc0204052:	6145                	addi	sp,sp,48
+ffffffffc0203f7e:	6942                	ld	s2,16(sp)
+ffffffffc0203f80:	64e2                	ld	s1,24(sp)
+ffffffffc0203f82:	6145                	addi	sp,sp,48
     putch("0123456789abcdef"[mod], putdat);
-ffffffffc0204054:	8782                	jr	a5
+ffffffffc0203f84:	8782                	jr	a5
         printnum(putch, putdat, result, base, width - 1, padc);
-ffffffffc0204056:	03065633          	divu	a2,a2,a6
-ffffffffc020405a:	8722                	mv	a4,s0
-ffffffffc020405c:	f99ff0ef          	jal	ffffffffc0203ff4 <printnum>
-ffffffffc0204060:	bfc1                	j	ffffffffc0204030 <printnum+0x3c>
+ffffffffc0203f86:	03065633          	divu	a2,a2,a6
+ffffffffc0203f8a:	8722                	mv	a4,s0
+ffffffffc0203f8c:	f9bff0ef          	jal	ra,ffffffffc0203f26 <printnum>
+ffffffffc0203f90:	b7f9                	j	ffffffffc0203f5e <printnum+0x38>
 
-ffffffffc0204062 <vprintfmt>:
+ffffffffc0203f92 <vprintfmt>:
  *
  * Call this function if you are already dealing with a va_list.
  * Or you probably want printfmt() instead.
  * */
 void
 vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap) {
-ffffffffc0204062:	7119                	addi	sp,sp,-128
-ffffffffc0204064:	f4a6                	sd	s1,104(sp)
-ffffffffc0204066:	f0ca                	sd	s2,96(sp)
-ffffffffc0204068:	ecce                	sd	s3,88(sp)
-ffffffffc020406a:	e8d2                	sd	s4,80(sp)
-ffffffffc020406c:	e4d6                	sd	s5,72(sp)
-ffffffffc020406e:	e0da                	sd	s6,64(sp)
-ffffffffc0204070:	f862                	sd	s8,48(sp)
-ffffffffc0204072:	fc86                	sd	ra,120(sp)
-ffffffffc0204074:	f8a2                	sd	s0,112(sp)
-ffffffffc0204076:	fc5e                	sd	s7,56(sp)
-ffffffffc0204078:	f466                	sd	s9,40(sp)
-ffffffffc020407a:	f06a                	sd	s10,32(sp)
-ffffffffc020407c:	ec6e                	sd	s11,24(sp)
-ffffffffc020407e:	892a                	mv	s2,a0
-ffffffffc0204080:	84ae                	mv	s1,a1
-ffffffffc0204082:	8c32                	mv	s8,a2
-ffffffffc0204084:	8a36                	mv	s4,a3
+ffffffffc0203f92:	7119                	addi	sp,sp,-128
+ffffffffc0203f94:	f4a6                	sd	s1,104(sp)
+ffffffffc0203f96:	f0ca                	sd	s2,96(sp)
+ffffffffc0203f98:	ecce                	sd	s3,88(sp)
+ffffffffc0203f9a:	e8d2                	sd	s4,80(sp)
+ffffffffc0203f9c:	e4d6                	sd	s5,72(sp)
+ffffffffc0203f9e:	e0da                	sd	s6,64(sp)
+ffffffffc0203fa0:	fc5e                	sd	s7,56(sp)
+ffffffffc0203fa2:	f06a                	sd	s10,32(sp)
+ffffffffc0203fa4:	fc86                	sd	ra,120(sp)
+ffffffffc0203fa6:	f8a2                	sd	s0,112(sp)
+ffffffffc0203fa8:	f862                	sd	s8,48(sp)
+ffffffffc0203faa:	f466                	sd	s9,40(sp)
+ffffffffc0203fac:	ec6e                	sd	s11,24(sp)
+ffffffffc0203fae:	892a                	mv	s2,a0
+ffffffffc0203fb0:	84ae                	mv	s1,a1
+ffffffffc0203fb2:	8d32                	mv	s10,a2
+ffffffffc0203fb4:	8a36                	mv	s4,a3
     register int ch, err;
     unsigned long long num;
     int base, width, precision, lflag, altflag;
 
     while (1) {
         while ((ch = *(unsigned char *)fmt ++) != '%') {
-ffffffffc0204086:	02500993          	li	s3,37
-        char padc = ' ';
-        width = precision = -1;
-        lflag = altflag = 0;
-
-    reswitch:
-        switch (ch = *(unsigned char *)fmt ++) {
-ffffffffc020408a:	05500b13          	li	s6,85
-ffffffffc020408e:	00002a97          	auipc	s5,0x2
-ffffffffc0204092:	182a8a93          	addi	s5,s5,386 # ffffffffc0206210 <default_pmm_manager+0x38>
-        while ((ch = *(unsigned char *)fmt ++) != '%') {
-ffffffffc0204096:	000c4503          	lbu	a0,0(s8)
-ffffffffc020409a:	001c0413          	addi	s0,s8,1
-ffffffffc020409e:	01350a63          	beq	a0,s3,ffffffffc02040b2 <vprintfmt+0x50>
-            if (ch == '\0') {
-ffffffffc02040a2:	cd0d                	beqz	a0,ffffffffc02040dc <vprintfmt+0x7a>
+ffffffffc0203fb6:	02500993          	li	s3,37
             putch(ch, putdat);
-ffffffffc02040a4:	85a6                	mv	a1,s1
-ffffffffc02040a6:	9902                	jalr	s2
-        while ((ch = *(unsigned char *)fmt ++) != '%') {
-ffffffffc02040a8:	00044503          	lbu	a0,0(s0)
-ffffffffc02040ac:	0405                	addi	s0,s0,1
-ffffffffc02040ae:	ff351ae3          	bne	a0,s3,ffffffffc02040a2 <vprintfmt+0x40>
+        }
+
+        // Process a %-escape sequence
         char padc = ' ';
-ffffffffc02040b2:	02000d93          	li	s11,32
-        lflag = altflag = 0;
-ffffffffc02040b6:	4b81                	li	s7,0
-ffffffffc02040b8:	4601                	li	a2,0
         width = precision = -1;
-ffffffffc02040ba:	5d7d                	li	s10,-1
-ffffffffc02040bc:	5cfd                	li	s9,-1
+ffffffffc0203fba:	5b7d                	li	s6,-1
+ffffffffc0203fbc:	00002a97          	auipc	s5,0x2
+ffffffffc0203fc0:	0f0a8a93          	addi	s5,s5,240 # ffffffffc02060ac <default_pmm_manager+0xefc>
+        case 'e':
+            err = va_arg(ap, int);
+            if (err < 0) {
+                err = -err;
+            }
+            if (err > MAXERROR || (p = error_string[err]) == NULL) {
+ffffffffc0203fc4:	00002b97          	auipc	s7,0x2
+ffffffffc0203fc8:	2c4b8b93          	addi	s7,s7,708 # ffffffffc0206288 <error_string>
+        while ((ch = *(unsigned char *)fmt ++) != '%') {
+ffffffffc0203fcc:	000d4503          	lbu	a0,0(s10) # 80000 <kern_entry-0xffffffffc0180000>
+ffffffffc0203fd0:	001d0413          	addi	s0,s10,1
+ffffffffc0203fd4:	01350a63          	beq	a0,s3,ffffffffc0203fe8 <vprintfmt+0x56>
+            if (ch == '\0') {
+ffffffffc0203fd8:	c121                	beqz	a0,ffffffffc0204018 <vprintfmt+0x86>
+            putch(ch, putdat);
+ffffffffc0203fda:	85a6                	mv	a1,s1
+        while ((ch = *(unsigned char *)fmt ++) != '%') {
+ffffffffc0203fdc:	0405                	addi	s0,s0,1
+            putch(ch, putdat);
+ffffffffc0203fde:	9902                	jalr	s2
+        while ((ch = *(unsigned char *)fmt ++) != '%') {
+ffffffffc0203fe0:	fff44503          	lbu	a0,-1(s0)
+ffffffffc0203fe4:	ff351ae3          	bne	a0,s3,ffffffffc0203fd8 <vprintfmt+0x46>
         switch (ch = *(unsigned char *)fmt ++) {
-ffffffffc02040be:	00044683          	lbu	a3,0(s0)
-ffffffffc02040c2:	00140c13          	addi	s8,s0,1
-ffffffffc02040c6:	fdd6859b          	addiw	a1,a3,-35
-ffffffffc02040ca:	0ff5f593          	zext.b	a1,a1
-ffffffffc02040ce:	02bb6663          	bltu	s6,a1,ffffffffc02040fa <vprintfmt+0x98>
-ffffffffc02040d2:	058a                	slli	a1,a1,0x2
-ffffffffc02040d4:	95d6                	add	a1,a1,s5
-ffffffffc02040d6:	4198                	lw	a4,0(a1)
-ffffffffc02040d8:	9756                	add	a4,a4,s5
-ffffffffc02040da:	8702                	jr	a4
+ffffffffc0203fe8:	00044603          	lbu	a2,0(s0)
+        char padc = ' ';
+ffffffffc0203fec:	02000793          	li	a5,32
+        lflag = altflag = 0;
+ffffffffc0203ff0:	4c81                	li	s9,0
+ffffffffc0203ff2:	4881                	li	a7,0
+        width = precision = -1;
+ffffffffc0203ff4:	5c7d                	li	s8,-1
+ffffffffc0203ff6:	5dfd                	li	s11,-1
+ffffffffc0203ff8:	05500513          	li	a0,85
+                if (ch < '0' || ch > '9') {
+ffffffffc0203ffc:	4825                	li	a6,9
+        switch (ch = *(unsigned char *)fmt ++) {
+ffffffffc0203ffe:	fdd6059b          	addiw	a1,a2,-35
+ffffffffc0204002:	0ff5f593          	zext.b	a1,a1
+ffffffffc0204006:	00140d13          	addi	s10,s0,1
+ffffffffc020400a:	04b56263          	bltu	a0,a1,ffffffffc020404e <vprintfmt+0xbc>
+ffffffffc020400e:	058a                	slli	a1,a1,0x2
+ffffffffc0204010:	95d6                	add	a1,a1,s5
+ffffffffc0204012:	4194                	lw	a3,0(a1)
+ffffffffc0204014:	96d6                	add	a3,a3,s5
+ffffffffc0204016:	8682                	jr	a3
             for (fmt --; fmt[-1] != '%'; fmt --)
                 /* do nothing */;
             break;
         }
     }
 }
-ffffffffc02040dc:	70e6                	ld	ra,120(sp)
-ffffffffc02040de:	7446                	ld	s0,112(sp)
-ffffffffc02040e0:	74a6                	ld	s1,104(sp)
-ffffffffc02040e2:	7906                	ld	s2,96(sp)
-ffffffffc02040e4:	69e6                	ld	s3,88(sp)
-ffffffffc02040e6:	6a46                	ld	s4,80(sp)
-ffffffffc02040e8:	6aa6                	ld	s5,72(sp)
-ffffffffc02040ea:	6b06                	ld	s6,64(sp)
-ffffffffc02040ec:	7be2                	ld	s7,56(sp)
-ffffffffc02040ee:	7c42                	ld	s8,48(sp)
-ffffffffc02040f0:	7ca2                	ld	s9,40(sp)
-ffffffffc02040f2:	7d02                	ld	s10,32(sp)
-ffffffffc02040f4:	6de2                	ld	s11,24(sp)
-ffffffffc02040f6:	6109                	addi	sp,sp,128
-ffffffffc02040f8:	8082                	ret
+ffffffffc0204018:	70e6                	ld	ra,120(sp)
+ffffffffc020401a:	7446                	ld	s0,112(sp)
+ffffffffc020401c:	74a6                	ld	s1,104(sp)
+ffffffffc020401e:	7906                	ld	s2,96(sp)
+ffffffffc0204020:	69e6                	ld	s3,88(sp)
+ffffffffc0204022:	6a46                	ld	s4,80(sp)
+ffffffffc0204024:	6aa6                	ld	s5,72(sp)
+ffffffffc0204026:	6b06                	ld	s6,64(sp)
+ffffffffc0204028:	7be2                	ld	s7,56(sp)
+ffffffffc020402a:	7c42                	ld	s8,48(sp)
+ffffffffc020402c:	7ca2                	ld	s9,40(sp)
+ffffffffc020402e:	7d02                	ld	s10,32(sp)
+ffffffffc0204030:	6de2                	ld	s11,24(sp)
+ffffffffc0204032:	6109                	addi	sp,sp,128
+ffffffffc0204034:	8082                	ret
+            padc = '0';
+ffffffffc0204036:	87b2                	mv	a5,a2
+            goto reswitch;
+ffffffffc0204038:	00144603          	lbu	a2,1(s0)
+        switch (ch = *(unsigned char *)fmt ++) {
+ffffffffc020403c:	846a                	mv	s0,s10
+ffffffffc020403e:	00140d13          	addi	s10,s0,1
+ffffffffc0204042:	fdd6059b          	addiw	a1,a2,-35
+ffffffffc0204046:	0ff5f593          	zext.b	a1,a1
+ffffffffc020404a:	fcb572e3          	bgeu	a0,a1,ffffffffc020400e <vprintfmt+0x7c>
             putch('%', putdat);
-ffffffffc02040fa:	85a6                	mv	a1,s1
-ffffffffc02040fc:	02500513          	li	a0,37
-ffffffffc0204100:	9902                	jalr	s2
+ffffffffc020404e:	85a6                	mv	a1,s1
+ffffffffc0204050:	02500513          	li	a0,37
+ffffffffc0204054:	9902                	jalr	s2
             for (fmt --; fmt[-1] != '%'; fmt --)
-ffffffffc0204102:	fff44703          	lbu	a4,-1(s0)
-ffffffffc0204106:	02500793          	li	a5,37
-ffffffffc020410a:	8c22                	mv	s8,s0
-ffffffffc020410c:	f8f705e3          	beq	a4,a5,ffffffffc0204096 <vprintfmt+0x34>
-ffffffffc0204110:	02500713          	li	a4,37
-ffffffffc0204114:	ffec4783          	lbu	a5,-2(s8)
-ffffffffc0204118:	1c7d                	addi	s8,s8,-1
-ffffffffc020411a:	fee79de3          	bne	a5,a4,ffffffffc0204114 <vprintfmt+0xb2>
-ffffffffc020411e:	bfa5                	j	ffffffffc0204096 <vprintfmt+0x34>
-                ch = *fmt;
-ffffffffc0204120:	00144783          	lbu	a5,1(s0)
-                if (ch < '0' || ch > '9') {
-ffffffffc0204124:	4725                	li	a4,9
+ffffffffc0204056:	fff44783          	lbu	a5,-1(s0)
+ffffffffc020405a:	8d22                	mv	s10,s0
+ffffffffc020405c:	f73788e3          	beq	a5,s3,ffffffffc0203fcc <vprintfmt+0x3a>
+ffffffffc0204060:	ffed4783          	lbu	a5,-2(s10)
+ffffffffc0204064:	1d7d                	addi	s10,s10,-1
+ffffffffc0204066:	ff379de3          	bne	a5,s3,ffffffffc0204060 <vprintfmt+0xce>
+ffffffffc020406a:	b78d                	j	ffffffffc0203fcc <vprintfmt+0x3a>
                 precision = precision * 10 + ch - '0';
-ffffffffc0204126:	fd068d1b          	addiw	s10,a3,-48
-                if (ch < '0' || ch > '9') {
-ffffffffc020412a:	fd07859b          	addiw	a1,a5,-48
+ffffffffc020406c:	fd060c1b          	addiw	s8,a2,-48
                 ch = *fmt;
-ffffffffc020412e:	0007869b          	sext.w	a3,a5
+ffffffffc0204070:	00144603          	lbu	a2,1(s0)
         switch (ch = *(unsigned char *)fmt ++) {
-ffffffffc0204132:	8462                	mv	s0,s8
+ffffffffc0204074:	846a                	mv	s0,s10
                 if (ch < '0' || ch > '9') {
-ffffffffc0204134:	02b76563          	bltu	a4,a1,ffffffffc020415e <vprintfmt+0xfc>
-ffffffffc0204138:	4525                	li	a0,9
+ffffffffc0204076:	fd06069b          	addiw	a3,a2,-48
                 ch = *fmt;
-ffffffffc020413a:	00144783          	lbu	a5,1(s0)
-                precision = precision * 10 + ch - '0';
-ffffffffc020413e:	002d171b          	slliw	a4,s10,0x2
-ffffffffc0204142:	01a7073b          	addw	a4,a4,s10
-ffffffffc0204146:	0017171b          	slliw	a4,a4,0x1
-ffffffffc020414a:	9f35                	addw	a4,a4,a3
+ffffffffc020407a:	0006059b          	sext.w	a1,a2
                 if (ch < '0' || ch > '9') {
-ffffffffc020414c:	fd07859b          	addiw	a1,a5,-48
+ffffffffc020407e:	02d86463          	bltu	a6,a3,ffffffffc02040a6 <vprintfmt+0x114>
+                ch = *fmt;
+ffffffffc0204082:	00144603          	lbu	a2,1(s0)
+                precision = precision * 10 + ch - '0';
+ffffffffc0204086:	002c169b          	slliw	a3,s8,0x2
+ffffffffc020408a:	0186873b          	addw	a4,a3,s8
+ffffffffc020408e:	0017171b          	slliw	a4,a4,0x1
+ffffffffc0204092:	9f2d                	addw	a4,a4,a1
+                if (ch < '0' || ch > '9') {
+ffffffffc0204094:	fd06069b          	addiw	a3,a2,-48
             for (precision = 0; ; ++ fmt) {
-ffffffffc0204150:	0405                	addi	s0,s0,1
+ffffffffc0204098:	0405                	addi	s0,s0,1
                 precision = precision * 10 + ch - '0';
-ffffffffc0204152:	fd070d1b          	addiw	s10,a4,-48
+ffffffffc020409a:	fd070c1b          	addiw	s8,a4,-48
                 ch = *fmt;
-ffffffffc0204156:	0007869b          	sext.w	a3,a5
+ffffffffc020409e:	0006059b          	sext.w	a1,a2
                 if (ch < '0' || ch > '9') {
-ffffffffc020415a:	feb570e3          	bgeu	a0,a1,ffffffffc020413a <vprintfmt+0xd8>
+ffffffffc02040a2:	fed870e3          	bgeu	a6,a3,ffffffffc0204082 <vprintfmt+0xf0>
             if (width < 0)
-ffffffffc020415e:	f60cd0e3          	bgez	s9,ffffffffc02040be <vprintfmt+0x5c>
+ffffffffc02040a6:	f40ddce3          	bgez	s11,ffffffffc0203ffe <vprintfmt+0x6c>
                 width = precision, precision = -1;
-ffffffffc0204162:	8cea                	mv	s9,s10
-ffffffffc0204164:	5d7d                	li	s10,-1
-ffffffffc0204166:	bfa1                	j	ffffffffc02040be <vprintfmt+0x5c>
-        switch (ch = *(unsigned char *)fmt ++) {
-ffffffffc0204168:	8db6                	mv	s11,a3
-ffffffffc020416a:	8462                	mv	s0,s8
-ffffffffc020416c:	bf89                	j	ffffffffc02040be <vprintfmt+0x5c>
-ffffffffc020416e:	8462                	mv	s0,s8
-            altflag = 1;
-ffffffffc0204170:	4b85                	li	s7,1
-            goto reswitch;
-ffffffffc0204172:	b7b1                	j	ffffffffc02040be <vprintfmt+0x5c>
-    if (lflag >= 2) {
-ffffffffc0204174:	4785                	li	a5,1
-            precision = va_arg(ap, int);
-ffffffffc0204176:	008a0713          	addi	a4,s4,8
-    if (lflag >= 2) {
-ffffffffc020417a:	00c7c463          	blt	a5,a2,ffffffffc0204182 <vprintfmt+0x120>
-    else if (lflag) {
-ffffffffc020417e:	1a060163          	beqz	a2,ffffffffc0204320 <vprintfmt+0x2be>
-        return va_arg(*ap, unsigned long);
-ffffffffc0204182:	000a3603          	ld	a2,0(s4)
-ffffffffc0204186:	46c1                	li	a3,16
-ffffffffc0204188:	8a3a                	mv	s4,a4
-            printnum(putch, putdat, num, base, width, padc);
-ffffffffc020418a:	000d879b          	sext.w	a5,s11
-ffffffffc020418e:	8766                	mv	a4,s9
-ffffffffc0204190:	85a6                	mv	a1,s1
-ffffffffc0204192:	854a                	mv	a0,s2
-ffffffffc0204194:	e61ff0ef          	jal	ffffffffc0203ff4 <printnum>
-            break;
-ffffffffc0204198:	bdfd                	j	ffffffffc0204096 <vprintfmt+0x34>
-            putch(va_arg(ap, int), putdat);
-ffffffffc020419a:	000a2503          	lw	a0,0(s4)
-ffffffffc020419e:	85a6                	mv	a1,s1
-ffffffffc02041a0:	0a21                	addi	s4,s4,8
-ffffffffc02041a2:	9902                	jalr	s2
-            break;
-ffffffffc02041a4:	bdcd                	j	ffffffffc0204096 <vprintfmt+0x34>
-    if (lflag >= 2) {
-ffffffffc02041a6:	4785                	li	a5,1
-            precision = va_arg(ap, int);
-ffffffffc02041a8:	008a0713          	addi	a4,s4,8
-    if (lflag >= 2) {
-ffffffffc02041ac:	00c7c463          	blt	a5,a2,ffffffffc02041b4 <vprintfmt+0x152>
-    else if (lflag) {
-ffffffffc02041b0:	16060363          	beqz	a2,ffffffffc0204316 <vprintfmt+0x2b4>
-        return va_arg(*ap, unsigned long);
-ffffffffc02041b4:	000a3603          	ld	a2,0(s4)
-ffffffffc02041b8:	46a9                	li	a3,10
-ffffffffc02041ba:	8a3a                	mv	s4,a4
-ffffffffc02041bc:	b7f9                	j	ffffffffc020418a <vprintfmt+0x128>
-            putch('0', putdat);
-ffffffffc02041be:	85a6                	mv	a1,s1
-ffffffffc02041c0:	03000513          	li	a0,48
-ffffffffc02041c4:	9902                	jalr	s2
-            putch('x', putdat);
-ffffffffc02041c6:	85a6                	mv	a1,s1
-ffffffffc02041c8:	07800513          	li	a0,120
-ffffffffc02041cc:	9902                	jalr	s2
-            num = (unsigned long long)(uintptr_t)va_arg(ap, void *);
-ffffffffc02041ce:	000a3603          	ld	a2,0(s4)
-            goto number;
-ffffffffc02041d2:	46c1                	li	a3,16
-            num = (unsigned long long)(uintptr_t)va_arg(ap, void *);
-ffffffffc02041d4:	0a21                	addi	s4,s4,8
-            goto number;
-ffffffffc02041d6:	bf55                	j	ffffffffc020418a <vprintfmt+0x128>
-            putch(ch, putdat);
-ffffffffc02041d8:	85a6                	mv	a1,s1
-ffffffffc02041da:	02500513          	li	a0,37
-ffffffffc02041de:	9902                	jalr	s2
-            break;
-ffffffffc02041e0:	bd5d                	j	ffffffffc0204096 <vprintfmt+0x34>
-            precision = va_arg(ap, int);
-ffffffffc02041e2:	000a2d03          	lw	s10,0(s4)
-        switch (ch = *(unsigned char *)fmt ++) {
-ffffffffc02041e6:	8462                	mv	s0,s8
-            precision = va_arg(ap, int);
-ffffffffc02041e8:	0a21                	addi	s4,s4,8
-            goto process_precision;
-ffffffffc02041ea:	bf95                	j	ffffffffc020415e <vprintfmt+0xfc>
-    if (lflag >= 2) {
-ffffffffc02041ec:	4785                	li	a5,1
-            precision = va_arg(ap, int);
-ffffffffc02041ee:	008a0713          	addi	a4,s4,8
-    if (lflag >= 2) {
-ffffffffc02041f2:	00c7c463          	blt	a5,a2,ffffffffc02041fa <vprintfmt+0x198>
-    else if (lflag) {
-ffffffffc02041f6:	10060b63          	beqz	a2,ffffffffc020430c <vprintfmt+0x2aa>
-        return va_arg(*ap, unsigned long);
-ffffffffc02041fa:	000a3603          	ld	a2,0(s4)
-ffffffffc02041fe:	46a1                	li	a3,8
-ffffffffc0204200:	8a3a                	mv	s4,a4
-ffffffffc0204202:	b761                	j	ffffffffc020418a <vprintfmt+0x128>
+ffffffffc02040aa:	8de2                	mv	s11,s8
+ffffffffc02040ac:	5c7d                	li	s8,-1
+ffffffffc02040ae:	bf81                	j	ffffffffc0203ffe <vprintfmt+0x6c>
             if (width < 0)
-ffffffffc0204204:	fffcc793          	not	a5,s9
-ffffffffc0204208:	97fd                	srai	a5,a5,0x3f
-ffffffffc020420a:	00fcf7b3          	and	a5,s9,a5
-ffffffffc020420e:	00078c9b          	sext.w	s9,a5
+ffffffffc02040b0:	fffdc693          	not	a3,s11
+ffffffffc02040b4:	96fd                	srai	a3,a3,0x3f
+ffffffffc02040b6:	00ddfdb3          	and	s11,s11,a3
         switch (ch = *(unsigned char *)fmt ++) {
-ffffffffc0204212:	8462                	mv	s0,s8
+ffffffffc02040ba:	00144603          	lbu	a2,1(s0)
+ffffffffc02040be:	2d81                	sext.w	s11,s11
+ffffffffc02040c0:	846a                	mv	s0,s10
             goto reswitch;
-ffffffffc0204214:	b56d                	j	ffffffffc02040be <vprintfmt+0x5c>
-            if ((p = va_arg(ap, char *)) == NULL) {
-ffffffffc0204216:	000a3403          	ld	s0,0(s4)
-ffffffffc020421a:	008a0793          	addi	a5,s4,8
-ffffffffc020421e:	e43e                	sd	a5,8(sp)
-ffffffffc0204220:	12040063          	beqz	s0,ffffffffc0204340 <vprintfmt+0x2de>
-            if (width > 0 && padc != '-') {
-ffffffffc0204224:	0d905963          	blez	s9,ffffffffc02042f6 <vprintfmt+0x294>
-ffffffffc0204228:	02d00793          	li	a5,45
-            for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
-ffffffffc020422c:	00140a13          	addi	s4,s0,1
-            if (width > 0 && padc != '-') {
-ffffffffc0204230:	12fd9763          	bne	s11,a5,ffffffffc020435e <vprintfmt+0x2fc>
-            for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
-ffffffffc0204234:	00044783          	lbu	a5,0(s0)
-ffffffffc0204238:	0007851b          	sext.w	a0,a5
-ffffffffc020423c:	cb9d                	beqz	a5,ffffffffc0204272 <vprintfmt+0x210>
-ffffffffc020423e:	547d                	li	s0,-1
-                if (altflag && (ch < ' ' || ch > '~')) {
-ffffffffc0204240:	05e00d93          	li	s11,94
-            for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
-ffffffffc0204244:	000d4563          	bltz	s10,ffffffffc020424e <vprintfmt+0x1ec>
-ffffffffc0204248:	3d7d                	addiw	s10,s10,-1
-ffffffffc020424a:	028d0263          	beq	s10,s0,ffffffffc020426e <vprintfmt+0x20c>
-                    putch('?', putdat);
-ffffffffc020424e:	85a6                	mv	a1,s1
-                if (altflag && (ch < ' ' || ch > '~')) {
-ffffffffc0204250:	0c0b8d63          	beqz	s7,ffffffffc020432a <vprintfmt+0x2c8>
-ffffffffc0204254:	3781                	addiw	a5,a5,-32
-ffffffffc0204256:	0cfdfa63          	bgeu	s11,a5,ffffffffc020432a <vprintfmt+0x2c8>
-                    putch('?', putdat);
-ffffffffc020425a:	03f00513          	li	a0,63
-ffffffffc020425e:	9902                	jalr	s2
-            for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
-ffffffffc0204260:	000a4783          	lbu	a5,0(s4)
-ffffffffc0204264:	3cfd                	addiw	s9,s9,-1
-ffffffffc0204266:	0a05                	addi	s4,s4,1
-ffffffffc0204268:	0007851b          	sext.w	a0,a5
-ffffffffc020426c:	ffe1                	bnez	a5,ffffffffc0204244 <vprintfmt+0x1e2>
-            for (; width > 0; width --) {
-ffffffffc020426e:	01905963          	blez	s9,ffffffffc0204280 <vprintfmt+0x21e>
-                putch(' ', putdat);
-ffffffffc0204272:	85a6                	mv	a1,s1
-ffffffffc0204274:	02000513          	li	a0,32
-            for (; width > 0; width --) {
-ffffffffc0204278:	3cfd                	addiw	s9,s9,-1
-                putch(' ', putdat);
-ffffffffc020427a:	9902                	jalr	s2
-            for (; width > 0; width --) {
-ffffffffc020427c:	fe0c9be3          	bnez	s9,ffffffffc0204272 <vprintfmt+0x210>
-            if ((p = va_arg(ap, char *)) == NULL) {
-ffffffffc0204280:	6a22                	ld	s4,8(sp)
-ffffffffc0204282:	bd11                	j	ffffffffc0204096 <vprintfmt+0x34>
-    if (lflag >= 2) {
-ffffffffc0204284:	4785                	li	a5,1
+ffffffffc02040c2:	bf35                	j	ffffffffc0203ffe <vprintfmt+0x6c>
             precision = va_arg(ap, int);
-ffffffffc0204286:	008a0b93          	addi	s7,s4,8
-    if (lflag >= 2) {
-ffffffffc020428a:	00c7c363          	blt	a5,a2,ffffffffc0204290 <vprintfmt+0x22e>
-    else if (lflag) {
-ffffffffc020428e:	ce25                	beqz	a2,ffffffffc0204306 <vprintfmt+0x2a4>
-        return va_arg(*ap, long);
-ffffffffc0204290:	000a3403          	ld	s0,0(s4)
-            if ((long long)num < 0) {
-ffffffffc0204294:	08044d63          	bltz	s0,ffffffffc020432e <vprintfmt+0x2cc>
-            num = getint(&ap, lflag);
-ffffffffc0204298:	8622                	mv	a2,s0
-ffffffffc020429a:	8a5e                	mv	s4,s7
-ffffffffc020429c:	46a9                	li	a3,10
-ffffffffc020429e:	b5f5                	j	ffffffffc020418a <vprintfmt+0x128>
-            if (err < 0) {
-ffffffffc02042a0:	000a2783          	lw	a5,0(s4)
-            if (err > MAXERROR || (p = error_string[err]) == NULL) {
-ffffffffc02042a4:	4619                	li	a2,6
-            if (err < 0) {
-ffffffffc02042a6:	41f7d71b          	sraiw	a4,a5,0x1f
-ffffffffc02042aa:	8fb9                	xor	a5,a5,a4
-ffffffffc02042ac:	40e786bb          	subw	a3,a5,a4
-            if (err > MAXERROR || (p = error_string[err]) == NULL) {
-ffffffffc02042b0:	02d64663          	blt	a2,a3,ffffffffc02042dc <vprintfmt+0x27a>
-ffffffffc02042b4:	00369713          	slli	a4,a3,0x3
-ffffffffc02042b8:	00002797          	auipc	a5,0x2
-ffffffffc02042bc:	0b078793          	addi	a5,a5,176 # ffffffffc0206368 <error_string>
-ffffffffc02042c0:	97ba                	add	a5,a5,a4
-ffffffffc02042c2:	639c                	ld	a5,0(a5)
-ffffffffc02042c4:	cf81                	beqz	a5,ffffffffc02042dc <vprintfmt+0x27a>
-                printfmt(putch, putdat, "%s", p);
-ffffffffc02042c6:	86be                	mv	a3,a5
-ffffffffc02042c8:	00002617          	auipc	a2,0x2
-ffffffffc02042cc:	dd060613          	addi	a2,a2,-560 # ffffffffc0206098 <etext+0x1b48>
-ffffffffc02042d0:	85a6                	mv	a1,s1
-ffffffffc02042d2:	854a                	mv	a0,s2
-ffffffffc02042d4:	0e8000ef          	jal	ffffffffc02043bc <printfmt>
-            err = va_arg(ap, int);
-ffffffffc02042d8:	0a21                	addi	s4,s4,8
-ffffffffc02042da:	bb75                	j	ffffffffc0204096 <vprintfmt+0x34>
-                printfmt(putch, putdat, "error %d", err);
-ffffffffc02042dc:	00002617          	auipc	a2,0x2
-ffffffffc02042e0:	dac60613          	addi	a2,a2,-596 # ffffffffc0206088 <etext+0x1b38>
-ffffffffc02042e4:	85a6                	mv	a1,s1
-ffffffffc02042e6:	854a                	mv	a0,s2
-ffffffffc02042e8:	0d4000ef          	jal	ffffffffc02043bc <printfmt>
-            err = va_arg(ap, int);
-ffffffffc02042ec:	0a21                	addi	s4,s4,8
-ffffffffc02042ee:	b365                	j	ffffffffc0204096 <vprintfmt+0x34>
-            lflag ++;
-ffffffffc02042f0:	2605                	addiw	a2,a2,1
+ffffffffc02040c4:	000a2c03          	lw	s8,0(s4)
         switch (ch = *(unsigned char *)fmt ++) {
-ffffffffc02042f2:	8462                	mv	s0,s8
+ffffffffc02040c8:	00144603          	lbu	a2,1(s0)
+            precision = va_arg(ap, int);
+ffffffffc02040cc:	0a21                	addi	s4,s4,8
+        switch (ch = *(unsigned char *)fmt ++) {
+ffffffffc02040ce:	846a                	mv	s0,s10
+            goto process_precision;
+ffffffffc02040d0:	bfd9                	j	ffffffffc02040a6 <vprintfmt+0x114>
+    if (lflag >= 2) {
+ffffffffc02040d2:	4705                	li	a4,1
+            precision = va_arg(ap, int);
+ffffffffc02040d4:	008a0593          	addi	a1,s4,8
+    if (lflag >= 2) {
+ffffffffc02040d8:	01174463          	blt	a4,a7,ffffffffc02040e0 <vprintfmt+0x14e>
+    else if (lflag) {
+ffffffffc02040dc:	1a088e63          	beqz	a7,ffffffffc0204298 <vprintfmt+0x306>
+        return va_arg(*ap, unsigned long);
+ffffffffc02040e0:	000a3603          	ld	a2,0(s4)
+ffffffffc02040e4:	46c1                	li	a3,16
+ffffffffc02040e6:	8a2e                	mv	s4,a1
+            printnum(putch, putdat, num, base, width, padc);
+ffffffffc02040e8:	2781                	sext.w	a5,a5
+ffffffffc02040ea:	876e                	mv	a4,s11
+ffffffffc02040ec:	85a6                	mv	a1,s1
+ffffffffc02040ee:	854a                	mv	a0,s2
+ffffffffc02040f0:	e37ff0ef          	jal	ra,ffffffffc0203f26 <printnum>
+            break;
+ffffffffc02040f4:	bde1                	j	ffffffffc0203fcc <vprintfmt+0x3a>
+            putch(va_arg(ap, int), putdat);
+ffffffffc02040f6:	000a2503          	lw	a0,0(s4)
+ffffffffc02040fa:	85a6                	mv	a1,s1
+ffffffffc02040fc:	0a21                	addi	s4,s4,8
+ffffffffc02040fe:	9902                	jalr	s2
+            break;
+ffffffffc0204100:	b5f1                	j	ffffffffc0203fcc <vprintfmt+0x3a>
+    if (lflag >= 2) {
+ffffffffc0204102:	4705                	li	a4,1
+            precision = va_arg(ap, int);
+ffffffffc0204104:	008a0593          	addi	a1,s4,8
+    if (lflag >= 2) {
+ffffffffc0204108:	01174463          	blt	a4,a7,ffffffffc0204110 <vprintfmt+0x17e>
+    else if (lflag) {
+ffffffffc020410c:	18088163          	beqz	a7,ffffffffc020428e <vprintfmt+0x2fc>
+        return va_arg(*ap, unsigned long);
+ffffffffc0204110:	000a3603          	ld	a2,0(s4)
+ffffffffc0204114:	46a9                	li	a3,10
+ffffffffc0204116:	8a2e                	mv	s4,a1
+ffffffffc0204118:	bfc1                	j	ffffffffc02040e8 <vprintfmt+0x156>
+        switch (ch = *(unsigned char *)fmt ++) {
+ffffffffc020411a:	00144603          	lbu	a2,1(s0)
+            altflag = 1;
+ffffffffc020411e:	4c85                	li	s9,1
+        switch (ch = *(unsigned char *)fmt ++) {
+ffffffffc0204120:	846a                	mv	s0,s10
             goto reswitch;
-ffffffffc02042f4:	b3e9                	j	ffffffffc02040be <vprintfmt+0x5c>
-            for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
-ffffffffc02042f6:	00044783          	lbu	a5,0(s0)
-ffffffffc02042fa:	0007851b          	sext.w	a0,a5
-ffffffffc02042fe:	d3c9                	beqz	a5,ffffffffc0204280 <vprintfmt+0x21e>
-ffffffffc0204300:	00140a13          	addi	s4,s0,1
-ffffffffc0204304:	bf2d                	j	ffffffffc020423e <vprintfmt+0x1dc>
-        return va_arg(*ap, int);
-ffffffffc0204306:	000a2403          	lw	s0,0(s4)
-ffffffffc020430a:	b769                	j	ffffffffc0204294 <vprintfmt+0x232>
-        return va_arg(*ap, unsigned int);
-ffffffffc020430c:	000a6603          	lwu	a2,0(s4)
-ffffffffc0204310:	46a1                	li	a3,8
-ffffffffc0204312:	8a3a                	mv	s4,a4
-ffffffffc0204314:	bd9d                	j	ffffffffc020418a <vprintfmt+0x128>
-ffffffffc0204316:	000a6603          	lwu	a2,0(s4)
-ffffffffc020431a:	46a9                	li	a3,10
-ffffffffc020431c:	8a3a                	mv	s4,a4
-ffffffffc020431e:	b5b5                	j	ffffffffc020418a <vprintfmt+0x128>
-ffffffffc0204320:	000a6603          	lwu	a2,0(s4)
-ffffffffc0204324:	46c1                	li	a3,16
-ffffffffc0204326:	8a3a                	mv	s4,a4
-ffffffffc0204328:	b58d                	j	ffffffffc020418a <vprintfmt+0x128>
-                    putch(ch, putdat);
-ffffffffc020432a:	9902                	jalr	s2
-ffffffffc020432c:	bf15                	j	ffffffffc0204260 <vprintfmt+0x1fe>
-                putch('-', putdat);
-ffffffffc020432e:	85a6                	mv	a1,s1
-ffffffffc0204330:	02d00513          	li	a0,45
-ffffffffc0204334:	9902                	jalr	s2
-                num = -(long long)num;
-ffffffffc0204336:	40800633          	neg	a2,s0
-ffffffffc020433a:	8a5e                	mv	s4,s7
-ffffffffc020433c:	46a9                	li	a3,10
-ffffffffc020433e:	b5b1                	j	ffffffffc020418a <vprintfmt+0x128>
-            if (width > 0 && padc != '-') {
-ffffffffc0204340:	01905663          	blez	s9,ffffffffc020434c <vprintfmt+0x2ea>
-ffffffffc0204344:	02d00793          	li	a5,45
-ffffffffc0204348:	04fd9263          	bne	s11,a5,ffffffffc020438c <vprintfmt+0x32a>
-            for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
-ffffffffc020434c:	02800793          	li	a5,40
-ffffffffc0204350:	00002a17          	auipc	s4,0x2
-ffffffffc0204354:	d31a0a13          	addi	s4,s4,-719 # ffffffffc0206081 <etext+0x1b31>
-ffffffffc0204358:	02800513          	li	a0,40
-ffffffffc020435c:	b5cd                	j	ffffffffc020423e <vprintfmt+0x1dc>
-                for (width -= strnlen(p, precision); width > 0; width --) {
-ffffffffc020435e:	85ea                	mv	a1,s10
-ffffffffc0204360:	8522                	mv	a0,s0
-ffffffffc0204362:	148000ef          	jal	ffffffffc02044aa <strnlen>
-ffffffffc0204366:	40ac8cbb          	subw	s9,s9,a0
-ffffffffc020436a:	01905963          	blez	s9,ffffffffc020437c <vprintfmt+0x31a>
-                    putch(padc, putdat);
-ffffffffc020436e:	2d81                	sext.w	s11,s11
-ffffffffc0204370:	85a6                	mv	a1,s1
-ffffffffc0204372:	856e                	mv	a0,s11
-                for (width -= strnlen(p, precision); width > 0; width --) {
-ffffffffc0204374:	3cfd                	addiw	s9,s9,-1
-                    putch(padc, putdat);
-ffffffffc0204376:	9902                	jalr	s2
-                for (width -= strnlen(p, precision); width > 0; width --) {
-ffffffffc0204378:	fe0c9ce3          	bnez	s9,ffffffffc0204370 <vprintfmt+0x30e>
-            for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
-ffffffffc020437c:	00044783          	lbu	a5,0(s0)
-ffffffffc0204380:	0007851b          	sext.w	a0,a5
-ffffffffc0204384:	ea079de3          	bnez	a5,ffffffffc020423e <vprintfmt+0x1dc>
+ffffffffc0204122:	bdf1                	j	ffffffffc0203ffe <vprintfmt+0x6c>
+            putch(ch, putdat);
+ffffffffc0204124:	85a6                	mv	a1,s1
+ffffffffc0204126:	02500513          	li	a0,37
+ffffffffc020412a:	9902                	jalr	s2
+            break;
+ffffffffc020412c:	b545                	j	ffffffffc0203fcc <vprintfmt+0x3a>
+        switch (ch = *(unsigned char *)fmt ++) {
+ffffffffc020412e:	00144603          	lbu	a2,1(s0)
+            lflag ++;
+ffffffffc0204132:	2885                	addiw	a7,a7,1
+        switch (ch = *(unsigned char *)fmt ++) {
+ffffffffc0204134:	846a                	mv	s0,s10
+            goto reswitch;
+ffffffffc0204136:	b5e1                	j	ffffffffc0203ffe <vprintfmt+0x6c>
+    if (lflag >= 2) {
+ffffffffc0204138:	4705                	li	a4,1
+            precision = va_arg(ap, int);
+ffffffffc020413a:	008a0593          	addi	a1,s4,8
+    if (lflag >= 2) {
+ffffffffc020413e:	01174463          	blt	a4,a7,ffffffffc0204146 <vprintfmt+0x1b4>
+    else if (lflag) {
+ffffffffc0204142:	14088163          	beqz	a7,ffffffffc0204284 <vprintfmt+0x2f2>
+        return va_arg(*ap, unsigned long);
+ffffffffc0204146:	000a3603          	ld	a2,0(s4)
+ffffffffc020414a:	46a1                	li	a3,8
+ffffffffc020414c:	8a2e                	mv	s4,a1
+ffffffffc020414e:	bf69                	j	ffffffffc02040e8 <vprintfmt+0x156>
+            putch('0', putdat);
+ffffffffc0204150:	03000513          	li	a0,48
+ffffffffc0204154:	85a6                	mv	a1,s1
+ffffffffc0204156:	e03e                	sd	a5,0(sp)
+ffffffffc0204158:	9902                	jalr	s2
+            putch('x', putdat);
+ffffffffc020415a:	85a6                	mv	a1,s1
+ffffffffc020415c:	07800513          	li	a0,120
+ffffffffc0204160:	9902                	jalr	s2
+            num = (unsigned long long)(uintptr_t)va_arg(ap, void *);
+ffffffffc0204162:	0a21                	addi	s4,s4,8
+            goto number;
+ffffffffc0204164:	6782                	ld	a5,0(sp)
+ffffffffc0204166:	46c1                	li	a3,16
+            num = (unsigned long long)(uintptr_t)va_arg(ap, void *);
+ffffffffc0204168:	ff8a3603          	ld	a2,-8(s4)
+            goto number;
+ffffffffc020416c:	bfb5                	j	ffffffffc02040e8 <vprintfmt+0x156>
             if ((p = va_arg(ap, char *)) == NULL) {
-ffffffffc0204388:	6a22                	ld	s4,8(sp)
-ffffffffc020438a:	b331                	j	ffffffffc0204096 <vprintfmt+0x34>
-                for (width -= strnlen(p, precision); width > 0; width --) {
-ffffffffc020438c:	85ea                	mv	a1,s10
-ffffffffc020438e:	00002517          	auipc	a0,0x2
-ffffffffc0204392:	cf250513          	addi	a0,a0,-782 # ffffffffc0206080 <etext+0x1b30>
-ffffffffc0204396:	114000ef          	jal	ffffffffc02044aa <strnlen>
-ffffffffc020439a:	40ac8cbb          	subw	s9,s9,a0
-                p = "(null)";
-ffffffffc020439e:	00002417          	auipc	s0,0x2
-ffffffffc02043a2:	ce240413          	addi	s0,s0,-798 # ffffffffc0206080 <etext+0x1b30>
+ffffffffc020416e:	000a3403          	ld	s0,0(s4)
+ffffffffc0204172:	008a0713          	addi	a4,s4,8
+ffffffffc0204176:	e03a                	sd	a4,0(sp)
+ffffffffc0204178:	14040263          	beqz	s0,ffffffffc02042bc <vprintfmt+0x32a>
+            if (width > 0 && padc != '-') {
+ffffffffc020417c:	0fb05763          	blez	s11,ffffffffc020426a <vprintfmt+0x2d8>
+ffffffffc0204180:	02d00693          	li	a3,45
+ffffffffc0204184:	0cd79163          	bne	a5,a3,ffffffffc0204246 <vprintfmt+0x2b4>
             for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
-ffffffffc02043a6:	00002a17          	auipc	s4,0x2
-ffffffffc02043aa:	cdba0a13          	addi	s4,s4,-805 # ffffffffc0206081 <etext+0x1b31>
-ffffffffc02043ae:	02800793          	li	a5,40
-ffffffffc02043b2:	02800513          	li	a0,40
+ffffffffc0204188:	00044783          	lbu	a5,0(s0)
+ffffffffc020418c:	0007851b          	sext.w	a0,a5
+ffffffffc0204190:	cf85                	beqz	a5,ffffffffc02041c8 <vprintfmt+0x236>
+ffffffffc0204192:	00140a13          	addi	s4,s0,1
+                if (altflag && (ch < ' ' || ch > '~')) {
+ffffffffc0204196:	05e00413          	li	s0,94
+            for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
+ffffffffc020419a:	000c4563          	bltz	s8,ffffffffc02041a4 <vprintfmt+0x212>
+ffffffffc020419e:	3c7d                	addiw	s8,s8,-1
+ffffffffc02041a0:	036c0263          	beq	s8,s6,ffffffffc02041c4 <vprintfmt+0x232>
+                    putch('?', putdat);
+ffffffffc02041a4:	85a6                	mv	a1,s1
+                if (altflag && (ch < ' ' || ch > '~')) {
+ffffffffc02041a6:	0e0c8e63          	beqz	s9,ffffffffc02042a2 <vprintfmt+0x310>
+ffffffffc02041aa:	3781                	addiw	a5,a5,-32
+ffffffffc02041ac:	0ef47b63          	bgeu	s0,a5,ffffffffc02042a2 <vprintfmt+0x310>
+                    putch('?', putdat);
+ffffffffc02041b0:	03f00513          	li	a0,63
+ffffffffc02041b4:	9902                	jalr	s2
+            for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
+ffffffffc02041b6:	000a4783          	lbu	a5,0(s4)
+ffffffffc02041ba:	3dfd                	addiw	s11,s11,-1
+ffffffffc02041bc:	0a05                	addi	s4,s4,1
+ffffffffc02041be:	0007851b          	sext.w	a0,a5
+ffffffffc02041c2:	ffe1                	bnez	a5,ffffffffc020419a <vprintfmt+0x208>
+            for (; width > 0; width --) {
+ffffffffc02041c4:	01b05963          	blez	s11,ffffffffc02041d6 <vprintfmt+0x244>
+ffffffffc02041c8:	3dfd                	addiw	s11,s11,-1
+                putch(' ', putdat);
+ffffffffc02041ca:	85a6                	mv	a1,s1
+ffffffffc02041cc:	02000513          	li	a0,32
+ffffffffc02041d0:	9902                	jalr	s2
+            for (; width > 0; width --) {
+ffffffffc02041d2:	fe0d9be3          	bnez	s11,ffffffffc02041c8 <vprintfmt+0x236>
+            if ((p = va_arg(ap, char *)) == NULL) {
+ffffffffc02041d6:	6a02                	ld	s4,0(sp)
+ffffffffc02041d8:	bbd5                	j	ffffffffc0203fcc <vprintfmt+0x3a>
+    if (lflag >= 2) {
+ffffffffc02041da:	4705                	li	a4,1
+            precision = va_arg(ap, int);
+ffffffffc02041dc:	008a0c93          	addi	s9,s4,8
+    if (lflag >= 2) {
+ffffffffc02041e0:	01174463          	blt	a4,a7,ffffffffc02041e8 <vprintfmt+0x256>
+    else if (lflag) {
+ffffffffc02041e4:	08088d63          	beqz	a7,ffffffffc020427e <vprintfmt+0x2ec>
+        return va_arg(*ap, long);
+ffffffffc02041e8:	000a3403          	ld	s0,0(s4)
+            if ((long long)num < 0) {
+ffffffffc02041ec:	0a044d63          	bltz	s0,ffffffffc02042a6 <vprintfmt+0x314>
+            num = getint(&ap, lflag);
+ffffffffc02041f0:	8622                	mv	a2,s0
+ffffffffc02041f2:	8a66                	mv	s4,s9
+ffffffffc02041f4:	46a9                	li	a3,10
+ffffffffc02041f6:	bdcd                	j	ffffffffc02040e8 <vprintfmt+0x156>
+            err = va_arg(ap, int);
+ffffffffc02041f8:	000a2783          	lw	a5,0(s4)
+            if (err > MAXERROR || (p = error_string[err]) == NULL) {
+ffffffffc02041fc:	4719                	li	a4,6
+            err = va_arg(ap, int);
+ffffffffc02041fe:	0a21                	addi	s4,s4,8
+            if (err < 0) {
+ffffffffc0204200:	41f7d69b          	sraiw	a3,a5,0x1f
+ffffffffc0204204:	8fb5                	xor	a5,a5,a3
+ffffffffc0204206:	40d786bb          	subw	a3,a5,a3
+            if (err > MAXERROR || (p = error_string[err]) == NULL) {
+ffffffffc020420a:	02d74163          	blt	a4,a3,ffffffffc020422c <vprintfmt+0x29a>
+ffffffffc020420e:	00369793          	slli	a5,a3,0x3
+ffffffffc0204212:	97de                	add	a5,a5,s7
+ffffffffc0204214:	639c                	ld	a5,0(a5)
+ffffffffc0204216:	cb99                	beqz	a5,ffffffffc020422c <vprintfmt+0x29a>
+                printfmt(putch, putdat, "%s", p);
+ffffffffc0204218:	86be                	mv	a3,a5
+ffffffffc020421a:	00002617          	auipc	a2,0x2
+ffffffffc020421e:	e8e60613          	addi	a2,a2,-370 # ffffffffc02060a8 <default_pmm_manager+0xef8>
+ffffffffc0204222:	85a6                	mv	a1,s1
+ffffffffc0204224:	854a                	mv	a0,s2
+ffffffffc0204226:	0ce000ef          	jal	ra,ffffffffc02042f4 <printfmt>
+ffffffffc020422a:	b34d                	j	ffffffffc0203fcc <vprintfmt+0x3a>
+                printfmt(putch, putdat, "error %d", err);
+ffffffffc020422c:	00002617          	auipc	a2,0x2
+ffffffffc0204230:	e6c60613          	addi	a2,a2,-404 # ffffffffc0206098 <default_pmm_manager+0xee8>
+ffffffffc0204234:	85a6                	mv	a1,s1
+ffffffffc0204236:	854a                	mv	a0,s2
+ffffffffc0204238:	0bc000ef          	jal	ra,ffffffffc02042f4 <printfmt>
+ffffffffc020423c:	bb41                	j	ffffffffc0203fcc <vprintfmt+0x3a>
+                p = "(null)";
+ffffffffc020423e:	00002417          	auipc	s0,0x2
+ffffffffc0204242:	e5240413          	addi	s0,s0,-430 # ffffffffc0206090 <default_pmm_manager+0xee0>
                 for (width -= strnlen(p, precision); width > 0; width --) {
-ffffffffc02043b6:	fb904ce3          	bgtz	s9,ffffffffc020436e <vprintfmt+0x30c>
-ffffffffc02043ba:	b551                	j	ffffffffc020423e <vprintfmt+0x1dc>
+ffffffffc0204246:	85e2                	mv	a1,s8
+ffffffffc0204248:	8522                	mv	a0,s0
+ffffffffc020424a:	e43e                	sd	a5,8(sp)
+ffffffffc020424c:	196000ef          	jal	ra,ffffffffc02043e2 <strnlen>
+ffffffffc0204250:	40ad8dbb          	subw	s11,s11,a0
+ffffffffc0204254:	01b05b63          	blez	s11,ffffffffc020426a <vprintfmt+0x2d8>
+                    putch(padc, putdat);
+ffffffffc0204258:	67a2                	ld	a5,8(sp)
+ffffffffc020425a:	00078a1b          	sext.w	s4,a5
+                for (width -= strnlen(p, precision); width > 0; width --) {
+ffffffffc020425e:	3dfd                	addiw	s11,s11,-1
+                    putch(padc, putdat);
+ffffffffc0204260:	85a6                	mv	a1,s1
+ffffffffc0204262:	8552                	mv	a0,s4
+ffffffffc0204264:	9902                	jalr	s2
+                for (width -= strnlen(p, precision); width > 0; width --) {
+ffffffffc0204266:	fe0d9ce3          	bnez	s11,ffffffffc020425e <vprintfmt+0x2cc>
+            for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
+ffffffffc020426a:	00044783          	lbu	a5,0(s0)
+ffffffffc020426e:	00140a13          	addi	s4,s0,1
+ffffffffc0204272:	0007851b          	sext.w	a0,a5
+ffffffffc0204276:	d3a5                	beqz	a5,ffffffffc02041d6 <vprintfmt+0x244>
+                if (altflag && (ch < ' ' || ch > '~')) {
+ffffffffc0204278:	05e00413          	li	s0,94
+ffffffffc020427c:	bf39                	j	ffffffffc020419a <vprintfmt+0x208>
+        return va_arg(*ap, int);
+ffffffffc020427e:	000a2403          	lw	s0,0(s4)
+ffffffffc0204282:	b7ad                	j	ffffffffc02041ec <vprintfmt+0x25a>
+        return va_arg(*ap, unsigned int);
+ffffffffc0204284:	000a6603          	lwu	a2,0(s4)
+ffffffffc0204288:	46a1                	li	a3,8
+ffffffffc020428a:	8a2e                	mv	s4,a1
+ffffffffc020428c:	bdb1                	j	ffffffffc02040e8 <vprintfmt+0x156>
+ffffffffc020428e:	000a6603          	lwu	a2,0(s4)
+ffffffffc0204292:	46a9                	li	a3,10
+ffffffffc0204294:	8a2e                	mv	s4,a1
+ffffffffc0204296:	bd89                	j	ffffffffc02040e8 <vprintfmt+0x156>
+ffffffffc0204298:	000a6603          	lwu	a2,0(s4)
+ffffffffc020429c:	46c1                	li	a3,16
+ffffffffc020429e:	8a2e                	mv	s4,a1
+ffffffffc02042a0:	b5a1                	j	ffffffffc02040e8 <vprintfmt+0x156>
+                    putch(ch, putdat);
+ffffffffc02042a2:	9902                	jalr	s2
+ffffffffc02042a4:	bf09                	j	ffffffffc02041b6 <vprintfmt+0x224>
+                putch('-', putdat);
+ffffffffc02042a6:	85a6                	mv	a1,s1
+ffffffffc02042a8:	02d00513          	li	a0,45
+ffffffffc02042ac:	e03e                	sd	a5,0(sp)
+ffffffffc02042ae:	9902                	jalr	s2
+                num = -(long long)num;
+ffffffffc02042b0:	6782                	ld	a5,0(sp)
+ffffffffc02042b2:	8a66                	mv	s4,s9
+ffffffffc02042b4:	40800633          	neg	a2,s0
+ffffffffc02042b8:	46a9                	li	a3,10
+ffffffffc02042ba:	b53d                	j	ffffffffc02040e8 <vprintfmt+0x156>
+            if (width > 0 && padc != '-') {
+ffffffffc02042bc:	03b05163          	blez	s11,ffffffffc02042de <vprintfmt+0x34c>
+ffffffffc02042c0:	02d00693          	li	a3,45
+ffffffffc02042c4:	f6d79de3          	bne	a5,a3,ffffffffc020423e <vprintfmt+0x2ac>
+                p = "(null)";
+ffffffffc02042c8:	00002417          	auipc	s0,0x2
+ffffffffc02042cc:	dc840413          	addi	s0,s0,-568 # ffffffffc0206090 <default_pmm_manager+0xee0>
+            for (; (ch = *p ++) != '\0' && (precision < 0 || -- precision >= 0); width --) {
+ffffffffc02042d0:	02800793          	li	a5,40
+ffffffffc02042d4:	02800513          	li	a0,40
+ffffffffc02042d8:	00140a13          	addi	s4,s0,1
+ffffffffc02042dc:	bd6d                	j	ffffffffc0204196 <vprintfmt+0x204>
+ffffffffc02042de:	00002a17          	auipc	s4,0x2
+ffffffffc02042e2:	db3a0a13          	addi	s4,s4,-589 # ffffffffc0206091 <default_pmm_manager+0xee1>
+ffffffffc02042e6:	02800513          	li	a0,40
+ffffffffc02042ea:	02800793          	li	a5,40
+                if (altflag && (ch < ' ' || ch > '~')) {
+ffffffffc02042ee:	05e00413          	li	s0,94
+ffffffffc02042f2:	b565                	j	ffffffffc020419a <vprintfmt+0x208>
 
-ffffffffc02043bc <printfmt>:
+ffffffffc02042f4 <printfmt>:
 printfmt(void (*putch)(int, void*), void *putdat, const char *fmt, ...) {
-ffffffffc02043bc:	715d                	addi	sp,sp,-80
+ffffffffc02042f4:	715d                	addi	sp,sp,-80
     va_start(ap, fmt);
-ffffffffc02043be:	02810313          	addi	t1,sp,40
+ffffffffc02042f6:	02810313          	addi	t1,sp,40
 printfmt(void (*putch)(int, void*), void *putdat, const char *fmt, ...) {
-ffffffffc02043c2:	f436                	sd	a3,40(sp)
+ffffffffc02042fa:	f436                	sd	a3,40(sp)
     vprintfmt(putch, putdat, fmt, ap);
-ffffffffc02043c4:	869a                	mv	a3,t1
+ffffffffc02042fc:	869a                	mv	a3,t1
 printfmt(void (*putch)(int, void*), void *putdat, const char *fmt, ...) {
-ffffffffc02043c6:	ec06                	sd	ra,24(sp)
-ffffffffc02043c8:	f83a                	sd	a4,48(sp)
-ffffffffc02043ca:	fc3e                	sd	a5,56(sp)
-ffffffffc02043cc:	e0c2                	sd	a6,64(sp)
-ffffffffc02043ce:	e4c6                	sd	a7,72(sp)
+ffffffffc02042fe:	ec06                	sd	ra,24(sp)
+ffffffffc0204300:	f83a                	sd	a4,48(sp)
+ffffffffc0204302:	fc3e                	sd	a5,56(sp)
+ffffffffc0204304:	e0c2                	sd	a6,64(sp)
+ffffffffc0204306:	e4c6                	sd	a7,72(sp)
     va_start(ap, fmt);
-ffffffffc02043d0:	e41a                	sd	t1,8(sp)
+ffffffffc0204308:	e41a                	sd	t1,8(sp)
     vprintfmt(putch, putdat, fmt, ap);
-ffffffffc02043d2:	c91ff0ef          	jal	ffffffffc0204062 <vprintfmt>
+ffffffffc020430a:	c89ff0ef          	jal	ra,ffffffffc0203f92 <vprintfmt>
 }
-ffffffffc02043d6:	60e2                	ld	ra,24(sp)
-ffffffffc02043d8:	6161                	addi	sp,sp,80
-ffffffffc02043da:	8082                	ret
+ffffffffc020430e:	60e2                	ld	ra,24(sp)
+ffffffffc0204310:	6161                	addi	sp,sp,80
+ffffffffc0204312:	8082                	ret
 
-ffffffffc02043dc <readline>:
+ffffffffc0204314 <readline>:
  * The readline() function returns the text of the line read. If some errors
  * are happened, NULL is returned. The return value is a global variable,
  * thus it should be copied before it is used.
  * */
 char *
 readline(const char *prompt) {
-ffffffffc02043dc:	715d                	addi	sp,sp,-80
-ffffffffc02043de:	e486                	sd	ra,72(sp)
-ffffffffc02043e0:	e0a2                	sd	s0,64(sp)
-ffffffffc02043e2:	fc26                	sd	s1,56(sp)
-ffffffffc02043e4:	f84a                	sd	s2,48(sp)
-ffffffffc02043e6:	f44e                	sd	s3,40(sp)
-ffffffffc02043e8:	f052                	sd	s4,32(sp)
-ffffffffc02043ea:	ec56                	sd	s5,24(sp)
-ffffffffc02043ec:	e85a                	sd	s6,16(sp)
+ffffffffc0204314:	715d                	addi	sp,sp,-80
+ffffffffc0204316:	e486                	sd	ra,72(sp)
+ffffffffc0204318:	e0a6                	sd	s1,64(sp)
+ffffffffc020431a:	fc4a                	sd	s2,56(sp)
+ffffffffc020431c:	f84e                	sd	s3,48(sp)
+ffffffffc020431e:	f452                	sd	s4,40(sp)
+ffffffffc0204320:	f056                	sd	s5,32(sp)
+ffffffffc0204322:	ec5a                	sd	s6,24(sp)
+ffffffffc0204324:	e85e                	sd	s7,16(sp)
     if (prompt != NULL) {
-ffffffffc02043ee:	c901                	beqz	a0,ffffffffc02043fe <readline+0x22>
-ffffffffc02043f0:	85aa                	mv	a1,a0
+ffffffffc0204326:	c901                	beqz	a0,ffffffffc0204336 <readline+0x22>
+ffffffffc0204328:	85aa                	mv	a1,a0
         cprintf("%s", prompt);
-ffffffffc02043f2:	00002517          	auipc	a0,0x2
-ffffffffc02043f6:	ca650513          	addi	a0,a0,-858 # ffffffffc0206098 <etext+0x1b48>
-ffffffffc02043fa:	cc1fb0ef          	jal	ffffffffc02000ba <cprintf>
+ffffffffc020432a:	00002517          	auipc	a0,0x2
+ffffffffc020432e:	d7e50513          	addi	a0,a0,-642 # ffffffffc02060a8 <default_pmm_manager+0xef8>
+ffffffffc0204332:	d89fb0ef          	jal	ra,ffffffffc02000ba <cprintf>
+readline(const char *prompt) {
+ffffffffc0204336:	4481                	li	s1,0
+    while (1) {
+        c = getchar();
         if (c < 0) {
             return NULL;
         }
         else if (c >= ' ' && i < BUFSIZE - 1) {
+ffffffffc0204338:	497d                	li	s2,31
             cputchar(c);
             buf[i ++] = c;
-ffffffffc02043fe:	4401                	li	s0,0
-        else if (c >= ' ' && i < BUFSIZE - 1) {
-ffffffffc0204400:	44fd                	li	s1,31
         }
         else if (c == '\b' && i > 0) {
-ffffffffc0204402:	4921                	li	s2,8
+ffffffffc020433a:	49a1                	li	s3,8
             cputchar(c);
             i --;
         }
         else if (c == '\n' || c == '\r') {
-ffffffffc0204404:	4a29                	li	s4,10
-ffffffffc0204406:	4ab5                	li	s5,13
+ffffffffc020433c:	4aa9                	li	s5,10
+ffffffffc020433e:	4b35                	li	s6,13
             buf[i ++] = c;
-ffffffffc0204408:	0000db17          	auipc	s6,0xd
-ffffffffc020440c:	cf0b0b13          	addi	s6,s6,-784 # ffffffffc02110f8 <buf>
+ffffffffc0204340:	0000db97          	auipc	s7,0xd
+ffffffffc0204344:	db8b8b93          	addi	s7,s7,-584 # ffffffffc02110f8 <buf>
         else if (c >= ' ' && i < BUFSIZE - 1) {
-ffffffffc0204410:	3fe00993          	li	s3,1022
+ffffffffc0204348:	3fe00a13          	li	s4,1022
         c = getchar();
-ffffffffc0204414:	cddfb0ef          	jal	ffffffffc02000f0 <getchar>
+ffffffffc020434c:	da7fb0ef          	jal	ra,ffffffffc02000f2 <getchar>
         if (c < 0) {
-ffffffffc0204418:	00054a63          	bltz	a0,ffffffffc020442c <readline+0x50>
+ffffffffc0204350:	00054a63          	bltz	a0,ffffffffc0204364 <readline+0x50>
         else if (c >= ' ' && i < BUFSIZE - 1) {
-ffffffffc020441c:	00a4da63          	bge	s1,a0,ffffffffc0204430 <readline+0x54>
-ffffffffc0204420:	0289d263          	bge	s3,s0,ffffffffc0204444 <readline+0x68>
+ffffffffc0204354:	00a95a63          	bge	s2,a0,ffffffffc0204368 <readline+0x54>
+ffffffffc0204358:	029a5263          	bge	s4,s1,ffffffffc020437c <readline+0x68>
         c = getchar();
-ffffffffc0204424:	ccdfb0ef          	jal	ffffffffc02000f0 <getchar>
+ffffffffc020435c:	d97fb0ef          	jal	ra,ffffffffc02000f2 <getchar>
         if (c < 0) {
-ffffffffc0204428:	fe055ae3          	bgez	a0,ffffffffc020441c <readline+0x40>
+ffffffffc0204360:	fe055ae3          	bgez	a0,ffffffffc0204354 <readline+0x40>
             return NULL;
-ffffffffc020442c:	4501                	li	a0,0
-ffffffffc020442e:	a091                	j	ffffffffc0204472 <readline+0x96>
+ffffffffc0204364:	4501                	li	a0,0
+ffffffffc0204366:	a091                	j	ffffffffc02043aa <readline+0x96>
         else if (c == '\b' && i > 0) {
-ffffffffc0204430:	03251463          	bne	a0,s2,ffffffffc0204458 <readline+0x7c>
-ffffffffc0204434:	04804963          	bgtz	s0,ffffffffc0204486 <readline+0xaa>
+ffffffffc0204368:	03351463          	bne	a0,s3,ffffffffc0204390 <readline+0x7c>
+ffffffffc020436c:	e8a9                	bnez	s1,ffffffffc02043be <readline+0xaa>
         c = getchar();
-ffffffffc0204438:	cb9fb0ef          	jal	ffffffffc02000f0 <getchar>
+ffffffffc020436e:	d85fb0ef          	jal	ra,ffffffffc02000f2 <getchar>
         if (c < 0) {
-ffffffffc020443c:	fe0548e3          	bltz	a0,ffffffffc020442c <readline+0x50>
+ffffffffc0204372:	fe0549e3          	bltz	a0,ffffffffc0204364 <readline+0x50>
         else if (c >= ' ' && i < BUFSIZE - 1) {
-ffffffffc0204440:	fea4d8e3          	bge	s1,a0,ffffffffc0204430 <readline+0x54>
+ffffffffc0204376:	fea959e3          	bge	s2,a0,ffffffffc0204368 <readline+0x54>
+ffffffffc020437a:	4481                	li	s1,0
             cputchar(c);
-ffffffffc0204444:	e42a                	sd	a0,8(sp)
-ffffffffc0204446:	ca9fb0ef          	jal	ffffffffc02000ee <cputchar>
+ffffffffc020437c:	e42a                	sd	a0,8(sp)
+ffffffffc020437e:	d73fb0ef          	jal	ra,ffffffffc02000f0 <cputchar>
             buf[i ++] = c;
-ffffffffc020444a:	6522                	ld	a0,8(sp)
-ffffffffc020444c:	008b07b3          	add	a5,s6,s0
-ffffffffc0204450:	2405                	addiw	s0,s0,1
-ffffffffc0204452:	00a78023          	sb	a0,0(a5)
-ffffffffc0204456:	bf7d                	j	ffffffffc0204414 <readline+0x38>
+ffffffffc0204382:	6522                	ld	a0,8(sp)
+ffffffffc0204384:	009b87b3          	add	a5,s7,s1
+ffffffffc0204388:	2485                	addiw	s1,s1,1
+ffffffffc020438a:	00a78023          	sb	a0,0(a5)
+ffffffffc020438e:	bf7d                	j	ffffffffc020434c <readline+0x38>
         else if (c == '\n' || c == '\r') {
-ffffffffc0204458:	01450463          	beq	a0,s4,ffffffffc0204460 <readline+0x84>
-ffffffffc020445c:	fb551ce3          	bne	a0,s5,ffffffffc0204414 <readline+0x38>
+ffffffffc0204390:	01550463          	beq	a0,s5,ffffffffc0204398 <readline+0x84>
+ffffffffc0204394:	fb651ce3          	bne	a0,s6,ffffffffc020434c <readline+0x38>
             cputchar(c);
-ffffffffc0204460:	c8ffb0ef          	jal	ffffffffc02000ee <cputchar>
+ffffffffc0204398:	d59fb0ef          	jal	ra,ffffffffc02000f0 <cputchar>
             buf[i] = '\0';
-ffffffffc0204464:	0000d517          	auipc	a0,0xd
-ffffffffc0204468:	c9450513          	addi	a0,a0,-876 # ffffffffc02110f8 <buf>
-ffffffffc020446c:	942a                	add	s0,s0,a0
-ffffffffc020446e:	00040023          	sb	zero,0(s0)
+ffffffffc020439c:	0000d517          	auipc	a0,0xd
+ffffffffc02043a0:	d5c50513          	addi	a0,a0,-676 # ffffffffc02110f8 <buf>
+ffffffffc02043a4:	94aa                	add	s1,s1,a0
+ffffffffc02043a6:	00048023          	sb	zero,0(s1)
             return buf;
         }
     }
 }
-ffffffffc0204472:	60a6                	ld	ra,72(sp)
-ffffffffc0204474:	6406                	ld	s0,64(sp)
-ffffffffc0204476:	74e2                	ld	s1,56(sp)
-ffffffffc0204478:	7942                	ld	s2,48(sp)
-ffffffffc020447a:	79a2                	ld	s3,40(sp)
-ffffffffc020447c:	7a02                	ld	s4,32(sp)
-ffffffffc020447e:	6ae2                	ld	s5,24(sp)
-ffffffffc0204480:	6b42                	ld	s6,16(sp)
-ffffffffc0204482:	6161                	addi	sp,sp,80
-ffffffffc0204484:	8082                	ret
+ffffffffc02043aa:	60a6                	ld	ra,72(sp)
+ffffffffc02043ac:	6486                	ld	s1,64(sp)
+ffffffffc02043ae:	7962                	ld	s2,56(sp)
+ffffffffc02043b0:	79c2                	ld	s3,48(sp)
+ffffffffc02043b2:	7a22                	ld	s4,40(sp)
+ffffffffc02043b4:	7a82                	ld	s5,32(sp)
+ffffffffc02043b6:	6b62                	ld	s6,24(sp)
+ffffffffc02043b8:	6bc2                	ld	s7,16(sp)
+ffffffffc02043ba:	6161                	addi	sp,sp,80
+ffffffffc02043bc:	8082                	ret
             cputchar(c);
-ffffffffc0204486:	4521                	li	a0,8
-ffffffffc0204488:	c67fb0ef          	jal	ffffffffc02000ee <cputchar>
+ffffffffc02043be:	4521                	li	a0,8
+ffffffffc02043c0:	d31fb0ef          	jal	ra,ffffffffc02000f0 <cputchar>
             i --;
-ffffffffc020448c:	347d                	addiw	s0,s0,-1
-ffffffffc020448e:	b759                	j	ffffffffc0204414 <readline+0x38>
+ffffffffc02043c4:	34fd                	addiw	s1,s1,-1
+ffffffffc02043c6:	b759                	j	ffffffffc020434c <readline+0x38>
 
-ffffffffc0204490 <strlen>:
+ffffffffc02043c8 <strlen>:
  * The strlen() function returns the length of string @s.
  * */
 size_t
 strlen(const char *s) {
     size_t cnt = 0;
     while (*s ++ != '\0') {
-ffffffffc0204490:	00054783          	lbu	a5,0(a0)
+ffffffffc02043c8:	00054783          	lbu	a5,0(a0)
 strlen(const char *s) {
-ffffffffc0204494:	872a                	mv	a4,a0
+ffffffffc02043cc:	872a                	mv	a4,a0
     size_t cnt = 0;
-ffffffffc0204496:	4501                	li	a0,0
+ffffffffc02043ce:	4501                	li	a0,0
     while (*s ++ != '\0') {
-ffffffffc0204498:	cb81                	beqz	a5,ffffffffc02044a8 <strlen+0x18>
+ffffffffc02043d0:	cb81                	beqz	a5,ffffffffc02043e0 <strlen+0x18>
         cnt ++;
-ffffffffc020449a:	0505                	addi	a0,a0,1
+ffffffffc02043d2:	0505                	addi	a0,a0,1
     while (*s ++ != '\0') {
-ffffffffc020449c:	00a707b3          	add	a5,a4,a0
-ffffffffc02044a0:	0007c783          	lbu	a5,0(a5)
-ffffffffc02044a4:	fbfd                	bnez	a5,ffffffffc020449a <strlen+0xa>
-ffffffffc02044a6:	8082                	ret
+ffffffffc02043d4:	00a707b3          	add	a5,a4,a0
+ffffffffc02043d8:	0007c783          	lbu	a5,0(a5)
+ffffffffc02043dc:	fbfd                	bnez	a5,ffffffffc02043d2 <strlen+0xa>
+ffffffffc02043de:	8082                	ret
     }
     return cnt;
 }
-ffffffffc02044a8:	8082                	ret
+ffffffffc02043e0:	8082                	ret
 
-ffffffffc02044aa <strnlen>:
+ffffffffc02043e2 <strnlen>:
  * @len if there is no '\0' character among the first @len characters
  * pointed by @s.
  * */
 size_t
 strnlen(const char *s, size_t len) {
     size_t cnt = 0;
-ffffffffc02044aa:	4781                	li	a5,0
+ffffffffc02043e2:	4781                	li	a5,0
     while (cnt < len && *s ++ != '\0') {
-ffffffffc02044ac:	e589                	bnez	a1,ffffffffc02044b6 <strnlen+0xc>
-ffffffffc02044ae:	a811                	j	ffffffffc02044c2 <strnlen+0x18>
+ffffffffc02043e4:	e589                	bnez	a1,ffffffffc02043ee <strnlen+0xc>
+ffffffffc02043e6:	a811                	j	ffffffffc02043fa <strnlen+0x18>
         cnt ++;
-ffffffffc02044b0:	0785                	addi	a5,a5,1
+ffffffffc02043e8:	0785                	addi	a5,a5,1
     while (cnt < len && *s ++ != '\0') {
-ffffffffc02044b2:	00f58863          	beq	a1,a5,ffffffffc02044c2 <strnlen+0x18>
-ffffffffc02044b6:	00f50733          	add	a4,a0,a5
-ffffffffc02044ba:	00074703          	lbu	a4,0(a4)
-ffffffffc02044be:	fb6d                	bnez	a4,ffffffffc02044b0 <strnlen+0x6>
-ffffffffc02044c0:	85be                	mv	a1,a5
+ffffffffc02043ea:	00f58863          	beq	a1,a5,ffffffffc02043fa <strnlen+0x18>
+ffffffffc02043ee:	00f50733          	add	a4,a0,a5
+ffffffffc02043f2:	00074703          	lbu	a4,0(a4)
+ffffffffc02043f6:	fb6d                	bnez	a4,ffffffffc02043e8 <strnlen+0x6>
+ffffffffc02043f8:	85be                	mv	a1,a5
     }
     return cnt;
 }
-ffffffffc02044c2:	852e                	mv	a0,a1
-ffffffffc02044c4:	8082                	ret
+ffffffffc02043fa:	852e                	mv	a0,a1
+ffffffffc02043fc:	8082                	ret
 
-ffffffffc02044c6 <strcpy>:
+ffffffffc02043fe <strcpy>:
 char *
 strcpy(char *dst, const char *src) {
 #ifdef __HAVE_ARCH_STRCPY
     return __strcpy(dst, src);
 #else
     char *p = dst;
-ffffffffc02044c6:	87aa                	mv	a5,a0
+ffffffffc02043fe:	87aa                	mv	a5,a0
     while ((*p ++ = *src ++) != '\0')
-ffffffffc02044c8:	0005c703          	lbu	a4,0(a1)
-ffffffffc02044cc:	0785                	addi	a5,a5,1
-ffffffffc02044ce:	0585                	addi	a1,a1,1
-ffffffffc02044d0:	fee78fa3          	sb	a4,-1(a5)
-ffffffffc02044d4:	fb75                	bnez	a4,ffffffffc02044c8 <strcpy+0x2>
+ffffffffc0204400:	0005c703          	lbu	a4,0(a1)
+ffffffffc0204404:	0785                	addi	a5,a5,1
+ffffffffc0204406:	0585                	addi	a1,a1,1
+ffffffffc0204408:	fee78fa3          	sb	a4,-1(a5)
+ffffffffc020440c:	fb75                	bnez	a4,ffffffffc0204400 <strcpy+0x2>
         /* nothing */;
     return dst;
 #endif /* __HAVE_ARCH_STRCPY */
 }
-ffffffffc02044d6:	8082                	ret
+ffffffffc020440e:	8082                	ret
 
-ffffffffc02044d8 <strcmp>:
+ffffffffc0204410 <strcmp>:
 int
 strcmp(const char *s1, const char *s2) {
 #ifdef __HAVE_ARCH_STRCMP
     return __strcmp(s1, s2);
 #else
     while (*s1 != '\0' && *s1 == *s2) {
-ffffffffc02044d8:	00054783          	lbu	a5,0(a0)
-ffffffffc02044dc:	e791                	bnez	a5,ffffffffc02044e8 <strcmp+0x10>
-ffffffffc02044de:	a02d                	j	ffffffffc0204508 <strcmp+0x30>
-ffffffffc02044e0:	00054783          	lbu	a5,0(a0)
-ffffffffc02044e4:	cf89                	beqz	a5,ffffffffc02044fe <strcmp+0x26>
-ffffffffc02044e6:	85b6                	mv	a1,a3
-ffffffffc02044e8:	0005c703          	lbu	a4,0(a1)
+ffffffffc0204410:	00054783          	lbu	a5,0(a0)
         s1 ++, s2 ++;
-ffffffffc02044ec:	0505                	addi	a0,a0,1
-ffffffffc02044ee:	00158693          	addi	a3,a1,1
-    while (*s1 != '\0' && *s1 == *s2) {
-ffffffffc02044f2:	fef707e3          	beq	a4,a5,ffffffffc02044e0 <strcmp+0x8>
     }
     return (int)((unsigned char)*s1 - (unsigned char)*s2);
-ffffffffc02044f6:	0007851b          	sext.w	a0,a5
+ffffffffc0204414:	0005c703          	lbu	a4,0(a1)
+    while (*s1 != '\0' && *s1 == *s2) {
+ffffffffc0204418:	cb89                	beqz	a5,ffffffffc020442a <strcmp+0x1a>
+        s1 ++, s2 ++;
+ffffffffc020441a:	0505                	addi	a0,a0,1
+ffffffffc020441c:	0585                	addi	a1,a1,1
+    while (*s1 != '\0' && *s1 == *s2) {
+ffffffffc020441e:	fee789e3          	beq	a5,a4,ffffffffc0204410 <strcmp>
+    return (int)((unsigned char)*s1 - (unsigned char)*s2);
+ffffffffc0204422:	0007851b          	sext.w	a0,a5
 #endif /* __HAVE_ARCH_STRCMP */
 }
-ffffffffc02044fa:	9d19                	subw	a0,a0,a4
-ffffffffc02044fc:	8082                	ret
-    return (int)((unsigned char)*s1 - (unsigned char)*s2);
-ffffffffc02044fe:	0015c703          	lbu	a4,1(a1)
-ffffffffc0204502:	4501                	li	a0,0
-}
-ffffffffc0204504:	9d19                	subw	a0,a0,a4
-ffffffffc0204506:	8082                	ret
-    return (int)((unsigned char)*s1 - (unsigned char)*s2);
-ffffffffc0204508:	0005c703          	lbu	a4,0(a1)
-ffffffffc020450c:	4501                	li	a0,0
-ffffffffc020450e:	b7f5                	j	ffffffffc02044fa <strcmp+0x22>
+ffffffffc0204426:	9d19                	subw	a0,a0,a4
+ffffffffc0204428:	8082                	ret
+ffffffffc020442a:	4501                	li	a0,0
+ffffffffc020442c:	bfed                	j	ffffffffc0204426 <strcmp+0x16>
 
-ffffffffc0204510 <strchr>:
+ffffffffc020442e <strchr>:
  * The strchr() function returns a pointer to the first occurrence of
  * character in @s. If the value is not found, the function returns 'NULL'.
  * */
 char *
 strchr(const char *s, char c) {
     while (*s != '\0') {
-ffffffffc0204510:	00054783          	lbu	a5,0(a0)
-ffffffffc0204514:	c799                	beqz	a5,ffffffffc0204522 <strchr+0x12>
+ffffffffc020442e:	00054783          	lbu	a5,0(a0)
+ffffffffc0204432:	c799                	beqz	a5,ffffffffc0204440 <strchr+0x12>
         if (*s == c) {
-ffffffffc0204516:	00f58763          	beq	a1,a5,ffffffffc0204524 <strchr+0x14>
+ffffffffc0204434:	00f58763          	beq	a1,a5,ffffffffc0204442 <strchr+0x14>
     while (*s != '\0') {
-ffffffffc020451a:	00154783          	lbu	a5,1(a0)
+ffffffffc0204438:	00154783          	lbu	a5,1(a0)
             return (char *)s;
         }
         s ++;
-ffffffffc020451e:	0505                	addi	a0,a0,1
+ffffffffc020443c:	0505                	addi	a0,a0,1
     while (*s != '\0') {
-ffffffffc0204520:	fbfd                	bnez	a5,ffffffffc0204516 <strchr+0x6>
+ffffffffc020443e:	fbfd                	bnez	a5,ffffffffc0204434 <strchr+0x6>
     }
     return NULL;
-ffffffffc0204522:	4501                	li	a0,0
+ffffffffc0204440:	4501                	li	a0,0
 }
-ffffffffc0204524:	8082                	ret
+ffffffffc0204442:	8082                	ret
 
-ffffffffc0204526 <memset>:
+ffffffffc0204444 <memset>:
 memset(void *s, char c, size_t n) {
 #ifdef __HAVE_ARCH_MEMSET
     return __memset(s, c, n);
 #else
     char *p = s;
     while (n -- > 0) {
-ffffffffc0204526:	ca01                	beqz	a2,ffffffffc0204536 <memset+0x10>
-ffffffffc0204528:	962a                	add	a2,a2,a0
+ffffffffc0204444:	ca01                	beqz	a2,ffffffffc0204454 <memset+0x10>
+ffffffffc0204446:	962a                	add	a2,a2,a0
     char *p = s;
-ffffffffc020452a:	87aa                	mv	a5,a0
+ffffffffc0204448:	87aa                	mv	a5,a0
         *p ++ = c;
-ffffffffc020452c:	0785                	addi	a5,a5,1
-ffffffffc020452e:	feb78fa3          	sb	a1,-1(a5)
+ffffffffc020444a:	0785                	addi	a5,a5,1
+ffffffffc020444c:	feb78fa3          	sb	a1,-1(a5)
     while (n -- > 0) {
-ffffffffc0204532:	fef61de3          	bne	a2,a5,ffffffffc020452c <memset+0x6>
+ffffffffc0204450:	fec79de3          	bne	a5,a2,ffffffffc020444a <memset+0x6>
     }
     return s;
 #endif /* __HAVE_ARCH_MEMSET */
 }
-ffffffffc0204536:	8082                	ret
+ffffffffc0204454:	8082                	ret
 
-ffffffffc0204538 <memcpy>:
+ffffffffc0204456 <memcpy>:
 #ifdef __HAVE_ARCH_MEMCPY
     return __memcpy(dst, src, n);
 #else
     const char *s = src;
     char *d = dst;
     while (n -- > 0) {
-ffffffffc0204538:	ca19                	beqz	a2,ffffffffc020454e <memcpy+0x16>
-ffffffffc020453a:	962e                	add	a2,a2,a1
+ffffffffc0204456:	ca19                	beqz	a2,ffffffffc020446c <memcpy+0x16>
+ffffffffc0204458:	962e                	add	a2,a2,a1
     char *d = dst;
-ffffffffc020453c:	87aa                	mv	a5,a0
+ffffffffc020445a:	87aa                	mv	a5,a0
         *d ++ = *s ++;
-ffffffffc020453e:	0005c703          	lbu	a4,0(a1)
-ffffffffc0204542:	0585                	addi	a1,a1,1
-ffffffffc0204544:	0785                	addi	a5,a5,1
-ffffffffc0204546:	fee78fa3          	sb	a4,-1(a5)
+ffffffffc020445c:	0005c703          	lbu	a4,0(a1)
+ffffffffc0204460:	0585                	addi	a1,a1,1
+ffffffffc0204462:	0785                	addi	a5,a5,1
+ffffffffc0204464:	fee78fa3          	sb	a4,-1(a5)
     while (n -- > 0) {
-ffffffffc020454a:	feb61ae3          	bne	a2,a1,ffffffffc020453e <memcpy+0x6>
+ffffffffc0204468:	fec59ae3          	bne	a1,a2,ffffffffc020445c <memcpy+0x6>
     }
     return dst;
 #endif /* __HAVE_ARCH_MEMCPY */
 }
-ffffffffc020454e:	8082                	ret
+ffffffffc020446c:	8082                	ret
