@@ -80,6 +80,7 @@ _clock_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tic
      /* Select the victim */
      //(1)  unlink the  earliest arrival page in front of pra_list_head qeueue
      //(2)  set the addr of addr of this page to ptr_page
+     list_entry_t *temp = head;//临时存储后向节点
     while (1) {
         /*LAB3 EXERCISE 4: YOUR CODE*/ 
         // 编写代码
@@ -88,26 +89,20 @@ _clock_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tic
         // 如果当前页面未被访问，则将该页面从页面链表中删除，并将该页面指针赋值给ptr_page作为换出页面
         // 如果当前页面已被访问，则将visited标志置为0，表示该页面已被重新访问
         //begin
-        list_entry_t* current = list_prev(head);
-        struct Page *page = le2page(current, pra_page_link);
-        if (current == head) {
-            *ptr_page = NULL;
-            break;
-        }
-        if(page->visited == 0)
+        list_entry_t* current = list_prev(temp);//向前遍历，当前节点
+        struct Page *page = le2page(current, pra_page_link);//转换成对应的page
+        if(page->visited == 0)//没访问，替换
         {
-            list_del(current);
-            *ptr_page = le2page(current, pra_page_link); 
+            list_del(current);//删掉节点
+            *ptr_page = page; //返回对应的页
             cprintf("curr_ptr %p\n", curr_ptr);
             break;
-              
         }
-        if(page->visited == 1)
+        if(page->visited == 1)//访问过，跳过
         {
-            page->visited = 0;
-            curr_ptr = current;
-            current = list_prev(current);           
+            page->visited = 0;//重新清零      
         }
+        temp = current;//传递节点
         //end
     }
     return 0;
