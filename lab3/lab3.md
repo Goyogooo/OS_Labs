@@ -301,9 +301,46 @@ failed:
 
 5. **数据结构Page的全局变量（其实是一个数组）的每一项与页表中的页目录项和页表项有无对应关系？如果有，其对应关系是啥？**
 
-    - struct Page 本身是对物理页帧的一种抽象，其中的成员用于跟踪页帧的状态，以及支持页面替换算法（如记录虚拟地址 pra_vaddr）。
-    - PTE 中的 PPN 对应着物理页帧，每个物理页帧对应 struct Page 的一个数组项，。
-    - PDE 和 PTE 类似， PDE 指向的下一级页表本身也是一个物理页帧，该物理页帧同样通过 struct Page 数组中的对应项进行管理。
+    ```c
+    struct Page { 
+            int ref; // page frame's reference counter 
+            uint_t flags; // array of flags that describe the status of the page frame 
+            uint_t visited; 
+            unsigned int property; // the num of free block, used in first fit pm manager 
+            list_entry_t page_link; // free list link 
+            list_entry_t pra_page_link; // used for pra (page replace algorithm) 
+            uintptr_t pra_vaddr; // used for pra (page replace algorithm) 
+        };
+    ```
+
+    总体而言：
+     - struct Page 本身是对物理页帧的一种抽象，其中的成员用于跟踪页帧的状态，以及支持页面替换算法（如记录虚拟地址 pra_vaddr）。
+     - PTE 中的 PPN 对应着物理页帧，每个物理页帧对应 struct Page 的一个数组项，。
+     - PDE 和 PTE 类似， PDE 指向的下一级页表本身也是一个物理页帧，该物理页帧同样通过 struct Page 数组中的对应项进行管理。
+  
+    具体而言：
+    - Ref，页帧被引用时计数。。
+    - f1ags，内核状态标志，与表项的标志位协同使用。
+    - Visited，操作系统自定义标志，与PTE的 Accessed 位配合使用，用于页面替换算法。
+    - pra_page _link，页面替换链表，用于管理和选择换出的页面
+    - pra vaddr，保存虚拟地址，便于在页面换出或换入时更新页表项。
+
+6. **vma结构体成员作用**
+    ```c
+    struct vma_struct {
+        struct mm_struct *vm_mm;  
+        uintptr_t vm_start;         
+        uintptr_t vm_end;        
+        uint_t vm_flags;    
+        list_entry_t list_link; 
+    };
+    ```
+    - *vm_mm: 指向该 VMA 所属的内存描述符
+    - vm_start: VMA 的起始虚拟地址   
+    - vm_end: VMA 的结束虚拟地址     
+    - vm_flags: 存储该 VMA 的标志信息，描述该虚拟内存区域的权限和属性 
+    - list_link: 一个链表节点,用于将 VMA 组织成一个线性链表
+
 
 #### 练习4：补充完成Clock页替换算法（需要编程）
 
@@ -411,6 +448,22 @@ _clock_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tic
     - FIFO 是一个简单直接的页面替换算法，不需要关注页面访问的频率或时间，仅根据插入顺序来替换页面。Clock 是 FIFO 的优化版本，它结合了页面访问的状态（visited 位），在替换页面时更加智能，性能接近于 LRU。
     - 在代码实现中，FIFO 的实现逻辑更为直观，而 Clock 算法通过遍历和判断 visited 位，使得页面替换更加高效。
 
+3. **clock替换算法正确性验证**
+   ```c
+   //前述已经触发四次缺页，且测试中规定只有4个可用物理页，5个有效虚拟页
+   *(unsigned char *)0x3000 = 0x0c;
+    assert(pgfault_num==4);
+    *(unsigned char *)0x1000 = 0x0a;
+    assert(pgfault_num==4);
+    *(unsigned char *)0x4000 = 0x0d;
+    assert(pgfault_num==4);
+    *(unsigned char *)0x2000 = 0x0b;
+    ++ score; cprintf("grading %d/%d points", score, totalscore);
+    assert(pgfault_num==4);//都不变，仍为4
+    *(unsigned char *)0x5000 = 0x0e;
+    assert(pgfault_num==5);
+    //0X5000缺页，pgfault加1
+   ```
 
 #### 练习5：阅读代码和实现手册，理解页表映射方式相关知识（思考题）
 
@@ -591,4 +644,134 @@ const struct swap_manager swap_manager_lru = {
 };
 
 ```
+
+lru算法设计：
+ 1. **_lru_init_mm: 初始化操作**
+```c
+static int _lru_init_mm(struct mm_struct *mm) {
+    list_init(&pra_list_head);
+    mm->sm_priv = &pra_list_head;
+    return 0;
+}
+```
+- 这个函数用于初始化 LRU 算法所使用的页面队列 `pra_list_head`。
+- `pra_list_head` 是一个链表的头部，用于管理所有的页面，队列中保存的是按照访问顺序排列的页面。
+- 将 `pra_list_head` 的地址赋值给 `mm->sm_priv`，使得每个进程的 `sm_priv` 指向相同的链表头部。
+
+ 2. **_lru_map_swappable: 将页面放到队列尾部**
+```c
+static int _lru_map_swappable(struct mm_struct *mm, uintptr_t addr, struct Page *page, int swap_in) {
+    list_entry_t *head = (list_entry_t *) mm->sm_priv;
+    list_entry_t *entry = &(page->pra_page_link);
+
+    assert(entry != NULL && head != NULL);
+
+    // 如果页面已经在队列中，先将其移除
+    list_del(entry);
+    // 将页面加入 pra_list_head 队尾
+    list_add_before(head, entry);
+    return 0;
+}
+```
+- **作用**：将指定的页面放到队列的尾部，即标记它为最近使用的页面。
+- **流程**：
+  - 如果页面已经在队列中，先将其从队列中删除。
+  - 然后将该页面重新添加到队列头部（表示它是最新访问的页面）。此操作将页面从队尾移动到队头，确保最少使用的页面始终在队首。
+- `swap_in` 参数虽然存在，但在代码中未被使用。它可能用于标记页面是否为换入操作。
+
+ 3. **_lru_swap_out_victim: 选择被换出的页面**
+```c
+static int _lru_swap_out_victim(struct mm_struct *mm, struct Page **ptr_page, int in_tick) {
+    list_entry_t *head = (list_entry_t *) mm->sm_priv;
+    assert(head != NULL);
+    assert(in_tick == 0);
+
+    // 选择队首的页面为 victim
+    list_entry_t *entry = list_next(head);
+    if (entry != head) {
+        list_del(entry);
+        *ptr_page = le2page(entry, pra_page_link);
+    } else {
+        *ptr_page = NULL;
+    }
+    return 0;
+}
+```
+- **作用**：根据 LRU 算法选择一个页面进行换出（将其交换到磁盘或其他存储设备）。
+- **流程**：
+  - 选择链表中最先进入的页面（队首的页面），即最近最少使用的页面。
+  - 如果链表非空，从队列中删除该页面，并将其传递给 `ptr_page`，表示被换出的页面。
+  - 如果链表为空，则返回 `NULL`，表示没有页面需要换出。
+
+ 4. **_lru_check_swap: 检查 LRU 替换策略的正确性**
+```c
+static int _lru_check_swap(void) {
+    cprintf("write Virt Page c in lru_check_swap\n");
+    *(unsigned char *)0x3000 = 0x0c;
+    assert(pgfault_num == 4);
+    cprintf("write Virt Page a in lru_check_swap\n");
+    *(unsigned char *)0x1000 = 0x0a;
+    assert(pgfault_num == 4);
+    cprintf("write Virt Page d in lru_check_swap\n");
+    *(unsigned char *)0x4000 = 0x0d;
+    assert(pgfault_num == 4);
+    cprintf("write Virt Page b in lru_check_swap\n");
+    *(unsigned char *)0x2000 = 0x0b;
+    assert(pgfault_num == 4);
+    cprintf("write Virt Page e in lru_check_swap\n");
+    *(unsigned char *)0x5000 = 0x0e;
+    assert(pgfault_num == 5);
+    cprintf("write Virt Page b in lru_check_swap\n");
+    *(unsigned char *)0x2000 = 0x0b;
+    assert(pgfault_num == 5);
+    cprintf("write Virt Page a in lru_check_swap\n");
+    *(unsigned char *)0x1000 = 0x0a;
+    assert(pgfault_num == 6);
+    cprintf("write Virt Page b in lru_check_swap\n");
+    *(unsigned char *)0x2000 = 0x0b;
+    assert(pgfault_num == 7);
+    cprintf("write Virt Page c in lru_check_swap\n");
+    *(unsigned char *)0x3000 = 0x0c;
+    assert(pgfault_num == 8);
+    cprintf("write Virt Page d in lru_check_swap\n");
+    *(unsigned char *)0x4000 = 0x0d;
+    assert(pgfault_num == 9);
+    cprintf("write Virt Page e in lru_check_swap\n");
+    *(unsigned char *)0x5000 = 0x0e;
+    assert(pgfault_num == 10);
+    cprintf("write Virt Page a in lru_check_swap\n");
+    assert(*(unsigned char *)0x1000 == 0x0a);
+    *(unsigned char *)0x1000 = 0x0a;
+    assert(pgfault_num == 11);
+    return 0;
+}
+```
+- **作用**：模拟对虚拟页面的访问，并通过写入不同的虚拟地址来触发页面缺失，从而测试 LRU 替换策略的正确性。
+- **流程**：
+  - 每次访问一个虚拟页面时，都会记录页面缺失（page fault）的次数，并确保 LRU 算法正确地替换了页面。
+  - 通过访问不同的虚拟地址来验证替换策略是否按预期工作。
+
+ 5. **其他函数**
+- **_lru_init**: 初始化 LRU 算法的状态，目前该函数没有实际操作。
+- **_lru_set_unswappable**: 设置页面不可交换（不参与 LRU 替换），此函数当前也没有实际操作。
+- **_lru_tick_event**: 该函数用于 LRU 算法的周期性更新（例如时间片到期时的处理），但目前没有实现。
+
+ 6. **swap_manager_lru: 注册 LRU 算法**
+```c
+const struct swap_manager swap_manager_lru = {
+    .name            = "lru swap manager",
+    .init            = &_lru_init,
+    .init_mm         = &_lru_init_mm,
+    .tick_event      = &_lru_tick_event,
+    .map_swappable   = &_lru_map_swappable,
+    .set_unswappable = &_lru_set_unswappable,
+    .swap_out_victim = &_lru_swap_out_victim,
+    .check_swap      = &_lru_check_swap,
+};
+```
+- `swap_manager_lru` 是一个结构体，用于注册 LRU 替换算法的各个操作。
+- 通过此结构体，操作系统可以识别和使用 LRU 算法进行页面替换。
+
+7. **总结**
+LRU（Least Recently Used）算法通过维护一个按访问顺序排列的页面链表，确保最久未使用的页面会被换出。通过这段代码，操作系统可以在内存不足时根据 LRU 策略选择合适的页面进行换出，从而高效地管理虚拟内存。
 
