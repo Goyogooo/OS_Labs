@@ -165,7 +165,7 @@ do_pgfault(struct mm_struct *mm, uint_t error_code, uintptr_t addr) {
 
     pgfault_num++;
     //If the addr is in the range of a mm's vma?
-    if (vma == NULL || vma->vm_start > addr) {
+    if (vma == NULL || vma->vm_start > addr) {//没有或越界
         cprintf("not valid addr %x, and  can not find it in vma\n", addr);
         goto failed;
     }
@@ -177,10 +177,10 @@ do_pgfault(struct mm_struct *mm, uint_t error_code, uintptr_t addr) {
      *    continue process
      */
     uint32_t perm = PTE_U;
-    if (vma->vm_flags & VM_WRITE) {
+    if (vma->vm_flags & VM_WRITE) {//通过vma确定写权限
         perm |= (PTE_R | PTE_W);
     }
-    addr = ROUNDDOWN(addr, PGSIZE);
+    addr = ROUNDDOWN(addr, PGSIZE);//页为单位对齐
 
     ret = -E_NO_MEM;
 
@@ -203,11 +203,11 @@ do_pgfault(struct mm_struct *mm, uint_t error_code, uintptr_t addr) {
     *
     */
 
-
+    //获取对应页表项
     ptep = get_pte(mm->pgdir, addr, 1);  //(1) try to find a pte, if pte's
                                          //PT(Page Table) isn't existed, then
                                          //create a PT.
-    if (*ptep == 0) {
+    if (*ptep == 0) {//为空则分配一个新的物理页
         if (pgdir_alloc_page(mm->pgdir, addr, perm) == NULL) {
             cprintf("pgdir_alloc_page in do_pgfault failed\n");
             goto failed;
@@ -225,7 +225,7 @@ do_pgfault(struct mm_struct *mm, uint_t error_code, uintptr_t addr) {
         *    page_insert ： 建立一个Page的phy addr与线性addr la的映射
         *    swap_map_swappable ： 设置页面可交换
         */
-        if (swap_init_ok) {
+        if (swap_init_ok) {//不为空但是不在内存中，在页面交换初始化完成后，加载页面进入内存
             struct Page *page = NULL;
             // 你要编写的内容在这里，请基于上文说明以及下文的英文注释完成代码编写
             //(1）According to the mm AND addr, try
@@ -243,7 +243,7 @@ do_pgfault(struct mm_struct *mm, uint_t error_code, uintptr_t addr) {
                 goto failed;
             }
 
-            // 重新映射页面
+            // 重新映射页面，在这里回更新tlb表
             if (page_insert(mm->pgdir, page, addr, perm) != 0) {
                 cprintf("page_insert() after swap_in() failed\n");
                 free_page(page);
@@ -266,6 +266,39 @@ failed:
 }
 //...
 ```
+2. **实现过程**
+
+    - 通过find_vma函数，查找addr所属的虚拟内存区域（VMA）。如果找不到或者地址超出范围，说明地址非法，直接退出。
+    - 根据vma->vm_flags判断地址是否可写（VM_WRITE）。随后将addr向下取整到页边界（ROUNDDOWN(addr, PGSIZE)）对齐，计算页表项的权限位perm。
+    - 调用get_pte函数，获取addr对应的页表项。如果目标页表不存在，则自动分配。
+    - 分配加载页面：
+        - 情况1：页表项为空（新建页）：调用pgdir_alloc_page分配物理页，并建立地址映射。如果分配失败，返回错误。
+        - 情况2：页表项存在但需要从交换区加载进来。调用swap_in，从交换区读取对应磁盘页到内存，通过page_insert将物理地址与逻辑地址映射，完成内存页插入，最后调用swap_map_swappable，将页面标记为可交换。
+    - 如果任一环节失败（例如地址非法、分配失败或交换失败），输出错误信息，并返回错误码-E_INVAL或-E_NO_MEM。
+    - 若所有步骤成功，返回值为0，表示页错误处理完成。
+
+3. **请描述页目录项（Page Directory Entry）和页表项（Page Table Entry）中组成部分对ucore实现页替换算法的潜在用处。**
+    +----26---+----9---+----9---+---2----+-------8-------+
+    |  PPN[2] | PPN[1] | PPN[0] |Reserved|D|A|G|U|X|W|R|V|
+    +---------+--------+--------+--------+---------------+
+    - PPN[2], PPN[1], PPN[0]：PPN 表示物理页号，用于将虚拟地址映射到物理地址。当页面需要换出到磁盘时，uCore 使用 PPN 来识别并操作对应的物理页帧。页面换入时，通过更新 PPN，重新映射虚拟地址到新分配的物理页帧。
+    - D (Dirty) 位：脏位指示页面是否被写入过。页面换出时，如果 D 位为 1，则需要将页面内容写回到磁盘。如果 D 位为 0，则页面内容未修改，可以直接丢弃。
+    - A (Accessed) 位：访问位指示页面是否被访问过。如果 A 位为 0，表示没被访问，可能被换出，为 1 则跳过。
+    - V (Valid) 位：有效位指示页面是否在内存中。如果页面不在内存中（V 位为 0），会触发缺页异常。缺页处理程序会决定是否需要换出其他页面以腾出空间。
+    - 权限位（U, W, R, X）：指示页面是否可读、可写、可执行，或者是否允许用户态访问。如果页面访问权限不足，会触发缺页异常。uCore 可以根据这些权限位为每个页面设置合适的权限，防止非法访问。
+    - G (Global) 位：指示页面是否是全局的（即不随上下文切换而失效）。
+    - Reserved：保留位，未被使用。
+
+4. **如果ucore的缺页服务例程在执行过程中访问内存，出现了页访问异常，请问硬件要做哪些事情？**
+    - 硬件触发新的缺页异常：硬件会检测到当前访问的页面不可用（页表项无效、未加载到内存），将新的缺页异常信息写入特定寄存器（ scause异常类型 和 stval错误地址）。
+    - 保存异常上下文：硬件会保存当前的程序状态（寄存器值等）到内核堆栈，以便操作系统可以恢复执行。
+    - 根据异常向量表，跳转到对应的入口：根据 stvec 寄存器的值跳转到异常处理程序（__alltraps），进入内核，由操作系统进行异常处理逻辑。
+
+5. **数据结构Page的全局变量（其实是一个数组）的每一项与页表中的页目录项和页表项有无对应关系？如果有，其对应关系是啥？**
+
+    - struct Page 本身是对物理页帧的一种抽象，其中的成员用于跟踪页帧的状态，以及支持页面替换算法（如记录虚拟地址 pra_vaddr）。
+    - PTE 中的 PPN 对应着物理页帧，每个物理页帧对应 struct Page 的一个数组项，。
+    - PDE 和 PTE 类似， PDE 指向的下一级页表本身也是一个物理页帧，该物理页帧同样通过 struct Page 数组中的对应项进行管理。
 
 #### 练习4：补充完成Clock页替换算法（需要编程）
 
@@ -279,8 +312,8 @@ failed:
 ```c
  //kern/mm/swap_clock.c
  //...
- extern list_entry_t pra_list_head;
-list_entry_t *curr_ptr;
+ extern list_entry_t pra_list_head;//哨兵队头
+list_entry_t *curr_ptr;//指示当前的节点
 /*
  * (2) _fifo_init_mm: init pra_list_head and let  mm->sm_priv point to the addr of pra_list_head.
  *              Now, From the memory control struct mm_struct, we can access FIFO PRA
@@ -316,8 +349,10 @@ _clock_map_swappable(struct mm_struct *mm, uintptr_t addr, struct Page *page, in
     // 将页面page插入到页面链表pra_list_head的末尾
     // 将页面的visited标志置为1，表示该页面已被访问
     //begin
-    list_add(&pra_list_head, entry);
-    page->visited =1;
+    list_add(&pra_list_head, entry);//添加活跃页到队头的后面
+    page->visited =1;//访问位置为1
+    curr_ptr = entry；//更新指针位置
+    cprint("curr_ptr %p\n", curr_ptr);
     //end
     return 0;
 }
@@ -334,6 +369,7 @@ _clock_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tic
      /* Select the victim */
      //(1)  unlink the  earliest arrival page in front of pra_list_head qeueue
      //(2)  set the addr of addr of this page to ptr_page
+     list_entry_t *temp = head;//临时存储后向节点
     while (1) {
         /*LAB3 EXERCISE 4: YOUR CODE*/ 
         // 编写代码
@@ -342,32 +378,34 @@ _clock_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tic
         // 如果当前页面未被访问，则将该页面从页面链表中删除，并将该页面指针赋值给ptr_page作为换出页面
         // 如果当前页面已被访问，则将visited标志置为0，表示该页面已被重新访问
         //begin
-        list_entry_t* current = list_prev(head);
-        struct Page *page = le2page(current, pra_page_link);
-        if (current == head) {
-            *ptr_page = NULL;
-            break;
-        }
-        if(page->visited == 0)
+        list_entry_t* current = list_prev(temp);//向前遍历，当前节点
+        struct Page *page = le2page(current, pra_page_link);//转换成对应的page
+        if(page->visited == 0)//没访问，替换
         {
-            list_del(current);
-            *ptr_page = le2page(current, pra_page_link); 
+            list_del(current);//删掉节点
+            *ptr_page = page; //返回对应的页
             cprintf("curr_ptr %p\n", curr_ptr);
             break;
-            
         }
-        if(page->visited == 1)
+        if(page->visited == 1)//访问过，跳过
         {
-            page->visited = 0;
-            curr_ptr = current;
-            current = list_prev(current);         
+            page->visited = 0;//重新清零      
         }
+        temp = current;//传递节点
         //end
     }
     return 0;
 }
 //...
 ```
+
+2. **比较Clock页替换算法和FIFO算法的不同。**
+
+    - FIFO 页替换算法：按照页面到达的顺序，优先替换最早进入内存的页面。只需要使用一个简单的队列来维护页面顺序。
+    - Clock 页替换算法：使用一个循环队列模拟时钟，每个页面有一个访问位（visited 位）。如果当前页面的 visited 位为 0，则替换该页面。如果 visited 位为 1，则清零并移动指针到下一个页面。
+    - FIFO 是一个简单直接的页面替换算法，不需要关注页面访问的频率或时间，仅根据插入顺序来替换页面。Clock 是 FIFO 的优化版本，它结合了页面访问的状态（visited 位），在替换页面时更加智能，性能接近于 LRU。
+    - 在代码实现中，FIFO 的实现逻辑更为直观，而 Clock 算法通过遍历和判断 visited 位，使得页面替换更加高效。
+
 
 #### 练习5：阅读代码和实现手册，理解页表映射方式相关知识（思考题）
 
