@@ -172,7 +172,7 @@ get_pid(void) {
 // NOTE: before call switch_to, should load  base addr of "proc"'s new PDT
 void
 proc_run(struct proc_struct *proc) {
-    if (proc != current) {
+    if (proc != current) {//need to switch
         // LAB4:EXERCISE3 YOUR CODE
         /*
         * Some Useful MACROs, Functions and DEFINEs, you can use them in below implementation.
@@ -182,6 +182,19 @@ proc_run(struct proc_struct *proc) {
         *   lcr3():                   Modify the value of CR3 register
         *   switch_to():              Context switching between two processes
         */
+        //begin
+        bool interrupt_state;
+        struct proc_struct *prev = current;
+        struct proc_struct *next = proc;
+        local_intr_save(interrupt_state);//CLOSE INTERRUPT
+        current = proc;
+        load_esp0(next->kstack+KSTACKSIZE);//update TSS esp0
+        //u model switch to s model : load coreBaseAddress(kstack)
+        //stack : grow from high to low (+KSTACKSIZE)
+        lcr3(next->cr3);//update pagetable
+        switch_to(&(prev->context), &(next->context));
+        local_intr_restore(interrupt_state);//OPEN INTERRUPT
+        //end
        
     }
 }
