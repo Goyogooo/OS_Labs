@@ -381,6 +381,21 @@ do_pgfault(struct mm_struct *mm, uint32_t error_code, uintptr_t addr) {
             //map of phy addr <--->
             //logical addr
             //(3) make the page swappable.
+            // 从交换区加载页面
+            if (swap_in(mm, addr, &page) != 0) {
+                cprintf("swap_in() failed\n");
+                goto failed;
+            }
+
+            // 重新映射页面
+            if (page_insert(mm->pgdir, page, addr, perm) != 0) {
+                cprintf("page_insert() after swap_in() failed\n");
+                free_page(page);
+                goto failed;
+            }
+
+            // 设置页面为可交换
+            swap_map_swappable(mm, addr, page, 0);
             page->pra_vaddr = addr;
         } else {
             cprintf("no swap_init_ok but ptep is %x, failed\n", *ptep);
