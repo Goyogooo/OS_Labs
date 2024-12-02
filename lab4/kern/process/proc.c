@@ -86,7 +86,7 @@ static struct proc_struct *
 alloc_proc(void) {
     struct proc_struct *proc = kmalloc(sizeof(struct proc_struct));
     if (proc != NULL) {
-    //LAB4:EXERCISE1 2213025
+    //LAB4:EXERCISE1 YOUR CODE
     /*
      * below fields in proc_struct need to be initialized
      *       enum proc_state state;                      // Process state
@@ -102,18 +102,19 @@ alloc_proc(void) {
      *       uint32_t flags;                             // Process flag
      *       char name[PROC_NAME_LEN + 1];               // Process name
      */
-    proc->state = PROC_UNINIT;  //设置进程为“初始”态
-    proc->pid = -1;             //设置进程pid的未初始化值
-    proc->cr3 = boot_cr3;       //使用内核页目录表的基址（ucore的二级页表）
-    proc->runs=0;               //设置进程运行次数为0
-    proc->kstack=0;             //设置内核栈地址为0(还未分配)
-    proc->need_resched =0;      //设置不需要重新调度   
-    proc->parent = NULL;        // 设置父进程为空 
-    proc->mm = NULL;            // 设置内存管理字段为空
-    memset(&(proc->context),0,sizeof(struct context));          // 初始化上下文信息为0
-    proc->tf = NULL;            //设置trapframe为空
-    proc->flags =0;             // 设置进程标志为0
-    memset(proc->name,0,PROC_NAME_LEN);         //初始化进程名为0
+    proc->state = PROC_UNINIT;
+    proc->pid = -1;
+    proc->runs = 0;
+    proc->kstack = 0;
+    proc->need_resched = 0;
+    proc->parent = NULL;
+    proc->mm = NULL;
+    memset(&(proc->context), 0, sizeof(struct context));
+    proc->tf = NULL;
+    proc->cr3 = boot_cr3;
+    proc->flags = 0;
+    memset(proc->name, 0, PROC_NAME_LEN + 1);
+
     }
     return proc;
 }
@@ -172,7 +173,7 @@ get_pid(void) {
 // NOTE: before call switch_to, should load  base addr of "proc"'s new PDT
 void
 proc_run(struct proc_struct *proc) {
-    if (proc != current) {//need to switch
+    if (proc != current) {
         // LAB4:EXERCISE3 YOUR CODE
         /*
         * Some Useful MACROs, Functions and DEFINEs, you can use them in below implementation.
@@ -182,20 +183,16 @@ proc_run(struct proc_struct *proc) {
         *   lcr3():                   Modify the value of CR3 register
         *   switch_to():              Context switching between two processes
         */
-        //begin
-        bool interrupt_state;
-        struct proc_struct *prev = current;
-        struct proc_struct *next = proc;
-        local_intr_save(interrupt_state);//CLOSE INTERRUPT
-        current = proc;
-        load_esp0(next->kstack+KSTACKSIZE);//update TSS esp0
-        //u model switch to s model : load coreBaseAddress(kstack)
-        //stack : grow from high to low (+KSTACKSIZE)
-        lcr3(next->cr3);//update pagetable
-        switch_to(&(prev->context), &(next->context));
-        local_intr_restore(interrupt_state);//OPEN INTERRUPT
-        //end
-       
+        bool intr_flag;
+        struct proc_struct *prev = current, *next = proc;
+        local_intr_save(intr_flag);
+        {
+            current = proc;
+            lcr3(next->cr3);
+            switch_to(&(prev->context), &(next->context));
+        }
+        local_intr_restore(intr_flag);
+
     }
 }
 
@@ -324,6 +321,19 @@ do_fork(uint32_t clone_flags, uintptr_t stack, struct trapframe *tf) {
 
     
 
+    proc = alloc_proc();
+    proc->parent = current;
+    setup_kstack(proc);
+    copy_mm(clone_flags, proc);
+    copy_thread(proc, stack, tf);
+    int pid = get_pid();
+    proc->pid = pid;
+    hash_proc(proc);
+    list_add(&proc_list, &(proc->list_link));
+    nr_process++;
+    proc->state = PROC_RUNNABLE;
+    ret = proc->pid;
+
 fork_out:
     return ret;
 
@@ -415,4 +425,3 @@ cpu_idle(void) {
         }
     }
 }
-
