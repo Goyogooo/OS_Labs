@@ -129,6 +129,85 @@ proc_run用于将指定的进程切换到CPU上运行。它的大致执行步骤
 
 如果可以得到如 附录A所示的显示内容（仅供参考，不是标准答案输出），则基本正确。
 
+##### 1）实现代码
+
+```c
+void
+proc_run(struct proc_struct *proc) {
+    if (proc != current) {
+        // LAB4:EXERCISE3 YOUR CODE
+        /*
+        * Some Useful MACROs, Functions and DEFINEs, you can use them in below implementation.
+        * MACROs or Functions:
+        *   local_intr_save():        Disable interrupts
+        *   local_intr_restore():     Enable Interrupts
+        *   lcr3():                   Modify the value of CR3 register
+        *   switch_to():              Context switching between two processes
+        */
+        bool intr_flag;
+        struct proc_struct *prev = current, *next = proc;
+        local_intr_save(intr_flag);
+        {
+            
+            current = proc;
+            lcr3(next->cr3);//new PDT
+            switch_to(&(prev->context), &(next->context));
+            //STORE ra, 0*REGBYTES(a0)   LOAD ra, 0*REGBYTES(a1)
+            //ra（返回地址寄存器）：保存函数返回地址。
+            //sp（堆栈指针寄存器）：保存堆栈指针。
+            //s0 - s11（保存寄存器）：这些寄存器用于保存需要跨函数调用保持的数据。
+            //因为线程切换在一个函数当中，所以编译器会自动帮助我们生成保存和恢复调用者保存寄存器的代码，
+            //在实际的进程切换过程中我们只需要保存被调用者保存寄存器.
+        }
+        local_intr_restore(intr_flag);
+        //sync.h:
+        
+#define local_intr_restore(x) __intr_restore(x);
+        
+    }
+}
+```
+
+##### 2）在本实验的执行过程中，创建且运行了几个内核线程？
+
+答：两个内核线程  **idleproc ** (pid = 0) 和 **initproc** (pid = 1) 。
+
+分析：进程模块的初始化主要分为两步，首先创建第0个内核进程，idleproc。在kern_init函数中，当完成虚拟内存的初始化工作后，就调用了proc_init函数。这个函数完成了idleproc内核线程和initproc内核线程的创建或复制工作，idleproc内核线程的工作就是不停地查询，看是否有其他内核线程可以执行了，如果有，马上让调度器选择那个内核线程执行。接着就是调用kernel_thread函数来创建initproc内核线程，initproc内核线程的工作就是显示“Hello World”，表明自己存在且能正常工作了。
+
+
+
 #### 扩展练习 Challenge：
 
 - 说明语句`local_intr_save(intr_flag);....local_intr_restore(intr_flag);`是如何实现开关中断的？
+
+  ```c
+  //相关的函数
+  static inline bool __intr_save(void) {
+      if (read_csr(sstatus) & SSTATUS_SIE) {//读取中断状态寄存器如果使能位为开启状态
+          intr_disable();//clear 清零禁用中断
+          return 1;//原来启用
+      }
+      return 0;//原来禁用
+  }
+  
+  static inline void __intr_restore(bool flag) {
+      if (flag) {//原来启用中断
+          intr_enable();//重新置位开启中断
+      }
+      //原来禁用不用开启
+  }
+  
+  #define local_intr_save(x) \
+      do {                   \
+          x = __intr_save(); \
+      } while (0)\\保证安全性
+  #define local_intr_restore(x) __intr_restore(x);
+  
+  void intr_enable(void) { set_csr(sstatus, SSTATUS_SIE); }//给sstatus的SIE置位
+  
+  
+  void intr_disable(void) { clear_csr(sstatus, SSTATUS_SIE); }//给sstatus的SIE清零
+  
+  ```
+
+  核心是通过给sstatus寄存器的SIE位置位和清零实现的开启中断和禁用中断。
