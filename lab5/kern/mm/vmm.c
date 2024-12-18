@@ -8,6 +8,7 @@
 #include <riscv.h>
 #include <swap.h>
 #include <kmalloc.h>
+#include <cow.h>
 
 /* 
   vmm design include two parts: mm_struct (mm) & vma_struct (vma)
@@ -421,7 +422,15 @@ do_pgfault(struct mm_struct *mm, uint_t error_code, uintptr_t addr) {
     ret = -E_NO_MEM;
 
     pte_t *ptep=NULL;
-  
+    
+    // 判断页表项权限，如果有效但是不可写，跳转到COW
+    // if ((ptep = get_pte(mm->pgdir, addr, 0)) != NULL) {
+    //     if((*ptep & PTE_V) & ~(*ptep & PTE_W)) {
+    //         return cow_pgfault(mm, error_code, addr);
+    //     }
+    // }
+
+
     // try to find a pte, if pte's PT(Page Table) isn't existed, then create a PT.
     // (notice the 3th parameter '1')
     if ((ptep = get_pte(mm->pgdir, addr, 1)) == NULL) {
@@ -458,6 +467,12 @@ do_pgfault(struct mm_struct *mm, uint_t error_code, uintptr_t addr) {
             //map of phy addr <--->
             //logical addr
             //(3) make the page swappable.
+            // cprintf("do_pgfault called!!!\n");
+            if((ret = swap_in(mm,addr,&page)) != 0) {
+                goto failed;
+            }
+            page_insert(mm->pgdir,page,addr,perm);
+            swap_map_swappable(mm,addr,page,1);
             page->pra_vaddr = addr;
         } else {
             cprintf("no swap_init_ok but ptep is %x, failed\n", *ptep);
@@ -495,4 +510,3 @@ user_mem_check(struct mm_struct *mm, uintptr_t addr, size_t len, bool write) {
     }
     return KERN_ACCESS(addr, addr + len);
 }
-
