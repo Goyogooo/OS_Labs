@@ -961,14 +961,14 @@ ffffffffc02005a8:	8082                	ret
 ffffffffc02005aa <intr_enable>:
 #include <intr.h>
 #include <riscv.h>
-
+//SIE 位设置为 1，从而启用中断
 /* intr_enable - enable irq interrupt */
 void intr_enable(void) { set_csr(sstatus, SSTATUS_SIE); }
 ffffffffc02005aa:	100167f3          	csrrsi	a5,sstatus,2
 ffffffffc02005ae:	8082                	ret
 
 ffffffffc02005b0 <intr_disable>:
-
+//SIE 位清除为 0，从而禁用中断
 /* intr_disable - disable irq interrupt */
 void intr_disable(void) { clear_csr(sstatus, SSTATUS_SIE); }
 ffffffffc02005b0:	100177f3          	csrrci	a5,sstatus,2
@@ -8102,10 +8102,10 @@ ffffffffc0204242:	9402                	jalr	s0
 ffffffffc0204244:	3b6000ef          	jal	ffffffffc02045fa <do_exit>
 
 ffffffffc0204248 <alloc_proc>:
-void forkrets(struct trapframe *tf);
 void switch_to(struct context *from, struct context *to);
 
 // alloc_proc - alloc a proc_struct and init all fields of proc_struct
+//初始化
 static struct proc_struct *
 alloc_proc(void) {
 ffffffffc0204248:	1141                	addi	sp,sp,-16
@@ -8119,47 +8119,46 @@ ffffffffc0204252:	dd6fd0ef          	jal	ffffffffc0201828 <kmalloc>
 ffffffffc0204256:	842a                	mv	s0,a0
     if (proc != NULL) {
 ffffffffc0204258:	c521                	beqz	a0,ffffffffc02042a0 <alloc_proc+0x58>
-     *       struct trapframe *tf;                       // Trap frame for current interrupt
-     *       uintptr_t cr3;                              // CR3 register: the base addr of Page Directroy Table(PDT)
      *       uint32_t flags;                             // Process flag
      *       char name[PROC_NAME_LEN + 1];               // Process name
      */
-    proc->state = PROC_UNINIT;
-ffffffffc020425a:	57fd                	li	a5,-1
-ffffffffc020425c:	1782                	slli	a5,a5,0x20
-ffffffffc020425e:	e11c                	sd	a5,0(a0)
-    proc->pid = -1;
-    proc->runs = 0;
-ffffffffc0204260:	00052423          	sw	zero,8(a0)
-    proc->kstack = 0;
-ffffffffc0204264:	00053823          	sd	zero,16(a0)
-    proc->need_resched = 0;
-ffffffffc0204268:	00052c23          	sw	zero,24(a0)
-    proc->parent = NULL;
-ffffffffc020426c:	02053023          	sd	zero,32(a0)
-    proc->mm = NULL;
-ffffffffc0204270:	02053423          	sd	zero,40(a0)
-    memset(&(proc->context), 0, sizeof(struct context));
-ffffffffc0204274:	07000613          	li	a2,112
-ffffffffc0204278:	4581                	li	a1,0
-ffffffffc020427a:	03050513          	addi	a0,a0,48
-ffffffffc020427e:	391000ef          	jal	ffffffffc0204e0e <memset>
-    proc->tf = NULL;
-    proc->cr3 = boot_cr3;
-ffffffffc0204282:	00011797          	auipc	a5,0x11
-ffffffffc0204286:	2de7b783          	ld	a5,734(a5) # ffffffffc0215560 <boot_cr3>
-    proc->tf = NULL;
-ffffffffc020428a:	0a043023          	sd	zero,160(s0)
-    proc->cr3 = boot_cr3;
-ffffffffc020428e:	f45c                	sd	a5,168(s0)
-    proc->flags = 0;
-ffffffffc0204290:	0a042823          	sw	zero,176(s0)
-    memset(proc->name, 0, PROC_NAME_LEN + 1);
-ffffffffc0204294:	4641                	li	a2,16
+    proc->state = PROC_UNINIT;  //设置进程为“初始”态
+    proc->pid = -1;             //设置进程pid的未初始化值
+    proc->cr3 = boot_cr3;       //使用内核页目录表的基址
+ffffffffc020425a:	00011797          	auipc	a5,0x11
+ffffffffc020425e:	3067b783          	ld	a5,774(a5) # ffffffffc0215560 <boot_cr3>
+ffffffffc0204262:	f55c                	sd	a5,168(a0)
+    proc->state = PROC_UNINIT;  //设置进程为“初始”态
+ffffffffc0204264:	57fd                	li	a5,-1
+ffffffffc0204266:	1782                	slli	a5,a5,0x20
+ffffffffc0204268:	e11c                	sd	a5,0(a0)
+    proc->runs=0;               //设置进程运行次数为0
+ffffffffc020426a:	00052423          	sw	zero,8(a0)
+    proc->kstack=0;             //设置内核栈地址为0(还未分配)
+ffffffffc020426e:	00053823          	sd	zero,16(a0)
+    proc->need_resched =0;      //设置不需要重新调度   
+ffffffffc0204272:	00052c23          	sw	zero,24(a0)
+    proc->parent = NULL;        // 设置父进程为空 
+ffffffffc0204276:	02053023          	sd	zero,32(a0)
+    proc->mm = NULL;            // 设置内存管理字段为空
+ffffffffc020427a:	02053423          	sd	zero,40(a0)
+    memset(&(proc->context),0,sizeof(struct context));          // 初始化上下文信息为0
+ffffffffc020427e:	07000613          	li	a2,112
+ffffffffc0204282:	4581                	li	a1,0
+ffffffffc0204284:	03050513          	addi	a0,a0,48
+ffffffffc0204288:	387000ef          	jal	ffffffffc0204e0e <memset>
+    proc->tf = NULL;            //设置trapframe为空
+    proc->flags =0;             // 设置进程标志为0
+    memset(proc->name,0,PROC_NAME_LEN);         //初始化进程名为0
+ffffffffc020428c:	463d                	li	a2,15
+    proc->tf = NULL;            //设置trapframe为空
+ffffffffc020428e:	0a043023          	sd	zero,160(s0)
+    proc->flags =0;             // 设置进程标志为0
+ffffffffc0204292:	0a042823          	sw	zero,176(s0)
+    memset(proc->name,0,PROC_NAME_LEN);         //初始化进程名为0
 ffffffffc0204296:	4581                	li	a1,0
 ffffffffc0204298:	0b440513          	addi	a0,s0,180
 ffffffffc020429c:	373000ef          	jal	ffffffffc0204e0e <memset>
-
     }
     return proc;
 }
@@ -8170,9 +8169,9 @@ ffffffffc02042a6:	0141                	addi	sp,sp,16
 ffffffffc02042a8:	8082                	ret
 
 ffffffffc02042aa <forkret>:
-// forkret -- the first kernel entry point of a new thread/process
-// NOTE: the addr of forkret is setted in copy_thread function
 //       after switch_to, the current proc will execute here.
+//新的进程/线程在创建后从这个函数开始执行
+//设置进程的内核栈和 trapframe，然后调用 forkrets() 函数
 static void
 forkret(void) {
     forkrets(current->tf);
@@ -8182,8 +8181,8 @@ ffffffffc02042b2:	73c8                	ld	a0,160(a5)
 ffffffffc02042b4:	8a9fc06f          	j	ffffffffc0200b5c <forkrets>
 
 ffffffffc02042b8 <init_main>:
-    panic("process exit!!.\n");
-}
+
+// 该函数被调用时，进程会释放其内存资源（通过 exit_mmap、put_pgdir 等），将状态设置为僵尸态，并通知父进程进行回收。
 
 // init_main - the second kernel thread used to create user_main kernel threads
 static int
@@ -8261,7 +8260,7 @@ ffffffffc0204348:	8b89                	andi	a5,a5,2
 ffffffffc020434a:	4981                	li	s3,0
     if (read_csr(sstatus) & SSTATUS_SIE) {
 ffffffffc020434c:	e3a1                	bnez	a5,ffffffffc020438c <proc_run+0x62>
-            lcr3(next->cr3);
+            lcr3(next->cr3);//更新 CR3 寄存器（切换页表）
 ffffffffc020434e:	755c                	ld	a5,168(a0)
 
 #define barrier() __asm__ __volatile__ ("fence" ::: "memory")
@@ -8275,7 +8274,7 @@ ffffffffc0204354:	00a93023          	sd	a0,0(s2)
 ffffffffc0204358:	00c7d79b          	srliw	a5,a5,0xc
 ffffffffc020435c:	8fd9                	or	a5,a5,a4
 ffffffffc020435e:	18079073          	csrw	satp,a5
-            switch_to(&(prev->context), &(next->context));
+            switch_to(&(prev->context), &(next->context));//上下文切换，将当前进程切换为 proc 进程
 ffffffffc0204362:	03050593          	addi	a1,a0,48
 ffffffffc0204366:	03048513          	addi	a0,s1,48
 ffffffffc020436a:	512000ef          	jal	ffffffffc020487c <switch_to>
@@ -8307,13 +8306,13 @@ ffffffffc0204398 <do_fork>:
 do_fork(uint32_t clone_flags, uintptr_t stack, struct trapframe *tf) {
 ffffffffc0204398:	7179                	addi	sp,sp,-48
 ffffffffc020439a:	e84a                	sd	s2,16(sp)
-    if (nr_process >= MAX_PROCESS) {
+    if (nr_process >= MAX_PROCESS) {//无法创建更多进程
 ffffffffc020439c:	00011917          	auipc	s2,0x11
 ffffffffc02043a0:	21490913          	addi	s2,s2,532 # ffffffffc02155b0 <nr_process>
 ffffffffc02043a4:	00092703          	lw	a4,0(s2)
 do_fork(uint32_t clone_flags, uintptr_t stack, struct trapframe *tf) {
 ffffffffc02043a8:	f406                	sd	ra,40(sp)
-    if (nr_process >= MAX_PROCESS) {
+    if (nr_process >= MAX_PROCESS) {//无法创建更多进程
 ffffffffc02043aa:	6785                	lui	a5,0x1
 ffffffffc02043ac:	1cf75163          	bge	a4,a5,ffffffffc020456e <do_fork+0x1d6>
 ffffffffc02043b0:	f022                	sd	s0,32(sp)
@@ -8325,11 +8324,11 @@ ffffffffc02043ba:	8a32                	mv	s4,a2
     proc->parent = current;
 ffffffffc02043bc:	00011997          	auipc	s3,0x11
 ffffffffc02043c0:	1fc98993          	addi	s3,s3,508 # ffffffffc02155b8 <current>
-    proc = alloc_proc();
+    proc = alloc_proc();//为新进程分配资源
 ffffffffc02043c4:	e85ff0ef          	jal	ffffffffc0204248 <alloc_proc>
     proc->parent = current;
 ffffffffc02043c8:	0009b783          	ld	a5,0(s3)
-    proc = alloc_proc();
+    proc = alloc_proc();//为新进程分配资源
 ffffffffc02043cc:	842a                	mv	s0,a0
     struct Page *page = alloc_pages(KSTACKPAGE);
 ffffffffc02043ce:	4509                	li	a0,2
@@ -8436,9 +8435,9 @@ ffffffffc02044bc:	6498                	ld	a4,8(s1)
     prev->next = next->prev = elm;
 ffffffffc02044be:	e21c                	sd	a5,0(a2)
 ffffffffc02044c0:	e51c                	sd	a5,8(a0)
-    nr_process++;
+    nr_process++;//当前活跃进程的数量
 ffffffffc02044c2:	00092783          	lw	a5,0(s2)
-    list_add(&proc_list, &(proc->list_link));
+    list_add(&proc_list, &(proc->list_link));//将进程加入哈希表（方便进程查找）和进程链表
 ffffffffc02044c6:	0c840693          	addi	a3,s0,200
     elm->prev = prev;
 ffffffffc02044ca:	ec68                	sd	a0,216(s0)
@@ -8446,21 +8445,21 @@ ffffffffc02044ca:	ec68                	sd	a0,216(s0)
 ffffffffc02044cc:	f070                	sd	a2,224(s0)
     prev->next = next->prev = elm;
 ffffffffc02044ce:	e314                	sd	a3,0(a4)
-    nr_process++;
+    nr_process++;//当前活跃进程的数量
 ffffffffc02044d0:	2785                	addiw	a5,a5,1
 ffffffffc02044d2:	e494                	sd	a3,8(s1)
 ffffffffc02044d4:	00f92023          	sw	a5,0(s2)
-    proc->state = PROC_RUNNABLE;
+    proc->state = PROC_RUNNABLE;//可运行状态
 ffffffffc02044d8:	4789                	li	a5,2
     elm->prev = prev;
 ffffffffc02044da:	e464                	sd	s1,200(s0)
-    ret = proc->pid;
+    ret = proc->pid;//将新进程的 PID 返回
 ffffffffc02044dc:	4048                	lw	a0,4(s0)
     elm->next = next;
 ffffffffc02044de:	e878                	sd	a4,208(s0)
-    proc->state = PROC_RUNNABLE;
+    proc->state = PROC_RUNNABLE;//可运行状态
 ffffffffc02044e0:	c01c                	sw	a5,0(s0)
-    ret = proc->pid;
+    ret = proc->pid;//将新进程的 PID 返回
 ffffffffc02044e2:	64e2                	ld	s1,24(sp)
 ffffffffc02044e4:	7402                	ld	s0,32(sp)
 ffffffffc02044e6:	69a2                	ld	s3,8(sp)
@@ -8481,48 +8480,48 @@ ffffffffc02044fe:	b5e30313          	addi	t1,t1,-1186 # ffffffffc020a058 <next_s
 ffffffffc0204502:	00011497          	auipc	s1,0x11
 ffffffffc0204506:	02648493          	addi	s1,s1,38 # ffffffffc0215528 <proc_list>
 ffffffffc020450a:	0084be03          	ld	t3,8(s1)
-        next_safe = MAX_PID;
+        next_safe = MAX_PID;//准备重新开始遍历整个进程列表来寻找未使用的 PID
 ffffffffc020450e:	6789                	lui	a5,0x2
 ffffffffc0204510:	00f32023          	sw	a5,0(t1)
 ffffffffc0204514:	86aa                	mv	a3,a0
 ffffffffc0204516:	4581                	li	a1,0
-        while ((le = list_next(le)) != list) {
+        while ((le = list_next(le)) != list) {//list_next(le) 来遍历链表
 ffffffffc0204518:	029e0e63          	beq	t3,s1,ffffffffc0204554 <do_fork+0x1bc>
 ffffffffc020451c:	88ae                	mv	a7,a1
 ffffffffc020451e:	87f2                	mv	a5,t3
 ffffffffc0204520:	6609                	lui	a2,0x2
 ffffffffc0204522:	a811                	j	ffffffffc0204536 <do_fork+0x19e>
-            else if (proc->pid > last_pid && next_safe > proc->pid) {
+            else if (proc->pid > last_pid && next_safe > proc->pid) {//更新 next_safe 为当前进程的 PID
 ffffffffc0204524:	00e6d663          	bge	a3,a4,ffffffffc0204530 <do_fork+0x198>
 ffffffffc0204528:	00c75463          	bge	a4,a2,ffffffffc0204530 <do_fork+0x198>
                 next_safe = proc->pid;
 ffffffffc020452c:	863a                	mv	a2,a4
-            else if (proc->pid > last_pid && next_safe > proc->pid) {
+            else if (proc->pid > last_pid && next_safe > proc->pid) {//更新 next_safe 为当前进程的 PID
 ffffffffc020452e:	4885                	li	a7,1
 ffffffffc0204530:	679c                	ld	a5,8(a5)
-        while ((le = list_next(le)) != list) {
+        while ((le = list_next(le)) != list) {//list_next(le) 来遍历链表
 ffffffffc0204532:	00978d63          	beq	a5,s1,ffffffffc020454c <do_fork+0x1b4>
-            if (proc->pid == last_pid) {
+            if (proc->pid == last_pid) {//last_pid 已被占用
 ffffffffc0204536:	f3c7a703          	lw	a4,-196(a5) # 1f3c <kern_entry-0xffffffffc01fe0c4>
 ffffffffc020453a:	fed715e3          	bne	a4,a3,ffffffffc0204524 <do_fork+0x18c>
-                if (++ last_pid >= next_safe) {
+                if (++ last_pid >= next_safe) {//递增 last_pid，并检查是否超过 next_safe
 ffffffffc020453e:	2685                	addiw	a3,a3,1
 ffffffffc0204540:	02c6d163          	bge	a3,a2,ffffffffc0204562 <do_fork+0x1ca>
 ffffffffc0204544:	679c                	ld	a5,8(a5)
 ffffffffc0204546:	4585                	li	a1,1
-        while ((le = list_next(le)) != list) {
+        while ((le = list_next(le)) != list) {//list_next(le) 来遍历链表
 ffffffffc0204548:	fe9797e3          	bne	a5,s1,ffffffffc0204536 <do_fork+0x19e>
 ffffffffc020454c:	00088463          	beqz	a7,ffffffffc0204554 <do_fork+0x1bc>
 ffffffffc0204550:	00c32023          	sw	a2,0(t1)
 ffffffffc0204554:	d1b9                	beqz	a1,ffffffffc020449a <do_fork+0x102>
 ffffffffc0204556:	00d82023          	sw	a3,0(a6)
-            else if (proc->pid > last_pid && next_safe > proc->pid) {
+            else if (proc->pid > last_pid && next_safe > proc->pid) {//更新 next_safe 为当前进程的 PID
 ffffffffc020455a:	8536                	mv	a0,a3
 ffffffffc020455c:	bf3d                	j	ffffffffc020449a <do_fork+0x102>
     proc->tf->gpr.sp = (esp == 0) ? (uintptr_t)proc->tf : esp;
 ffffffffc020455e:	84ba                	mv	s1,a4
 ffffffffc0204560:	bded                	j	ffffffffc020445a <do_fork+0xc2>
-                    if (last_pid >= MAX_PID) {
+                    if (last_pid >= MAX_PID) {//如果超过，则重置 last_pid 为 1
 ffffffffc0204562:	6789                	lui	a5,0x2
 ffffffffc0204564:	00f6c363          	blt	a3,a5,ffffffffc020456a <do_fork+0x1d2>
                         last_pid = 1;
@@ -8538,7 +8537,7 @@ ffffffffc0204572:	00002697          	auipc	a3,0x2
 ffffffffc0204576:	58668693          	addi	a3,a3,1414 # ffffffffc0206af8 <etext+0x1c9c>
 ffffffffc020457a:	00001617          	auipc	a2,0x1
 ffffffffc020457e:	1d660613          	addi	a2,a2,470 # ffffffffc0205750 <etext+0x8f4>
-ffffffffc0204582:	10700593          	li	a1,263
+ffffffffc0204582:	13300593          	li	a1,307
 ffffffffc0204586:	00002517          	auipc	a0,0x2
 ffffffffc020458a:	58a50513          	addi	a0,a0,1418 # ffffffffc0206b10 <etext+0x1cb4>
 ffffffffc020458e:	ea5fb0ef          	jal	ffffffffc0200432 <__panic>
@@ -8601,7 +8600,7 @@ ffffffffc02045fa:	1141                	addi	sp,sp,-16
     panic("process exit!!.\n");
 ffffffffc02045fc:	00002617          	auipc	a2,0x2
 ffffffffc0204600:	52c60613          	addi	a2,a2,1324 # ffffffffc0206b28 <etext+0x1ccc>
-ffffffffc0204604:	16100593          	li	a1,353
+ffffffffc0204604:	18d00593          	li	a1,397
 ffffffffc0204608:	00002517          	auipc	a0,0x2
 ffffffffc020460c:	50850513          	addi	a0,a0,1288 # ffffffffc0206b10 <etext+0x1cb4>
 do_exit(int error_code) {
@@ -8855,14 +8854,14 @@ ffffffffc02047f0:	b78d                	j	ffffffffc0204752 <proc_init+0x13c>
         panic("cannot alloc idleproc.\n");
 ffffffffc02047f2:	00002617          	auipc	a2,0x2
 ffffffffc02047f6:	34e60613          	addi	a2,a2,846 # ffffffffc0206b40 <etext+0x1ce4>
-ffffffffc02047fa:	17900593          	li	a1,377
+ffffffffc02047fa:	1a700593          	li	a1,423
 ffffffffc02047fe:	00002517          	auipc	a0,0x2
 ffffffffc0204802:	31250513          	addi	a0,a0,786 # ffffffffc0206b10 <etext+0x1cb4>
 ffffffffc0204806:	c2dfb0ef          	jal	ffffffffc0200432 <__panic>
         panic("create init_main failed.\n");
 ffffffffc020480a:	00002617          	auipc	a2,0x2
 ffffffffc020480e:	37e60613          	addi	a2,a2,894 # ffffffffc0206b88 <etext+0x1d2c>
-ffffffffc0204812:	19900593          	li	a1,409
+ffffffffc0204812:	1c700593          	li	a1,455
 ffffffffc0204816:	00002517          	auipc	a0,0x2
 ffffffffc020481a:	2fa50513          	addi	a0,a0,762 # ffffffffc0206b10 <etext+0x1cb4>
 ffffffffc020481e:	c15fb0ef          	jal	ffffffffc0200432 <__panic>
@@ -8871,7 +8870,7 @@ ffffffffc0204822:	00002697          	auipc	a3,0x2
 ffffffffc0204826:	3b668693          	addi	a3,a3,950 # ffffffffc0206bd8 <etext+0x1d7c>
 ffffffffc020482a:	00001617          	auipc	a2,0x1
 ffffffffc020482e:	f2660613          	addi	a2,a2,-218 # ffffffffc0205750 <etext+0x8f4>
-ffffffffc0204832:	1a000593          	li	a1,416
+ffffffffc0204832:	1ce00593          	li	a1,462
 ffffffffc0204836:	00002517          	auipc	a0,0x2
 ffffffffc020483a:	2da50513          	addi	a0,a0,730 # ffffffffc0206b10 <etext+0x1cb4>
 ffffffffc020483e:	bf5fb0ef          	jal	ffffffffc0200432 <__panic>
@@ -8880,7 +8879,7 @@ ffffffffc0204842:	00002697          	auipc	a3,0x2
 ffffffffc0204846:	36e68693          	addi	a3,a3,878 # ffffffffc0206bb0 <etext+0x1d54>
 ffffffffc020484a:	00001617          	auipc	a2,0x1
 ffffffffc020484e:	f0660613          	addi	a2,a2,-250 # ffffffffc0205750 <etext+0x8f4>
-ffffffffc0204852:	19f00593          	li	a1,415
+ffffffffc0204852:	1cd00593          	li	a1,461
 ffffffffc0204856:	00002517          	auipc	a0,0x2
 ffffffffc020485a:	2ba50513          	addi	a0,a0,698 # ffffffffc0206b10 <etext+0x1cb4>
 ffffffffc020485e:	bd5fb0ef          	jal	ffffffffc0200432 <__panic>

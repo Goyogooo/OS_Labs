@@ -58,6 +58,39 @@ SYS_getpid      : get the process's pid
 
 */
 
+/*
+PROC_UNINIT：未初始化状态。alloc_proc（分配进程结构体）
+
+PROC_RUNNABLE：可运行状态，表示进程可以被调度。proc_init、wakeup_proc（进程初始化或唤醒进程）
+
+PROC_SLEEPING：睡眠状态，表示进程正在等待某种事件发生。try_free_pages、do_wait、do_sleep（等待、睡眠或释放内存）
+
+PROC_ZOMBIE：僵尸状态，表示进程已终止但尚未被父进程回收资源。do_exit（进程退出）
+
+进程状态从 PROC_UNINIT 到 PROC_ZOMBIE 的转变过程如下：
+
+alloc_proc：分配一个新的进程。
+proc_init / wakeup_proc：将进程状态设为 PROC_RUNNABLE，使进程可以被调度运行。
+try_free_pages / do_wait / do_sleep：进程进入 PROC_SLEEPING 状态，表示进程处于等待或休眠中。
+do_exit：进程进入 PROC_ZOMBIE 状态，表示进程已经终止，但尚未被完全清理。
+
+父进程：通过 proc->parent 获取，proc 是子进程。
+子进程：通过 proc->cptr 获取，proc 是父进程。
+年长的兄弟进程：通过 proc->optr 获取，proc 是年轻的兄弟进程。
+年轻的兄弟进程：通过 proc->yptr 获取，proc 是年长的兄弟进程。
+
+与进程相关的系统调用：
+SYS_exit：进程退出，通过 do_exit 实现。
+SYS_fork：创建子进程，并复制父进程的内存空间（dup mm），通过 do_fork 创建子进程并调用 wakeup_proc 唤醒新进程。
+SYS_wait：等待进程结束，通过 do_wait 实现。
+SYS_exec：进程调用 exec 系统调用后，加载程序并刷新内存管理信息。
+SYS_clone：创建子线程，类似于 fork，但线程共享父进程的内存空间，通过 do_fork 和 wakeup_proc 实现。
+SYS_yield：进程表示自己需要被重新调度（设置 proc->need_sched = 1），然后调度器将重新调度此进程。
+SYS_sleep：进程进入睡眠状态，通过 do_sleep 实现。
+SYS_kill：终止进程，通过 do_kill 和设置 proc->flags |= PF_EXITING 使进程退出，然后调用 wakeup_proc 和 do_wait 来清理进程。
+SYS_getpid：获取当前进程的 PID。
+
+*/
 // the process set's list
 list_entry_t proc_list;
 
@@ -82,6 +115,7 @@ void forkrets(struct trapframe *tf);
 void switch_to(struct context *from, struct context *to);
 
 // alloc_proc - alloc a proc_struct and init all fields of proc_struct
+//初始化
 static struct proc_struct *
 alloc_proc(void) {
     struct proc_struct *proc = kmalloc(sizeof(struct proc_struct));
@@ -102,19 +136,18 @@ alloc_proc(void) {
      *       uint32_t flags;                             // Process flag
      *       char name[PROC_NAME_LEN + 1];               // Process name
      */
-    proc->state = PROC_UNINIT;
-    proc->pid = -1;
-    proc->runs = 0;
-    proc->kstack = 0;
-    proc->need_resched = 0;
-    proc->parent = NULL;
-    proc->mm = NULL;
-    memset(&(proc->context), 0, sizeof(struct context));
-    proc->tf = NULL;
-    proc->cr3 = boot_cr3;
-    proc->flags = 0;
-    memset(proc->name, 0, PROC_NAME_LEN + 1);
-
+    proc->state = PROC_UNINIT;  //设置进程为“初始”态
+    proc->pid = -1;             //设置进程pid的未初始化值
+    proc->cr3 = boot_cr3;       //使用内核页目录表的基址
+    proc->runs=0;               //设置进程运行次数为0
+    proc->kstack=0;             //设置内核栈地址为0(还未分配)
+    proc->need_resched =0;      //设置不需要重新调度   
+    proc->parent = NULL;        // 设置父进程为空 
+    proc->mm = NULL;            // 设置内存管理字段为空
+    memset(&(proc->context),0,sizeof(struct context));          // 初始化上下文信息为0
+    proc->tf = NULL;            //设置trapframe为空
+    proc->flags =0;             // 设置进程标志为0
+    memset(proc->name,0,PROC_NAME_LEN);         //初始化进程名为0
     }
     return proc;
 }
@@ -133,35 +166,36 @@ get_proc_name(struct proc_struct *proc) {
     memset(name, 0, sizeof(name));
     return memcpy(name, proc->name, PROC_NAME_LEN);
 }
-
+//遍历 proc_list，寻找一个未被占用的 PID，确保每个进程的 PID 是唯一的
 // get_pid - alloc a unique pid for process
 static int
 get_pid(void) {
     static_assert(MAX_PID > MAX_PROCESS);
-    struct proc_struct *proc;
-    list_entry_t *list = &proc_list, *le;
-    static int next_safe = MAX_PID, last_pid = MAX_PID;
+    struct proc_struct *proc;//在遍历进程列表时指向当前的进程结构体
+    list_entry_t *list = &proc_list, *le;// 定义进程列表的入口指针，le 用来遍历列表
+    static int next_safe = MAX_PID, last_pid = MAX_PID;// next_safe 用来存储下一个可用的安全 PID
+    //到达上限 MAX_PID，重置为 1
     if (++ last_pid >= MAX_PID) {
         last_pid = 1;
         goto inside;
     }
     if (last_pid >= next_safe) {
     inside:
-        next_safe = MAX_PID;
+        next_safe = MAX_PID;//准备重新开始遍历整个进程列表来寻找未使用的 PID
     repeat:
         le = list;
-        while ((le = list_next(le)) != list) {
-            proc = le2proc(le, list_link);
-            if (proc->pid == last_pid) {
-                if (++ last_pid >= next_safe) {
-                    if (last_pid >= MAX_PID) {
+        while ((le = list_next(le)) != list) {//list_next(le) 来遍历链表
+            proc = le2proc(le, list_link);//将链表节点 le 转换为进程结构体 proc
+            if (proc->pid == last_pid) {//last_pid 已被占用
+                if (++ last_pid >= next_safe) {//递增 last_pid，并检查是否超过 next_safe
+                    if (last_pid >= MAX_PID) {//如果超过，则重置 last_pid 为 1
                         last_pid = 1;
                     }
                     next_safe = MAX_PID;
                     goto repeat;
                 }
             }
-            else if (proc->pid > last_pid && next_safe > proc->pid) {
+            else if (proc->pid > last_pid && next_safe > proc->pid) {//更新 next_safe 为当前进程的 PID
                 next_safe = proc->pid;
             }
         }
@@ -169,6 +203,15 @@ get_pid(void) {
     return last_pid;
 }
 
+//将指定的进程切换到CPU上运行
+/*
+- 检查要切换的进程是否与当前正在运行的进程相同，如果相同则不需要切换。
+- 禁用中断。你可以使用`/kern/sync/sync.h`中定义好的宏`local_intr_save(x)`和`local_intr_restore(x)`来实现关、开中断。
+- 切换当前进程为要运行的进程。
+- 切换页表，以便使用新进程的地址空间。`/libs/riscv.h`中提供了`lcr3(unsigned int cr3)`函数，可实现修改CR3寄存器值的功能。
+- 实现上下文切换。`/kern/process`中已经预先编写好了`switch.S`，其中定义了`switch_to()`函数。可实现两个进程的context切换。
+- 允许中断。
+*/
 // proc_run - make process "proc" running on cpu
 // NOTE: before call switch_to, should load  base addr of "proc"'s new PDT
 void
@@ -185,31 +228,34 @@ proc_run(struct proc_struct *proc) {
         */
         bool intr_flag;
         struct proc_struct *prev = current, *next = proc;
-        local_intr_save(intr_flag);
+        local_intr_save(intr_flag);//禁用中断
         {
             current = proc;
-            lcr3(next->cr3);
-            switch_to(&(prev->context), &(next->context));
+            lcr3(next->cr3);//更新 CR3 寄存器（切换页表）
+            switch_to(&(prev->context), &(next->context));//上下文切换，将当前进程切换为 proc 进程
         }
-        local_intr_restore(intr_flag);
-
+        local_intr_restore(intr_flag);//启用中断
     }
 }
 
 // forkret -- the first kernel entry point of a new thread/process
 // NOTE: the addr of forkret is setted in copy_thread function
 //       after switch_to, the current proc will execute here.
+//新的进程/线程在创建后从这个函数开始执行
+//设置进程的内核栈和 trapframe，然后调用 forkrets() 函数
 static void
 forkret(void) {
-    forkrets(current->tf);
+    forkrets(current->tf);//当前进程的 trapframe 指针
 }
 
+//将进程添加到哈希链表中，便于根据 PID 查找进程
 // hash_proc - add proc into proc hash_list
 static void
 hash_proc(struct proc_struct *proc) {
     list_add(hash_list + pid_hashfn(proc->pid), &(proc->hash_link));
 }
 
+//在哈希表中查找指定 PID 的进程，若找到则返回该进程结构体
 // find_proc - find proc frome proc hash_list according to pid
 struct proc_struct *
 find_proc(int pid) {
@@ -225,20 +271,22 @@ find_proc(int pid) {
     return NULL;
 }
 
+//创建一个新的内核线程
 // kernel_thread - create a kernel thread using "fn" function
 // NOTE: the contents of temp trapframe tf will be copied to 
 //       proc->tf in do_fork-->copy_thread function
 int
 kernel_thread(int (*fn)(void *), void *arg, uint32_t clone_flags) {
-    struct trapframe tf;
+    struct trapframe tf;//为新线程分配一个 trapframe
     memset(&tf, 0, sizeof(struct trapframe));
     tf.gpr.s0 = (uintptr_t)fn;
     tf.gpr.s1 = (uintptr_t)arg;
     tf.status = (read_csr(sstatus) | SSTATUS_SPP | SSTATUS_SPIE) & ~SSTATUS_SIE;
     tf.epc = (uintptr_t)kernel_thread_entry;
-    return do_fork(clone_flags | CLONE_VM, 0, &tf);
+    return do_fork(clone_flags | CLONE_VM, 0, &tf);//调用 do_fork 创建子进程
 }
 
+//为进程分配一块内存作为内核栈
 // setup_kstack - alloc pages with size KSTACKPAGE as process kernel stack
 static int
 setup_kstack(struct proc_struct *proc) {
@@ -249,7 +297,7 @@ setup_kstack(struct proc_struct *proc) {
     }
     return -E_NO_MEM;
 }
-
+//释放进程的内核栈
 // put_kstack - free the memory space of process kernel stack
 static void
 put_kstack(struct proc_struct *proc) {
@@ -265,6 +313,7 @@ copy_mm(uint32_t clone_flags, struct proc_struct *proc) {
     return 0;
 }
 
+//为新进程/线程设置内核栈和陷入处理框架（trapframe），并设置上下文
 // copy_thread - setup the trapframe on the  process's kernel stack top and
 //             - setup the kernel entry point and stack of process
 static void
@@ -279,7 +328,7 @@ copy_thread(struct proc_struct *proc, uintptr_t esp, struct trapframe *tf) {
     proc->context.ra = (uintptr_t)forkret;
     proc->context.sp = (uintptr_t)(proc->tf);
 }
-
+//给线程分配资源，并且复制原进程的状态
 /* do_fork -     parent process for a new child process
  * @clone_flags: used to guide how to clone the child process
  * @stack:       the parent's user stack pointer. if stack==0, It means to fork a kernel thread.
@@ -289,7 +338,7 @@ int
 do_fork(uint32_t clone_flags, uintptr_t stack, struct trapframe *tf) {
     int ret = -E_NO_FREE_PROC;
     struct proc_struct *proc;
-    if (nr_process >= MAX_PROCESS) {
+    if (nr_process >= MAX_PROCESS) {//无法创建更多进程
         goto fork_out;
     }
     ret = -E_NO_MEM;
@@ -321,22 +370,22 @@ do_fork(uint32_t clone_flags, uintptr_t stack, struct trapframe *tf) {
 
     
 
-    proc = alloc_proc();
+    proc = alloc_proc();//为新进程分配资源
     proc->parent = current;
-    setup_kstack(proc);
-    copy_mm(clone_flags, proc);
-    copy_thread(proc, stack, tf);
-    int pid = get_pid();
+    setup_kstack(proc);//为子进程分配内核栈
+    copy_mm(clone_flags, proc);//复制父进程的内存管理信息
+    copy_thread(proc, stack, tf);//复制父进程的线程信息
+    int pid = get_pid();//分配一个唯一的进程 ID
     proc->pid = pid;
     hash_proc(proc);
-    list_add(&proc_list, &(proc->list_link));
-    nr_process++;
-    proc->state = PROC_RUNNABLE;
-    ret = proc->pid;
+    list_add(&proc_list, &(proc->list_link));//将进程加入哈希表（方便进程查找）和进程链表
+    nr_process++;//当前活跃进程的数量
+    proc->state = PROC_RUNNABLE;//可运行状态
+    ret = proc->pid;//将新进程的 PID 返回
 
 fork_out:
     return ret;
-
+//用于在进程创建过程中发生错误时进行清理工作
 bad_fork_cleanup_kstack:
     put_kstack(proc);
 bad_fork_cleanup_proc:
@@ -353,6 +402,9 @@ do_exit(int error_code) {
     panic("process exit!!.\n");
 }
 
+// 进程退出。清理进程的资源（如内存），设置进程状态为 PROC_ZOMBIE，通知父进程回收资源，并调用 scheduler 切换到其他进程。
+
+//初始化进程 initproc
 // init_main - the second kernel thread used to create user_main kernel threads
 static int
 init_main(void *arg) {
@@ -362,6 +414,7 @@ init_main(void *arg) {
     return 0;
 }
 
+//启动第一个进程（idleproc）和第二个进程（initproc）
 // proc_init - set up the first kernel thread idleproc "idle" by itself and 
 //           - create the second kernel thread init_main
 void
@@ -404,7 +457,7 @@ proc_init(void) {
 
     current = idleproc;
 
-    int pid = kernel_thread(init_main, "Hello world!!", 0);
+    int pid = kernel_thread(init_main, "Hello world!!", 0);//通过 kernel_thread 创建 init_main 进程
     if (pid <= 0) {
         panic("create init_main failed.\n");
     }
@@ -416,12 +469,20 @@ proc_init(void) {
     assert(initproc != NULL && initproc->pid == 1);
 }
 
+//当没有进程可调度时，idleproc 进程将一直执行此函数cpu空转
 // cpu_idle - at the end of kern_init, the first kernel thread idleproc will do below works
 void
 cpu_idle(void) {
     while (1) {
-        if (current->need_resched) {
-            schedule();
+        if (current->need_resched) {//在循环中检查当前进程是否需要重新调度，如果需要则调用 schedule 进行进程调度
+            schedule();//PROC_RUNNABLE
         }
     }
 }
+/*
+1．设置当前内核线程current->need_resched为0； 
+
+2．在proc_list队列中查找下一个处于“就绪”态的线程或进程next；
+
+ 3．找到这样的进程后，就调用**proc_run函数**（调用switch_to函数），保存当前进程current的执行现场（进程上下文），恢复新进程的执行现场，完成进程切换。
+*/

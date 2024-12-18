@@ -370,6 +370,10 @@ int copy_range(pde_t *to, pde_t *from, uintptr_t start, uintptr_t end,
             assert(page != NULL);
             assert(npage != NULL);
             int ret = 0;
+            if (share) {
+                /* 如果share为1，那么将子进程的页面映射到父进程的页面。
+* 由于两个进程共享一个页面之后，无论任何一个进程修改页面，都会影响另外一个页面，
+* 所以需要子进程和父进程对于这个共享页面都保持只读。
             /* LAB5:EXERCISE2 YOUR CODE
              * replicate content of page to npage, build the map of phy addr of
              * nage with the linear addr start
@@ -388,8 +392,20 @@ int copy_range(pde_t *to, pde_t *from, uintptr_t start, uintptr_t end,
              * (3) memory copy from src_kvaddr to dst_kvaddr, size is PGSIZE
              * (4) build the map of phy addr of  nage with the linear addr start
              */
-
-
+            page_insert(from, page, start, perm & (~PTE_W));
+        ret = page_insert(to, page, start, perm & (~PTE_W));
+            }else{
+                struct Page * npage=alloc_page();
+assert(npage = NULL);
+            // (1) 获取进程A的页的内核虚拟地址
+           uintptr_t src_kvaddr = page2kva(page);
+            // (2) 获取新分配的页的内核虚拟地址
+            uintptr_t dst_kvaddr = page2kva(npage);
+            // (3) 使用 memcpy 将数据从源页复制到目标页
+            memcpy(dst_kvaddr, src_kvaddr, PGSIZE);
+            // (4) 使用 page_insert 将目标页插入到进程B的页表
+            ret = page_insert(to, npage, start, perm);
+            }
             assert(ret == 0);
         }
         start += PGSIZE;

@@ -111,6 +111,7 @@ __trapret:
  
     .globl forkrets
 forkrets:
-    # set stack to this new process's trapframe
+    # set stack to this new process's trapframe，将栈指针 sp 设置为传递给 forkrets 函数的参数值，子进程的 trapframe 地址
     move sp, a0
     j __trapret
+    #用户态
